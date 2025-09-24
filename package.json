@@ -1,0 +1,45 @@
+{
+  "name": "enterprise-app-optimization",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Enterprise app starter based on KasperskyLab UIF quick-start template using Webpack.",
+  "scripts": {
+    "start": "webpack serve --config webpack.config.ts --mode development",
+    "build": "webpack --config webpack.config.ts --mode production",
+    "lint": "eslint --ext .ts,.tsx src",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@kaspersky/uif": "latest",
+    "@kaspersky/uif-react": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "autoprefixer": "latest",
+    "css-loader": "latest",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.34.3",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "html-webpack-plugin": "latest",
+    "mini-css-extract-plugin": "latest",
+    "postcss": "latest",
+    "postcss-loader": "latest",
+    "prettier": "^3.4.2",
+    "style-loader": "latest",
+    "ts-loader": "latest",
+    "ts-node": "latest",
+    "typescript": "latest",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "webpack-dev-server": "latest"
+  }
+}
