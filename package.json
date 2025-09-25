@@ -4,16 +4,28 @@
   "private": true,
   "description": "Enterprise app starter based on KasperskyLab UIF quick-start template using Webpack.",
   "scripts": {
-    "start": "webpack serve --config webpack.config.ts --mode development",
-    "build": "webpack --config webpack.config.ts --mode production",
+    "build": "npm-run-all build:microfront build:shell",
+    "build:shell": "webpack --config webpack.config.ts --mode production",
+    "build:microfront": "webpack --config microfrontends/operations-reports/webpack.config.ts --mode production",
+    "dev": "npm-run-all --parallel dev:shell dev:microfront",
+    "dev:shell": "npm-run-all --parallel dev:shell:build dev:shell:server",
+    "dev:shell:build": "webpack --config webpack.config.ts --mode development --watch",
+    "dev:shell:server": "node src/shell-app/server/shell-server.js",
+    "dev:microfront": "npm-run-all --parallel dev:microfront:build dev:microfront:server",
+    "dev:microfront:build": "webpack --config microfrontends/operations-reports/webpack.config.ts --mode development --watch",
+    "dev:microfront:server": "node src/microfrontends/server/operations-reports/server.js",
+    "start": "node src/shell-app/server/shell-server.js",
+    "start:microfront": "node src/microfrontends/server/operations-reports/server.js",
     "lint": "eslint --ext .ts,.tsx src",
     "format": "prettier --write ."
   },
   "dependencies": {
     "@kaspersky/uif": "latest",
     "@kaspersky/uif-react": "latest",
+    "express": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-router-dom": "latest"
   },
   "devDependencies": {
     "@types/react": "latest",
@@ -21,6 +33,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "autoprefixer": "latest",
+    "copy-webpack-plugin": "latest",
     "css-loader": "latest",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
@@ -31,6 +44,7 @@
     "eslint-plugin-react-hooks": "^4.6.2",
     "html-webpack-plugin": "latest",
     "mini-css-extract-plugin": "latest",
+    "npm-run-all": "latest",
     "postcss": "latest",
     "postcss-loader": "latest",
     "prettier": "^3.4.2",

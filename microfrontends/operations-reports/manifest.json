@@ -1,0 +1,8 @@
+{
+  "id": "reports-microfrontend",
+  "name": "Operations Reports",
+  "menuLabel": "Operations reports",
+  "routePath": "/reports",
+  "entryPath": "/operations-reports.js",
+  "description": "Analytics and readiness metrics prepared by the operations reporting team."
+}

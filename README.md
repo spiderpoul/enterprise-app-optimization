@@ -1,63 +1,85 @@
 # Enterprise App Optimization
 
-This project bootstraps the [KasperskyLab UIF quick-start example](https://github.com/KasperskyLab/uif/tree/master/examples/quick-start)
-while modernizing the tooling stack. The original template uses Vite; this starter replaces it with a Webpack based
-build optimized for enterprise environments that require explicit bundler configuration.
-
-The application mirrors the quick-start demo shell, including:
-
-- A sidebar navigation that exposes monitoring, management, and administration menu groups.
-- The enterprise optimization dashboard with KPI cards, task and activity panels, and contextual placeholders for
-  secondary sections.
-- A guided footer with documentation and escalation entry points.
+The Enterprise App Optimization project now acts as a microfrontend shell on top of the UIF quick-start demo. The shell is
+responsible for serving the core dashboard experience, exposing a discovery API for plugin teams, and lazily rendering any
+registered microfrontends. Each remote microfrontend is served by its own Express static host and acknowledges itself with the
+shell when it becomes available.
 
 ## Getting started
 
-1. Install dependencies (requires access to the private UIF packages):
+1. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Launch the development server:
+2. In a first terminal build and launch the shell in watch mode alongside the Express static host:
 
    ```bash
-   npm start
+   npm run dev:shell
    ```
 
-   The dev server runs on [http://localhost:5173](http://localhost:5173) by default.
+   This starts Webpack in watch mode and serves the compiled assets from `src/shell-app/server/shell-server.js` on
+   [http://localhost:4300](http://localhost:4300).
 
-3. Build a production bundle:
+3. In a second terminal build and serve the sample microfrontend:
+
+   ```bash
+   npm run dev:microfront
+   ```
+
+   The Operations reports plugin is exposed on [http://localhost:4400](http://localhost:4400). Once its bundle and manifest are available the
+   plugin acknowledges the shell via `POST /api/microfrontends/ack`. The shell persists acknowledgement data in
+   `src/shell-app/server/data/microfrontends.json` and exposes it through `GET /api/microfrontends` so the React application can lazy-load the
+   remote module when its route is visited.
+
+4. Visit [http://localhost:4300](http://localhost:4300) to use the shell. The navigation will automatically display the
+   "Operations reports" page contributed by the microfrontend and render it on demand.
+
+5. For a one-off production build run:
 
    ```bash
    npm run build
    ```
 
-4. Lint and format the codebase:
+   The command builds both the shell and every microfrontend defined in `microfrontends/`.
+
+6. Lint and format the source when required:
 
    ```bash
    npm run lint
    npm run format
    ```
 
-   Both commands rely on ESLint, TypeScript-aware rules, and Prettier. Package installation is required before they can be executed.
+## Key scripts
 
-## Project structure
+- `npm run dev` – Starts both the shell and the sample microfrontend in watch mode (equivalent to running the two dev scripts in
+  parallel).
+- `npm run start` – Runs the compiled shell assets behind the Express server.
+- `npm run start:microfront` – Serves the pre-built Operations reports microfrontend and replays acknowledgement pings to the shell.
+- `npm run build:shell` / `npm run build:microfront` – Targeted builds for the shell or a single microfrontend package.
 
-- `public/` – HTML template injected by Webpack.
-- `src/` – TypeScript source code mirroring the UIF quick-start layout (entry point, application shell, dashboard
-  components, and lightweight type declarations for UIF React bindings).
-- `src/components/` – Layout shell, sidebar navigation, and dashboard building blocks copied from the quick-start
-  reference implementation.
-- `webpack.config.ts` – Webpack configuration tuned for TypeScript, React, CSS, and PostCSS with autoprefixer.
-- `.eslintrc.cjs`, `.prettierrc.cjs` – Linting and formatting rules shared across the project.
+## Architecture highlights
 
-## Notes
+- **Shell discovery API** – `src/shell-app/server/shell-server.js` persists acknowledgements and exposes REST endpoints for discovery and
+  lifecycle management. Client-side code fetches `/api/microfrontends` on boot and constructs lazy React routes for each
+  registered plugin.
+- **Dynamic module loading** – The shell uses `React.lazy` together with dynamic `import()` calls (`webpackIgnore: true`) so that
+  remote bundles are fetched only when a user navigates to the corresponding route.
+- **Error isolation** – `MicrofrontendBoundary` wraps every remote component to keep failures contained and provide actionable
+  feedback in the shell UI.
+- **Plugin contract** – Each microfrontend ships a `manifest.json`, serves static assets over Express, and periodically
+  acknowledges the shell with the route, menu label, and remote entry URL.
+- **Sample microfrontend** – `microfrontends/operations-reports` contributes an “Operations reports” page. It demonstrates the contract by
+  registering a route, injecting a navigation item, and rendering a standalone React component once the user selects it.
 
-- UIF libraries are referenced via `latest` tags so the starter automatically tracks the most recent releases.
-- Module declarations in `src/types/uif.d.ts` make the project compile even when UIF packages are not locally
-  installed yet.
-- You may extend the configuration with organization-specific optimizations such as aliases, environment variable
-  injection, or additional loaders depending on your deployment target.
-- ESLint is pinned to the latest 8.x series so existing `.eslintrc`-based setups continue to work without migrating to
-  the new flat configuration introduced in ESLint 9.
+## Project layout
+
+- `src/shell-app/` – Shell React application and Express server organised into `client/` and `server/` packages.
+- `src/microfrontends/` – Source for microfrontend clients and their Express hosts, grouped by feature name.
+- `microfrontends/operations-reports/` – Build configuration, manifest, and distribution artefacts for the Operations reports plugin.
+- `webpack.config.ts` – Shell build configuration for TypeScript, React, CSS, and PostCSS.
+- `.eslintrc.cjs`, `.prettierrc.cjs` – Linting and formatting configuration shared across the monorepo.
+
+The UIF dependencies are pinned to the latest releases and TypeScript module declarations under `src/types/` keep the compiler
+happy even before packages are fetched locally.

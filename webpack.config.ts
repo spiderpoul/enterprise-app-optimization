@@ -7,7 +7,7 @@ import 'webpack-dev-server';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const config: Configuration = {
-  entry: path.resolve(__dirname, 'src', 'main.tsx'),
+  entry: path.resolve(__dirname, 'src', 'shell-app', 'client', 'main.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'assets/[name].[contenthash].js',
