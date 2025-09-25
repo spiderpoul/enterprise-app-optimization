@@ -494,3 +494,25 @@ body {
     flex-wrap: wrap;
   }
 }
+.microfrontend-loading,
+.microfrontend-error {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+  padding: 32px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+}
+
+.microfrontend-loading {
+  font-size: 15px;
+  color: #1e293b;
+}
+
+.microfrontend-error h2 {
+  margin-bottom: 12px;
+}
+
+.microfrontend-error p {
+  margin: 0;
+  color: #7f1d1d;
+}
