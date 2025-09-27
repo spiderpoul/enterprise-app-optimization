@@ -45,6 +45,26 @@ const HOST = String(process.env.SHELL_HOST ?? '0.0.0.0');
 const isProduction = process.env.NODE_ENV === 'production';
 const CLIENT_DEV_SERVER_URL = resolveClientDevServerUrl();
 
+const parseProxyTarget = (value) => {
+  if (!value) {
+    return null;
+  }
+
+  try {
+    const url = new URL(value);
+    if (!url.protocol || !url.host) {
+      return null;
+    }
+
+    return url.toString().replace(/\/$/, '');
+  } catch (_error) {
+    return null;
+  }
+};
+
+const CLIENT_DEV_SERVER_TARGET = parseProxyTarget(CLIENT_DEV_SERVER_URL);
+const shouldProxyClientRequest = (url) => typeof url === 'string' && !url.startsWith('/api');
+
 const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
 
 const delay = (ms) =>
@@ -208,24 +228,37 @@ if (isProduction) {
   app.get('*', (_req, res) => {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
   });
-} else if (CLIENT_DEV_SERVER_URL) {
+} else if (CLIENT_DEV_SERVER_TARGET) {
   const { createProxyMiddleware } = require('http-proxy-middleware');
 
-  const clientProxy = createProxyMiddleware(
-    (pathname) => !pathname.startsWith('/api'),
-    {
-      target: CLIENT_DEV_SERVER_URL,
-      changeOrigin: true,
-      ws: true,
-      logLevel: 'warn',
-    },
-  );
+  const clientProxy = createProxyMiddleware({
+    target: CLIENT_DEV_SERVER_TARGET,
+    changeOrigin: true,
+    ws: true,
+    logLevel: 'warn',
+  });
 
-  app.use(clientProxy);
-  app.on('upgrade', clientProxy.upgrade);
-  console.log(`Proxying shell client requests to ${CLIENT_DEV_SERVER_URL}`);
+  app.use((req, res, next) => {
+    if (!shouldProxyClientRequest(req.originalUrl || req.url)) {
+      return next();
+    }
+
+    return clientProxy(req, res, next);
+  });
+
+  app.on('upgrade', (req, socket, head) => {
+    if (!shouldProxyClientRequest(req.url)) {
+      return;
+    }
+
+    clientProxy.upgrade(req, socket, head);
+  });
+
+  console.log(`Proxying shell client requests to ${CLIENT_DEV_SERVER_TARGET}`);
 } else {
-  console.warn('Shell client dev server URL is not defined; client assets will not be proxied.');
+  console.warn(
+    'Shell client dev server URL is not defined or invalid; client assets will not be proxied.',
+  );
 }
 
 app.listen(PORT, HOST, () => {
