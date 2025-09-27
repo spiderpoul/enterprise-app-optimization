@@ -1,23 +1,20 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { Configuration } from 'webpack';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import StatoscopeWebpackPlugin from '@statoscope/webpack-plugin';
-import { WebpackPluginInstance } from 'webpack';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { default: StatoscopeWebpackPlugin } = require('@statoscope/webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 const shouldAnalyze = process.env.ANALYZE === 'true';
 
-const analyzerPlugins = (): WebpackPluginInstance[] => {
+/**
+ * @returns {import('webpack').WebpackPluginInstance[]}
+ */
+const analyzerPlugins = () => {
   if (!shouldAnalyze) {
     return [];
   }
 
-  const plugins: WebpackPluginInstance[] = [
+  return [
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       openAnalyzer: false,
@@ -28,11 +25,10 @@ const analyzerPlugins = (): WebpackPluginInstance[] => {
       saveOnlyStats: false,
     }),
   ];
-
-  return plugins;
 };
 
-const config: Configuration = {
+/** @type {import('webpack').Configuration} */
+const config = {
   entry: path.resolve(__dirname, 'client', 'index.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -98,4 +94,4 @@ const config: Configuration = {
   devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
 };
 
-export default config;
+module.exports = config;

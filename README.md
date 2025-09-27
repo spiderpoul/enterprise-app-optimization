@@ -72,7 +72,7 @@ shell when it becomes available.
 - `src/shell-app/` – Shell React application and Express server organised into `client/` and `server/` packages with their own workspaces.
 - `src/microfrontends/` – Source for microfrontend clients and their Express hosts, grouped by feature name.
 - `src/microfrontends/operations-reports/` – Source, build configuration, manifest, and Dockerfile for the Operations reports plugin.
-- `src/shell-app/client/webpack.config.ts` – Shell build configuration for TypeScript, React, CSS, and PostCSS.
+- `src/shell-app/client/webpack.config.cjs` – Shell build configuration for TypeScript, React, CSS, and PostCSS.
 - `nx.json` – Nx workspace configuration describing every project.
 - `docker-compose.yml` – Local orchestration for the shell and Operations reports microfrontend images.
 - `src/shell-app/Dockerfile` / `src/microfrontends/operations-reports/Dockerfile` – Container definitions for the shell and Operations reports microfrontend.

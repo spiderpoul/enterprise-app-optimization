@@ -5,6 +5,41 @@ const path = require('path');
 const app = express();
 const PORT = Number(process.env.SHELL_PORT || 4300);
 const HOST = process.env.SHELL_HOST || '0.0.0.0';
+
+const initializationPlan = [
+  {
+    id: 'services-bootstrap',
+    label: 'Bootstrapping shared telemetry and notification services…',
+    duration: 650,
+  },
+  {
+    id: 'user-settings',
+    label: 'Retrieving operator workspace preferences…',
+    duration: 820,
+  },
+  {
+    id: 'catalog-sync',
+    label: 'Synchronising automation catalog metadata…',
+    duration: 1240,
+  },
+  {
+    id: 'permissions',
+    label: 'Resolving permission boundaries and access policies…',
+    duration: 1040,
+  },
+  {
+    id: 'final-handshake',
+    label: 'Finalising service handshakes and secure channels…',
+    duration: 870,
+  },
+];
+
+const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
+
+const delay = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 const resolveClientDist = () => {
   if (process.env.CLIENT_DIST_DIR) {
     return path.resolve(process.env.CLIENT_DIST_DIR);
@@ -50,6 +85,40 @@ app.use(express.json());
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
+});
+
+app.get('/api/initialization/steps', (_req, res) => {
+  res.json(initializationPlan);
+});
+
+app.post('/api/initialization/steps/:stepId/complete', async (req, res) => {
+  const { stepId } = req.params;
+  const step = initializationPlanById.get(stepId);
+
+  if (!step) {
+    return res.status(404).json({ message: `Initialization step with id "${stepId}" was not found.` });
+  }
+
+  await delay(step.duration);
+
+  res.json({ step });
+});
+
+app.post('/api/metrics/web-vitals', (req, res) => {
+  if (req.body) {
+    const { name, value, id, rating, navigationType, delta, ...rest } = req.body;
+    console.log('[web-vitals]', {
+      name,
+      value,
+      id,
+      rating,
+      navigationType,
+      delta,
+      context: rest,
+    });
+  }
+
+  res.status(202).end();
 });
 
 app.get('/api/microfrontends', (_req, res) => {

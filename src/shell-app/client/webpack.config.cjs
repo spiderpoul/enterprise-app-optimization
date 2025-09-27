@@ -1,24 +1,21 @@
-import path from 'path';
-import { fileURLToPath } from 'url';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { Configuration, WebpackPluginInstance } from 'webpack';
-import 'webpack-dev-server';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import StatoscopeWebpackPlugin from '@statoscope/webpack-plugin';
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const statoscope = require('@statoscope/webpack-plugin');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const StatoscopeWebpackPlugin =
+  statoscope && statoscope.default ? statoscope.default : statoscope;
 
 const isProduction = process.env.NODE_ENV === 'production';
 const shouldAnalyze = process.env.ANALYZE === 'true';
 
-const analyzerPlugins = (): WebpackPluginInstance[] => {
+const analyzerPlugins = () => {
   if (!shouldAnalyze) {
     return [];
   }
 
-  const plugins: WebpackPluginInstance[] = [
+  return [
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       openAnalyzer: false,
@@ -29,11 +26,10 @@ const analyzerPlugins = (): WebpackPluginInstance[] => {
       saveOnlyStats: false,
     }),
   ];
-
-  return plugins;
 };
 
-const config: Configuration = {
+/** @type {import('webpack').Configuration} */
+const config = {
   entry: path.resolve(__dirname, 'main.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -108,4 +104,4 @@ const config: Configuration = {
   devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
 };
 
-export default config;
+module.exports = config;

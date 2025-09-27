@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cross-env NODE_OPTIONS='--loader ts-node/esm' webpack --config webpack.config.ts --mode production",
-    "serve": "cross-env NODE_OPTIONS='--loader ts-node/esm' webpack serve --config webpack.config.ts --mode development",
-    "analyze": "cross-env NODE_OPTIONS='--loader ts-node/esm' ANALYZE=true webpack --config webpack.config.ts --mode production"
+    "build": "webpack --config webpack.config.cjs --mode production",
+    "serve": "webpack serve --config webpack.config.cjs --mode development",
+    "analyze": "cross-env ANALYZE=true webpack --config webpack.config.cjs --mode production"
   },
   "dependencies": {
     "@kaspersky/hexa-ui": "^6.198.2",
@@ -16,7 +16,8 @@
     "react-is": "^19.1.1",
     "react-router-dom": "7.9.3",
     "recharts": "3.2.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "web-vitals": "^4.2.4"
   },
   "devDependencies": {
     "@statoscope/webpack-plugin": "5.29.0",
