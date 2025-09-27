@@ -1,5 +1,5 @@
 import React from 'react';
-import { UIFButton } from '@kaspersky/uif-react';
+import { Button } from '@kaspersky/hexa-ui';
 
 const metrics = [
   {
@@ -82,8 +82,8 @@ const Dashboard: React.FC = () => (
           <p>Track the most important metrics driving the health of your enterprise workloads.</p>
         </div>
         <div className="dashboard__section-actions">
-          <UIFButton appearance="secondary">Schedule report</UIFButton>
-          <UIFButton appearance="primary">Run optimization</UIFButton>
+          <Button mode="secondary">Schedule report</Button>
+          <Button mode="primary">Run optimization</Button>
         </div>
       </header>
       <div className="dashboard__grid" role="list">
@@ -103,7 +103,7 @@ const Dashboard: React.FC = () => (
       <div className="dashboard__panel">
         <header className="dashboard__panel-header">
           <h3>Optimization tasks</h3>
-          <UIFButton appearance="ghost">View all</UIFButton>
+          <Button mode="tertiary">View all</Button>
         </header>
         <ul className="dashboard__list" aria-label="Upcoming optimization tasks">
           {optimizationTasks.map((task) => (
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => (
       <div className="dashboard__panel">
         <header className="dashboard__panel-header">
           <h3>Recent activity</h3>
-          <UIFButton appearance="ghost">Open timeline</UIFButton>
+          <Button mode="tertiary">Open timeline</Button>
         </header>
         <ul className="dashboard__timeline" aria-label="Recent optimization activity">
           {activityFeed.map((activity) => (

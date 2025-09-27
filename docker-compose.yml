@@ -21,3 +21,15 @@ services:
       - SHELL_URL=http://shell:4300
     depends_on:
       - shell
+  users-and-roles:
+    build:
+      context: .
+      dockerfile: src/microfrontends/users-and-roles/Dockerfile
+    ports:
+      - '4402:4402'
+    environment:
+      - NODE_ENV=production
+      - CLIENT_DIST_DIR=/app/client/dist
+      - SHELL_URL=http://shell:4300
+    depends_on:
+      - shell

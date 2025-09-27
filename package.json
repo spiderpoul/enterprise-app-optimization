@@ -7,15 +7,17 @@
     "src/shell-app/client",
     "src/shell-app/server",
     "src/microfrontends/operations-reports/client",
-    "src/microfrontends/operations-reports/server"
+    "src/microfrontends/operations-reports/server",
+    "src/microfrontends/users-and-roles/client",
+    "src/microfrontends/users-and-roles/server"
   ],
   "scripts": {
     "nx": "nx",
     "build": "nx run-many --target=build --all",
-    "dev": "nx run-many --target=serve --projects shell-client,shell-server,operations-reports-client,operations-reports-server --parallel",
+    "dev": "nx run-many --target=serve --projects shell-client,shell-server,operations-reports-client,operations-reports-server,users-and-roles-client,users-and-roles-server --parallel",
     "lint": "eslint --ext .ts,.tsx src",
     "format": "prettier --write .",
-    "analyze": "nx run shell-client:analyze && nx run operations-reports-client:analyze"
+    "analyze": "nx run shell-client:analyze && nx run operations-reports-client:analyze && nx run users-and-roles-client:analyze"
   },
   "devDependencies": {
     "@types/react": "18.2.74",

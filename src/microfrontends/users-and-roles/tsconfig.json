@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "./client",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "declaration": false,
+    "jsx": "react-jsx"
+  },
+  "include": ["./client"]
+}

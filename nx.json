@@ -16,6 +16,8 @@
     "shell-client": "src/shell-app/client",
     "shell-server": "src/shell-app/server",
     "operations-reports-client": "src/microfrontends/operations-reports/client",
-    "operations-reports-server": "src/microfrontends/operations-reports/server"
+    "operations-reports-server": "src/microfrontends/operations-reports/server",
+    "users-and-roles-client": "src/microfrontends/users-and-roles/client",
+    "users-and-roles-server": "src/microfrontends/users-and-roles/server"
   }
 }

@@ -8,16 +8,21 @@
     "analyze": "cross-env NODE_OPTIONS='--loader ts-node/esm' ANALYZE=true webpack --config webpack.config.ts --mode production"
   },
   "dependencies": {
+    "@kaspersky/hexa-ui": "^6.198.2",
+    "@kaspersky/hexa-ui-icons": "^2.6.11",
     "antd": "5.27.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-is": "^19.1.1",
     "react-router-dom": "7.9.3",
-    "recharts": "3.2.1"
+    "recharts": "3.2.1",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@statoscope/webpack-plugin": "5.29.0",
     "@types/react": "18.2.74",
     "@types/react-dom": "18.2.24",
+    "@types/styled-components": "^5.1.34",
     "autoprefixer": "10.4.21",
     "cross-env": "10.0.0",
     "css-loader": "7.1.2",
