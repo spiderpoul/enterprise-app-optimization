@@ -5,16 +5,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 const isProduction = process.env.NODE_ENV === 'production';
 
 const config: Configuration = {
-  entry: path.resolve(
-    __dirname,
-    '..',
-    '..',
-    'src',
-    'microfrontends',
-    'client',
-    'operations-reports',
-    'index.tsx'
-  ),
+  entry: path.resolve(__dirname, 'client', 'index.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'operations-reports.js',
