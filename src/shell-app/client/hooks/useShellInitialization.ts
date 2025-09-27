@@ -14,80 +14,88 @@ export interface UseShellInitializationResult {
   progress: number;
 }
 
-const initializationPlan: InitializationStep[] = [
-  {
-    id: 'services-bootstrap',
-    label: 'Bootstrapping shared telemetry and notification services…',
-    duration: 650,
-  },
-  {
-    id: 'user-settings',
-    label: 'Retrieving operator workspace preferences…',
-    duration: 820,
-  },
-  {
-    id: 'catalog-sync',
-    label: 'Synchronising automation catalog metadata…',
-    duration: 780,
-  },
-  {
-    id: 'permissions',
-    label: 'Resolving permission boundaries and access policies…',
-    duration: 640,
-  },
-  {
-    id: 'final-handshake',
-    label: 'Finalising service handshakes and secure channels…',
-    duration: 520,
-  },
-];
-
-const wait = (ms: number) =>
-  new Promise<void>((resolve) => {
-    window.setTimeout(resolve, ms);
-  });
-
 export const useShellInitialization = (): UseShellInitializationResult => {
   const [completedSteps, setCompletedSteps] = useState<string[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [steps, setSteps] = useState<InitializationStep[]>([]);
 
   useEffect(() => {
     let isMounted = true;
 
     const runInitialization = async () => {
-      for (let index = 0; index < initializationPlan.length; index += 1) {
+      try {
+        const planResponse = await fetch('/api/initialization/steps');
+
+        if (!planResponse.ok) {
+          throw new Error(`Unable to load shell initialization plan: ${planResponse.status}`);
+        }
+
+        const plan = (await planResponse.json()) as InitializationStep[];
+
         if (!isMounted) {
           return;
         }
 
-        setCurrentIndex(index);
-        const step = initializationPlan[index];
-        await wait(step.duration);
+        setSteps(plan);
+        setCurrentIndex(0);
+        setCompletedSteps([]);
+
+        if (plan.length === 0) {
+          setIsInitializing(false);
+          return;
+        }
+
+        for (let index = 0; index < plan.length; index += 1) {
+          if (!isMounted) {
+            return;
+          }
+
+          const step = plan[index];
+          setCurrentIndex(index);
+
+          const response = await fetch(
+            `/api/initialization/steps/${encodeURIComponent(step.id)}/complete`,
+            {
+              method: 'POST',
+            },
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Initialization step "${step.id}" failed with status ${response.status}.`,
+            );
+          }
+
+          const { step: completedStep } = (await response.json()) as {
+            step: InitializationStep;
+          };
+
+          if (!isMounted) {
+            return;
+          }
+
+          setCompletedSteps((previous) => {
+            if (previous.includes(completedStep.id)) {
+              return previous;
+            }
+
+            return [...previous, completedStep.id];
+          });
+        }
 
         if (!isMounted) {
           return;
         }
 
-        setCompletedSteps((previous) =>
-          previous.includes(step.id) ? previous : [...previous, step.id],
-        );
+        setIsInitializing(false);
+      } catch (error) {
+        console.error('Shell initialization failed.', error);
 
-        if (step.id === 'catalog-sync') {
-          await wait(460);
-        }
-
-        if (step.id === 'permissions') {
-          await Promise.all([wait(220), wait(180)]);
+        if (isMounted) {
+          setIsInitializing(false);
         }
       }
-
-      if (!isMounted) {
-        return;
-      }
-
-      await wait(350);
-      setIsInitializing(false);
     };
 
     void runInitialization();
@@ -98,23 +106,23 @@ export const useShellInitialization = (): UseShellInitializationResult => {
   }, []);
 
   const currentStep = useMemo<InitializationStep | null>(
-    () => initializationPlan[currentIndex] ?? null,
-    [currentIndex],
+    () => steps[currentIndex] ?? null,
+    [steps, currentIndex],
   );
 
   const progress = useMemo(() => {
-    if (initializationPlan.length === 0) {
+    if (steps.length === 0) {
       return 1;
     }
 
-    return Math.min(completedSteps.length / initializationPlan.length, 1);
-  }, [completedSteps]);
+    return Math.min(completedSteps.length / steps.length, 1);
+  }, [completedSteps, steps]);
 
   return {
     isInitializing,
     currentStep,
     completedSteps,
-    steps: initializationPlan,
+    steps,
     progress,
   };
 };
