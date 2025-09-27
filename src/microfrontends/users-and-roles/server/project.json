@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "src/microfrontends/users-and-roles/server",
-        "command": "npm run start"
+        "command": "npm run dev"
       }
     }
   },

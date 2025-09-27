@@ -1,38 +1,14 @@
+const path = require('path');
+
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+
 const express = require('express');
 const fs = require('fs');
-const path = require('path');
+const { initializationPlan } = require('./data/initialization-plan');
 
 const app = express();
 const PORT = Number(process.env.SHELL_PORT || 4300);
 const HOST = process.env.SHELL_HOST || '0.0.0.0';
-
-const initializationPlan = [
-  {
-    id: 'services-bootstrap',
-    label: 'Bootstrapping shared telemetry and notification services…',
-    duration: 650,
-  },
-  {
-    id: 'user-settings',
-    label: 'Retrieving operator workspace preferences…',
-    duration: 820,
-  },
-  {
-    id: 'catalog-sync',
-    label: 'Synchronising automation catalog metadata…',
-    duration: 1240,
-  },
-  {
-    id: 'permissions',
-    label: 'Resolving permission boundaries and access policies…',
-    duration: 1040,
-  },
-  {
-    id: 'final-handshake',
-    label: 'Finalising service handshakes and secure channels…',
-    duration: 870,
-  },
-];
 
 const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
 

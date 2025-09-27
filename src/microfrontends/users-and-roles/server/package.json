@@ -4,9 +4,14 @@
   "private": true,
   "scripts": {
     "build": "node scripts/build.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon --watch server.js --watch data --ext js,json --exec node server.js"
   },
   "dependencies": {
-    "express": "4.19.2"
+    "express": "4.19.2",
+    "dotenv": "16.4.7"
+  },
+  "devDependencies": {
+    "nodemon": "3.1.7"
   }
 }
