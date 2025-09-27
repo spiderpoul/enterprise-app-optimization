@@ -231,28 +231,19 @@ if (isProduction) {
 } else if (CLIENT_DEV_SERVER_TARGET) {
   const { createProxyMiddleware } = require('http-proxy-middleware');
 
-  const clientProxy = createProxyMiddleware({
-    target: CLIENT_DEV_SERVER_TARGET,
-    changeOrigin: true,
-    ws: true,
-    logLevel: 'warn',
-  });
+  const pathFilter = (path, req) => !path.startsWith('/api');
+  const clientProxy = createProxyMiddleware(
+    {
+      target: CLIENT_DEV_SERVER_TARGET,
+      changeOrigin: true,
+      ws: true,
+      logLevel: 'warn',
+      pathFilter
+    },
+  );
 
-  app.use((req, res, next) => {
-    if (!shouldProxyClientRequest(req.originalUrl || req.url)) {
-      return next();
-    }
-
-    return clientProxy(req, res, next);
-  });
-
-  app.on('upgrade', (req, socket, head) => {
-    if (!shouldProxyClientRequest(req.url)) {
-      return;
-    }
-
-    clientProxy.upgrade(req, socket, head);
-  });
+  app.use(clientProxy);
+  app.on('upgrade', clientProxy.upgrade);
 
   console.log(`Proxying shell client requests to ${CLIENT_DEV_SERVER_TARGET}`);
 } else {

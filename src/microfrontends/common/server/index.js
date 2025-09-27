@@ -55,13 +55,14 @@ const registerClientAssetHandling = ({
   }
 
   if (devServerUrl) {
+    const pathFilter = (path, req) => !path.startsWith('/api');
     const clientProxy = createProxyMiddleware(
-      (pathname) => !pathname.startsWith('/api'),
       {
         target: devServerUrl,
         changeOrigin: true,
         ws: true,
         logLevel: 'warn',
+        pathFilter
       },
     );
 
