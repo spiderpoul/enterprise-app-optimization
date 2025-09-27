@@ -7,14 +7,43 @@ const fs = require('fs');
 const { initializationPlan } = require('./data/initialization-plan');
 
 const app = express();
-const PORT = Number(process.env.SHELL_PORT || 4300);
-const HOST = process.env.SHELL_HOST || '0.0.0.0';
+const parsePort = (value, fallback) => {
+  const parsed = Number.parseInt(String(value ?? '').trim(), 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+const normalizeHost = (host) => {
+  const trimmed = String(host ?? '').trim();
+  return trimmed && trimmed !== '0.0.0.0' ? trimmed : 'localhost';
+};
+const resolveClientDevServerUrl = () => {
+  const explicitUrl = String(process.env.CLIENT_DEV_SERVER_URL ?? '').trim();
+  if (explicitUrl) {
+    return explicitUrl;
+  }
+
+  const host = normalizeHost(process.env.CLIENT_HOST);
+  const port = parsePort(process.env.CLIENT_PORT, 4301);
+
+  return `http://${host}:${port}`;
+};
+
+const createRequestLogger = (label) => (req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    const url = req.originalUrl || req.url;
+    console.log(
+      `[${label}] ${req.method} ${url} -> ${res.statusCode} (${duration}ms)`,
+    );
+  });
+
+  next();
+};
+
+const PORT = parsePort(process.env.SHELL_PORT, 4300);
+const HOST = String(process.env.SHELL_HOST ?? '0.0.0.0');
 const isProduction = process.env.NODE_ENV === 'production';
-const CLIENT_PORT = Number(process.env.CLIENT_PORT || 4301);
-const CLIENT_HOST = process.env.CLIENT_HOST || '0.0.0.0';
-const CLIENT_DEV_SERVER_URL =
-  process.env.CLIENT_DEV_SERVER_URL ||
-  `http://${CLIENT_HOST === '0.0.0.0' ? 'localhost' : CLIENT_HOST}:${CLIENT_PORT}`;
+const CLIENT_DEV_SERVER_URL = resolveClientDevServerUrl();
 
 const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
 
@@ -73,6 +102,7 @@ const persistRegistry = () => {
   fs.writeFileSync(DATA_FILE, serialized);
 };
 
+app.use(createRequestLogger('shell-server'));
 app.use(express.json());
 
 app.get('/api/health', (_req, res) => {
@@ -178,7 +208,7 @@ if (isProduction) {
   app.get('*', (_req, res) => {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
   });
-} else {
+} else if (CLIENT_DEV_SERVER_URL) {
   const { createProxyMiddleware } = require('http-proxy-middleware');
 
   const clientProxy = createProxyMiddleware(
@@ -193,6 +223,9 @@ if (isProduction) {
 
   app.use(clientProxy);
   app.on('upgrade', clientProxy.upgrade);
+  console.log(`Proxying shell client requests to ${CLIENT_DEV_SERVER_URL}`);
+} else {
+  console.warn('Shell client dev server URL is not defined; client assets will not be proxied.');
 }
 
 app.listen(PORT, HOST, () => {

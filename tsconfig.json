@@ -3,6 +3,7 @@
   "files": [],
   "references": [
     { "path": "./src/shell-app/client/tsconfig.json" },
-    { "path": "./src/microfrontends/operations-reports/tsconfig.json" }
+    { "path": "./src/microfrontends/operations-reports/client/tsconfig.json" },
+    { "path": "./src/microfrontends/users-and-roles/client/tsconfig.json" }
   ]
 }

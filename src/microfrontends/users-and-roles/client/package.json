@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cross-env webpack --config ../webpack.config.cjs --mode production",
-    "serve": "cross-env webpack serve --config ../webpack.config.cjs --mode development",
-    "analyze": "cross-env ANALYZE=true webpack --config ../webpack.config.cjs --mode production"
+    "build": "cross-env webpack --config ./webpack.config.cjs --mode production",
+    "serve": "cross-env webpack serve --config ./webpack.config.cjs --mode development",
+    "analyze": "cross-env ANALYZE=true webpack --config ./webpack.config.cjs --mode production"
   },
   "dependencies": {
     "antd": "5.27.4",
