@@ -1,10 +1,11 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { Configuration } from 'webpack';
-import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { Configuration, WebpackPluginInstance } from 'webpack';
+import 'webpack-dev-server';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import StatoscopeWebpackPlugin from '@statoscope/webpack-plugin';
-import { WebpackPluginInstance } from 'webpack';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,10 +22,10 @@ const analyzerPlugins = (): WebpackPluginInstance[] => {
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
       openAnalyzer: false,
-      reportFilename: path.resolve(__dirname, 'dist', 'reports', 'operations-reports-bundle.html'),
+      reportFilename: path.resolve(__dirname, 'dist', 'reports', 'shell-client-bundle.html'),
     }),
     new StatoscopeWebpackPlugin({
-      saveStatsTo: path.resolve(__dirname, 'dist', 'reports', 'operations-reports-stats.json'),
+      saveStatsTo: path.resolve(__dirname, 'dist', 'reports', 'shell-client-stats.json'),
       saveOnlyStats: false,
     }),
   ];
@@ -33,22 +34,19 @@ const analyzerPlugins = (): WebpackPluginInstance[] => {
 };
 
 const config: Configuration = {
-  entry: path.resolve(__dirname, 'client', 'index.tsx'),
+  entry: path.resolve(__dirname, 'main.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'operations-reports.js',
-    module: true,
-    library: {
-      type: 'module',
-    },
-    publicPath: '/',
+    filename: 'assets/[name].[contenthash].js',
     clean: true,
-  },
-  experiments: {
-    outputModule: true,
+    publicPath: '/',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@kaspersky/uif-react': path.resolve(__dirname, 'lib', 'uif-react.tsx'),
+      '@kaspersky/uif': path.resolve(__dirname, 'lib', 'uif.ts'),
+    },
   },
   module: {
     rules: [
@@ -65,7 +63,7 @@ const config: Configuration = {
       {
         test: /\.css$/i,
         use: [
-          'style-loader',
+          isProduction ? MiniCssExtractPlugin.loader : 'style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -76,7 +74,14 @@ const config: Configuration = {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: [['autoprefixer']],
+                plugins: [
+                  [
+                    'autoprefixer',
+                    {
+                      flexbox: 'no-2009',
+                    },
+                  ],
+                ],
               },
             },
           },
@@ -85,16 +90,25 @@ const config: Configuration = {
     ],
   },
   plugins: [
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, 'manifest.json'),
-          to: path.resolve(__dirname, 'dist', 'manifest.json'),
-        },
-      ],
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, '..', '..', '..', 'public', 'index.html'),
+      inject: 'body',
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'assets/[name].[contenthash].css',
     }),
     ...analyzerPlugins(),
   ],
+  devServer: {
+    host: '0.0.0.0',
+    port: Number(process.env.SHELL_CLIENT_PORT || 5173),
+    historyApiFallback: true,
+    hot: true,
+    open: false,
+    static: {
+      directory: path.resolve(__dirname, 'dist'),
+    },
+  },
   devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
 };
 

@@ -5,8 +5,9 @@ const path = require('path');
 const MICROFRONT_PORT = Number(process.env.MICROFRONT_PORT || 4400);
 const MICROFRONT_HOST = process.env.MICROFRONT_HOST || '0.0.0.0';
 const SHELL_URL = process.env.SHELL_URL || 'http://localhost:4300';
-const PROJECT_ROOT = path.resolve(__dirname, '../../../..');
-const DIST_DIR = path.join(PROJECT_ROOT, 'src', 'microfrontends', 'operations-reports', 'dist');
+const DIST_DIR = process.env.CLIENT_DIST_DIR
+  ? path.resolve(process.env.CLIENT_DIST_DIR)
+  : path.resolve(__dirname, '..', 'client', 'dist');
 const MANIFEST_PATH = path.join(DIST_DIR, 'manifest.json');
 
 const app = express();
@@ -37,7 +38,8 @@ const reports = [
         value: 86.2,
         unit: 'score',
         change: 4.1,
-        description: 'Composite view of redundancy, failover coverage, and recovery rehearsal adherence across regions.',
+        description:
+          'Composite view of redundancy, failover coverage, and recovery rehearsal adherence across regions.',
       },
       {
         id: 'automation-coverage',
@@ -45,7 +47,8 @@ const reports = [
         value: 72.5,
         unit: 'percentage',
         change: 5.4,
-        description: 'Percentage of critical runbooks executed automatically without engineer intervention.',
+        description:
+          'Percentage of critical runbooks executed automatically without engineer intervention.',
       },
       {
         id: 'region-hotspots',
@@ -53,7 +56,8 @@ const reports = [
         value: 3,
         unit: 'count',
         change: -2,
-        description: 'Number of geographic regions where fallback automation requires manual approval.',
+        description:
+          'Number of geographic regions where fallback automation requires manual approval.',
       },
     ],
     timeline: [
@@ -101,7 +105,8 @@ const reports = [
         value: 64.2,
         unit: 'percentage',
         change: 3.2,
-        description: 'Percentage of priority incidents that triggered the recommended automation playbook.',
+        description:
+          'Percentage of priority incidents that triggered the recommended automation playbook.',
       },
       {
         id: 'responder-saturation',
@@ -109,7 +114,8 @@ const reports = [
         value: 12,
         unit: 'count',
         change: 1,
-        description: 'Average number of simultaneous priority incidents handled per responder during peak loads.',
+        description:
+          'Average number of simultaneous priority incidents handled per responder during peak loads.',
       },
     ],
     timeline: [
@@ -149,7 +155,8 @@ const reports = [
         value: 1840,
         unit: 'count',
         change: 210,
-        description: 'Cumulative monthly engineering hours avoided due to automated remediation and change orchestration.',
+        description:
+          'Cumulative monthly engineering hours avoided due to automated remediation and change orchestration.',
       },
       {
         id: 'change-success',
@@ -157,7 +164,8 @@ const reports = [
         value: 96.4,
         unit: 'percentage',
         change: 1.8,
-        description: 'Percentage of changes deployed through automation with no production rollback within 24 hours.',
+        description:
+          'Percentage of changes deployed through automation with no production rollback within 24 hours.',
       },
       {
         id: 'self-healed-events',
@@ -165,7 +173,8 @@ const reports = [
         value: 312,
         unit: 'count',
         change: 48,
-        description: 'Number of production incidents automatically resolved without paging an on-call responder.',
+        description:
+          'Number of production incidents automatically resolved without paging an on-call responder.',
       },
     ],
     timeline: [
@@ -244,6 +253,8 @@ const startAcknowledgementLoop = () => {
 };
 
 app.listen(MICROFRONT_PORT, MICROFRONT_HOST, () => {
-  console.log(`Operations reports microfrontend listening at http://${MICROFRONT_HOST}:${MICROFRONT_PORT}`);
+  console.log(
+    `Operations reports microfrontend listening at http://${MICROFRONT_HOST}:${MICROFRONT_PORT}`,
+  );
   startAcknowledgementLoop();
 });

@@ -16,6 +16,55 @@ const mapReport = (report: OperationsReport): OperationsReport => ({
   highlights: [...report.highlights],
 });
 
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+const isOperationsReport = (value: unknown): value is OperationsReport => {
+  if (!isRecord(value)) {
+    return false;
+  }
+
+  const {
+    id,
+    name,
+    owner,
+    status,
+    healthScore,
+    lastUpdated,
+    summary,
+    category,
+    tags,
+    metrics,
+    timeline,
+    distribution,
+    highlights,
+  } = value;
+
+  return (
+    typeof id === 'string' &&
+    typeof name === 'string' &&
+    typeof owner === 'string' &&
+    typeof status === 'string' &&
+    typeof healthScore === 'number' &&
+    typeof lastUpdated === 'string' &&
+    typeof summary === 'string' &&
+    typeof category === 'string' &&
+    Array.isArray(tags) &&
+    Array.isArray(metrics) &&
+    Array.isArray(timeline) &&
+    Array.isArray(distribution) &&
+    Array.isArray(highlights)
+  );
+};
+
+const parseReports = (input: unknown): OperationsReport[] => {
+  if (!Array.isArray(input)) {
+    throw new Error('Malformed reports payload received from server');
+  }
+
+  return input.filter(isOperationsReport).map(mapReport);
+};
+
 export const useReportsData = (): ReportsState => {
   const [reports, setReports] = useState<OperationsReport[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,13 +84,14 @@ export const useReportsData = (): ReportsState => {
           throw new Error(`Request failed with status ${response.status}`);
         }
 
-        const payload: OperationsReport[] = await response.json();
+        const rawPayload = (await response.json()) as unknown;
+        const parsed = parseReports(rawPayload);
 
         if (!isMounted) {
           return;
         }
 
-        setReports(payload.map(mapReport));
+        setReports(parsed);
       } catch (err) {
         if (!isMounted) {
           return;
@@ -57,7 +107,7 @@ export const useReportsData = (): ReportsState => {
       }
     };
 
-    loadReports();
+    void loadReports();
 
     return () => {
       isMounted = false;

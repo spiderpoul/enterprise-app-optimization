@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  shell:
+    build:
+      context: .
+      dockerfile: src/shell-app/Dockerfile
+    ports:
+      - '4300:4300'
+    environment:
+      - NODE_ENV=production
+      - CLIENT_DIST_DIR=/app/client/dist
+  operations-reports:
+    build:
+      context: .
+      dockerfile: src/microfrontends/operations-reports/Dockerfile
+    ports:
+      - '4400:4400'
+    environment:
+      - NODE_ENV=production
+      - CLIENT_DIST_DIR=/app/client/dist
+      - SHELL_URL=http://shell:4300
+    depends_on:
+      - shell

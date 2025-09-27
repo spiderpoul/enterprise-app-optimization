@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "operations-reports-client",
+  "sourceRoot": "src/microfrontends/operations-reports/client",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/operations-reports/client",
+        "command": "npm run build"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/operations-reports/client",
+        "command": "npm run serve"
+      }
+    },
+    "analyze": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/operations-reports/client",
+        "command": "npm run analyze"
+      }
+    }
+  },
+  "tags": []
+}

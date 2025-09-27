@@ -12,9 +12,10 @@ module.exports = {
     },
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+    project: ['./tsconfig.eslint.json'],
   },
-  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y', 'import', 'prettier'],
+  plugins: ['@typescript-eslint', 'react', 'react-hooks', 'jsx-a11y', 'prettier'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -22,34 +23,16 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
-    'plugin:import/recommended',
-    'plugin:import/typescript',
     'plugin:prettier/recommended',
   ],
   settings: {
     react: {
       version: 'detect',
     },
-    'import/resolver': {
-      typescript: {
-        project: '.',
-      },
-    },
   },
   rules: {
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
-    'import/order': [
-      'warn',
-      {
-        groups: [['builtin', 'external'], 'internal', ['parent', 'sibling', 'index']],
-        alphabetize: {
-          order: 'asc',
-          caseInsensitive: true,
-        },
-        newlines-between: 'always',
-      },
-    ],
   },
   overrides: [
     {

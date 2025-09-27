@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@kaspersky/uif-react": ["./lib/uif-react"],
+      "@kaspersky/uif": ["./lib/uif"]
+    }
+  },
+  "include": ["./**/*"],
+  "exclude": ["dist", "node_modules"]
+}

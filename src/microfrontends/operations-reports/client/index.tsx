@@ -85,10 +85,16 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
                 {report.status}
               </Tag>
             </div>
-            <Paragraph className="operations-reports__table-description">{report.summary}</Paragraph>
+            <Paragraph className="operations-reports__table-description">
+              {report.summary}
+            </Paragraph>
             <div className="operations-reports__tags" aria-label="report tags">
               {report.tags.map((tag) => (
-                <Tag key={`${report.id}-${tag}`} color="geekblue" className="operations-reports__tag">
+                <Tag
+                  key={`${report.id}-${tag}`}
+                  color="geekblue"
+                  className="operations-reports__tag"
+                >
                   {tag}
                 </Tag>
               ))}
@@ -99,10 +105,12 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
       {
         key: 'owner',
         title: 'Owner',
-        render: (report) => (
+        render: (_value, report) => (
           <div>
             <Text strong>{report.owner}</Text>
-            <Paragraph className="operations-reports__table-description">{report.category}</Paragraph>
+            <Paragraph className="operations-reports__table-description">
+              {report.category}
+            </Paragraph>
           </div>
         ),
       },
@@ -110,7 +118,7 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
         key: 'healthScore',
         title: 'Health score',
         align: 'right',
-        render: (report) => (
+        render: (_value, report) => (
           <div className="operations-reports__health-score" aria-label="report health score">
             {report.healthScore.toFixed(0)}
             <span>Composite index</span>
@@ -121,10 +129,10 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
         key: 'lastUpdated',
         title: 'Last updated',
         align: 'right',
-        render: (report) => <span>{formatUpdatedAt(report.lastUpdated)}</span>,
+        render: (_value, report) => <span>{formatUpdatedAt(report.lastUpdated)}</span>,
       },
     ],
-    []
+    [],
   );
 
   return (
@@ -132,9 +140,10 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
       <div>
         <Title level={2}>Enterprise operations reports</Title>
         <Paragraph className="operations-reports__header-summary">
-          Each report aggregates telemetry from automation pipelines, incident command logs, and cloud infrastructure metrics.
-          Select a report to inspect the detailed timeline, key metrics, and automation maturity breakdowns served directly from
-          the microfrontend service.
+          Each report aggregates telemetry from automation pipelines, incident command logs, and
+          cloud infrastructure metrics. Select a report to inspect the detailed timeline, key
+          metrics, and automation maturity breakdowns served directly from the microfrontend
+          service.
         </Paragraph>
       </div>
 
@@ -152,7 +161,9 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
           emptyText: isLoading ? 'Loading reports…' : 'No published reports available yet.',
         }}
         onRow={(report) => ({
-          onClick: () => navigate(report.id),
+          onClick: () => {
+            void navigate(report.id);
+          },
           className: 'operations-reports__table-row',
         })}
       />
@@ -169,10 +180,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
   const navigate = useNavigate();
   const { reportId } = useParams<{ reportId: string }>();
 
-  const report = useMemo(
-    () => reports.find((item) => item.id === reportId),
-    [reports, reportId]
-  );
+  const report = useMemo(() => reports.find((item) => item.id === reportId), [reports, reportId]);
 
   if (isLoading) {
     return (
@@ -185,13 +193,21 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
   if (!report) {
     return (
       <Space direction="vertical" size="large" className="operations-reports__section">
-        <Button type="link" onClick={() => navigate('..')} className="operations-reports__back-button">
+        <Button
+          type="link"
+          onClick={() => {
+            void navigate('..');
+          }}
+          className="operations-reports__back-button"
+        >
           Back to all reports
         </Button>
         <Card>
           <Space direction="vertical" size="small">
             <Title level={4}>Report unavailable</Title>
-            <Paragraph>The requested report could not be found. It may have been unpublished or renamed.</Paragraph>
+            <Paragraph>
+              The requested report could not be found. It may have been unpublished or renamed.
+            </Paragraph>
           </Space>
         </Card>
       </Space>
@@ -200,7 +216,13 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
 
   return (
     <Space direction="vertical" size="large" className="operations-reports__section">
-      <Button type="link" onClick={() => navigate('..')} className="operations-reports__back-button">
+      <Button
+        type="link"
+        onClick={() => {
+          void navigate('..');
+        }}
+        className="operations-reports__back-button"
+      >
         Back to all reports
       </Button>
 
@@ -211,23 +233,37 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
 
       <div className="operations-reports__tags" aria-label="report labels">
         {report.tags.map((tag) => (
-          <Tag key={`${report.id}-detail-${tag}`} color="geekblue" className="operations-reports__tag">
+          <Tag
+            key={`${report.id}-detail-${tag}`}
+            color="geekblue"
+            className="operations-reports__tag"
+          >
             {tag}
           </Tag>
         ))}
       </div>
 
       <div className="operations-reports__detail-grid">
-        <Card className="operations-reports__chart-card" bordered={false} aria-label="readiness trend">
+        <Card
+          className="operations-reports__chart-card"
+          bordered={false}
+          aria-label="readiness trend"
+        >
           <h3 className="operations-reports__chart-title">Readiness velocity</h3>
           <AreaTrendChart data={report.timeline} />
           <div className="operations-reports__chart-footer">
-            <span>Comparing automation coverage against readiness index over the last six months.</span>
+            <span>
+              Comparing automation coverage against readiness index over the last six months.
+            </span>
             <span>Last updated {formatUpdatedAt(report.lastUpdated)}</span>
           </div>
         </Card>
 
-        <Card className="operations-reports__chart-card" bordered={false} aria-label="automation maturity">
+        <Card
+          className="operations-reports__chart-card"
+          bordered={false}
+          aria-label="automation maturity"
+        >
           <h3 className="operations-reports__chart-title">Automation maturity breakdown</h3>
           <DonutChart data={report.distribution} />
         </Card>
@@ -240,17 +276,23 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
             delta > 0
               ? 'operations-reports__metric-delta--positive'
               : delta < 0
-              ? 'operations-reports__metric-delta--negative'
-              : undefined;
+                ? 'operations-reports__metric-delta--negative'
+                : undefined;
           const deltaLabel =
-            delta === 0 ? 'No change vs. previous cycle' : `${delta > 0 ? '+' : ''}${delta.toFixed(1)} pts vs. previous cycle`;
+            delta === 0
+              ? 'No change vs. previous cycle'
+              : `${delta > 0 ? '+' : ''}${delta.toFixed(1)} pts vs. previous cycle`;
 
           return (
             <Card key={metric.id} className="operations-reports__metric-card" bordered={false}>
               <div className="operations-reports__metric-label">{metric.label}</div>
               <div className="operations-reports__metric-value">{formatMetricValue(metric)}</div>
-              <div className={`operations-reports__metric-delta ${deltaClass ?? ''}`}>{deltaLabel}</div>
-              <Paragraph className="operations-reports__table-description">{metric.description}</Paragraph>
+              <div className={`operations-reports__metric-delta ${deltaClass ?? ''}`}>
+                {deltaLabel}
+              </div>
+              <Paragraph className="operations-reports__table-description">
+                {metric.description}
+              </Paragraph>
             </Card>
           );
         })}
@@ -260,7 +302,10 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
         <Title level={4}>Highlights from operations analytics</Title>
         <div className="operations-reports__highlights">
           {report.highlights.map((highlight, index) => (
-            <div key={`${report.id}-highlight-${index}`} className="operations-reports__highlight-item">
+            <div
+              key={`${report.id}-highlight-${index}`}
+              className="operations-reports__highlight-item"
+            >
               <span className="operations-reports__highlight-bullet" aria-hidden="true" />
               <span>{highlight}</span>
             </div>
@@ -277,8 +322,14 @@ const OperationsReportsApp: React.FC = () => {
   return (
     <div className="operations-reports__content">
       <Routes>
-        <Route index element={<ReportsList reports={reports} isLoading={isLoading} error={error} />} />
-        <Route path=":reportId" element={<ReportDetails reports={reports} isLoading={isLoading} />} />
+        <Route
+          index
+          element={<ReportsList reports={reports} isLoading={isLoading} error={error} />}
+        />
+        <Route
+          path=":reportId"
+          element={<ReportDetails reports={reports} isLoading={isLoading} />}
+        />
       </Routes>
     </div>
   );

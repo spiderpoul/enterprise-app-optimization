@@ -64,7 +64,6 @@ const DonutChart: React.FC<DonutChartProps> = ({ data, colors = defaultPalette }
             outerRadius={108}
             paddingAngle={4}
             dataKey="value"
-            blendStroke
           >
             {chartData.map((entry) => (
               <Cell key={entry.name} fill={entry.color} stroke="transparent" />

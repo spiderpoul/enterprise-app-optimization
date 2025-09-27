@@ -1,5 +1,12 @@
 :root {
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    'Segoe UI',
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
   color: #0b1222;
   background-color: #f2f4f8;
 }
@@ -338,7 +345,9 @@ body {
   flex-direction: column;
   gap: 6px;
   cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .sidebar-menu__button:hover {
@@ -515,4 +524,172 @@ body {
 .microfrontend-error p {
   margin: 0;
   color: #7f1d1d;
+}
+
+.app-shell__user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.app-shell__user-name {
+  font-weight: 600;
+  color: #0b1222;
+}
+
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 48px 24px;
+  background: radial-gradient(circle at top, rgba(30, 64, 175, 0.12), transparent 60%), #f2f4f8;
+}
+
+.login-page__layout {
+  max-width: 520px;
+  margin: 0 auto;
+  gap: 32px;
+}
+
+.login-page__card {
+  box-shadow: 0 40px 80px -40px rgba(15, 23, 42, 0.35);
+  border-radius: 24px;
+  padding: 32px;
+  background: #ffffff;
+}
+
+.login-page__intro {
+  color: #475467;
+}
+
+.login-page__actions {
+  margin-top: 16px;
+}
+
+.uif-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.uif-header__title {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.uif-header__subtitle {
+  margin: 0;
+  color: #475467;
+}
+
+.uif-content {
+  width: 100%;
+}
+
+.uif-button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 600;
+  background: #1d4ed8;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uif-button--secondary {
+  background: #ffffff;
+  color: #1d4ed8;
+  border: 1px solid rgba(29, 78, 216, 0.3);
+}
+
+.uif-button--ghost {
+  background: transparent;
+  color: #1d4ed8;
+  border: 1px solid transparent;
+}
+
+.uif-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.uif-stack--row {
+  flex-direction: row;
+}
+
+.uif-stack--space-xs {
+  gap: 4px;
+}
+
+.uif-stack--space-s {
+  gap: 8px;
+}
+
+.uif-stack--space-m {
+  gap: 16px;
+}
+
+.uif-stack--space-l {
+  gap: 24px;
+}
+
+.uif-stack--space-xl {
+  gap: 32px;
+}
+
+.uif-card {
+  border-radius: 24px;
+  background: #ffffff;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uif-card--strong {
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: linear-gradient(180deg, rgba(226, 232, 240, 0.45) 0%, #ffffff 100%);
+}
+
+.uif-card__title {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.uif-card__description {
+  margin: 0;
+  color: #475467;
+}
+
+.uif-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uif-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uif-loader__spinner {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(29, 78, 216, 0.4);
+  border-top-color: #1d4ed8;
+  animation: uif-spinner 1s linear infinite;
+}
+
+@keyframes uif-spinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
