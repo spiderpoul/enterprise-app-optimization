@@ -9,6 +9,12 @@ const { initializationPlan } = require('./data/initialization-plan');
 const app = express();
 const PORT = Number(process.env.SHELL_PORT || 4300);
 const HOST = process.env.SHELL_HOST || '0.0.0.0';
+const isProduction = process.env.NODE_ENV === 'production';
+const CLIENT_PORT = Number(process.env.CLIENT_PORT || 4301);
+const CLIENT_HOST = process.env.CLIENT_HOST || '0.0.0.0';
+const CLIENT_DEV_SERVER_URL =
+  process.env.CLIENT_DEV_SERVER_URL ||
+  `http://${CLIENT_HOST === '0.0.0.0' ? 'localhost' : CLIENT_HOST}:${CLIENT_PORT}`;
 
 const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
 
@@ -25,16 +31,22 @@ const resolveClientDist = () => {
 };
 
 const DIST_DIR = resolveClientDist();
-const DATA_DIR = path.join(__dirname, 'data');
+const SOURCE_DATA_DIR = path.join(__dirname, 'data');
+const SOURCE_DATA_FILE = path.join(SOURCE_DATA_DIR, 'microfrontends.json');
+const DATA_DIR = path.join(__dirname, 'dist', 'data');
 const DATA_FILE = path.join(DATA_DIR, 'microfrontends.json');
 
-const ensureDataDir = () => {
+const ensureDataFile = () => {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
+
+  if (!fs.existsSync(DATA_FILE) && fs.existsSync(SOURCE_DATA_FILE)) {
+    fs.copyFileSync(SOURCE_DATA_FILE, DATA_FILE);
+  }
 };
 
-ensureDataDir();
+ensureDataFile();
 
 const loadRegistry = () => {
   try {
@@ -53,6 +65,10 @@ const loadRegistry = () => {
 const registry = loadRegistry();
 
 const persistRegistry = () => {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+
   const serialized = JSON.stringify(Array.from(registry.values()), null, 2);
   fs.writeFileSync(DATA_FILE, serialized);
 };
@@ -156,11 +172,28 @@ app.use((_req, res, next) => {
   next();
 });
 
-app.use(express.static(DIST_DIR));
+if (isProduction) {
+  app.use(express.static(DIST_DIR));
 
-app.get('*', (_req, res) => {
-  res.sendFile(path.join(DIST_DIR, 'index.html'));
-});
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(DIST_DIR, 'index.html'));
+  });
+} else {
+  const { createProxyMiddleware } = require('http-proxy-middleware');
+
+  const clientProxy = createProxyMiddleware(
+    (pathname) => !pathname.startsWith('/api'),
+    {
+      target: CLIENT_DEV_SERVER_URL,
+      changeOrigin: true,
+      ws: true,
+      logLevel: 'warn',
+    },
+  );
+
+  app.use(clientProxy);
+  app.on('upgrade', clientProxy.upgrade);
+}
 
 app.listen(PORT, HOST, () => {
   console.log(`Shell server running at http://${HOST}:${PORT}`);

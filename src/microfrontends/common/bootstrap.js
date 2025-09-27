@@ -49,6 +49,16 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
 
   const acknowledgementEndpoint = new URL('/api/microfrontends/ack', shellUrl).href;
 
+  let timer = null;
+  let hasAcknowledged = false;
+
+  const stopTimer = () => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  };
+
   const sendAcknowledgement = async () => {
     try {
       const response = await fetch(acknowledgementEndpoint, {
@@ -64,15 +74,25 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
       }
 
       console.log(`Microfrontend "${descriptor.id}" acknowledged by shell.`);
+      hasAcknowledged = true;
+      stopTimer();
     } catch (error) {
       console.error('Unable to acknowledge shell:', error.message || error);
     }
   };
 
   const start = () => {
-    sendAcknowledgement();
-    const timer = setInterval(sendAcknowledgement, intervalMs);
-    return () => clearInterval(timer);
+    void sendAcknowledgement();
+
+    if (!hasAcknowledged) {
+      timer = setInterval(() => {
+        void sendAcknowledgement();
+      }, intervalMs);
+    }
+
+    return () => {
+      stopTimer();
+    };
   };
 
   return {
