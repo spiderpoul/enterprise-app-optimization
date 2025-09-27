@@ -1,12 +1,11 @@
 import React from 'react';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import Plotly from 'plotly.js/dist/plotly';
-import type { Config, Layout, PlotlyStatic } from 'plotly.js';
 import { UserActivityPoint } from '../types';
 
 // Plotly's runtime bundle does not ship strong typings, so we assert the type for the factory.
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-const Plot = createPlotlyComponent(Plotly as unknown as PlotlyStatic);
+const Plot = createPlotlyComponent(Plotly);
 
 interface UserEngagementChartProps {
   data: UserActivityPoint[];
@@ -15,7 +14,7 @@ interface UserEngagementChartProps {
 const UserEngagementChart: React.FC<UserEngagementChartProps> = ({ data }) => {
   const weeks = data.map((point) => point.week);
 
-  const layout: Partial<Layout> = {
+  const layout = {
     margin: { l: 40, r: 16, t: 24, b: 32 },
     legend: { orientation: 'h', y: -0.2 },
     hovermode: 'x unified',
@@ -37,7 +36,7 @@ const UserEngagementChart: React.FC<UserEngagementChartProps> = ({ data }) => {
     },
   };
 
-  const config: Partial<Config> = {
+  const config = {
     responsive: true,
     displayModeBar: false,
   };
