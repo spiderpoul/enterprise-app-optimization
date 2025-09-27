@@ -41,7 +41,10 @@ const TrendTooltip: React.FC<TooltipProps> = ({ active, label, payload }) => {
       <ul>
         {payload.map((entry) => (
           <li key={entry.name}>
-            <span className="operations-reports__tooltip-swatch" style={{ background: entry.color }} />
+            <span
+              className="operations-reports__tooltip-swatch"
+              style={{ background: entry.color }}
+            />
             <span>
               {entry.name}: {formatPercentage(Number(entry.value ?? 0))}
             </span>
@@ -65,7 +68,7 @@ const AreaTrendChart: React.FC<AreaTrendChartProps> = ({
         automation: Math.max(0, Math.min(100, point.automation)),
         incidents: point.incidents,
       })),
-    [data]
+    [data],
   );
 
   if (chartData.length === 0) {
@@ -82,7 +85,12 @@ const AreaTrendChart: React.FC<AreaTrendChartProps> = ({
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="4 6" stroke="rgba(16,37,66,0.12)" vertical={false} />
-        <XAxis dataKey="label" stroke="rgba(16,37,66,0.55)" tickLine={false} axisLine={{ stroke: 'rgba(16,37,66,0.2)' }} />
+        <XAxis
+          dataKey="label"
+          stroke="rgba(16,37,66,0.55)"
+          tickLine={false}
+          axisLine={{ stroke: 'rgba(16,37,66,0.2)' }}
+        />
         <YAxis
           domain={[0, 100]}
           tickFormatter={formatPercentage}
@@ -91,7 +99,12 @@ const AreaTrendChart: React.FC<AreaTrendChartProps> = ({
           stroke="rgba(16,37,66,0.55)"
         />
         <Tooltip content={<TrendTooltip />} cursor={{ strokeDasharray: '3 3' }} />
-        <Legend verticalAlign="top" align="right" iconType="circle" wrapperStyle={{ paddingBottom: 12 }} />
+        <Legend
+          verticalAlign="top"
+          align="right"
+          iconType="circle"
+          wrapperStyle={{ paddingBottom: 12 }}
+        />
         <Area
           type="monotone"
           dataKey="readiness"

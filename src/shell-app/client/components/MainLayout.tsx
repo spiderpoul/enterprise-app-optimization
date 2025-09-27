@@ -6,6 +6,7 @@ import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import MicrofrontendBoundary from '../microfrontends/MicrofrontendBoundary';
 import NotFound from '../pages/NotFound';
+import { useAuth } from '../auth/AuthContext';
 
 const coreMenuSections: MenuSection[] = [
   {
@@ -25,6 +26,7 @@ const coreMenuSections: MenuSection[] = [
 
 const MainLayout: React.FC = () => {
   const { microfrontends, isLoading, error } = useMicrofrontends();
+  const { user, logout } = useAuth();
 
   const extensionSection = useMemo<MenuSection | null>(() => {
     if (microfrontends.length === 0) {
@@ -54,7 +56,11 @@ const MainLayout: React.FC = () => {
   }, [extensionSection]);
 
   return (
-    <UIFApplication appCode="enterprise-app-optimization" locale="en-US" title="Enterprise App Optimization">
+    <UIFApplication
+      appCode="enterprise-app-optimization"
+      locale="en-US"
+      title="Enterprise App Optimization"
+    >
       <div className="app-shell">
         <aside className="app-shell__sidebar">
           <div className="app-shell__sidebar-header">
@@ -74,6 +80,14 @@ const MainLayout: React.FC = () => {
               subtitle="Monitor posture, orchestrate response playbooks, and track automation coverage."
             />
             <div className="app-shell__header-actions">
+              <div className="app-shell__user-chip" aria-label="Signed in user">
+                <span className="app-shell__user-name">
+                  {user?.displayName ?? 'Enterprise guest'}
+                </span>
+                <UIFButton appearance="ghost" onClick={logout}>
+                  Sign out
+                </UIFButton>
+              </div>
               <UIFButton appearance="secondary">Export insights</UIFButton>
               <UIFButton appearance="primary">Launch automation</UIFButton>
             </div>
@@ -100,7 +114,11 @@ const MainLayout: React.FC = () => {
                 {microfrontends.map((microfrontend) => (
                   <Route
                     key={microfrontend.id}
-                    path={microfrontend.routePath.startsWith('/') ? microfrontend.routePath : `/${microfrontend.routePath}`}
+                    path={
+                      microfrontend.routePath.startsWith('/')
+                        ? microfrontend.routePath
+                        : `/${microfrontend.routePath}`
+                    }
                     element={
                       <Suspense
                         fallback={
@@ -125,8 +143,8 @@ const MainLayout: React.FC = () => {
             <div>
               <p className="app-shell__footer-title">Need help accelerating adoption?</p>
               <p className="app-shell__footer-copy">
-                Review the UIF documentation, explore integration blueprints, or reach out to the enterprise solutions
-                team for guided onboarding.
+                Review the UIF documentation, explore integration blueprints, or reach out to the
+                enterprise solutions team for guided onboarding.
               </p>
             </div>
             <div className="app-shell__footer-actions">

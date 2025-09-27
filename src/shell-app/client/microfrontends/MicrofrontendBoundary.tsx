@@ -21,7 +21,7 @@ export class MicrofrontendBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error) {
-    console.error(`Microfrontend \"${this.props.name}\" failed to render.`, error);
+    console.error(`Microfrontend "${this.props.name}" failed to render.`, error);
   }
 
   render(): React.ReactNode {
@@ -29,7 +29,10 @@ export class MicrofrontendBoundary extends React.Component<
       return (
         <div role="alert" className="microfrontend-error">
           <h2>Unable to load {this.props.name}</h2>
-          <p>{this.state.message ?? 'The microfrontend failed to render. Check the browser console for details.'}</p>
+          <p>
+            {this.state.message ??
+              'The microfrontend failed to render. Check the browser console for details.'}
+          </p>
         </div>
       );
     }

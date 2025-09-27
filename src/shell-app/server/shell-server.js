@@ -5,7 +5,15 @@ const path = require('path');
 const app = express();
 const PORT = Number(process.env.SHELL_PORT || 4300);
 const HOST = process.env.SHELL_HOST || '0.0.0.0';
-const DIST_DIR = path.resolve(__dirname, '..', '..', '..', 'dist');
+const resolveClientDist = () => {
+  if (process.env.CLIENT_DIST_DIR) {
+    return path.resolve(process.env.CLIENT_DIST_DIR);
+  }
+
+  return path.resolve(__dirname, '..', 'client', 'dist');
+};
+
+const DIST_DIR = resolveClientDist();
 const DATA_DIR = path.join(__dirname, 'data');
 const DATA_FILE = path.join(DATA_DIR, 'microfrontends.json');
 
@@ -25,11 +33,7 @@ const loadRegistry = () => {
       return new Map();
     }
 
-    return new Map(
-      parsed
-        .filter((entry) => entry && entry.id)
-        .map((entry) => [entry.id, entry])
-    );
+    return new Map(parsed.filter((entry) => entry && entry.id).map((entry) => [entry.id, entry]));
   } catch (error) {
     return new Map();
   }
@@ -68,7 +72,8 @@ app.post('/api/microfrontends/ack', (req, res) => {
 
   if (!id || !name || !menuLabel || !routePath || !entryUrl) {
     return res.status(400).json({
-      message: 'id, name, menuLabel, routePath and entryUrl are required for microfrontend acknowledgement.',
+      message:
+        'id, name, menuLabel, routePath and entryUrl are required for microfrontend acknowledgement.',
     });
   }
 

@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "name": "shell-client",
+  "sourceRoot": "src/shell-app/client",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/shell-app/client",
+        "command": "npm run build"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/shell-app/client",
+        "command": "npm run serve"
+      }
+    },
+    "analyze": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/shell-app/client",
+        "command": "npm run analyze"
+      }
+    }
+  },
+  "tags": []
+}

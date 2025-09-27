@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "npmScope": "enterprise-app-optimization",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*"],
+    "production": ["default", "!{projectRoot}/**/*.spec.ts", "!{projectRoot}/**/*.spec.tsx"]
+  },
+  "projects": {
+    "shell-client": "src/shell-app/client",
+    "shell-server": "src/shell-app/server",
+    "operations-reports-client": "src/microfrontends/operations-reports/client",
+    "operations-reports-server": "src/microfrontends/operations-reports/server"
+  }
+}
