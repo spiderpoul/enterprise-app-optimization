@@ -1,7 +1,10 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { container } = require('webpack');
 const { default: StatoscopeWebpackPlugin } = require('@statoscope/webpack-plugin');
+
+const { ModuleFederationPlugin } = container;
 
 const parsePort = (value, fallback) => {
   const parsed = Number.parseInt(String(value ?? '').trim(), 10);
@@ -28,6 +31,31 @@ const createAnalyzerPlugins = ({ rootDir, bundleName, shouldAnalyze }) => {
   ];
 };
 
+const normalizeModuleFederationName = (value) =>
+  String(value)
+    .trim()
+    .replace(/[^a-zA-Z0-9_]/g, '-')
+    .replace(/-+(\w)/g, (_match, letter) => letter.toUpperCase())
+    .replace(/^-/, '')
+    .replace(/[^a-zA-Z0-9_]/g, '') || 'microfrontend';
+
+const createSharedConfig = (dependencies = {}) => {
+  const sharedLibraries = ['react', 'react-dom', 'react-router', 'react-router-dom'];
+
+  return sharedLibraries.reduce((shared, library) => {
+    const version = dependencies[library];
+
+    if (version) {
+      shared[library] = {
+        singleton: true,
+        requiredVersion: version,
+      };
+    }
+
+    return shared;
+  }, {});
+};
+
 const createMicrofrontendConfig = ({
   rootDir,
   outputFileName,
@@ -39,6 +67,8 @@ const createMicrofrontendConfig = ({
 
   const isProduction = process.env.NODE_ENV === 'production';
   const shouldAnalyze = String(process.env.ANALYZE ?? '').trim() === 'true';
+  const dependencies = require(path.resolve(rootDir, 'package.json')).dependencies ?? {};
+  const mfName = normalizeModuleFederationName(bundleName);
 
   return {
     entry: path.resolve(rootDir, entryFile),
@@ -101,6 +131,10 @@ const createMicrofrontendConfig = ({
       ],
     },
     plugins: [
+      new ModuleFederationPlugin({
+        name: mfName,
+        shared: createSharedConfig(dependencies),
+      }),
       new CopyWebpackPlugin({
         patterns: [
           {
