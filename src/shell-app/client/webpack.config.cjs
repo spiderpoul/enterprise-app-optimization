@@ -4,7 +4,28 @@ require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { container } = require('webpack');
 const statoscope = require('@statoscope/webpack-plugin');
+
+const { ModuleFederationPlugin } = container;
+const { dependencies = {} } = require('./package.json');
+
+const createSharedConfig = () => {
+  const libraries = ['react', 'react-dom', 'react-router', 'react-router-dom'];
+
+  return libraries.reduce((shared, library) => {
+    const version = dependencies[library];
+
+    if (version) {
+      shared[library] = {
+        singleton: true,
+        requiredVersion: version,
+      };
+    }
+
+    return shared;
+  }, {});
+};
 
 const StatoscopeWebpackPlugin =
   statoscope && statoscope.default ? statoscope.default : statoscope;
@@ -84,6 +105,10 @@ const config = {
     ],
   },
   plugins: [
+    new ModuleFederationPlugin({
+      name: 'shellApp',
+      shared: createSharedConfig(),
+    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '..', '..', '..', 'public', 'index.html'),
       inject: 'body',
