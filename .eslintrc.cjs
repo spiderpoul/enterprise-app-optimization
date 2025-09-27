@@ -51,4 +51,27 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['src/microfrontends/operations-reports/client/**/*.{ts,tsx}'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            paths: [
+              {
+                name: 'lodash',
+                message: 'Do not use lodash in operations reports client components.',
+              },
+              {
+                name: 'lodash-es',
+                message: 'Do not use lodash in operations reports client components.',
+              },
+            ],
+            patterns: ['lodash/*', 'lodash-es/*'],
+          },
+        ],
+      },
+    },
+  ],
 };

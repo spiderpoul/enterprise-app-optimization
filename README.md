@@ -70,14 +70,14 @@ shell when it becomes available.
   feedback in the shell UI.
 - **Plugin contract** – Each microfrontend ships a `manifest.json`, serves static assets over Express, and periodically
   acknowledges the shell with the route, menu label, and remote entry URL.
-- **Sample microfrontend** – `microfrontends/operations-reports` contributes an “Operations reports” page. It demonstrates the contract by
+- **Sample microfrontend** – `src/microfrontends/operations-reports` contributes an “Operations reports” page. It demonstrates the contract by
   registering a route, injecting a navigation item, and rendering a standalone React component once the user selects it.
 
 ## Project layout
 
 - `src/shell-app/` – Shell React application and Express server organised into `client/` and `server/` packages.
 - `src/microfrontends/` – Source for microfrontend clients and their Express hosts, grouped by feature name.
-- `microfrontends/operations-reports/` – Build configuration, manifest, and distribution artefacts for the Operations reports plugin.
+- `src/microfrontends/operations-reports/` – Source, build configuration, manifest, and distribution artefacts for the Operations reports plugin.
 - `webpack.config.ts` – Shell build configuration for TypeScript, React, CSS, and PostCSS.
 - `.eslintrc.cjs`, `.prettierrc.cjs` – Linting and formatting configuration shared across the monorepo.
 

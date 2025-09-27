@@ -6,26 +6,26 @@
   "scripts": {
     "build": "npm-run-all build:microfront build:shell",
     "build:shell": "webpack --config webpack.config.ts --mode production",
-    "build:microfront": "webpack --config microfrontends/operations-reports/webpack.config.ts --mode production",
+    "build:microfront": "webpack --config src/microfrontends/operations-reports/webpack.config.ts --mode production",
     "dev": "npm-run-all --parallel dev:shell dev:microfront",
     "dev:shell": "npm-run-all --parallel dev:shell:build dev:shell:server",
     "dev:shell:build": "webpack --config webpack.config.ts --mode development --watch",
     "dev:shell:server": "node src/shell-app/server/shell-server.js",
     "dev:microfront": "npm-run-all --parallel dev:microfront:build dev:microfront:server",
-    "dev:microfront:build": "webpack --config microfrontends/operations-reports/webpack.config.ts --mode development --watch",
-    "dev:microfront:server": "node src/microfrontends/server/operations-reports/server.js",
+    "dev:microfront:build": "webpack --config src/microfrontends/operations-reports/webpack.config.ts --mode development --watch",
+    "dev:microfront:server": "node src/microfrontends/operations-reports/server/server.js",
     "start": "node src/shell-app/server/shell-server.js",
-    "start:microfront": "node src/microfrontends/server/operations-reports/server.js",
+    "start:microfront": "node src/microfrontends/operations-reports/server/server.js",
     "lint": "eslint --ext .ts,.tsx src",
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@kaspersky/uif": "latest",
-    "@kaspersky/uif-react": "latest",
+    "antd": "latest",
     "express": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-router-dom": "latest"
+    "react-router-dom": "latest",
+    "recharts": "latest"
   },
   "devDependencies": {
     "@types/react": "latest",
