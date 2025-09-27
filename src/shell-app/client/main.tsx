@@ -1,9 +1,30 @@
 import React from 'react';
+import * as ReactDOM from 'react-dom';
+import * as ReactDOMClient from 'react-dom/client';
+import * as ReactJSXRuntime from 'react/jsx-runtime';
+import * as ReactJSXDevRuntime from 'react/jsx-dev-runtime';
 import type { Metric } from 'web-vitals';
-import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './metrics/reportWebVitals';
 import './styles.css';
+
+declare global {
+  interface Window {
+    React: typeof React;
+    ReactDOM: typeof ReactDOM;
+    ReactDOMClient: typeof ReactDOMClient;
+    ReactJSXRuntime: typeof ReactJSXRuntime;
+    ReactJSXDevRuntime: typeof ReactJSXDevRuntime;
+  }
+}
+
+if (typeof window !== 'undefined') {
+  window.React = React;
+  window.ReactDOM = ReactDOM;
+  window.ReactDOMClient = ReactDOMClient;
+  window.ReactJSXRuntime = ReactJSXRuntime;
+  window.ReactJSXDevRuntime = ReactJSXDevRuntime;
+}
 
 const container = document.getElementById('root');
 
@@ -11,21 +32,31 @@ if (!container) {
   throw new Error('Root element with id="root" was not found in the document.');
 }
 
-const root = createRoot(container);
+const root = ReactDOMClient.createRoot(container);
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
 );
 
+type WebVitalPayload = Pick<
+  Metric,
+  'name' | 'id' | 'value' | 'delta' | 'rating' | 'navigationType'
+> & {
+  page: string;
+  timestamp: number;
+};
+
 const sendWebVital = (metric: Metric) => {
-  const payload = {
-    name: metric.name,
-    id: metric.id,
-    value: metric.value,
-    delta: metric.delta,
-    rating: metric.rating,
-    navigationType: metric.navigationType,
+  const { name, id, value, delta, rating, navigationType } = metric;
+
+  const payload: WebVitalPayload = {
+    name,
+    id,
+    value,
+    delta,
+    rating,
+    navigationType,
     page: window.location.pathname,
     timestamp: Date.now(),
   };

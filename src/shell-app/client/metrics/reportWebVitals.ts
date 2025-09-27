@@ -7,12 +7,12 @@ const reportWebVitals = (onReport?: WebVitalsReporter) => {
     return;
   }
 
-  onCLS(onReport);
-  onFID(onReport);
-  onFCP(onReport);
-  onINP(onReport);
-  onLCP(onReport);
-  onTTFB(onReport);
+  type MetricRunner = (report: WebVitalsReporter) => void;
+  const metricRunners: MetricRunner[] = [onCLS, onFID, onFCP, onINP, onLCP, onTTFB];
+
+  metricRunners.forEach((runner) => {
+    runner(onReport);
+  });
 };
 
 export default reportWebVitals;

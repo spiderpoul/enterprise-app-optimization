@@ -45,6 +45,14 @@ const config = {
   experiments: {
     outputModule: true,
   },
+  externalsType: 'window',
+  externals: {
+    react: 'React',
+    'react/jsx-runtime': 'ReactJSXRuntime',
+    'react/jsx-dev-runtime': 'ReactJSXDevRuntime',
+    'react-dom': 'ReactDOM',
+    'react-dom/client': 'ReactDOMClient',
+  },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },
