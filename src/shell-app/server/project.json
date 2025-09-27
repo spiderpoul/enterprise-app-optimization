@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "cwd": "src/shell-app/server",
-        "command": "npm run start"
+        "command": "npm run dev"
       }
     }
   },

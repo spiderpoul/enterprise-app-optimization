@@ -1,4 +1,6 @@
 const path = require('path');
+
+require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
@@ -92,11 +94,15 @@ const config = {
     ...analyzerPlugins(),
   ],
   devServer: {
-    host: '0.0.0.0',
-    port: Number(process.env.SHELL_CLIENT_PORT || 5173),
+    host: process.env.CLIENT_HOST || '0.0.0.0',
+    port: Number(process.env.CLIENT_PORT || 4301),
     historyApiFallback: true,
     hot: true,
     open: false,
+    allowedHosts: 'all',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
     static: {
       directory: path.resolve(__dirname, 'dist'),
     },

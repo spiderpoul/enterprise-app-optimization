@@ -1,4 +1,6 @@
 const path = require('path');
+
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const { default: StatoscopeWebpackPlugin } = require('@statoscope/webpack-plugin');
@@ -91,6 +93,18 @@ const config = {
     }),
     ...analyzerPlugins(),
   ],
+  devServer: {
+    host: process.env.CLIENT_HOST || '0.0.0.0',
+    port: Number(process.env.CLIENT_PORT || 8080),
+    allowedHosts: 'all',
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+    hot: true,
+    client: {
+      overlay: true,
+    },
+  },
   devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
 };
 

@@ -1,6 +1,6 @@
 import React, { Suspense, useCallback, useMemo, useState } from 'react';
 import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   Alert,
   Button,
@@ -53,21 +53,36 @@ const baseMenuSections: ShellMenuSection[] = [
   },
 ];
 
-const ShellRoot = styled(Space)`
-  height: 100vh;
-  align-items: stretch;
+const surfaceStyles = css`
+  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(244, 247, 255, 0.88) 100%);
+`;
+
+const LayoutGrid = styled.div<{ menuWidth: number }>`
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: ${({ menuWidth }) => `${menuWidth}px 1fr`};
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar main'
+    'sidebar footer';
   background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
 `;
 
-const ShellMenu = styled(Menu)`
+const SidebarContainer = styled.div`
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   box-shadow: 6px 0 24px -20px rgba(15, 23, 42, 0.45);
 `;
 
-const ShellContent = styled(Space)`
+const ShellMenu = styled(Menu)`
   flex: 1;
-  min-width: 0;
-  backdrop-filter: blur(8px);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(244, 247, 255, 0.88) 100%);
+  display: flex;
+  flex-direction: column;
+  background: transparent;
 `;
 
 const Branding = styled(Space)<{ minimized: boolean }>`
@@ -97,9 +112,11 @@ const BrandingText = styled(Space)`
 `;
 
 const HeaderBar = styled(Space)`
+  grid-area: header;
   padding: 32px 40px 24px;
   gap: 24px;
   align-items: flex-start;
+  ${surfaceStyles};
 `;
 
 const HeaderTitles = styled(Space)`
@@ -122,10 +139,12 @@ const UserChip = styled(Space)`
 `;
 
 const ContentArea = styled.div`
+  grid-area: main;
   flex: 1;
   min-height: 0;
   overflow-y: auto;
   padding: 0 40px 40px;
+  ${surfaceStyles};
 `;
 
 const LoaderContainer = styled.div`
@@ -137,11 +156,13 @@ const AlertContainer = styled.div`
 `;
 
 const FooterBar = styled(Space)`
+  grid-area: footer;
   padding: 24px 40px 32px;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
+  ${surfaceStyles};
 `;
 
 const FooterActions = styled(Space)`
@@ -349,121 +370,123 @@ const MainLayout: React.FC = () => {
     );
   }
 
+  const activeMenuWidth = menuMinimized ? 72 : 292;
+
   return (
-    <ShellRoot direction="horizontal" size={0} wrap="nowrap">
-      <ShellMenu
-        applyAppTheme
-        theme="light"
-        width={292}
-        collapsedWidth={72}
-        collapsible
-        collapsed={menuMinimized}
-      >
-        <ServicesNav>
-          <Hamburger
-            className="item left"
-            role="button"
-            name="hamburger"
-            onClick={() => setMenuMinimized((value) => !value)}
-          />
-        </ServicesNav>
-        <Branding minimized={menuMinimized} direction="horizontal" gap={12}>
-          <BrandingLogo aria-label="Enterprise App Optimization logo">EAO</BrandingLogo>
-          {!menuMinimized ? (
-            <BrandingText direction="vertical">
-              <Text>Enterprise App Optimization</Text>
-              <Text style={{ color: '#475467' }}>Automation command centre</Text>
-            </BrandingText>
-          ) : null}
-        </Branding>
-        <Nav navItems={navItems} minimized={menuMinimized} favsEnabled={false} />
-        <UserNav navItems={userNavItems} minimized={menuMinimized} childPop />
-      </ShellMenu>
+    <LayoutGrid menuWidth={activeMenuWidth}>
+      <SidebarContainer>
+        <ShellMenu
+          applyAppTheme
+          theme="light"
+          width={292}
+          collapsedWidth={72}
+          collapsible
+          collapsed={menuMinimized}
+        >
+          <ServicesNav>
+            <Hamburger
+              className="item left"
+              role="button"
+              name="hamburger"
+              onClick={() => setMenuMinimized((value) => !value)}
+            />
+          </ServicesNav>
+          <Branding minimized={menuMinimized} direction="horizontal" gap={12}>
+            <BrandingLogo aria-label="Enterprise App Optimization logo">EAO</BrandingLogo>
+            {!menuMinimized ? (
+              <BrandingText direction="vertical">
+                <Text>Enterprise App Optimization</Text>
+                <Text style={{ color: '#475467' }}>Automation command centre</Text>
+              </BrandingText>
+            ) : null}
+          </Branding>
+          <Nav navItems={navItems} minimized={menuMinimized} favsEnabled={false} />
+          <UserNav navItems={userNavItems} minimized={menuMinimized} childPop />
+        </ShellMenu>
+      </SidebarContainer>
 
-      <ShellContent direction="vertical" size={0} wrap="nowrap">
-        <HeaderBar direction="horizontal" justify="space-between">
-          <HeaderTitles direction="vertical" align="flex-start">
-            <H2>Enterprise optimisation centre</H2>
-            <Text style={{ color: '#475467' }}>
-              Monitor posture, orchestrate response playbooks, and track automation coverage from a
-              unified shell.
-            </Text>
-          </HeaderTitles>
-          <HeaderActions direction="horizontal" align="flex-start">
-            <UserChip direction="horizontal">
-              <Text>{user?.displayName ?? 'Enterprise guest'}</Text>
-              <Button mode="tertiary" onClick={logout} text="Sign out" />
-            </UserChip>
-            <Button mode="secondary" text="Export insights" />
-            <Button mode="primary" text="Launch automation" />
-          </HeaderActions>
-        </HeaderBar>
+      <HeaderBar direction="horizontal" justify="space-between">
+        <HeaderTitles direction="vertical" align="flex-start">
+          <H2>Enterprise optimisation centre</H2>
+          <Text style={{ color: '#475467' }}>
+            Monitor posture, orchestrate response playbooks, and track automation coverage from a
+            unified shell.
+          </Text>
+        </HeaderTitles>
+        <HeaderActions direction="horizontal" align="flex-start">
+          <UserChip direction="horizontal">
+            <Text>{user?.displayName ?? 'Enterprise guest'}</Text>
+            <Button mode="tertiary" onClick={logout} text="Sign out" />
+          </UserChip>
+          <Button mode="secondary" text="Export insights" />
+          <Button mode="primary" text="Launch automation" />
+        </HeaderActions>
+      </HeaderBar>
 
-        <ContentArea>
-          {isLoading ? (
-            <LoaderContainer role="status">
-              <Loader centered size="large" tip="Discovering registered microfrontends…" />
-            </LoaderContainer>
-          ) : null}
+      <ContentArea>
+        {isLoading ? (
+          <LoaderContainer role="status">
+            <Loader centered size="large" tip="Discovering registered microfrontends…" />
+          </LoaderContainer>
+        ) : null}
 
-          {error ? (
-            <AlertContainer>
-              <Alert mode="error">
-                <Space direction="vertical" gap={4} align="flex-start">
-                  <H4>Microfrontend registry unreachable</H4>
-                  <Text>{error}</Text>
-                </Space>
-              </Alert>
-            </AlertContainer>
-          ) : null}
+        {error ? (
+          <AlertContainer>
+            <Alert mode="error">
+              <Space direction="vertical" gap={4} align="flex-start">
+                <H4>Microfrontend registry unreachable</H4>
+                <Text>{error}</Text>
+              </Space>
+            </Alert>
+          </AlertContainer>
+        ) : null}
 
-          <Routes>
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            {microfrontends.map((microfrontend) => (
-              <Route
-                key={microfrontend.id}
-                path={
-                  microfrontend.routePath.startsWith('/')
-                    ? microfrontend.routePath
-                    : `/${microfrontend.routePath}`
-                }
-                element={
-                  <Suspense
-                    fallback={
-                      <LoaderContainer role="status">
-                        <Loader centered size="large" tip={`Loading ${microfrontend.name}…`} />
-                      </LoaderContainer>
-                    }
-                  >
-                    <MicrofrontendBoundary name={microfrontend.name}>
-                      <microfrontend.Component />
-                    </MicrofrontendBoundary>
-                  </Suspense>
-                }
-              />
-            ))}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ContentArea>
+        <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          {microfrontends.map((microfrontend) => (
+            <Route
+              key={microfrontend.id}
+              path={
+                microfrontend.routePath.startsWith('/')
+                  ? microfrontend.routePath
+                  : `/${microfrontend.routePath}`
+              }
+              element={
+                <Suspense
+                  fallback={
+                    <LoaderContainer role="status">
+                      <Loader centered size="large" tip={`Loading ${microfrontend.name}…`} />
+                    </LoaderContainer>
+                  }
+                >
+                  <MicrofrontendBoundary name={microfrontend.name}>
+                    <microfrontend.Component />
+                  </MicrofrontendBoundary>
+                </Suspense>
+              }
+            />
+          ))}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ContentArea>
 
-        <FooterBar direction="horizontal" align="flex-start">
-          <Space direction="vertical" align="flex-start" gap={8}>
-            <Text as="span" style={{ fontWeight: 600 }}>
-              Need help accelerating adoption?
-            </Text>
-            <P style={{ color: '#475467' }}>
-              Review design system documentation, explore integration blueprints, or reach out to
-              the enterprise solutions team for guided onboarding.
-            </P>
-          </Space>
-          <FooterActions direction="horizontal">
-            <Button mode="tertiary" text="View documentation" />
-            <Button mode="primary" text="Contact solutions team" />
-          </FooterActions>
-        </FooterBar>
-      </ShellContent>
-    </ShellRoot>
+      <FooterBar direction="horizontal" align="flex-start">
+        <Space direction="vertical" align="flex-start" gap={8}>
+          <Text as="span" style={{ fontWeight: 600 }}>
+            Need help accelerating adoption?
+          </Text>
+          <P style={{ color: '#475467' }}>
+            Review design system documentation, explore integration blueprints, or reach out to the
+            enterprise solutions team for guided onboarding.
+          </P>
+        </Space>
+        <FooterActions direction="horizontal">
+          <Button mode="tertiary" text="View documentation" />
+          <Button mode="primary" text="Contact solutions team" />
+        </FooterActions>
+      </FooterBar>
+    </LayoutGrid>
   );
 };
 
