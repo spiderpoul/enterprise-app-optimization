@@ -87,7 +87,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, isLoading, error }) => {
   );
 
   return (
-    <Space className="users-roles__section" direction="vertical" size="large" align="stretch">
+    <Space className="users-roles__section" direction="vertical" size="large">
       <div>
         <Title level={2}>Users and roles</Title>
         <Paragraph>
@@ -142,7 +142,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
 
   if (!user) {
     return (
-      <Space className="users-roles__section" direction="vertical" size="large" align="stretch">
+      <Space className="users-roles__section" direction="vertical" size="large">
         <Button
           type="link"
           className="users-roles__back-button"
@@ -190,7 +190,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
   ];
 
   return (
-    <Space className="users-roles__section" direction="vertical" size="large" align="stretch">
+    <Space className="users-roles__section" direction="vertical" size="large">
       <Button
         type="link"
         className="users-roles__back-button"

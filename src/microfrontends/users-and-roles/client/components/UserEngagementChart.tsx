@@ -26,12 +26,12 @@ const UserEngagementChart: React.FC<UserEngagementChartProps> = ({ data }) => {
     paper_bgcolor: 'transparent',
     plot_bgcolor: 'transparent',
     xaxis: {
-      title: 'Week',
+      title: { text: 'Week' },
       zeroline: false,
       gridcolor: 'rgba(148, 163, 184, 0.2)',
     },
     yaxis: {
-      title: 'Activity',
+      title: { text: 'Activity' },
       zeroline: false,
       gridcolor: 'rgba(148, 163, 184, 0.2)',
     },
