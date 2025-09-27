@@ -1,0 +1,8 @@
+{
+  "id": "users-and-roles-microfrontend",
+  "name": "Users and Roles",
+  "menuLabel": "Users & roles",
+  "routePath": "/users",
+  "entryPath": "/users-and-roles.js",
+  "description": "Directory of workspace users, role assignments, and recent audit activity."
+}

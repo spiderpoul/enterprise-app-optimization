@@ -3,11 +3,7 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@kaspersky/uif-react": ["./lib/uif-react"],
-      "@kaspersky/uif": ["./lib/uif"]
-    }
+    "baseUrl": "."
   },
   "include": ["./**/*"],
   "exclude": ["dist", "node_modules"]

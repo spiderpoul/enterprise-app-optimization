@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "users-and-roles-client",
+  "sourceRoot": "src/microfrontends/users-and-roles/client",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/users-and-roles/client",
+        "command": "npm run build"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/users-and-roles/client",
+        "command": "npm run serve"
+      }
+    },
+    "analyze": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/users-and-roles/client",
+        "command": "npm run analyze"
+      }
+    }
+  },
+  "tags": []
+}
