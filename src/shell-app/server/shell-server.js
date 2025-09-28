@@ -9,6 +9,14 @@ const { initializationPlan } = require('./data/initialization-plan');
 const { dashboardData } = require('./data/dashboard');
 
 const app = express();
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled promise rejection detected.', { reason, promise });
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception encountered.', error);
+});
 const parsePort = (value, fallback) => {
   const parsed = Number.parseInt(String(value ?? '').trim(), 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
@@ -202,6 +210,9 @@ const sanitizeRegistryEntry = (entry) => {
 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
 
+const createProxyPathFilter = (prefix) => (pathname) =>
+  typeof pathname === 'string' && pathname.startsWith(prefix);
+
 const createPathRewriter = (prefix, rewriteBase) => {
   const escapedPrefix = escapeRegex(prefix);
   const matcher = new RegExp(`^${escapedPrefix}`);
@@ -272,6 +283,7 @@ const registerMicrofrontendProxy = (entry) => {
     changeOrigin: true,
     ws: true,
     logLevel: 'warn',
+    pathFilter: createProxyPathFilter(config.prefix),
     pathRewrite: (path) => rewritePath(path),
   });
 

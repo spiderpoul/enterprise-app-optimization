@@ -34,7 +34,7 @@ const normalizeApiPrefix = (prefix: string | null | undefined, fallback: string)
 };
 
 const manifestApiPrefix = (manifest as ManifestWithApiPrefix).api?.prefix ?? null;
-const API_PREFIX = normalizeApiPrefix(manifestApiPrefix, '/api/mf/operations-reports');
+const API_PREFIX = normalizeApiPrefix(manifestApiPrefix, '/api/mf/reports');
 
 const buildApiUrl = (path: string) => {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;

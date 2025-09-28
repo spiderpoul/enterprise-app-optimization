@@ -6,7 +6,7 @@
   "entryPath": "/operations-reports.js",
   "description": "Analytics and readiness metrics prepared by the operations reporting team.",
   "api": {
-    "prefix": "/api/mf/operations-reports",
+    "prefix": "/api/mf/reports",
     "target": "/api"
   }
 }
