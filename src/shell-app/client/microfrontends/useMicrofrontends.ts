@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import React from 'react';
-import { LoadedMicrofrontend, MicrofrontendManifest } from './types';
+import { LoadedMicrofrontend, MicrofrontendApiProxyConfig, MicrofrontendManifest } from './types';
 
 type MicrofrontendModule = {
   default?: React.ComponentType<Record<string, unknown>>;
@@ -23,20 +23,56 @@ const createLazyComponent = (entryUrl: string) =>
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
 
-const isMicrofrontendManifest = (value: unknown): value is MicrofrontendManifest => {
+const isMicrofrontendApiProxyConfig = (value: unknown): value is MicrofrontendApiProxyConfig => {
   if (!isRecord(value)) {
     return false;
   }
 
-  const { id, name, menuLabel, routePath, entryUrl } = value;
+  const { prefix, target, pathRewrite } = value;
 
   return (
-    typeof id === 'string' &&
-    typeof name === 'string' &&
-    typeof menuLabel === 'string' &&
-    typeof routePath === 'string' &&
-    typeof entryUrl === 'string'
+    typeof prefix === 'string' && typeof target === 'string' && typeof pathRewrite === 'string'
   );
+};
+
+const toMicrofrontendManifest = (value: unknown): MicrofrontendManifest | null => {
+  if (!isRecord(value)) {
+    return null;
+  }
+
+  const { id, name, menuLabel, routePath, entryUrl } = value;
+
+  if (
+    typeof id !== 'string' ||
+    typeof name !== 'string' ||
+    typeof menuLabel !== 'string' ||
+    typeof routePath !== 'string' ||
+    typeof entryUrl !== 'string'
+  ) {
+    return null;
+  }
+
+  const base: MicrofrontendManifest = {
+    id,
+    name,
+    menuLabel,
+    routePath,
+    entryUrl,
+    description: typeof value.description === 'string' ? value.description : undefined,
+    lastAcknowledgedAt:
+      typeof value.lastAcknowledgedAt === 'string' ? value.lastAcknowledgedAt : undefined,
+    manifestUrl:
+      typeof value.manifestUrl === 'string' || value.manifestUrl === null
+        ? (value.manifestUrl ?? null)
+        : undefined,
+    apiProxy: null,
+  };
+
+  if (value.apiProxy && isMicrofrontendApiProxyConfig(value.apiProxy)) {
+    base.apiProxy = value.apiProxy;
+  }
+
+  return base;
 };
 
 const parseMicrofrontends = (input: unknown): MicrofrontendManifest[] => {
@@ -44,7 +80,9 @@ const parseMicrofrontends = (input: unknown): MicrofrontendManifest[] => {
     throw new Error('Malformed microfrontend manifest payload received from server');
   }
 
-  return input.filter(isMicrofrontendManifest);
+  return input
+    .map(toMicrofrontendManifest)
+    .filter((manifest): manifest is MicrofrontendManifest => manifest !== null);
 };
 
 export interface UseMicrofrontendsResult {

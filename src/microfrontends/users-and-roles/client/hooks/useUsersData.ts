@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { UserActivityPoint, UserAuditEntry, UserRecord, UserStatus } from '../types';
+import manifest from '../../manifest.json';
 
 interface UsersState {
   users: UserRecord[];
@@ -96,6 +97,39 @@ const cloneUser = (user: UserRecord): UserRecord => ({
   auditLog: user.auditLog.map((entry) => ({ ...entry })),
 });
 
+interface ManifestWithApiPrefix {
+  api?: {
+    prefix?: string | null;
+  } | null;
+}
+
+const ensureLeadingSlash = (value: string) => (value.startsWith('/') ? value : `/${value}`);
+
+const normalizeApiPrefix = (prefix: string | null | undefined, fallback: string) => {
+  if (typeof prefix !== 'string') {
+    return fallback;
+  }
+
+  const trimmed = prefix.trim();
+
+  if (!trimmed) {
+    return fallback;
+  }
+
+  const withLeadingSlash = ensureLeadingSlash(trimmed);
+  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
+
+  return withoutTrailingSlash || fallback;
+};
+
+const manifestApiPrefix = (manifest as ManifestWithApiPrefix).api?.prefix ?? null;
+const API_PREFIX = normalizeApiPrefix(manifestApiPrefix, '/api/mf/users-and-roles');
+
+const buildApiUrl = (path: string) => {
+  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+  return `${API_PREFIX}${normalizedPath}`;
+};
+
 const parseUsers = (input: unknown): UserRecord[] => {
   if (!Array.isArray(input)) {
     throw new Error('Malformed users payload received from server');
@@ -117,7 +151,7 @@ const useUsersData = (): UsersState => {
       setError(null);
 
       try {
-        const response = await fetch('/api/users');
+        const response = await fetch(buildApiUrl('/users'));
 
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);

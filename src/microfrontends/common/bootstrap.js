@@ -1,5 +1,79 @@
 const DEFAULT_ACK_INTERVAL = 30000;
 
+const ensureLeadingSlash = (value) => {
+  if (typeof value !== 'string') {
+    return '/';
+  }
+
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return '/';
+  }
+
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+};
+
+const normalizeProxyPrefix = (value) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
+  if (!trimmed) {
+    return null;
+  }
+
+  const withLeadingSlash = ensureLeadingSlash(trimmed);
+  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
+
+  if (withoutTrailingSlash === '' || withoutTrailingSlash === '/') {
+    return null;
+  }
+
+  return withoutTrailingSlash;
+};
+
+const normalizeProxyTarget = (value) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
+  if (!trimmed) {
+    return '/api';
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  return ensureLeadingSlash(trimmed);
+};
+
+const createApiProxyDescriptor = ({ manifest, baseUrl }) => {
+  const manifestApi = manifest.api;
+
+  if (!manifestApi || typeof manifestApi !== 'object') {
+    return null;
+  }
+
+  const prefix = normalizeProxyPrefix(manifestApi.prefix);
+
+  if (!prefix) {
+    return null;
+  }
+
+  const targetValue = normalizeProxyTarget(manifestApi.target);
+
+  try {
+    const targetUrl = new URL(targetValue, baseUrl);
+    const pathRewrite = targetUrl.pathname.replace(/\/+$/, '') || '/';
+
+    return {
+      prefix,
+      target: targetUrl.origin,
+      pathRewrite,
+    };
+  } catch (_error) {
+    return null;
+  }
+};
+
 /**
  * @typedef {Object} Manifest
  * @property {string} id
@@ -8,6 +82,7 @@ const DEFAULT_ACK_INTERVAL = 30000;
  * @property {string} routePath
  * @property {string} entryPath
  * @property {string} [description]
+ * @property {{ prefix?: string; target?: string }} [api]
  */
 
 /**
@@ -30,6 +105,7 @@ function buildMicrofrontendDescriptor({ manifest, port, publicUrl }) {
     description: manifest.description || '',
     entryUrl: new URL(manifest.entryPath, baseUrl).href,
     manifestUrl: new URL('manifest.json', baseUrl).href,
+    apiProxy: createApiProxyDescriptor({ manifest, baseUrl }),
   };
 }
 

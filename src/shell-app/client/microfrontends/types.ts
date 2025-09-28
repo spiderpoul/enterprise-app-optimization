@@ -9,8 +9,15 @@ export interface MicrofrontendManifest {
   description?: string;
   lastAcknowledgedAt?: string;
   manifestUrl?: string | null;
+  apiProxy?: MicrofrontendApiProxyConfig | null;
 }
 
 export interface LoadedMicrofrontend extends MicrofrontendManifest {
   Component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>;
+}
+
+export interface MicrofrontendApiProxyConfig {
+  prefix: string;
+  target: string;
+  pathRewrite: string;
 }

@@ -4,6 +4,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const express = require('express');
 const fs = require('fs');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const { initializationPlan } = require('./data/initialization-plan');
 
 const app = express();
@@ -97,6 +98,131 @@ const ensureDataFile = () => {
 
 ensureDataFile();
 
+const ensureLeadingSlash = (value) => {
+  if (typeof value !== 'string') {
+    return '/';
+  }
+
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return '/';
+  }
+
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+};
+
+const normalizeProxyPrefix = (value) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
+  if (!trimmed) {
+    return null;
+  }
+
+  const withLeadingSlash = ensureLeadingSlash(trimmed);
+  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
+
+  if (!withoutTrailingSlash || withoutTrailingSlash === '/') {
+    return null;
+  }
+
+  return withoutTrailingSlash;
+};
+
+const normalizeProxyRewrite = (value) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
+  if (!trimmed || trimmed === '/') {
+    return '/';
+  }
+
+  const withLeadingSlash = ensureLeadingSlash(trimmed);
+  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
+
+  return withoutTrailingSlash || '/';
+};
+
+const sanitizeApiProxyConfig = (value) => {
+  if (!value || typeof value !== 'object') {
+    return null;
+  }
+
+  const prefix = normalizeProxyPrefix(value.prefix);
+  const target = typeof value.target === 'string' ? value.target.trim() : '';
+
+  if (!prefix || !target) {
+    return null;
+  }
+
+  const pathRewrite = normalizeProxyRewrite(value.pathRewrite);
+
+  return {
+    prefix,
+    target,
+    pathRewrite,
+  };
+};
+
+const sanitizeRegistryEntry = (entry) => {
+  if (!entry || typeof entry !== 'object') {
+    return null;
+  }
+
+  const id = typeof entry.id === 'string' ? entry.id.trim() : '';
+
+  if (!id) {
+    return null;
+  }
+
+  const name = typeof entry.name === 'string' ? entry.name : id;
+  const menuLabel = typeof entry.menuLabel === 'string' ? entry.menuLabel : name;
+  const routePath = ensureLeadingSlash(entry.routePath || '/');
+  const entryUrl = typeof entry.entryUrl === 'string' ? entry.entryUrl : '';
+  const description = typeof entry.description === 'string' ? entry.description : '';
+  const manifestUrl =
+    typeof entry.manifestUrl === 'string' && entry.manifestUrl.trim()
+      ? entry.manifestUrl
+      : null;
+  const lastAcknowledgedAt =
+    typeof entry.lastAcknowledgedAt === 'string' ? entry.lastAcknowledgedAt : null;
+
+  return {
+    id,
+    name,
+    menuLabel,
+    routePath,
+    entryUrl,
+    description,
+    manifestUrl,
+    lastAcknowledgedAt,
+    apiProxy: sanitizeApiProxyConfig(entry.apiProxy),
+  };
+};
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
+
+const createPathRewriter = (prefix, rewriteBase) => {
+  const escapedPrefix = escapeRegex(prefix);
+  const matcher = new RegExp(`^${escapedPrefix}`);
+  const normalizedBase = rewriteBase === '/' ? '/' : normalizeProxyRewrite(rewriteBase);
+
+  return (path) => {
+    const stripped = path.replace(matcher, '');
+
+    if (!stripped || stripped === '/') {
+      return normalizedBase;
+    }
+
+    const suffix = stripped.startsWith('/') ? stripped : `/${stripped}`;
+
+    if (normalizedBase === '/') {
+      return suffix === '/' ? '/' : suffix;
+    }
+
+    return suffix === '/' ? normalizedBase : `${normalizedBase}${suffix}`;
+  };
+};
+
 const loadRegistry = () => {
   try {
     const raw = fs.readFileSync(DATA_FILE, 'utf-8');
@@ -105,13 +231,67 @@ const loadRegistry = () => {
       return new Map();
     }
 
-    return new Map(parsed.filter((entry) => entry && entry.id).map((entry) => [entry.id, entry]));
+    const entries = parsed
+      .map(sanitizeRegistryEntry)
+      .filter((entry) => entry && entry.id && entry.entryUrl);
+
+    return new Map(entries.map((entry) => [entry.id, entry]));
   } catch (error) {
     return new Map();
   }
 };
 
 const registry = loadRegistry();
+
+const microfrontendProxyRegistry = new Map();
+
+const registerMicrofrontendProxy = (entry) => {
+  const config = entry?.apiProxy;
+
+  if (!config) {
+    return;
+  }
+
+  const existing = microfrontendProxyRegistry.get(config.prefix);
+  if (existing) {
+    if (existing.target === config.target && existing.pathRewrite === config.pathRewrite) {
+      return;
+    }
+
+    console.warn(
+      `Proxy for prefix ${config.prefix} is already registered; skipping conflicting registration`,
+    );
+    return;
+  }
+
+  const rewritePath = createPathRewriter(config.prefix, config.pathRewrite);
+
+  const proxyMiddleware = createProxyMiddleware(config.prefix, {
+    target: config.target,
+    changeOrigin: true,
+    ws: true,
+    logLevel: 'warn',
+    pathRewrite: (path) => rewritePath(path),
+  });
+
+  app.use(proxyMiddleware);
+  app.on('upgrade', proxyMiddleware.upgrade);
+
+  microfrontendProxyRegistry.set(config.prefix, {
+    target: config.target,
+    pathRewrite: config.pathRewrite,
+  });
+
+  const targetPathSuffix = config.pathRewrite === '/' ? '' : config.pathRewrite;
+
+  console.log(
+    `Proxying microfrontend API requests from ${config.prefix} to ${config.target}${targetPathSuffix}`,
+  );
+};
+
+for (const entry of registry.values()) {
+  registerMicrofrontendProxy(entry);
+}
 
 const persistRegistry = () => {
   if (!fs.existsSync(DATA_DIR)) {
@@ -173,13 +353,15 @@ app.get('/api/microfrontends', (_req, res) => {
     description: entry.description || '',
     lastAcknowledgedAt: entry.lastAcknowledgedAt,
     manifestUrl: entry.manifestUrl || null,
+    apiProxy: entry.apiProxy || null,
   }));
 
   res.json(microfrontends);
 });
 
 app.post('/api/microfrontends/ack', (req, res) => {
-  const { id, name, menuLabel, routePath, entryUrl, description, manifestUrl } = req.body || {};
+  const { id, name, menuLabel, routePath, entryUrl, description, manifestUrl, apiProxy } =
+    req.body || {};
 
   if (!id || !name || !menuLabel || !routePath || !entryUrl) {
     return res.status(400).json({
@@ -188,19 +370,26 @@ app.post('/api/microfrontends/ack', (req, res) => {
     });
   }
 
-  const sanitizedRoute = String(routePath).startsWith('/') ? routePath : `/${routePath}`;
+  const acknowledgementTimestamp = new Date().toISOString();
 
-  registry.set(id, {
+  const entry = sanitizeRegistryEntry({
     id,
     name,
     menuLabel,
-    routePath: sanitizedRoute,
+    routePath,
     entryUrl,
-    description: description || '',
-    manifestUrl: manifestUrl || null,
-    lastAcknowledgedAt: new Date().toISOString(),
+    description,
+    manifestUrl,
+    apiProxy,
+    lastAcknowledgedAt: acknowledgementTimestamp,
   });
 
+  if (!entry) {
+    return res.status(400).json({ message: 'Unable to register microfrontend acknowledgement.' });
+  }
+
+  registry.set(entry.id, entry);
+  registerMicrofrontendProxy(entry);
   persistRegistry();
 
   res.status(204).end();
@@ -208,11 +397,16 @@ app.post('/api/microfrontends/ack', (req, res) => {
 
 app.delete('/api/microfrontends/:id', (req, res) => {
   const { id } = req.params;
-  if (!registry.has(id)) {
+  const existing = registry.get(id);
+
+  if (!existing) {
     return res.status(404).json({ message: `Microfrontend with id "${id}" was not found.` });
   }
 
   registry.delete(id);
+  if (existing.apiProxy?.prefix) {
+    microfrontendProxyRegistry.delete(existing.apiProxy.prefix);
+  }
   persistRegistry();
   res.status(204).end();
 });
@@ -229,18 +423,14 @@ if (isProduction) {
     res.sendFile(path.join(DIST_DIR, 'index.html'));
   });
 } else if (CLIENT_DEV_SERVER_TARGET) {
-  const { createProxyMiddleware } = require('http-proxy-middleware');
-
-  const pathFilter = (path, req) => !path.startsWith('/api');
-  const clientProxy = createProxyMiddleware(
-    {
-      target: CLIENT_DEV_SERVER_TARGET,
-      changeOrigin: true,
-      ws: true,
-      logLevel: 'warn',
-      pathFilter
-    },
-  );
+  const pathFilter = (path) => shouldProxyClientRequest(path);
+  const clientProxy = createProxyMiddleware({
+    target: CLIENT_DEV_SERVER_TARGET,
+    changeOrigin: true,
+    ws: true,
+    logLevel: 'warn',
+    pathFilter,
+  });
 
   app.use(clientProxy);
   app.on('upgrade', clientProxy.upgrade);

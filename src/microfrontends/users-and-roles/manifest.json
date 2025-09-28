@@ -4,5 +4,9 @@
   "menuLabel": "Users & roles",
   "routePath": "/users",
   "entryPath": "/users-and-roles.js",
-  "description": "Directory of workspace users, role assignments, and recent audit activity."
+  "description": "Directory of workspace users, role assignments, and recent audit activity.",
+  "api": {
+    "prefix": "/api/mf/users-and-roles",
+    "target": "/api"
+  }
 }

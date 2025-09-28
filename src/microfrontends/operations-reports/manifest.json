@@ -4,5 +4,9 @@
   "menuLabel": "Operations reports",
   "routePath": "/reports",
   "entryPath": "/operations-reports.js",
-  "description": "Analytics and readiness metrics prepared by the operations reporting team."
+  "description": "Analytics and readiness metrics prepared by the operations reporting team.",
+  "api": {
+    "prefix": "/api/mf/operations-reports",
+    "target": "/api"
+  }
 }
