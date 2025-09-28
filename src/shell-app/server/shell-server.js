@@ -266,7 +266,7 @@ const registerMicrofrontendProxy = (entry) => {
 
   const rewritePath = createPathRewriter(config.prefix, config.pathRewrite);
 
-  const proxyMiddleware = createProxyMiddleware(config.prefix, {
+  const proxyMiddleware = createProxyMiddleware({
     target: config.target,
     changeOrigin: true,
     ws: true,
