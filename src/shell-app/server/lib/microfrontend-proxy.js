@@ -1,5 +1,5 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const { createPathRewriter } = require('./proxy-config');
+const { registerFilteredProxy } = require('../../../server/lib/filtered-proxy');
 
 const createMicrofrontendProxyManager = ({ app }) => {
   if (!app) {
@@ -31,20 +31,19 @@ const createMicrofrontendProxyManager = ({ app }) => {
     const rewritePath = createPathRewriter(config.prefix, config.pathRewrite);
     const pathFilter = (pathname) =>
       typeof pathname === 'string' && pathname.startsWith(config.prefix);
-    const proxyMiddleware = createProxyMiddleware({
-      changeOrigin: true,
-      logLevel: 'warn',
-      pathFilter,
-      pathRewrite: (path) => rewritePath(path),
-      target: config.target,
-      ws: true,
+    const filteredProxy = registerFilteredProxy({
+      app,
+      filter: pathFilter,
+      proxyOptions: {
+        changeOrigin: true,
+        pathRewrite: (path) => rewritePath(path),
+        target: config.target,
+        ws: true,
+      },
     });
 
-    app.use(proxyMiddleware);
-    app.on('upgrade', proxyMiddleware.upgrade);
-
     proxyRegistry.set(config.prefix, {
-      middleware: proxyMiddleware,
+      middleware: filteredProxy,
       pathRewrite: config.pathRewrite,
       target: config.target,
     });

@@ -3,12 +3,12 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const { initializationPlan } = require('./data/initialization-plan');
 const { dashboardData } = require('./data/dashboard');
 const { createEnvironment } = require('./lib/env');
 const { createRequestLogger } = require('./lib/request-logger');
 const { createMicrofrontendProxyManager } = require('./lib/microfrontend-proxy');
+const { registerFilteredProxy } = require('../../server/lib/filtered-proxy');
 const {
   createMicrofrontendRegistry,
   sanitizeRegistryEntry,
@@ -203,18 +203,18 @@ if (environment.isProduction) {
     res.sendFile(path.join(environment.distDir, 'index.html'));
   });
 } else if (environment.clientDevServerTarget) {
-  const shouldProxyClientRequest = (url) => typeof url === 'string' && !url.startsWith('/api');
-  const pathFilter = (requestPath) => shouldProxyClientRequest(requestPath);
-  const clientProxy = createProxyMiddleware({
-    changeOrigin: true,
-    logLevel: 'warn',
-    pathFilter,
-    target: environment.clientDevServerTarget,
-    ws: true,
-  });
+  const shouldProxyClientRequest = (requestPath) =>
+    typeof requestPath === 'string' && !requestPath.startsWith('/api');
 
-  app.use(clientProxy);
-  app.on('upgrade', clientProxy.upgrade);
+  registerFilteredProxy({
+    app,
+    filter: shouldProxyClientRequest,
+    proxyOptions: {
+      changeOrigin: true,
+      target: environment.clientDevServerTarget,
+      ws: true,
+    },
+  });
 
   console.log(`Proxying shell client requests to ${environment.clientDevServerTarget}`);
 } else {

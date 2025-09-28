@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { registerFilteredProxy } = require('../../../server/lib/filtered-proxy');
 
 const DEFAULT_RESPONSE_DELAY_MS = 300;
 
@@ -62,19 +62,17 @@ const registerClientAssetHandling = ({
   }
 
   if (devServerUrl) {
-    const pathFilter = (path, req) => !path.startsWith('/api');
-    const clientProxy = createProxyMiddleware(
-      {
-        target: devServerUrl,
-        changeOrigin: true,
-        ws: true,
-        logLevel: 'warn',
-        pathFilter
-      },
-    );
+    const shouldProxy = (path) => typeof path === 'string' && !path.startsWith('/api');
 
-    app.use(clientProxy);
-    app.on('upgrade', clientProxy.upgrade);
+    registerFilteredProxy({
+      app,
+      filter: shouldProxy,
+      proxyOptions: {
+        changeOrigin: true,
+        target: devServerUrl,
+        ws: true,
+      },
+    });
     console.log(`Proxying ${label} client requests to ${devServerUrl}`);
     return;
   }
