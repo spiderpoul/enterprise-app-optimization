@@ -3,10 +3,17 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const express = require('express');
-const fs = require('fs');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { initializationPlan } = require('./data/initialization-plan');
 const { dashboardData } = require('./data/dashboard');
+const { createEnvironment } = require('./lib/env');
+const { createRequestLogger } = require('./lib/request-logger');
+const { createMicrofrontendProxyManager } = require('./lib/microfrontend-proxy');
+const {
+  createMicrofrontendRegistry,
+  sanitizeRegistryEntry,
+} = require('./lib/registry');
+const { cloneDeep, delay } = require('./lib/utils');
 
 const microfrontendsRoot = path.resolve(__dirname, '..', '..', 'microfrontends');
 const { users } = require(path.join(
@@ -24,7 +31,21 @@ const { reports } = require(path.join(
   'reports.js',
 ));
 
+const environment = createEnvironment({ env: process.env, serverDir: __dirname });
+
+const registry = createMicrofrontendRegistry({
+  dataFile: path.join(__dirname, 'dist', 'data', 'microfrontends.json'),
+  sourceDataFile: path.join(__dirname, 'data', 'microfrontends.json'),
+});
+
+const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
+
 const app = express();
+const microfrontendProxyManager = createMicrofrontendProxyManager({ app });
+
+for (const entry of registry.values()) {
+  microfrontendProxyManager.register(entry);
+}
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled promise rejection detected.', { reason, promise });
@@ -33,327 +54,15 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (error) => {
   console.error('Uncaught exception encountered.', error);
 });
-const DEFAULT_RESPONSE_DELAY_MS = 300;
-
-const parsePort = (value, fallback) => {
-  const parsed = Number.parseInt(String(value ?? '').trim(), 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
-};
-const parseDelayMs = (value, fallback) => {
-  const parsed = Number.parseInt(String(value ?? '').trim(), 10);
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
-};
-const normalizeHost = (host) => {
-  const trimmed = String(host ?? '').trim();
-  return trimmed && trimmed !== '0.0.0.0' ? trimmed : 'localhost';
-};
-const resolveClientDevServerUrl = () => {
-  const explicitUrl = String(process.env.CLIENT_DEV_SERVER_URL ?? '').trim();
-  if (explicitUrl) {
-    return explicitUrl;
-  }
-
-  const host = normalizeHost(process.env.CLIENT_HOST);
-  const port = parsePort(process.env.CLIENT_PORT, 4301);
-
-  return `http://${host}:${port}`;
-};
-
-const createRequestLogger = (label) => (req, res, next) => {
-  const start = Date.now();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    const url = req.originalUrl || req.url;
-    console.log(
-      `[${label}] ${req.method} ${url} -> ${res.statusCode} (${duration}ms)`,
-    );
-  });
-
-  next();
-};
-
-const PORT = parsePort(process.env.SHELL_PORT, 4300);
-const HOST = String(process.env.SHELL_HOST ?? '0.0.0.0');
-const isProduction = process.env.NODE_ENV === 'production';
-const CLIENT_DEV_SERVER_URL = resolveClientDevServerUrl();
-
-const parseProxyTarget = (value) => {
-  if (!value) {
-    return null;
-  }
-
-  try {
-    const url = new URL(value);
-    if (!url.protocol || !url.host) {
-      return null;
-    }
-
-    return url.toString().replace(/\/$/, '');
-  } catch (_error) {
-    return null;
-  }
-};
-
-const CLIENT_DEV_SERVER_TARGET = parseProxyTarget(CLIENT_DEV_SERVER_URL);
-const shouldProxyClientRequest = (url) => typeof url === 'string' && !url.startsWith('/api');
-
-const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
-
-const delay = (ms) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-const cloneDeep = (value) => {
-  if (typeof structuredClone === 'function') {
-    return structuredClone(value);
-  }
-
-  return JSON.parse(JSON.stringify(value));
-};
-const resolveClientDist = () => {
-  if (process.env.CLIENT_DIST_DIR) {
-    return path.resolve(process.env.CLIENT_DIST_DIR);
-  }
-
-  return path.resolve(__dirname, '..', 'client', 'dist');
-};
-
-const DIST_DIR = resolveClientDist();
-const SOURCE_DATA_DIR = path.join(__dirname, 'data');
-const SOURCE_DATA_FILE = path.join(SOURCE_DATA_DIR, 'microfrontends.json');
-const DATA_DIR = path.join(__dirname, 'dist', 'data');
-const DATA_FILE = path.join(DATA_DIR, 'microfrontends.json');
-
-const ensureDataFile = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-
-  if (!fs.existsSync(DATA_FILE) && fs.existsSync(SOURCE_DATA_FILE)) {
-    fs.copyFileSync(SOURCE_DATA_FILE, DATA_FILE);
-  }
-};
-
-ensureDataFile();
-
-const ensureLeadingSlash = (value) => {
-  if (typeof value !== 'string') {
-    return '/';
-  }
-
-  const trimmed = value.trim();
-
-  if (!trimmed) {
-    return '/';
-  }
-
-  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
-};
-
-const normalizeProxyPrefix = (value) => {
-  const trimmed = typeof value === 'string' ? value.trim() : '';
-
-  if (!trimmed) {
-    return null;
-  }
-
-  const withLeadingSlash = ensureLeadingSlash(trimmed);
-  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
-
-  if (!withoutTrailingSlash || withoutTrailingSlash === '/') {
-    return null;
-  }
-
-  return withoutTrailingSlash;
-};
-
-const normalizeProxyRewrite = (value) => {
-  const trimmed = typeof value === 'string' ? value.trim() : '';
-
-  if (!trimmed || trimmed === '/') {
-    return '/';
-  }
-
-  const withLeadingSlash = ensureLeadingSlash(trimmed);
-  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
-
-  return withoutTrailingSlash || '/';
-};
-
-const sanitizeApiProxyConfig = (value) => {
-  if (!value || typeof value !== 'object') {
-    return null;
-  }
-
-  const prefix = normalizeProxyPrefix(value.prefix);
-  const target = typeof value.target === 'string' ? value.target.trim() : '';
-
-  if (!prefix || !target) {
-    return null;
-  }
-
-  const pathRewrite = normalizeProxyRewrite(value.pathRewrite);
-
-  return {
-    prefix,
-    target,
-    pathRewrite,
-  };
-};
-
-const sanitizeRegistryEntry = (entry) => {
-  if (!entry || typeof entry !== 'object') {
-    return null;
-  }
-
-  const id = typeof entry.id === 'string' ? entry.id.trim() : '';
-
-  if (!id) {
-    return null;
-  }
-
-  const name = typeof entry.name === 'string' ? entry.name : id;
-  const menuLabel = typeof entry.menuLabel === 'string' ? entry.menuLabel : name;
-  const routePath = ensureLeadingSlash(entry.routePath || '/');
-  const entryUrl = typeof entry.entryUrl === 'string' ? entry.entryUrl : '';
-  const description = typeof entry.description === 'string' ? entry.description : '';
-  const manifestUrl =
-    typeof entry.manifestUrl === 'string' && entry.manifestUrl.trim()
-      ? entry.manifestUrl
-      : null;
-  const lastAcknowledgedAt =
-    typeof entry.lastAcknowledgedAt === 'string' ? entry.lastAcknowledgedAt : null;
-
-  return {
-    id,
-    name,
-    menuLabel,
-    routePath,
-    entryUrl,
-    description,
-    manifestUrl,
-    lastAcknowledgedAt,
-    apiProxy: sanitizeApiProxyConfig(entry.apiProxy),
-  };
-};
-
-const escapeRegex = (value) => value.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
-
-const createProxyPathFilter = (prefix) => (pathname) =>
-  typeof pathname === 'string' && pathname.startsWith(prefix);
-
-const createPathRewriter = (prefix, rewriteBase) => {
-  const escapedPrefix = escapeRegex(prefix);
-  const matcher = new RegExp(`^${escapedPrefix}`);
-  const normalizedBase = rewriteBase === '/' ? '/' : normalizeProxyRewrite(rewriteBase);
-
-  return (path) => {
-    const stripped = path.replace(matcher, '');
-
-    if (!stripped || stripped === '/') {
-      return normalizedBase;
-    }
-
-    const suffix = stripped.startsWith('/') ? stripped : `/${stripped}`;
-
-    if (normalizedBase === '/') {
-      return suffix === '/' ? '/' : suffix;
-    }
-
-    return suffix === '/' ? normalizedBase : `${normalizedBase}${suffix}`;
-  };
-};
-
-const loadRegistry = () => {
-  try {
-    const raw = fs.readFileSync(DATA_FILE, 'utf-8');
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) {
-      return new Map();
-    }
-
-    const entries = parsed
-      .map(sanitizeRegistryEntry)
-      .filter((entry) => entry && entry.id && entry.entryUrl);
-
-    return new Map(entries.map((entry) => [entry.id, entry]));
-  } catch (error) {
-    return new Map();
-  }
-};
-
-const registry = loadRegistry();
-
-const microfrontendProxyRegistry = new Map();
-
-const registerMicrofrontendProxy = (entry) => {
-  const config = entry?.apiProxy;
-
-  if (!config) {
-    return;
-  }
-
-  const existing = microfrontendProxyRegistry.get(config.prefix);
-  if (existing) {
-    if (existing.target === config.target && existing.pathRewrite === config.pathRewrite) {
-      return;
-    }
-
-    console.warn(
-      `Proxy for prefix ${config.prefix} is already registered; skipping conflicting registration`,
-    );
-    return;
-  }
-
-  const rewritePath = createPathRewriter(config.prefix, config.pathRewrite);
-
-  const proxyMiddleware = createProxyMiddleware({
-    target: config.target,
-    changeOrigin: true,
-    ws: true,
-    logLevel: 'warn',
-    pathFilter: createProxyPathFilter(config.prefix),
-    pathRewrite: (path) => rewritePath(path),
-  });
-
-  app.use(proxyMiddleware);
-  app.on('upgrade', proxyMiddleware.upgrade);
-
-  microfrontendProxyRegistry.set(config.prefix, {
-    target: config.target,
-    pathRewrite: config.pathRewrite,
-  });
-
-  const targetPathSuffix = config.pathRewrite === '/' ? '' : config.pathRewrite;
-
-  console.log(
-    `Proxying microfrontend API requests from ${config.prefix} to ${config.target}${targetPathSuffix}`,
-  );
-};
-
-for (const entry of registry.values()) {
-  registerMicrofrontendProxy(entry);
-}
-
-const persistRegistry = () => {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-
-  const serialized = JSON.stringify(Array.from(registry.values()), null, 2);
-  fs.writeFileSync(DATA_FILE, serialized);
-};
 
 app.use(createRequestLogger('shell-server'));
 app.use(express.json());
-const responseDelayMs = parseDelayMs(process.env.SERVER_RESPONSE_DELAY_MS, DEFAULT_RESPONSE_DELAY_MS);
-const applyResponseDelay =
-  responseDelayMs > 0
-    ? (_req, _res, next) => {
-        setTimeout(next, responseDelayMs);
-      }
-    : (_req, _res, next) => next();
-app.use(applyResponseDelay);
+
+if (environment.responseDelayMs > 0) {
+  app.use((_, __, next) => {
+    setTimeout(next, environment.responseDelayMs);
+  });
+}
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
@@ -368,7 +77,9 @@ app.post('/api/initialization/steps/:stepId/complete', async (req, res) => {
   const step = initializationPlanById.get(stepId);
 
   if (!step) {
-    return res.status(404).json({ message: `Initialization step with id "${stepId}" was not found.` });
+    return res
+      .status(404)
+      .json({ message: `Initialization step with id "${stepId}" was not found.` });
   }
 
   await delay(step.duration);
@@ -380,13 +91,13 @@ app.post('/api/metrics/web-vitals', (req, res) => {
   if (req.body) {
     const { name, value, id, rating, navigationType, delta, ...rest } = req.body;
     console.log('[web-vitals]', {
-      name,
-      value,
-      id,
-      rating,
-      navigationType,
-      delta,
       context: rest,
+      delta,
+      id,
+      name,
+      navigationType,
+      rating,
+      value,
     });
   }
 
@@ -401,27 +112,27 @@ app.get('/api/mf/users-and-roles/users', (_req, res) => {
   res.json(cloneDeep(users));
 });
 
-app.get('/api/mf/reports/reports', (_req, res) => {
+app.get('/api/mf/reports', (_req, res) => {
   res.json(cloneDeep(reports));
 });
 
-app.get('/api/mf/reports/reportserror', (_req, res) => {
+app.get('/api/mf/reports/error', (_req, res) => {
   res.status(500).json({
     message: 'Simulated operations reports failure. Please retry shortly.',
   });
 });
 
 app.get('/api/microfrontends', (_req, res) => {
-  const microfrontends = Array.from(registry.values()).map((entry) => ({
-    id: entry.id,
-    name: entry.name,
-    menuLabel: entry.menuLabel,
-    routePath: entry.routePath,
-    entryUrl: entry.entryUrl,
+  const microfrontends = registry.values().map((entry) => ({
+    apiProxy: entry.apiProxy || null,
     description: entry.description || '',
+    entryUrl: entry.entryUrl,
+    id: entry.id,
     lastAcknowledgedAt: entry.lastAcknowledgedAt,
     manifestUrl: entry.manifestUrl || null,
-    apiProxy: entry.apiProxy || null,
+    menuLabel: entry.menuLabel,
+    name: entry.name,
+    routePath: entry.routePath,
   }));
 
   res.json(microfrontends);
@@ -441,24 +152,24 @@ app.post('/api/microfrontends/ack', (req, res) => {
   const acknowledgementTimestamp = new Date().toISOString();
 
   const entry = sanitizeRegistryEntry({
-    id,
-    name,
-    menuLabel,
-    routePath,
-    entryUrl,
-    description,
-    manifestUrl,
     apiProxy,
+    description,
+    entryUrl,
+    id,
     lastAcknowledgedAt: acknowledgementTimestamp,
+    manifestUrl,
+    menuLabel,
+    name,
+    routePath,
   });
 
   if (!entry) {
     return res.status(400).json({ message: 'Unable to register microfrontend acknowledgement.' });
   }
 
-  registry.set(entry.id, entry);
-  registerMicrofrontendProxy(entry);
-  persistRegistry();
+  registry.set(entry);
+  microfrontendProxyManager.register(entry);
+  registry.persist();
 
   res.status(204).end();
 });
@@ -471,11 +182,13 @@ app.delete('/api/microfrontends/:id', (req, res) => {
     return res.status(404).json({ message: `Microfrontend with id "${id}" was not found.` });
   }
 
-  registry.delete(id);
+  registry.remove(id);
+
   if (existing.apiProxy?.prefix) {
-    microfrontendProxyRegistry.delete(existing.apiProxy.prefix);
+    microfrontendProxyManager.unregister(existing.apiProxy.prefix);
   }
-  persistRegistry();
+
+  registry.persist();
   res.status(204).end();
 });
 
@@ -484,31 +197,32 @@ app.use((_req, res, next) => {
   next();
 });
 
-if (isProduction) {
-  app.use(express.static(DIST_DIR));
-
+if (environment.isProduction) {
+  app.use(express.static(environment.distDir));
   app.get('*', (_req, res) => {
-    res.sendFile(path.join(DIST_DIR, 'index.html'));
+    res.sendFile(path.join(environment.distDir, 'index.html'));
   });
-} else if (CLIENT_DEV_SERVER_TARGET) {
-  const pathFilter = (path) => shouldProxyClientRequest(path);
-  const clientProxy = createProxyMiddleware({
-    target: CLIENT_DEV_SERVER_TARGET,
+} else if (environment.clientDevServerTarget) {
+  const shouldProxyClientRequest = (url) => typeof url === 'string' && !url.startsWith('/api');
+  const pathFilter = (requestPath) => shouldProxyClientRequest(requestPath);
+  const clientProxy = createProxyMiddleware(pathFilter, {
     changeOrigin: true,
-    ws: true,
     logLevel: 'warn',
-    pathFilter,
+    target: environment.clientDevServerTarget,
+    ws: true,
   });
 
   app.use(clientProxy);
   app.on('upgrade', clientProxy.upgrade);
 
-  console.log(`Proxying shell client requests to ${CLIENT_DEV_SERVER_TARGET}`);
+  console.log(`Proxying shell client requests to ${environment.clientDevServerTarget}`);
 } else {
   console.warn(
     'Shell client dev server URL is not defined or invalid; client assets will not be proxied.',
   );
 }
+
+const { host: HOST, port: PORT } = environment;
 
 app.listen(PORT, HOST, () => {
   console.log(`Shell server running at http://${HOST}:${PORT}`);
