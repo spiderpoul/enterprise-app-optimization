@@ -45,7 +45,7 @@ const normalizeProxyTarget = (value) => {
   return ensureLeadingSlash(trimmed);
 };
 
-const createApiProxyDescriptor = ({ manifest, baseUrl }) => {
+const createApiProxyDescriptor = ({ manifest, apiBaseUrl }) => {
   const manifestApi = manifest.api;
 
   if (!manifestApi || typeof manifestApi !== 'object') {
@@ -61,7 +61,7 @@ const createApiProxyDescriptor = ({ manifest, baseUrl }) => {
   const targetValue = normalizeProxyTarget(manifestApi.target);
 
   try {
-    const targetUrl = new URL(targetValue, baseUrl);
+    const targetUrl = new URL(targetValue, apiBaseUrl);
     const pathRewrite = targetUrl.pathname.replace(/\/+$/, '') || '/';
 
     return {
@@ -88,14 +88,20 @@ const createApiProxyDescriptor = ({ manifest, baseUrl }) => {
 /**
  * Builds the descriptor that will be registered in the shell registry.
  *
- * @param {{ manifest: Manifest; port?: number; publicUrl?: string }} params
+ * @param {{
+ *   manifest: Manifest;
+ *   port?: number;
+ *   publicUrl?: string;
+ *   apiBaseUrl?: string;
+ * }} params
  */
-function buildMicrofrontendDescriptor({ manifest, port, publicUrl }) {
+function buildMicrofrontendDescriptor({ manifest, port, publicUrl, apiBaseUrl }) {
   if (!manifest) {
     throw new Error('Manifest is required to build microfrontend descriptor.');
   }
 
-  const baseUrl = new URL('/', publicUrl || `http://localhost:${port ?? 0}`);
+  const assetsBaseUrl = new URL('/', publicUrl || `http://localhost:${port ?? 0}`);
+  const apiBase = new URL('/', apiBaseUrl || `http://localhost:${port ?? 0}`);
 
   return {
     id: manifest.id,
@@ -103,9 +109,9 @@ function buildMicrofrontendDescriptor({ manifest, port, publicUrl }) {
     menuLabel: manifest.menuLabel,
     routePath: manifest.routePath,
     description: manifest.description || '',
-    entryUrl: new URL(manifest.entryPath, baseUrl).href,
-    manifestUrl: new URL('manifest.json', baseUrl).href,
-    apiProxy: createApiProxyDescriptor({ manifest, baseUrl }),
+    entryUrl: new URL(manifest.entryPath, assetsBaseUrl).href,
+    manifestUrl: new URL('manifest.json', assetsBaseUrl).href,
+    apiProxy: createApiProxyDescriptor({ manifest, apiBaseUrl: apiBase }),
   };
 }
 

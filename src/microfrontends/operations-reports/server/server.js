@@ -11,17 +11,22 @@ const {
 const {
   createRequestLogger,
   createResponseDelayMiddleware,
+  normalizeHost,
   parsePort,
   registerClientAssetHandling,
   resolveClientDevServerUrl,
   resolveClientDistDirectory,
 } = require('../../common/server');
+const swaggerUi = require('swagger-ui-express');
+const apiDocumentation = require('./swagger/reports-api.json');
 const { reports } = require('./data/reports');
 
 const MICROFRONT_PORT = parsePort(process.env.MICROFRONT_PORT, 4400);
 const MICROFRONT_HOST = String(process.env.MICROFRONT_HOST ?? '0.0.0.0');
 const SHELL_URL = process.env.SHELL_URL || 'http://localhost:4300';
 const MICROFRONT_PUBLIC_URL = process.env.MICROFRONT_PUBLIC_URL || 'http://localhost:4401';
+const MICROFRONT_API_URL =
+  process.env.MICROFRONT_API_URL || `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`;
 const ACK_INTERVAL = Number(process.env.MICROFRONT_ACK_INTERVAL || 30000);
 const isProduction = process.env.NODE_ENV === 'production';
 const CLIENT_HOST = String(process.env.CLIENT_HOST ?? '0.0.0.0');
@@ -46,6 +51,11 @@ app.use((_, res, next) => {
   next();
 });
 
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(apiDocumentation, { explorer: true }));
+app.get('/api/docs.json', (_req, res) => {
+  res.json(apiDocumentation);
+});
+
 registerClientAssetHandling({
   app,
   distDir: DIST_DIR,
@@ -58,10 +68,15 @@ app.get('/api/reports', (_, res) => {
   res.json(reports);
 });
 
+app.get('/api', (_, res) => {
+  res.json(reports);
+});
+
 const descriptor = buildMicrofrontendDescriptor({
   manifest,
   port: MICROFRONT_PORT,
   publicUrl: MICROFRONT_PUBLIC_URL,
+  apiBaseUrl: MICROFRONT_API_URL,
 });
 
 const acknowledger = createMicrofrontendAcknowledger({

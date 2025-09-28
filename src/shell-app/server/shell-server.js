@@ -3,6 +3,7 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
 const { initializationPlan } = require('./data/initialization-plan');
 const { dashboardData } = require('./data/dashboard');
 const { createEnvironment } = require('./lib/env');
@@ -30,6 +31,7 @@ const { reports } = require(path.join(
   'data',
   'reports.js',
 ));
+const shellApiDocumentation = require('./swagger/shell-api.json');
 
 const environment = createEnvironment({ env: process.env, serverDir: __dirname });
 
@@ -57,6 +59,11 @@ process.on('uncaughtException', (error) => {
 
 app.use(createRequestLogger('shell-server'));
 app.use(express.json());
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(shellApiDocumentation, { explorer: true }));
+app.get('/api/docs.json', (_req, res) => {
+  res.json(shellApiDocumentation);
+});
 
 if (environment.responseDelayMs > 0) {
   app.use((_, __, next) => {
