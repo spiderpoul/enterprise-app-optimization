@@ -62,11 +62,7 @@ const LayoutGrid = styled.div<{ menuWidth: number }>`
   min-height: 100vh;
   display: grid;
   grid-template-columns: ${({ menuWidth }) => `${menuWidth}px 1fr`};
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    'sidebar header'
-    'sidebar main'
-    'sidebar footer';
+  grid-template-areas: 'sidebar main';
   background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
   overflow: hidden;
 `;
@@ -82,6 +78,23 @@ const SidebarContainer = styled.div`
   height: 100vh;
   min-height: 0;
   overflow: hidden;
+  background: #ffffff;
+`;
+
+const MainColumn = styled.div`
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+`;
+
+const ScrollContainer = styled.div`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ShellMenu = styled(Menu)`
@@ -121,7 +134,6 @@ const BrandingText = styled(Space)`
 `;
 
 const HeaderBar = styled(Space)`
-  grid-area: header;
   padding: 32px 40px 24px;
   gap: 24px;
   align-items: flex-start;
@@ -148,11 +160,6 @@ const UserChip = styled(Space)`
 `;
 
 const ContentArea = styled.div`
-  grid-area: main;
-  flex: 1;
-  min-height: 0;
-  height: 100%;
-  overflow-y: auto;
   padding: 0 40px 40px;
   ${surfaceStyles};
 `;
@@ -166,7 +173,6 @@ const AlertContainer = styled.div`
 `;
 
 const FooterBar = styled(Space)`
-  grid-area: footer;
   padding: 24px 40px 32px;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
   justify-content: space-between;
@@ -311,7 +317,8 @@ const MainLayout: React.FC = () => {
   if (isInitializing) {
     return (
       <InitializationContainer direction="vertical" size={32}>
-        <Loader size="large" centered tip={currentStep?.label ?? 'Preparing workspace…'} />
+        <Loader size="large" centered />
+        {currentStep?.label ? <Text style={{ color: '#1f2937' }}>{currentStep.label}</Text> : null}
       </InitializationContainer>
     );
   }
@@ -351,91 +358,101 @@ const MainLayout: React.FC = () => {
         </ShellMenu>
       </SidebarContainer>
 
-      <HeaderBar direction="horizontal" justify="space-between">
-        <HeaderTitles direction="vertical" align="flex-start">
-          <H2>Enterprise optimisation centre</H2>
-          <Text style={{ color: '#475467' }}>
-            Monitor posture, orchestrate response playbooks, and track automation coverage from a
-            unified shell.
-          </Text>
-        </HeaderTitles>
-        <HeaderActions direction="horizontal" align="flex-start">
-          <UserChip direction="horizontal">
-            <Text>{userDisplayName}</Text>
-            <Button
-              mode="tertiary"
-              onClick={() => handleNavigate('/dashboard')}
-              text="Manage profile"
-            />
-          </UserChip>
-          <Button mode="secondary" text="Export insights" />
-          <Button mode="primary" text="Launch automation" />
-        </HeaderActions>
-      </HeaderBar>
+      <MainColumn>
+        <ScrollContainer>
+          <HeaderBar direction="horizontal" justify="space-between">
+            <HeaderTitles direction="vertical" align="flex-start">
+              <H2>Enterprise optimisation centre</H2>
+              <Text style={{ color: '#475467' }}>
+                Monitor posture, orchestrate response playbooks, and track automation coverage from
+                a unified shell.
+              </Text>
+            </HeaderTitles>
+            <HeaderActions direction="horizontal" align="flex-start">
+              <UserChip direction="horizontal">
+                <Text>{userDisplayName}</Text>
+                <Button
+                  mode="tertiary"
+                  onClick={() => handleNavigate('/dashboard')}
+                  text="Manage profile"
+                />
+              </UserChip>
+              <Button mode="secondary" text="Export insights" />
+              <Button mode="primary" text="Launch automation" />
+            </HeaderActions>
+          </HeaderBar>
 
-      <ContentArea>
-        {isLoading ? (
-          <LoaderContainer role="status">
-            <Loader centered size="large" tip="Discovering registered microfrontends…" />
-          </LoaderContainer>
-        ) : null}
+          <ContentArea>
+            {isLoading ? (
+              <LoaderContainer role="status">
+                <Space direction="vertical" align="center" gap={12}>
+                  <Loader centered size="large" />
+                  <Text style={{ color: '#475467' }}>Discovering registered microfrontends…</Text>
+                </Space>
+              </LoaderContainer>
+            ) : null}
 
-        {error ? (
-          <AlertContainer>
-            <Alert mode="error">
-              <Space direction="vertical" gap={4} align="flex-start">
-                <H4>Microfrontend registry unreachable</H4>
-                <Text>{error}</Text>
-              </Space>
-            </Alert>
-          </AlertContainer>
-        ) : null}
+            {error ? (
+              <AlertContainer>
+                <Alert mode="error">
+                  <Space direction="vertical" gap={4} align="flex-start">
+                    <H4>Microfrontend registry unreachable</H4>
+                    <Text>{error}</Text>
+                  </Space>
+                </Alert>
+              </AlertContainer>
+            ) : null}
 
-        <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          {microfrontends.map((microfrontend) => (
-            <Route
-              key={microfrontend.id}
-              path={
-                microfrontend.routePath.startsWith('/')
-                  ? microfrontend.routePath
-                  : `/${microfrontend.routePath}`
-              }
-              element={
-                <Suspense
-                  fallback={
-                    <LoaderContainer role="status">
-                      <Loader centered size="large" tip={`Loading ${microfrontend.name}…`} />
-                    </LoaderContainer>
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              {microfrontends.map((microfrontend) => (
+                <Route
+                  key={microfrontend.id}
+                  path={
+                    microfrontend.routePath.startsWith('/')
+                      ? microfrontend.routePath
+                      : `/${microfrontend.routePath}`
                   }
-                >
-                  <MicrofrontendBoundary name={microfrontend.name}>
-                    <microfrontend.Component />
-                  </MicrofrontendBoundary>
-                </Suspense>
-              }
-            />
-          ))}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </ContentArea>
+                  element={
+                    <Suspense
+                      fallback={
+                        <LoaderContainer role="status">
+                          <Space direction="vertical" align="center" gap={12}>
+                            <Loader centered size="large" />
+                            <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
+                          </Space>
+                        </LoaderContainer>
+                      }
+                    >
+                      <MicrofrontendBoundary name={microfrontend.name}>
+                        <microfrontend.Component />
+                      </MicrofrontendBoundary>
+                    </Suspense>
+                  }
+                />
+              ))}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ContentArea>
 
-      <FooterBar direction="horizontal" align="flex-start">
-        <Space direction="vertical" align="flex-start" gap={8}>
-          <Text as="span" style={{ fontWeight: 600 }}>
-            Need help accelerating adoption?
-          </Text>
-          <P style={{ color: '#475467' }}>
-            Review design system documentation, explore integration blueprints, or reach out to the
-            enterprise solutions team for guided onboarding.
-          </P>
-        </Space>
-        <FooterActions direction="horizontal">
-          <Button mode="tertiary" text="View documentation" />
-          <Button mode="primary" text="Contact solutions team" />
-        </FooterActions>
-      </FooterBar>
+          <FooterBar direction="horizontal" align="flex-start">
+            <Space direction="vertical" align="flex-start" gap={8}>
+              <Text as="span" style={{ fontWeight: 600 }}>
+                Need help accelerating adoption?
+              </Text>
+              <P style={{ color: '#475467' }}>
+                Review design system documentation, explore integration blueprints, or reach out to
+                the enterprise solutions team for guided onboarding.
+              </P>
+            </Space>
+            <FooterActions direction="horizontal">
+              <Button mode="tertiary" text="View documentation" />
+              <Button mode="primary" text="Contact solutions team" />
+            </FooterActions>
+          </FooterBar>
+        </ScrollContainer>
+      </MainColumn>
     </LayoutGrid>
   );
 };

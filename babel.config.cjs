@@ -1,10 +1,12 @@
+const isProduction = process.env.NODE_ENV === 'production';
+
 module.exports = {
   presets: [
     [
       '@babel/preset-env',
       {
-        targets: 'defaults',
-        modules: false,
+        targets: { esmodules: false },
+        modules: 'cjs',
       },
     ],
     [
@@ -14,5 +16,16 @@ module.exports = {
       },
     ],
     '@babel/preset-typescript',
+  ],
+  plugins: [
+    [
+      'babel-plugin-styled-components',
+      {
+        displayName: !isProduction,
+        fileName: !isProduction,
+        minify: isProduction,
+        pure: true,
+      },
+    ],
   ],
 };

@@ -2,6 +2,8 @@ const path = require('path');
 const express = require('express');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
+const DEFAULT_RESPONSE_DELAY_MS = 300;
+
 const parsePort = (value, fallback) => {
   const parsed = Number.parseInt(String(value ?? '').trim(), 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
@@ -10,6 +12,11 @@ const parsePort = (value, fallback) => {
 const normalizeHost = (host) => {
   const trimmed = String(host ?? '').trim();
   return trimmed && trimmed !== '0.0.0.0' ? trimmed : 'localhost';
+};
+
+const parseDelayMs = (value, fallback = DEFAULT_RESPONSE_DELAY_MS) => {
+  const parsed = Number.parseInt(String(value ?? '').trim(), 10);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 };
 
 const resolveClientDevServerUrl = ({ explicitUrl, host, port }) => {
@@ -77,9 +84,26 @@ const registerClientAssetHandling = ({
   );
 };
 
+const createResponseDelayMiddleware = (options = {}) => {
+  const delayMs = parseDelayMs(
+    options.delayMs ?? process.env.SERVER_RESPONSE_DELAY_MS,
+    DEFAULT_RESPONSE_DELAY_MS,
+  );
+
+  if (delayMs <= 0) {
+    return (_req, _res, next) => next();
+  }
+
+  return (_req, _res, next) => {
+    setTimeout(next, delayMs);
+  };
+};
+
 module.exports = {
   createRequestLogger,
+  createResponseDelayMiddleware,
   normalizeHost,
+  parseDelayMs,
   parsePort,
   registerClientAssetHandling,
   resolveClientDevServerUrl,

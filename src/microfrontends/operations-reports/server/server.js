@@ -10,6 +10,7 @@ const {
 } = require('../../common/bootstrap');
 const {
   createRequestLogger,
+  createResponseDelayMiddleware,
   parsePort,
   registerClientAssetHandling,
   resolveClientDevServerUrl,
@@ -39,6 +40,7 @@ const DIST_DIR = resolveClientDistDirectory({
 const app = express();
 
 app.use(createRequestLogger('operations-reports-server'));
+app.use(createResponseDelayMiddleware());
 app.use((_, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   next();
