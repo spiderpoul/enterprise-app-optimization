@@ -211,13 +211,18 @@ const MainLayout: React.FC = () => {
       id: 'extensions',
       title: 'Extensions',
       icon: AppUpdate,
-      items: microfrontends.map((microfrontend) => ({
-        id: microfrontend.id,
-        title: microfrontend.menuLabel,
-        path: microfrontend.routePath.startsWith('/')
+      items: microfrontends.map((microfrontend) => {
+        const normalizedPath = microfrontend.routePath.startsWith('/')
           ? microfrontend.routePath
-          : `/${microfrontend.routePath}`,
-      })),
+          : `/${microfrontend.routePath}`;
+        const trimmedPath = normalizedPath.replace(/\/\*$/, '');
+
+        return {
+          id: microfrontend.id,
+          title: microfrontend.menuLabel,
+          path: trimmedPath,
+        };
+      }),
     };
   }, [microfrontends]);
 
@@ -406,15 +411,19 @@ const MainLayout: React.FC = () => {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              {microfrontends.map((microfrontend) => (
-                <Route
-                  key={microfrontend.id}
-                  path={
-                    microfrontend.routePath.startsWith('/')
-                      ? microfrontend.routePath
-                      : `/${microfrontend.routePath}`
-                  }
-                  element={
+              {microfrontends.map((microfrontend) => {
+                const normalizedPath = microfrontend.routePath.startsWith('/')
+                  ? microfrontend.routePath
+                  : `/${microfrontend.routePath}`;
+                const routePath = normalizedPath.endsWith('/*')
+                  ? normalizedPath
+                  : `${normalizedPath}/*`;
+
+                return (
+                  <Route
+                    key={microfrontend.id}
+                    path={routePath}
+                    element={
                     <Suspense
                       fallback={
                         <LoaderContainer role="status">
@@ -430,8 +439,9 @@ const MainLayout: React.FC = () => {
                       </MicrofrontendBoundary>
                     </Suspense>
                   }
-                />
-              ))}
+                  />
+                );
+              })}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ContentArea>
