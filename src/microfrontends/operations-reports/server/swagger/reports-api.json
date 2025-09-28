@@ -1,0 +1,174 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Operations Reports API",
+    "version": "1.0.0",
+    "description": "Read-only API that powers the Operations Reports microfrontend."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4400",
+      "description": "Operations reports service"
+    }
+  ],
+  "paths": {
+    "/api/reports": {
+      "get": {
+        "summary": "List operations reports",
+        "description": "Returns curated operations readiness reports, including key metrics and highlights for each document.",
+        "responses": {
+          "200": {
+            "description": "Collection of operations reports.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationsReport"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api": {
+      "get": {
+        "summary": "List operations reports",
+        "description": "Returns curated operations readiness reports, including key metrics and highlights for each document.",
+        "responses": {
+          "200": {
+            "description": "Collection of operations reports.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OperationsReport"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OperationsReport": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "healthScore": {
+            "type": "number",
+            "format": "float"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReportMetric"
+            }
+          },
+          "timeline": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimelinePoint"
+            }
+          },
+          "distribution": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DistributionSlice"
+            }
+          },
+          "highlights": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ReportMetric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "change": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "TimelinePoint": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "readiness": {
+            "type": "number"
+          },
+          "automation": {
+            "type": "number"
+          },
+          "incidents": {
+            "type": "number"
+          }
+        }
+      },
+      "DistributionSlice": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

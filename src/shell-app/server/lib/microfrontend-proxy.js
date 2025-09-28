@@ -1,5 +1,6 @@
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 const { createPathRewriter } = require('./proxy-config');
-const { registerFilteredProxy } = require('../../../server/lib/filtered-proxy');
 
 const createMicrofrontendProxyManager = ({ app }) => {
   if (!app) {
@@ -7,6 +8,9 @@ const createMicrofrontendProxyManager = ({ app }) => {
   }
 
   const proxyRegistry = new Map();
+  const router = express.Router();
+
+  app.use(router);
 
   const register = (entry) => {
     const config = entry?.apiProxy;
@@ -22,28 +26,23 @@ const createMicrofrontendProxyManager = ({ app }) => {
         return;
       }
 
-      console.warn(
-        `Proxy for prefix ${config.prefix} is already registered; skipping conflicting registration`,
-      );
-      return;
+      router.stack = router.stack.filter((layer) => layer.handle !== existing.middleware);
+      proxyRegistry.delete(config.prefix);
     }
 
     const rewritePath = createPathRewriter(config.prefix, config.pathRewrite);
-    const pathFilter = (pathname) =>
-      typeof pathname === 'string' && pathname.startsWith(config.prefix);
-    const filteredProxy = registerFilteredProxy({
-      app,
-      filter: pathFilter,
-      proxyOptions: {
-        changeOrigin: true,
-        pathRewrite: (path) => rewritePath(path),
-        target: config.target,
-        ws: true,
-      },
+    const middleware = createProxyMiddleware({
+      changeOrigin: true,
+      logLevel: 'warn',
+      pathRewrite: (_path, req) => rewritePath(req.originalUrl || req.url || ''),
+      target: config.target,
+      ws: true,
     });
 
+    router.use(config.prefix, middleware);
+
     proxyRegistry.set(config.prefix, {
-      middleware: filteredProxy,
+      middleware,
       pathRewrite: config.pathRewrite,
       target: config.target,
     });
@@ -55,6 +54,13 @@ const createMicrofrontendProxyManager = ({ app }) => {
   };
 
   const unregister = (prefix) => {
+    const existing = proxyRegistry.get(prefix);
+
+    if (!existing) {
+      return;
+    }
+
+    router.stack = router.stack.filter((layer) => layer.handle !== existing.middleware);
     proxyRegistry.delete(prefix);
   };
 

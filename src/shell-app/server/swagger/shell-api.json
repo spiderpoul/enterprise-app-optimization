@@ -1,0 +1,458 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Shell API",
+    "version": "1.0.0",
+    "description": "Service endpoints exposed by the enterprise shell application."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:4300",
+      "description": "Shell server"
+    }
+  ],
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Health check",
+        "description": "Returns the operational status of the shell server.",
+        "responses": {
+          "200": {
+            "description": "Shell server is operating normally.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/initialization/steps": {
+      "get": {
+        "summary": "Retrieve initialization steps",
+        "description": "Returns the initialization plan that the client renders while the workspace is loading.",
+        "responses": {
+          "200": {
+            "description": "List of initialization steps in execution order.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InitializationStep"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/initialization/steps/{stepId}/complete": {
+      "post": {
+        "summary": "Mark initialization step complete",
+        "description": "Simulates completion of a specific initialization step and returns the acknowledged payload.",
+        "parameters": [
+          {
+            "name": "stepId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The initialization step was marked as complete.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "step": {
+                      "$ref": "#/components/schemas/InitializationStep"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No initialization step was found for the given identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metrics/web-vitals": {
+      "post": {
+        "summary": "Report web vital metrics",
+        "description": "Accepts web-vital measurements pushed from the client.",
+        "responses": {
+          "202": {
+            "description": "Metrics were accepted for asynchronous processing."
+          }
+        }
+      }
+    },
+    "/api/dashboard": {
+      "get": {
+        "summary": "Fetch dashboard data",
+        "description": "Returns the metrics, tasks and activity feed rendered on the operations dashboard.",
+        "responses": {
+          "200": {
+            "description": "Dashboard data payload.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mf/users-and-roles/users": {
+      "get": {
+        "summary": "Proxy users and roles records",
+        "description": "Forwards the request to the Users & Roles microfrontend service and returns the user list.",
+        "responses": {
+          "200": {
+            "description": "List of users returned by the microfrontend.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mf/reports": {
+      "get": {
+        "summary": "Proxy operations reports",
+        "description": "Forwards the request to the Operations Reports microfrontend and returns report summaries.",
+        "responses": {
+          "200": {
+            "description": "List of reports returned by the microfrontend.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Report"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The microfrontend returned an error response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/microfrontends": {
+      "get": {
+        "summary": "List registered microfrontends",
+        "description": "Returns the microfrontend descriptors that have acknowledged the shell.",
+        "responses": {
+          "200": {
+            "description": "Collection of registered microfrontends.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Microfrontend"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/microfrontends/ack": {
+      "post": {
+        "summary": "Acknowledge microfrontend registration",
+        "description": "Called by microfrontends to register or refresh their availability with the shell.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Microfrontend"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Microfrontend acknowledgement accepted."
+          },
+          "400": {
+            "description": "The acknowledgement payload was invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/microfrontends/{id}": {
+      "delete": {
+        "summary": "Remove a microfrontend",
+        "description": "Removes a microfrontend descriptor from the registry and tears down any active proxies.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Microfrontend entry deleted."
+          },
+          "404": {
+            "description": "No registered microfrontend matches the requested identifier.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "ok"
+          }
+        }
+      },
+      "InitializationStep": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "required": ["id", "label", "duration"]
+      },
+      "DashboardResponse": {
+        "type": "object",
+        "properties": {
+          "metrics": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DashboardMetric"
+            }
+          },
+          "optimizationTasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptimizationTask"
+            }
+          },
+          "activityFeed": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActivityItem"
+            }
+          }
+        }
+      },
+      "DashboardMetric": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "trend": {
+            "type": "string"
+          }
+        }
+      },
+      "OptimizationTask": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "eta": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string"
+          }
+        }
+      },
+      "ActivityItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "detail": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Microfrontend": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "menuLabel": {
+            "type": "string"
+          },
+          "routePath": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "entryUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "manifestUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "lastAcknowledgedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "apiProxy": {
+            "$ref": "#/components/schemas/MicrofrontendProxyConfig"
+          }
+        },
+        "required": ["id", "name", "menuLabel", "routePath", "entryUrl"]
+      },
+      "MicrofrontendProxyConfig": {
+        "type": "object",
+        "properties": {
+          "prefix": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string",
+            "format": "uri"
+          },
+          "pathRewrite": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
