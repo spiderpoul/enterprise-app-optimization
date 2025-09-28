@@ -59,6 +59,7 @@ const surfaceStyles = css`
 `;
 
 const LayoutGrid = styled.div<{ menuWidth: number }>`
+  height: 100vh;
   min-height: 100vh;
   display: grid;
   grid-template-columns: ${({ menuWidth }) => `${menuWidth}px 1fr`};
@@ -68,6 +69,7 @@ const LayoutGrid = styled.div<{ menuWidth: number }>`
     'sidebar main'
     'sidebar footer';
   background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+  overflow: hidden;
 `;
 
 const SidebarContainer = styled.div`
@@ -76,6 +78,11 @@ const SidebarContainer = styled.div`
   flex-direction: column;
   align-items: stretch;
   box-shadow: 6px 0 24px -20px rgba(15, 23, 42, 0.45);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
 `;
 
 const ShellMenu = styled(Menu)`
@@ -83,6 +90,9 @@ const ShellMenu = styled(Menu)`
   display: flex;
   flex-direction: column;
   background: transparent;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
 `;
 
 const Branding = styled(Space)<{ minimized: boolean }>`
@@ -142,6 +152,7 @@ const ContentArea = styled.div`
   grid-area: main;
   flex: 1;
   min-height: 0;
+  height: 100%;
   overflow-y: auto;
   padding: 0 40px 40px;
   ${surfaceStyles};
@@ -283,7 +294,7 @@ const MainLayout: React.FC = () => {
           key: section.title,
           icon: SectionIcon,
           isRoot: true,
-          expanded: sectionActive,
+          expanded: !menuMinimized || sectionActive,
           items: section.items.map((item) => ({
             state: item.path,
             key: item.title,
@@ -292,7 +303,7 @@ const MainLayout: React.FC = () => {
           })),
         } satisfies NavItemData;
       }),
-    [handleNavigate, matchRoute, sections],
+    [handleNavigate, matchRoute, menuMinimized, sections],
   );
 
   const userNavItems = useMemo<NavItemData[]>(() => {

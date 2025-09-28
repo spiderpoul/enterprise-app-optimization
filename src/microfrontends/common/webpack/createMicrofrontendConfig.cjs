@@ -48,6 +48,8 @@ const createSharedConfig = (dependencies = {}) => {
     if (version) {
       shared[library] = {
         singleton: true,
+        eager: true,
+        shareScope: 'default',
         requiredVersion: version,
       };
     }
