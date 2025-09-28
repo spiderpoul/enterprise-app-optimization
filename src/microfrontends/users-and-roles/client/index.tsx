@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom';
 
 import 'antd/dist/reset.css';
@@ -12,6 +12,16 @@ import UserEngagementChart from './components/UserEngagementChart';
 import useUsersData from './hooks/useUsersData';
 import { UserAuditEntry, UserRecord, UserStatus } from './types';
 import './styles/index.css';
+
+const markPerformance = (label: string) => {
+  if (typeof performance === 'undefined' || typeof performance.mark !== 'function') {
+    return;
+  }
+
+  performance.mark(label);
+};
+
+markPerformance('users-and-roles:start-js-parsing');
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -290,7 +300,18 @@ const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
 };
 
 const UsersAndRolesApp: React.FC = () => {
+  const hasMarkedRender = useRef(false);
+
+  if (!hasMarkedRender.current) {
+    markPerformance('users-and-roles:start-react-render');
+    hasMarkedRender.current = true;
+  }
+
   const { users, isLoading, error } = useUsersData();
+
+  useEffect(() => {
+    markPerformance('users-and-roles:end-react-render');
+  }, []);
 
   return (
     <div className="users-roles__content">

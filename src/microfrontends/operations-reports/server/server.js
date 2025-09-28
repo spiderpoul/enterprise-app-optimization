@@ -21,11 +21,11 @@ const { reports } = require('./data/reports');
 const MICROFRONT_PORT = parsePort(process.env.MICROFRONT_PORT, 4400);
 const MICROFRONT_HOST = String(process.env.MICROFRONT_HOST ?? '0.0.0.0');
 const SHELL_URL = process.env.SHELL_URL || 'http://localhost:4300';
-const MICROFRONT_PUBLIC_URL = process.env.MICROFRONT_PUBLIC_URL;
+const MICROFRONT_PUBLIC_URL = process.env.MICROFRONT_PUBLIC_URL || 'http://localhost:4401';
 const ACK_INTERVAL = Number(process.env.MICROFRONT_ACK_INTERVAL || 30000);
 const isProduction = process.env.NODE_ENV === 'production';
 const CLIENT_HOST = String(process.env.CLIENT_HOST ?? '0.0.0.0');
-const CLIENT_PORT = parsePort(process.env.CLIENT_PORT, 8080);
+const CLIENT_PORT = parsePort(process.env.CLIENT_PORT, 4401);
 const CLIENT_DEV_SERVER_URL = resolveClientDevServerUrl({
   explicitUrl: process.env.CLIENT_DEV_SERVER_URL,
   host: CLIENT_HOST,
