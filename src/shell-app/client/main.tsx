@@ -10,6 +10,16 @@ import App from './App';
 import reportWebVitals from './metrics/reportWebVitals';
 import './styles.css';
 
+const markPerformance = (label: string) => {
+  if (typeof performance === 'undefined' || typeof performance.mark !== 'function') {
+    return;
+  }
+
+  performance.mark(label);
+};
+
+markPerformance('shell:start-js-parsing');
+
 declare global {
   interface Window {
     React: typeof React;
@@ -39,11 +49,23 @@ if (!container) {
 }
 
 const root = ReactDOMClient.createRoot(container);
+markPerformance('shell:start-react-render');
 root.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
 );
+
+const scheduleRenderEndMark = () => {
+  if (typeof requestAnimationFrame === 'function') {
+    requestAnimationFrame(() => markPerformance('shell:end-react-render'));
+    return;
+  }
+
+  markPerformance('shell:end-react-render');
+};
+
+scheduleRenderEndMark();
 
 type WebVitalPayload = Pick<
   Metric,

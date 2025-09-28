@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import 'antd/dist/reset.css';
@@ -12,6 +12,16 @@ import useReportsData from './hooks/useReportsData';
 import { OperationsReport, ReportMetric } from './types';
 
 import './styles/index.css';
+
+const markPerformance = (label: string) => {
+  if (typeof performance === 'undefined' || typeof performance.mark !== 'function') {
+    return;
+  }
+
+  performance.mark(label);
+};
+
+markPerformance('operations-reports:start-js-parsing');
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -326,7 +336,18 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
 };
 
 const OperationsReportsApp: React.FC = () => {
+  const hasMarkedRender = useRef(false);
+
+  if (!hasMarkedRender.current) {
+    markPerformance('operations-reports:start-react-render');
+    hasMarkedRender.current = true;
+  }
+
   const { reports, isLoading, error } = useReportsData();
+
+  useEffect(() => {
+    markPerformance('operations-reports:end-react-render');
+  }, []);
 
   return (
     <div className="operations-reports__content">
