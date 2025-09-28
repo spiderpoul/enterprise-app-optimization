@@ -6,6 +6,7 @@ const express = require('express');
 const fs = require('fs');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { initializationPlan } = require('./data/initialization-plan');
+const { dashboardData } = require('./data/dashboard');
 
 const app = express();
 const parsePort = (value, fallback) => {
@@ -341,6 +342,10 @@ app.post('/api/metrics/web-vitals', (req, res) => {
   }
 
   res.status(202).end();
+});
+
+app.get('/api/dashboard', (_req, res) => {
+  res.json(dashboardData);
 });
 
 app.get('/api/microfrontends', (_req, res) => {

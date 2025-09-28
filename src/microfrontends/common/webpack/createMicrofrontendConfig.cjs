@@ -94,6 +94,8 @@ const createMicrofrontendConfig = ({
       'react/jsx-dev-runtime': 'ReactJSXDevRuntime',
       'react-dom': 'ReactDOM',
       'react-dom/client': 'ReactDOMClient',
+      'react-router-dom': 'ReactRouterDOM',
+      'react-router': 'ReactRouter',
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
@@ -101,12 +103,13 @@ const createMicrofrontendConfig = ({
     module: {
       rules: [
         {
-          test: /\.tsx?$/,
+          test: /\.[jt]sx?$/,
           exclude: /node_modules/,
           use: {
-            loader: 'ts-loader',
+            loader: 'babel-loader',
             options: {
-              configFile: path.resolve(rootDir, 'tsconfig.json'),
+              cacheDirectory: true,
+              cacheCompression: false,
             },
           },
         },

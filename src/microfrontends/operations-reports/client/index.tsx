@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
 
 import 'antd/dist/reset.css';
 import { Alert, Button, Card, Space, Spin, Table, Tag, Typography } from 'antd';
+import { Analytics, Clock } from '@kaspersky/hexa-ui-icons/24';
 import type { ColumnsType } from 'antd/es/table';
 
 import AreaTrendChart from './components/charts/AreaTrendChart';
@@ -138,7 +139,12 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
   return (
     <Space direction="vertical" size="large" className="operations-reports__section">
       <div>
-        <Title level={2}>Enterprise operations reports</Title>
+        <Title level={2} className="operations-reports__title">
+          <span className="operations-reports__title-icon" aria-hidden="true">
+            <Analytics />
+          </span>
+          Enterprise operations reports
+        </Title>
         <Paragraph className="operations-reports__header-summary">
           Each report aggregates telemetry from automation pipelines, incident command logs, and
           cloud infrastructure metrics. Select a report to inspect the detailed timeline, key
@@ -255,7 +261,10 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
             <span>
               Comparing automation coverage against readiness index over the last six months.
             </span>
-            <span>Last updated {formatUpdatedAt(report.lastUpdated)}</span>
+            <span className="operations-reports__chart-meta">
+              <Clock aria-hidden="true" />
+              <span>Last updated {formatUpdatedAt(report.lastUpdated)}</span>
+            </span>
           </div>
         </Card>
 

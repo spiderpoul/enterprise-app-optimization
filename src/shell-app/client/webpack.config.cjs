@@ -68,12 +68,13 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.[jt]sx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'ts-loader',
+          loader: 'babel-loader',
           options: {
-            configFile: path.resolve(__dirname, 'tsconfig.json'),
+            cacheDirectory: true,
+            cacheCompression: false,
           },
         },
       },
