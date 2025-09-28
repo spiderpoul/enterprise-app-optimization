@@ -22,7 +22,6 @@ import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import MicrofrontendBoundary from '../microfrontends/MicrofrontendBoundary';
 import NotFound from '../pages/NotFound';
-import { useAuth } from '../auth/AuthContext';
 import { useShellInitialization } from '../hooks/useShellInitialization';
 
 interface ShellMenuItem {
@@ -188,47 +187,11 @@ const InitializationContainer = styled(Space)`
   justify-content: center;
 `;
 
-const InitializationPanel = styled.div`
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 40px 80px -40px rgba(15, 23, 42, 0.35);
-  max-width: 520px;
-  width: 100%;
-`;
-
-const InitializationSteps = styled.ul`
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 8px;
-`;
-
-const InitializationStep = styled.li<{ status: 'complete' | 'active' | 'pending' }>`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: ${({ status }) =>
-    status === 'complete' ? '#14532d' : status === 'active' ? '#1d4ed8' : '#475467'};
-  font-weight: ${({ status }) => (status === 'pending' ? 500 : 600)};
-  opacity: ${({ status }) => (status === 'pending' ? 0.72 : 1)};
-`;
-
-const StepBullet = styled.span<{ status: 'complete' | 'active' | 'pending' }>`
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: ${({ status }) =>
-    status === 'complete' ? '#16a34a' : status === 'active' ? '#2563eb' : '#cbd5f5'};
-  box-shadow: ${({ status }) =>
-    status === 'active' ? '0 0 0 4px rgba(37, 99, 235, 0.2)' : 'none'};
-`;
-
 const MainLayout: React.FC = () => {
   const { microfrontends, isLoading, error } = useMicrofrontends();
-  const { user, logout } = useAuth();
-  const { isInitializing, currentStep, completedSteps, steps, progress } = useShellInitialization();
+  const userDisplayName = 'Enterprise operator';
+  const userRole = 'Workspace automation lead';
+  const { isInitializing, currentStep } = useShellInitialization();
   const [menuMinimized, setMenuMinimized] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -307,18 +270,16 @@ const MainLayout: React.FC = () => {
   );
 
   const userNavItems = useMemo<NavItemData[]>(() => {
-    const displayName = user?.displayName ?? 'Enterprise guest';
-
     return [
       {
         mode: 'user',
         state: 'user-profile',
-        key: displayName,
+        key: userDisplayName,
         icon: UserAccount,
         isRoot: true,
         userProps: {
-          name: displayName,
-          role: user ? 'Workspace administrator' : 'Guest session',
+          name: userDisplayName,
+          role: userRole,
           status: 'available',
         },
         items: [
@@ -327,8 +288,8 @@ const MainLayout: React.FC = () => {
             onClick: () => handleNavigate('/dashboard'),
           },
           {
-            key: 'Sign out',
-            onClick: logout,
+            key: 'Notification settings',
+            onClick: () => handleNavigate('/dashboard'),
           },
         ],
       },
@@ -345,38 +306,12 @@ const MainLayout: React.FC = () => {
         ],
       },
     ];
-  }, [handleNavigate, logout, user]);
+  }, [handleNavigate, userDisplayName, userRole]);
 
   if (isInitializing) {
     return (
       <InitializationContainer direction="vertical" size={32}>
-        <InitializationPanel>
-          <Space direction="vertical" gap={16} align="stretch">
-            <H2>Preparing your workspace</H2>
-            <Text style={{ color: '#475467' }}>
-              The shell intentionally performs several staged requests to showcase asynchronous
-              service initialisation and delay the UI start-up sequence.
-            </Text>
-            <Loader size="large" centered tip={currentStep?.label ?? 'Preparing workspace…'} />
-            <Text style={{ color: '#475467' }}>{Math.round(progress * 100)}% complete</Text>
-            <InitializationSteps>
-              {steps.map((step) => {
-                const status: 'complete' | 'active' | 'pending' = completedSteps.includes(step.id)
-                  ? 'complete'
-                  : currentStep?.id === step.id
-                    ? 'active'
-                    : 'pending';
-
-                return (
-                  <InitializationStep key={step.id} status={status}>
-                    <StepBullet status={status} />
-                    <span>{step.label}</span>
-                  </InitializationStep>
-                );
-              })}
-            </InitializationSteps>
-          </Space>
-        </InitializationPanel>
+        <Loader size="large" centered tip={currentStep?.label ?? 'Preparing workspace…'} />
       </InitializationContainer>
     );
   }
@@ -426,8 +361,12 @@ const MainLayout: React.FC = () => {
         </HeaderTitles>
         <HeaderActions direction="horizontal" align="flex-start">
           <UserChip direction="horizontal">
-            <Text>{user?.displayName ?? 'Enterprise guest'}</Text>
-            <Button mode="tertiary" onClick={logout} text="Sign out" />
+            <Text>{userDisplayName}</Text>
+            <Button
+              mode="tertiary"
+              onClick={() => handleNavigate('/dashboard')}
+              text="Manage profile"
+            />
           </UserChip>
           <Button mode="secondary" text="Export insights" />
           <Button mode="primary" text="Launch automation" />

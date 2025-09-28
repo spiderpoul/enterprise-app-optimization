@@ -11,6 +11,28 @@
   width: 100%;
 }
 
+.operations-reports__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.operations-reports__title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(37, 99, 235, 0.12);
+  color: #1e3a8a;
+}
+
+.operations-reports__title-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
 .operations-reports__header-summary {
   color: rgba(16, 37, 66, 0.7);
   max-width: 720px;
@@ -110,6 +132,17 @@
   color: rgba(16, 37, 66, 0.55);
   gap: 16px;
   flex-wrap: wrap;
+}
+
+.operations-reports__chart-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.operations-reports__chart-meta svg {
+  width: 16px;
+  height: 16px;
 }
 
 .operations-reports__metrics-grid {

@@ -9,6 +9,28 @@
   gap: 24px;
 }
 
+.users-roles__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.users-roles__title-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: rgba(22, 163, 74, 0.14);
+  color: #047857;
+}
+
+.users-roles__title-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
 .users-roles__table-summary {
   display: flex;
   flex-direction: column;
@@ -47,6 +69,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
+}
+
+.users-roles__card-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.users-roles__card-title svg {
+  width: 18px;
+  height: 18px;
 }
 
 .users-roles__audit-table {

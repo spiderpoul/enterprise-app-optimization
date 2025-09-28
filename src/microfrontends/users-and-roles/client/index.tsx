@@ -6,6 +6,7 @@ import { Alert, Button, Card, Descriptions, Space, Spin, Table, Tag, Typography 
 import type { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import orderBy from 'lodash/orderBy';
+import { ActivityMonitor, ShieldOkSolid, UserAccount } from '@kaspersky/hexa-ui-icons/24';
 
 import UserEngagementChart from './components/UserEngagementChart';
 import useUsersData from './hooks/useUsersData';
@@ -89,7 +90,12 @@ const UsersList: React.FC<UsersListProps> = ({ users, isLoading, error }) => {
   return (
     <Space className="users-roles__section" direction="vertical" size="large">
       <div>
-        <Title level={2}>Users and roles</Title>
+        <Title level={2} className="users-roles__title">
+          <span className="users-roles__title-icon" aria-hidden="true">
+            <UserAccount />
+          </span>
+          Users and roles
+        </Title>
         <Paragraph>
           Review active workspace members, their assigned roles, and team affiliations. Select a
           user to inspect detailed activity, permission scopes, and the most recent audit trail
@@ -241,7 +247,14 @@ const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
         </Card>
       </div>
 
-      <Card title="Permission scope">
+      <Card
+        title={
+          <span className="users-roles__card-title">
+            <ShieldOkSolid aria-hidden="true" />
+            Permission scope
+          </span>
+        }
+      >
         <Paragraph type="secondary">
           Permissions reflect the automation catalog operations and governance actions available to
           this user.
@@ -255,7 +268,14 @@ const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
         </div>
       </Card>
 
-      <Card title="Recent access audits">
+      <Card
+        title={
+          <span className="users-roles__card-title">
+            <ActivityMonitor aria-hidden="true" />
+            Recent access audits
+          </span>
+        }
+      >
         <Table<UserAuditEntry>
           className="users-roles__audit-table"
           columns={auditColumns}
