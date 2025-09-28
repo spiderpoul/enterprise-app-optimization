@@ -8,6 +8,22 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const { initializationPlan } = require('./data/initialization-plan');
 const { dashboardData } = require('./data/dashboard');
 
+const microfrontendsRoot = path.resolve(__dirname, '..', '..', 'microfrontends');
+const { users } = require(path.join(
+  microfrontendsRoot,
+  'users-and-roles',
+  'server',
+  'data',
+  'users.js',
+));
+const { reports } = require(path.join(
+  microfrontendsRoot,
+  'operations-reports',
+  'server',
+  'data',
+  'reports.js',
+));
+
 const app = express();
 
 process.on('unhandledRejection', (reason, promise) => {
@@ -17,9 +33,15 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', (error) => {
   console.error('Uncaught exception encountered.', error);
 });
+const DEFAULT_RESPONSE_DELAY_MS = 300;
+
 const parsePort = (value, fallback) => {
   const parsed = Number.parseInt(String(value ?? '').trim(), 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+};
+const parseDelayMs = (value, fallback) => {
+  const parsed = Number.parseInt(String(value ?? '').trim(), 10);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : fallback;
 };
 const normalizeHost = (host) => {
   const trimmed = String(host ?? '').trim();
@@ -81,6 +103,13 @@ const delay = (ms) =>
   new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+const cloneDeep = (value) => {
+  if (typeof structuredClone === 'function') {
+    return structuredClone(value);
+  }
+
+  return JSON.parse(JSON.stringify(value));
+};
 const resolveClientDist = () => {
   if (process.env.CLIENT_DIST_DIR) {
     return path.resolve(process.env.CLIENT_DIST_DIR);
@@ -317,6 +346,14 @@ const persistRegistry = () => {
 
 app.use(createRequestLogger('shell-server'));
 app.use(express.json());
+const responseDelayMs = parseDelayMs(process.env.SERVER_RESPONSE_DELAY_MS, DEFAULT_RESPONSE_DELAY_MS);
+const applyResponseDelay =
+  responseDelayMs > 0
+    ? (_req, _res, next) => {
+        setTimeout(next, responseDelayMs);
+      }
+    : (_req, _res, next) => next();
+app.use(applyResponseDelay);
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
@@ -358,6 +395,20 @@ app.post('/api/metrics/web-vitals', (req, res) => {
 
 app.get('/api/dashboard', (_req, res) => {
   res.json(dashboardData);
+});
+
+app.get('/api/mf/users-and-roles/users', (_req, res) => {
+  res.json(cloneDeep(users));
+});
+
+app.get('/api/mf/reports/reports', (_req, res) => {
+  res.json(cloneDeep(reports));
+});
+
+app.get('/api/mf/reports/reportserror', (_req, res) => {
+  res.status(500).json({
+    message: 'Simulated operations reports failure. Please retry shortly.',
+  });
 });
 
 app.get('/api/microfrontends', (_req, res) => {
