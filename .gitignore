@@ -4,4 +4,3 @@ dist
 npm-debug.log*
 .nx
 .npmrc
-**/.env
