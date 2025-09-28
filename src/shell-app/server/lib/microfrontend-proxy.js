@@ -29,10 +29,12 @@ const createMicrofrontendProxyManager = ({ app }) => {
     }
 
     const rewritePath = createPathRewriter(config.prefix, config.pathRewrite);
-    const filter = (pathname) => typeof pathname === 'string' && pathname.startsWith(config.prefix);
-    const proxyMiddleware = createProxyMiddleware(filter, {
+    const pathFilter = (pathname) =>
+      typeof pathname === 'string' && pathname.startsWith(config.prefix);
+    const proxyMiddleware = createProxyMiddleware({
       changeOrigin: true,
       logLevel: 'warn',
+      pathFilter,
       pathRewrite: (path) => rewritePath(path),
       target: config.target,
       ws: true,

@@ -205,9 +205,10 @@ if (environment.isProduction) {
 } else if (environment.clientDevServerTarget) {
   const shouldProxyClientRequest = (url) => typeof url === 'string' && !url.startsWith('/api');
   const pathFilter = (requestPath) => shouldProxyClientRequest(requestPath);
-  const clientProxy = createProxyMiddleware(pathFilter, {
+  const clientProxy = createProxyMiddleware({
     changeOrigin: true,
     logLevel: 'warn',
+    pathFilter,
     target: environment.clientDevServerTarget,
     ws: true,
   });
