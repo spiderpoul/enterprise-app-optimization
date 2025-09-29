@@ -5,8 +5,10 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        targets: 'defaults',
-        modules: false,
+        targets: 'ie 11',
+        useBuiltIns: 'usage',
+        modules: 'cjs',
+        corejs: '3.38',
       },
     ],
     [
