@@ -1,24 +1,26 @@
-import { useEffect, useMemo, useState } from 'react';
-import React from 'react';
+import { useEffect, useState } from 'react';
+import type { ComponentType } from 'react';
 import { LoadedMicrofrontend, MicrofrontendApiProxyConfig, MicrofrontendManifest } from './types';
 
+type MicrofrontendComponent = ComponentType<Record<string, unknown>>;
+
 type MicrofrontendModule = {
-  default?: React.ComponentType<Record<string, unknown>>;
-  Microfrontend?: React.ComponentType<Record<string, unknown>>;
-  Component?: React.ComponentType<Record<string, unknown>>;
+  default?: MicrofrontendComponent;
+  Microfrontend?: MicrofrontendComponent;
+  Component?: MicrofrontendComponent;
 };
 
-const createLazyComponent = (entryUrl: string) =>
-  React.lazy(async () => {
-    const module = (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
-    const Component = module.default ?? module.Microfrontend ?? module.Component;
+// Centralized resolver so we can switch between eager and lazy strategies without touching callers.
+const resolveMicrofrontendComponent = async (entryUrl: string): Promise<MicrofrontendComponent> => {
+  const module = (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
+  const Component = module.default ?? module.Microfrontend ?? module.Component;
 
-    if (!Component) {
-      throw new Error(`Microfrontend at ${entryUrl} does not provide a default export.`);
-    }
+  if (!Component) {
+    throw new Error(`Microfrontend at ${entryUrl} does not provide a component export.`);
+  }
 
-    return { default: Component };
-  });
+  return Component;
+};
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
@@ -92,7 +94,7 @@ export interface UseMicrofrontendsResult {
 }
 
 export const useMicrofrontends = (): UseMicrofrontendsResult => {
-  const [manifests, setManifests] = useState<MicrofrontendManifest[]>([]);
+  const [microfrontends, setMicrofrontends] = useState<LoadedMicrofrontend[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -108,14 +110,23 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         }
 
         const payload = parseMicrofrontends((await response.json()) as unknown);
+        const loadedMicrofrontends = await Promise.all(
+          payload.map(async (manifest) => ({
+            ...manifest,
+            Component: await resolveMicrofrontendComponent(manifest.entryUrl),
+          })),
+        );
 
         if (isMounted) {
-          setManifests(payload);
+          setMicrofrontends(loadedMicrofrontends);
+          setError(null);
         }
       } catch (err) {
+        console.error('Failed to load microfrontends', err);
         if (isMounted) {
           const message = err instanceof Error ? err.message : 'Unable to retrieve microfrontends.';
           setError(message);
+          setMicrofrontends([]);
         }
       } finally {
         if (isMounted) {
@@ -130,15 +141,6 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
       isMounted = false;
     };
   }, []);
-
-  const microfrontends = useMemo<LoadedMicrofrontend[]>(
-    () =>
-      manifests.map((manifest) => ({
-        ...manifest,
-        Component: createLazyComponent(manifest.entryUrl),
-      })),
-    [manifests],
-  );
 
   return {
     microfrontends,

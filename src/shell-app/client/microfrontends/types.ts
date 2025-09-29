@@ -13,7 +13,7 @@ export interface MicrofrontendManifest {
 }
 
 export interface LoadedMicrofrontend extends MicrofrontendManifest {
-  Component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>;
+  Component: React.ComponentType<Record<string, unknown>>;
 }
 
 export interface MicrofrontendApiProxyConfig {

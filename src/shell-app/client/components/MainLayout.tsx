@@ -424,21 +424,23 @@ const MainLayout: React.FC = () => {
                     key={microfrontend.id}
                     path={routePath}
                     element={
-                    <Suspense
-                      fallback={
-                        <LoaderContainer role="status">
-                          <Space direction="vertical" align="center" gap={12}>
-                            <Loader centered size="large" />
-                            <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
-                          </Space>
-                        </LoaderContainer>
-                      }
-                    >
-                      <MicrofrontendBoundary name={microfrontend.name}>
-                        <microfrontend.Component />
-                      </MicrofrontendBoundary>
-                    </Suspense>
-                  }
+                      <Suspense
+                        fallback={
+                          <LoaderContainer role="status">
+                            <Space direction="vertical" align="center" gap={12}>
+                              <Loader centered size="large" />
+                              <Text style={{ color: '#475467' }}>
+                                Loading {microfrontend.name}…
+                              </Text>
+                            </Space>
+                          </LoaderContainer>
+                        }
+                      >
+                        <MicrofrontendBoundary name={microfrontend.name}>
+                          <microfrontend.Component />
+                        </MicrofrontendBoundary>
+                      </Suspense>
+                    }
                   />
                 );
               })}
