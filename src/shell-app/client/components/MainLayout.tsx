@@ -17,12 +17,19 @@ import {
   type NavItemData,
   Hamburger,
 } from '@kaspersky/hexa-ui';
-import { AppUpdate, Grid, Settings2, UserAccount } from '@kaspersky/hexa-ui-icons/16';
+import {
+  ActivityMonitor,
+  AppUpdate,
+  Grid,
+  Settings2,
+  UserAccount,
+} from '@kaspersky/hexa-ui-icons/16';
 import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import MicrofrontendBoundary from '../microfrontends/MicrofrontendBoundary';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
+import WizardQuickSetupPage from '../pages/workshop/react-perf/WizardQuickSetupPage';
 
 interface ShellMenuItem {
   id: string;
@@ -47,6 +54,18 @@ const baseMenuSections: ShellMenuSection[] = [
         id: 'dashboard',
         title: 'Dashboard',
         path: '/dashboard',
+      },
+    ],
+  },
+  {
+    id: 'react-perf',
+    title: 'React Perf',
+    icon: ActivityMonitor,
+    items: [
+      {
+        id: 'react-perf-wizard',
+        title: 'Wizard Quick Setup',
+        path: '/workshop/react-perf/wizard',
       },
     ],
   },
@@ -411,6 +430,7 @@ const MainLayout: React.FC = () => {
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/workshop/react-perf/wizard" element={<WizardQuickSetupPage />} />
               {microfrontends.map((microfrontend) => {
                 const normalizedPath = microfrontend.routePath.startsWith('/')
                   ? microfrontend.routePath
@@ -424,21 +444,23 @@ const MainLayout: React.FC = () => {
                     key={microfrontend.id}
                     path={routePath}
                     element={
-                    <Suspense
-                      fallback={
-                        <LoaderContainer role="status">
-                          <Space direction="vertical" align="center" gap={12}>
-                            <Loader centered size="large" />
-                            <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
-                          </Space>
-                        </LoaderContainer>
-                      }
-                    >
-                      <MicrofrontendBoundary name={microfrontend.name}>
-                        <microfrontend.Component />
-                      </MicrofrontendBoundary>
-                    </Suspense>
-                  }
+                      <Suspense
+                        fallback={
+                          <LoaderContainer role="status">
+                            <Space direction="vertical" align="center" gap={12}>
+                              <Loader centered size="large" />
+                              <Text style={{ color: '#475467' }}>
+                                Loading {microfrontend.name}…
+                              </Text>
+                            </Space>
+                          </LoaderContainer>
+                        }
+                      >
+                        <MicrofrontendBoundary name={microfrontend.name}>
+                          <microfrontend.Component />
+                        </MicrofrontendBoundary>
+                      </Suspense>
+                    }
                   />
                 );
               })}
