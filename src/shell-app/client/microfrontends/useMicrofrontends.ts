@@ -12,8 +12,42 @@ type MicrofrontendModule = {
   routeConfig?: RouteObject;
 };
 
-const loadMicrofrontendModule = async (entryUrl: string): Promise<MicrofrontendModule> =>
-  (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
+type RemoteContainer = {
+  init: (shareScope: unknown) => Promise<void>;
+  get: (module: string) => Promise<() => unknown>;
+};
+
+const ROUTES_MODULE_ID = './routes';
+
+const isRemoteContainer = (value: unknown): value is RemoteContainer =>
+  typeof value === 'object' &&
+  value !== null &&
+  typeof (value as RemoteContainer).init === 'function' &&
+  typeof (value as RemoteContainer).get === 'function';
+
+const loadMicrofrontendModule = async (
+  manifest: MicrofrontendManifest,
+): Promise<MicrofrontendModule> => {
+  if (typeof __webpack_init_sharing__ === 'function') {
+    await __webpack_init_sharing__('default');
+  }
+
+  const containerModule = (await import(/* webpackIgnore: true */ manifest.entryUrl)) as unknown;
+
+  if (!isRemoteContainer(containerModule)) {
+    throw new Error(`Remote at ${manifest.entryUrl} is not a valid module federation container.`);
+  }
+
+  const shareScope =
+    typeof __webpack_share_scopes__ === 'object' && __webpack_share_scopes__ !== null
+      ? (__webpack_share_scopes__.default ?? {})
+      : {};
+  await containerModule.init(shareScope);
+  const factory = await containerModule.get(ROUTES_MODULE_ID);
+  const module = await factory();
+
+  return module as MicrofrontendModule;
+};
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
@@ -134,7 +168,7 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         const payload = parseMicrofrontends((await response.json()) as unknown);
         const loadedMicrofrontends = await Promise.all(
           payload.map(async (manifest) => {
-            const module = await loadMicrofrontendModule(manifest.entryUrl);
+            const module = await loadMicrofrontendModule(manifest);
             const routeConfig = resolveMicrofrontendRouteConfig(module, manifest.entryUrl);
 
             return {
