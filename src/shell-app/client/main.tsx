@@ -1,10 +1,5 @@
 import React from 'react';
-import * as ReactDOM from 'react-dom';
 import * as ReactDOMClient from 'react-dom/client';
-import * as ReactJSXRuntime from 'react/jsx-runtime';
-import * as ReactJSXDevRuntime from 'react/jsx-dev-runtime';
-import * as ReactRouterDOM from 'react-router-dom';
-import * as ReactRouter from 'react-router';
 import type { Metric } from 'web-vitals';
 import App from './App';
 import reportWebVitals from './metrics/reportWebVitals';
@@ -19,28 +14,6 @@ const markPerformance = (label: string) => {
 };
 
 markPerformance('shell:start-js-parsing');
-
-declare global {
-  interface Window {
-    React: typeof React;
-    ReactDOM: typeof ReactDOM;
-    ReactDOMClient: typeof ReactDOMClient;
-    ReactJSXRuntime: typeof ReactJSXRuntime;
-    ReactJSXDevRuntime: typeof ReactJSXDevRuntime;
-    ReactRouterDOM: typeof ReactRouterDOM;
-    ReactRouter: typeof ReactRouter;
-  }
-}
-
-if (typeof window !== 'undefined') {
-  window.React = React;
-  window.ReactDOM = ReactDOM;
-  window.ReactDOMClient = ReactDOMClient;
-  window.ReactJSXRuntime = ReactJSXRuntime;
-  window.ReactJSXDevRuntime = ReactJSXDevRuntime;
-  window.ReactRouterDOM = ReactRouterDOM;
-  window.ReactRouter = ReactRouter;
-}
 
 const container = document.getElementById('root');
 
