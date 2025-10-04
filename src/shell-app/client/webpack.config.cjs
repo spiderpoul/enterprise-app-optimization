@@ -4,7 +4,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { container } = require('webpack');
+const { container, DefinePlugin } = require('webpack');
 const statoscope = require('@statoscope/webpack-plugin');
 
 const { ModuleFederationPlugin } = container;
@@ -43,6 +43,7 @@ const StatoscopeWebpackPlugin =
 
 const isProduction = process.env.NODE_ENV === 'production';
 const shouldAnalyze = process.env.ANALYZE === 'true';
+const isReactScanEnabled = process.env.REACT_SCAN === 'true';
 
 const analyzerPlugins = () => {
   if (!shouldAnalyze) {
@@ -120,6 +121,9 @@ const config = {
     new ModuleFederationPlugin({
       name: 'shellApp',
       shared: createSharedConfig(),
+    }),
+    new DefinePlugin({
+      __REACT_SCAN_ENABLED__: JSON.stringify(isReactScanEnabled),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '..', '..', '..', 'public', 'index.html'),
