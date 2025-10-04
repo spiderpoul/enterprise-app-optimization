@@ -10,24 +10,48 @@ const statoscope = require('@statoscope/webpack-plugin');
 const { ModuleFederationPlugin } = container;
 const { dependencies = {} } = require('./package.json');
 
-const createSharedConfig = () => {
-  const libraries = ['react', 'react-dom', 'react-router', 'react-router-dom'];
+const sharedLibraries = [
+  { shareKey: 'react' },
+  { shareKey: 'react-dom' },
+  { shareKey: 'react-dom/client', packageName: 'react-dom' },
+  { shareKey: 'react/jsx-runtime', packageName: 'react' },
+  { shareKey: 'react/jsx-dev-runtime', packageName: 'react' },
+  { shareKey: 'react-router' },
+  { shareKey: 'react-router-dom' },
+];
 
-  return libraries.reduce((shared, library) => {
-    const version = dependencies[library];
+const resolveSharedSpecifier = (specifier, resolveFrom) => {
+  try {
+    return require.resolve(specifier, { paths: [resolveFrom, process.cwd()] });
+  } catch (error) {
+    console.warn(`Unable to resolve shared specifier "${specifier}": ${error.message}`);
+    return specifier;
+  }
+};
 
-    if (version) {
-      shared[library] = {
-        singleton: true,
-        eager: true,
-        shareScope: 'default',
-        requiredVersion: version,
-      };
+const createSharedConfig = ({ resolveFrom }) =>
+  sharedLibraries.reduce((shared, { shareKey, packageName }) => {
+    const dependencyName = packageName ?? shareKey;
+    const version = dependencies[dependencyName];
+
+    if (!version) {
+      return shared;
     }
+
+    const importSpecifier = resolveSharedSpecifier(shareKey, resolveFrom);
+
+    shared[shareKey] = {
+      singleton: true,
+      eager: true,
+      shareScope: 'default',
+      requiredVersion: version,
+      version,
+      import: importSpecifier,
+      packageName: dependencyName,
+    };
 
     return shared;
   }, {});
-};
 
 const StatoscopeWebpackPlugin =
   statoscope && statoscope.default ? statoscope.default : statoscope;
@@ -110,7 +134,7 @@ const config = {
   plugins: [
     new ModuleFederationPlugin({
       name: 'shellApp',
-      shared: createSharedConfig(),
+      shared: createSharedConfig({ resolveFrom: __dirname }),
     }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '..', '..', '..', 'public', 'index.html'),

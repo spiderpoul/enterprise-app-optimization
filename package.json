@@ -16,14 +16,17 @@
     "build": "nx run-many --target=build --all",
     "dev": "nx run-many --target=serve --projects shell-client,shell-server,operations-reports-client,operations-reports-server,users-and-roles-client,users-and-roles-server --parallel=6 --output-style=stream",
     "lint": "eslint --ext .ts,.tsx src",
+    "test:e2e": "playwright test",
     "format": "prettier --write .",
     "analyze": "nx run shell-client:analyze && nx run operations-reports-client:analyze && nx run users-and-roles-client:analyze"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.1",
     "@types/react": "18.2.74",
     "@types/react-dom": "18.2.24",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
+    "dotenv": "16.4.7",
     "eslint": "8.57.1",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-import": "2.29.1",
@@ -31,7 +34,6 @@
     "eslint-plugin-prettier": "5.1.3",
     "eslint-plugin-react": "7.34.3",
     "eslint-plugin-react-hooks": "4.6.2",
-    "dotenv": "16.4.7",
     "nx": "21.5.3",
     "prettier": "3.4.2",
     "typescript": "5.5.4"
