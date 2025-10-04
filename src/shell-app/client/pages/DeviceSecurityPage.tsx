@@ -1,5 +1,6 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Table, type TableColumn, type TablePaginationProps, type TableRecord } from '@kaspersky/hexa-ui';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { Table } from 'antd';
 import { useAutoTrimCells } from '../shared/useAutoTrimCells';
 
 type AuditTrail = {
@@ -8,7 +9,7 @@ type AuditTrail = {
   raw: string;
 };
 
-type Row = TableRecord & {
+type Row = {
   id: string;
   device: string;
   policy: {
@@ -58,7 +59,7 @@ export default function DeviceSecurityPage() {
     [page],
   );
 
-  const columns = useMemo<TableColumn[]>(
+  const columns = useMemo<ColumnsType<Row>>(
     () => [
       {
         key: 'device',
@@ -73,7 +74,7 @@ export default function DeviceSecurityPage() {
         title: 'Policy',
         width: 280,
         ellipsis: true,
-        render: (_value, record: Row) => (
+        render: (_value, record) => (
           <span title={record.policy.summary}>{record.policy.label}</span>
         ),
       },
@@ -104,7 +105,7 @@ export default function DeviceSecurityPage() {
     [],
   );
 
-  const pagination = useMemo<TablePaginationProps>(
+  const pagination = useMemo<TablePaginationConfig>(
     () => ({
       pageSize: PAGE_SIZE,
       current: page + 1,
