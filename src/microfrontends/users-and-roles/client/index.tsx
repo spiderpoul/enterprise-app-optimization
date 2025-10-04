@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 import 'antd/dist/reset.css';
 import { Alert, Button, Card, Descriptions, Space, Spin, Table, Tag, Typography } from 'antd';
@@ -31,14 +32,17 @@ const statusColors: Record<UserStatus, string> = {
   Suspended: 'volcano',
 };
 
-interface UsersListProps {
+type UsersRouteContext = {
   users: UserRecord[];
   isLoading: boolean;
   error: string | null;
-}
+};
 
-const UsersList: React.FC<UsersListProps> = ({ users, isLoading, error }) => {
+const useUsersRouteContext = (): UsersRouteContext => useOutletContext<UsersRouteContext>();
+
+const UsersList: React.FC = () => {
   const navigate = useNavigate();
+  const { users, isLoading, error } = useUsersRouteContext();
 
   const sortedUsers = useMemo(() => orderBy(users, (user) => user.lastActive, 'desc'), [users]);
 
@@ -137,13 +141,9 @@ const UsersList: React.FC<UsersListProps> = ({ users, isLoading, error }) => {
   );
 };
 
-interface UserDetailsProps {
-  users: UserRecord[];
-  isLoading: boolean;
-}
-
-const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
+const UserDetails: React.FC = () => {
   const navigate = useNavigate();
+  const { users, isLoading } = useUsersRouteContext();
   const { userId } = useParams<{ userId: string }>();
 
   const user = useMemo(() => users.find((item) => item.id === userId), [users, userId]);
@@ -299,7 +299,7 @@ const UserDetails: React.FC<UserDetailsProps> = ({ users, isLoading }) => {
   );
 };
 
-const UsersAndRolesApp: React.FC = () => {
+const UsersAndRolesLayout: React.FC = () => {
   const hasMarkedRender = useRef(false);
 
   if (!hasMarkedRender.current) {
@@ -313,15 +313,35 @@ const UsersAndRolesApp: React.FC = () => {
     markPerformance('users-and-roles:end-react-render');
   }, []);
 
+  const contextValue = useMemo<UsersRouteContext>(
+    () => ({ users, isLoading, error }),
+    [users, isLoading, error],
+  );
+
   return (
     <div className="users-roles__content">
-      <Routes>
-        <Route index element={<UsersList users={users} isLoading={isLoading} error={error} />} />
-        <Route path=":userId" element={<UserDetails users={users} isLoading={isLoading} />} />
-        <Route path="*" element={<Navigate to=".." replace />} />
-      </Routes>
+      <Outlet context={contextValue} />
     </div>
   );
 };
 
-export default UsersAndRolesApp;
+export const usersAndRolesRouteConfig: RouteObject = {
+  path: '/users',
+  Component: UsersAndRolesLayout,
+  children: [
+    {
+      index: true,
+      Component: UsersList,
+    },
+    {
+      path: ':userId',
+      Component: UserDetails,
+    },
+    {
+      path: '*',
+      element: <Navigate to=".." replace />,
+    },
+  ],
+};
+
+export default usersAndRolesRouteConfig;

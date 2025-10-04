@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
+import { Outlet, useNavigate, useOutletContext, useParams } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 
 import 'antd/dist/reset.css';
 import { Alert, Button, Card, Space, Spin, Table, Tag, Typography } from 'antd';
@@ -26,6 +27,14 @@ markPerformance('operations-reports:start-js-parsing');
 const { Title, Paragraph, Text } = Typography;
 
 type StatusVariant = 'success' | 'warning' | 'danger';
+
+type ReportsRouteContext = {
+  reports: OperationsReport[];
+  isLoading: boolean;
+  error: string | null;
+};
+
+const useReportsRouteContext = (): ReportsRouteContext => useOutletContext<ReportsRouteContext>();
 
 const getStatusVariant = (status: OperationsReport['status']): StatusVariant => {
   switch (status) {
@@ -74,14 +83,9 @@ const formatMetricValue = (metric: ReportMetric) => {
   }
 };
 
-interface ReportsListProps {
-  reports: OperationsReport[];
-  isLoading: boolean;
-  error: string | null;
-}
-
-const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) => {
+const ReportsList: React.FC = () => {
   const navigate = useNavigate();
+  const { reports, isLoading, error } = useReportsRouteContext();
 
   const columns: ColumnsType<OperationsReport> = useMemo(
     () => [
@@ -187,13 +191,9 @@ const ReportsList: React.FC<ReportsListProps> = ({ reports, isLoading, error }) 
   );
 };
 
-interface ReportDetailsProps {
-  reports: OperationsReport[];
-  isLoading: boolean;
-}
-
-const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => {
+const ReportDetails: React.FC = () => {
   const navigate = useNavigate();
+  const { reports, isLoading } = useReportsRouteContext();
   const { reportId } = useParams<{ reportId: string }>();
 
   const report = useMemo(() => reports.find((item) => item.id === reportId), [reports, reportId]);
@@ -335,7 +335,7 @@ const ReportDetails: React.FC<ReportDetailsProps> = ({ reports, isLoading }) => 
   );
 };
 
-const OperationsReportsApp: React.FC = () => {
+const OperationsReportsLayout: React.FC = () => {
   const hasMarkedRender = useRef(false);
 
   if (!hasMarkedRender.current) {
@@ -349,20 +349,31 @@ const OperationsReportsApp: React.FC = () => {
     markPerformance('operations-reports:end-react-render');
   }, []);
 
+  const contextValue = useMemo<ReportsRouteContext>(
+    () => ({ reports, isLoading, error }),
+    [reports, isLoading, error],
+  );
+
   return (
     <div className="operations-reports__content">
-      <Routes>
-        <Route
-          index
-          element={<ReportsList reports={reports} isLoading={isLoading} error={error} />}
-        />
-        <Route
-          path=":reportId"
-          element={<ReportDetails reports={reports} isLoading={isLoading} />}
-        />
-      </Routes>
+      <Outlet context={contextValue} />
     </div>
   );
 };
 
-export default OperationsReportsApp;
+export const operationsReportsRouteConfig: RouteObject = {
+  path: '/reports',
+  Component: OperationsReportsLayout,
+  children: [
+    {
+      index: true,
+      Component: ReportsList,
+    },
+    {
+      path: ':reportId',
+      Component: ReportDetails,
+    },
+  ],
+};
+
+export default operationsReportsRouteConfig;

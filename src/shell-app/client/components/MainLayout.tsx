@@ -213,7 +213,8 @@ const MainLayout: React.FC = () => {
       title: 'Extensions',
       icon: AppUpdate,
       items: microfrontends.map((microfrontend) => {
-        const trimmedPath = microfrontend.routeConfig.path.replace(/\/\*$/, '');
+        const path = microfrontend.routeConfig.path;
+        const trimmedPath = path === '/' ? '/' : path.replace(/\/+$/, '');
 
         return {
           id: microfrontend.id,
@@ -317,34 +318,48 @@ const MainLayout: React.FC = () => {
     ];
   }, [handleNavigate, userDisplayName, userRole]);
 
-  const microfrontendRoutes = useMemo<RouteObject[]>(
-    () =>
-      microfrontends.map((microfrontend) => {
-        const routePath = microfrontend.routeConfig.path;
-        const MicrofrontendComponent = microfrontend.routeConfig.Component;
+  const microfrontendRoutes = useMemo<RouteObject[]>(() => {
+    return microfrontends.map((microfrontend) => {
+      const { routeConfig } = microfrontend;
+      const {
+        Component: componentFromConfig,
+        element: elementFromConfig,
+        children: childRoutes,
+        ...rest
+      } = routeConfig;
+      const RouteComponent = componentFromConfig as React.ComponentType | undefined;
+      const routeElement = elementFromConfig as React.ReactNode | undefined;
+      const nestedRoutes = childRoutes as RouteObject[] | undefined;
+      const resolvedElement = routeElement ?? (RouteComponent ? <RouteComponent /> : null);
 
-        return {
-          path: routePath,
-          element: (
-            <Suspense
-              fallback={
-                <LoaderContainer role="status">
-                  <Space direction="vertical" align="center" gap={12}>
-                    <Loader centered size="large" />
-                    <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
-                  </Space>
-                </LoaderContainer>
-              }
-            >
-              <MicrofrontendBoundary name={microfrontend.name}>
-                <MicrofrontendComponent />
-              </MicrofrontendBoundary>
-            </Suspense>
-          ),
-        } satisfies RouteObject;
-      }),
-    [microfrontends],
-  );
+      if (!resolvedElement) {
+        throw new Error(
+          `Microfrontend "${microfrontend.name}" must define an element or Component on its route configuration.`,
+        );
+      }
+
+      return {
+        ...rest,
+        element: (
+          <Suspense
+            fallback={
+              <LoaderContainer role="status">
+                <Space direction="vertical" align="center" gap={12}>
+                  <Loader centered size="large" />
+                  <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
+                </Space>
+              </LoaderContainer>
+            }
+          >
+            <MicrofrontendBoundary name={microfrontend.name}>
+              {resolvedElement}
+            </MicrofrontendBoundary>
+          </Suspense>
+        ),
+        children: nestedRoutes,
+      } satisfies RouteObject;
+    });
+  }, [microfrontends]);
 
   const routes = useMemo<RouteObject[]>(() => {
     const staticRoutes: RouteObject[] = [

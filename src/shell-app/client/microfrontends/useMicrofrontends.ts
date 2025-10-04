@@ -1,60 +1,51 @@
-import { lazy, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { RouteObject } from 'react-router';
 import {
-  LazyMicrofrontendComponent,
   LoadedMicrofrontend,
   MicrofrontendApiProxyConfig,
-  MicrofrontendComponent,
   MicrofrontendManifest,
-  MicrofrontendRouteConfig,
+  MicrofrontendRouteObject,
 } from './types';
 
 type MicrofrontendModule = {
-  default?: MicrofrontendComponent;
-  Microfrontend?: MicrofrontendComponent;
-  Component?: MicrofrontendComponent;
+  default?: RouteObject;
+  routeConfig?: RouteObject;
 };
 
 const loadMicrofrontendModule = async (entryUrl: string): Promise<MicrofrontendModule> =>
   (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
 
-const resolveMicrofrontendComponent = (
-  module: MicrofrontendModule,
-  entryUrl: string,
-): MicrofrontendComponent => {
-  const Component = module.default ?? module.Microfrontend ?? module.Component;
-
-  if (!Component) {
-    throw new Error(`Microfrontend at ${entryUrl} does not provide a component export.`);
-  }
-
-  return Component;
-};
-
-const createLazyMicrofrontendComponent = (entryUrl: string): LazyMicrofrontendComponent =>
-  lazy(async () => {
-    const module = await loadMicrofrontendModule(entryUrl);
-
-    return {
-      default: resolveMicrofrontendComponent(module, entryUrl),
-    };
-  });
-
-const normalizeRoutePath = (routePath: string): string => {
-  const ensuredLeadingSlash = routePath.startsWith('/') ? routePath : `/${routePath}`;
-
-  return ensuredLeadingSlash.endsWith('/*') ? ensuredLeadingSlash : `${ensuredLeadingSlash}/*`;
-};
-
-const createMicrofrontendRouteConfig = (
-  manifest: MicrofrontendManifest,
-  Component: MicrofrontendComponent,
-): MicrofrontendRouteConfig => ({
-  path: normalizeRoutePath(manifest.routePath),
-  Component,
-});
-
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
+
+const ensureLeadingSlash = (path: string): string => {
+  const withLeadingSlash = path.startsWith('/') ? path : `/${path}`;
+  const trimmed = withLeadingSlash.replace(/\/+$/, '');
+
+  return trimmed === '' ? '/' : trimmed;
+};
+
+const resolveMicrofrontendRouteConfig = (
+  module: MicrofrontendModule,
+  entryUrl: string,
+): MicrofrontendRouteObject => {
+  const routeConfig = module.routeConfig ?? module.default;
+
+  if (!routeConfig || !isRecord(routeConfig)) {
+    throw new Error(`Microfrontend at ${entryUrl} does not provide a route configuration.`);
+  }
+
+  if (typeof routeConfig.path !== 'string' || routeConfig.path.trim() === '') {
+    throw new Error(`Microfrontend at ${entryUrl} must define a string path on its route config.`);
+  }
+
+  const normalizedPath = ensureLeadingSlash(routeConfig.path);
+
+  return {
+    ...routeConfig,
+    path: normalizedPath,
+  } as MicrofrontendRouteObject;
+};
 
 const isMicrofrontendApiProxyConfig = (value: unknown): value is MicrofrontendApiProxyConfig => {
   if (!isRecord(value)) {
@@ -144,14 +135,12 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         const loadedMicrofrontends = await Promise.all(
           payload.map(async (manifest) => {
             const module = await loadMicrofrontendModule(manifest.entryUrl);
-            const Component = resolveMicrofrontendComponent(module, manifest.entryUrl);
+            const routeConfig = resolveMicrofrontendRouteConfig(module, manifest.entryUrl);
 
             return {
               ...manifest,
-              Component,
-              LazyComponent: createLazyMicrofrontendComponent(manifest.entryUrl),
-              routeConfig: createMicrofrontendRouteConfig(manifest, Component),
-            };
+              routeConfig,
+            } satisfies LoadedMicrofrontend;
           }),
         );
 
