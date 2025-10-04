@@ -10,16 +10,23 @@ const statoscope = require('@statoscope/webpack-plugin');
 const { ModuleFederationPlugin } = container;
 const { dependencies = {} } = require('./package.json');
 
-const createSharedConfig = () => {
-  const libraries = ['react', 'react-dom', 'react-router', 'react-router-dom'];
+const sharedLibraries = [
+  { packageName: 'react' },
+  { packageName: 'react-dom' },
+  { packageName: 'react-router' },
+  { packageName: 'react-router-dom' },
+  { packageName: 'react/jsx-runtime', versionSource: 'react' },
+  { packageName: 'react/jsx-dev-runtime', versionSource: 'react' },
+];
 
-  return libraries.reduce((shared, library) => {
-    const version = dependencies[library];
+const createSharedConfig = () =>
+  sharedLibraries.reduce((shared, { packageName, versionSource }) => {
+    const version = dependencies[versionSource ?? packageName];
 
     if (version) {
-      shared[library] = {
+      shared[packageName] = {
         singleton: true,
-        eager: true,
+        strictVersion: true,
         shareScope: 'default',
         requiredVersion: version,
       };
@@ -27,7 +34,6 @@ const createSharedConfig = () => {
 
     return shared;
   }, {});
-};
 
 const StatoscopeWebpackPlugin =
   statoscope && statoscope.default ? statoscope.default : statoscope;

@@ -39,16 +39,23 @@ const normalizeModuleFederationName = (value) =>
     .replace(/^-/, '')
     .replace(/[^a-zA-Z0-9_]/g, '') || 'microfrontend';
 
-const createSharedConfig = (dependencies = {}) => {
-  const sharedLibraries = ['react', 'react-dom', 'react-router', 'react-router-dom'];
+const sharedLibraries = [
+  { packageName: 'react' },
+  { packageName: 'react-dom' },
+  { packageName: 'react-router' },
+  { packageName: 'react-router-dom' },
+  { packageName: 'react/jsx-runtime', versionSource: 'react' },
+  { packageName: 'react/jsx-dev-runtime', versionSource: 'react' },
+];
 
-  return sharedLibraries.reduce((shared, library) => {
-    const version = dependencies[library];
+const createSharedConfig = (dependencies = {}) =>
+  sharedLibraries.reduce((shared, { packageName, versionSource }) => {
+    const version = dependencies[versionSource ?? packageName];
 
     if (version) {
-      shared[library] = {
+      shared[packageName] = {
         singleton: true,
-        eager: true,
+        strictVersion: true,
         shareScope: 'default',
         requiredVersion: version,
       };
@@ -56,7 +63,6 @@ const createSharedConfig = (dependencies = {}) => {
 
     return shared;
   }, {});
-};
 
 const createMicrofrontendConfig = ({
   rootDir,
@@ -76,26 +82,17 @@ const createMicrofrontendConfig = ({
     entry: path.resolve(rootDir, entryFile),
     output: {
       path: path.resolve(rootDir, 'dist'),
-      filename: outputFileName,
+      filename: 'assets/[name].[contenthash].js',
+      chunkFilename: 'assets/[name].[contenthash].js',
       module: true,
       library: {
         type: 'module',
       },
-      publicPath: '/',
+      publicPath: 'auto',
       clean: true,
     },
     experiments: {
       outputModule: true,
-    },
-    externalsType: 'window',
-    externals: {
-      react: 'React',
-      'react/jsx-runtime': 'ReactJSXRuntime',
-      'react/jsx-dev-runtime': 'ReactJSXDevRuntime',
-      'react-dom': 'ReactDOM',
-      'react-dom/client': 'ReactDOMClient',
-      'react-router-dom': 'ReactRouterDOM',
-      'react-router': 'ReactRouter',
     },
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
@@ -138,6 +135,10 @@ const createMicrofrontendConfig = ({
     plugins: [
       new ModuleFederationPlugin({
         name: mfName,
+        filename: outputFileName,
+        exposes: {
+          './routes': path.resolve(rootDir, entryFile),
+        },
         shared: createSharedConfig(dependencies),
       }),
       new CopyWebpackPlugin({
