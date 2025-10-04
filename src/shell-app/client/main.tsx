@@ -10,6 +10,8 @@ import App from './App';
 import reportWebVitals from './metrics/reportWebVitals';
 import './styles.css';
 
+declare const __REACT_SCAN_ENABLED__: boolean;
+
 declare global {
   interface Window {
     React: typeof React;
@@ -19,6 +21,7 @@ declare global {
     ReactJSXDevRuntime: typeof ReactJSXDevRuntime;
     ReactRouter: typeof ReactRouter;
     ReactRouterDOM: typeof ReactRouterDOM;
+    microfrontends?: Record<string, unknown>;
   }
 }
 
@@ -30,6 +33,17 @@ if (typeof window !== 'undefined') {
   window.ReactJSXDevRuntime = ReactJSXDevRuntime;
   window.ReactRouter = ReactRouter;
   window.ReactRouterDOM = ReactRouterDOM;
+  window.microfrontends = window.microfrontends ?? {};
+}
+
+if (typeof __REACT_SCAN_ENABLED__ !== 'undefined' && __REACT_SCAN_ENABLED__) {
+  void import('react-scan')
+    .then(({ scan }) => {
+      scan();
+    })
+    .catch((error) => {
+      console.error('Failed to initialize React Scan', error);
+    });
 }
 
 const markPerformance = (label: string) => {
