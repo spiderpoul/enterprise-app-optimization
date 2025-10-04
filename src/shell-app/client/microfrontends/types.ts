@@ -1,4 +1,4 @@
-import type React from 'react';
+import type { RouteObject } from 'react-router';
 
 export interface MicrofrontendManifest {
   id: string;
@@ -12,8 +12,12 @@ export interface MicrofrontendManifest {
   apiProxy?: MicrofrontendApiProxyConfig | null;
 }
 
+export interface MicrofrontendRouteObject extends RouteObject {
+  path: string;
+}
+
 export interface LoadedMicrofrontend extends MicrofrontendManifest {
-  Component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>;
+  routeConfig: MicrofrontendRouteObject;
 }
 
 export interface MicrofrontendApiProxyConfig {
