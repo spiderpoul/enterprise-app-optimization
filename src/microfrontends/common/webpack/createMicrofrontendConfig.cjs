@@ -39,24 +39,33 @@ const normalizeModuleFederationName = (value) =>
     .replace(/^-/, '')
     .replace(/[^a-zA-Z0-9_]/g, '') || 'microfrontend';
 
-const createSharedConfig = (dependencies = {}) => {
-  const sharedLibraries = ['react', 'react-dom', 'react-router', 'react-router-dom'];
+const sharedLibraries = [
+  { shareKey: 'react', packageName: 'react' },
+  { shareKey: 'react-dom', packageName: 'react-dom' },
+  { shareKey: 'react-dom/client', packageName: 'react-dom' },
+  { shareKey: 'react/jsx-runtime', packageName: 'react' },
+  { shareKey: 'react/jsx-dev-runtime', packageName: 'react' },
+  { shareKey: 'react-router', packageName: 'react-router' },
+  { shareKey: 'react-router-dom', packageName: 'react-router-dom' },
+];
 
-  return sharedLibraries.reduce((shared, library) => {
-    const version = dependencies[library];
+const createSharedConfig = (dependencies = {}) =>
+  sharedLibraries.reduce((shared, { shareKey, packageName }) => {
+    const version = dependencies[packageName];
 
-    if (version) {
-      shared[library] = {
-        singleton: true,
-        eager: true,
-        shareScope: 'default',
-        requiredVersion: version,
-      };
+    if (!version) {
+      return shared;
     }
+
+    shared[shareKey] = {
+      singleton: true,
+      eager: true,
+      shareScope: 'default',
+      requiredVersion: version,
+    };
 
     return shared;
   }, {});
-};
 
 const createMicrofrontendConfig = ({
   rootDir,
