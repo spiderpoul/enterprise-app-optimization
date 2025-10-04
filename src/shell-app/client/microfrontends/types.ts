@@ -12,8 +12,13 @@ export interface MicrofrontendManifest {
   apiProxy?: MicrofrontendApiProxyConfig | null;
 }
 
+export type MicrofrontendComponent = React.ComponentType<Record<string, unknown>>;
+
+export type LazyMicrofrontendComponent = React.LazyExoticComponent<MicrofrontendComponent>;
+
 export interface LoadedMicrofrontend extends MicrofrontendManifest {
-  Component: React.ComponentType<Record<string, unknown>>;
+  Component: MicrofrontendComponent;
+  LazyComponent: LazyMicrofrontendComponent;
 }
 
 export interface MicrofrontendApiProxyConfig {

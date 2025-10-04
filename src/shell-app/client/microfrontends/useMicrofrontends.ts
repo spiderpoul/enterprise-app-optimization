@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
-import type { ComponentType } from 'react';
-import { LoadedMicrofrontend, MicrofrontendApiProxyConfig, MicrofrontendManifest } from './types';
-
-type MicrofrontendComponent = ComponentType<Record<string, unknown>>;
+import { lazy, useEffect, useState } from 'react';
+import {
+  LazyMicrofrontendComponent,
+  LoadedMicrofrontend,
+  MicrofrontendApiProxyConfig,
+  MicrofrontendComponent,
+  MicrofrontendManifest,
+} from './types';
 
 type MicrofrontendModule = {
   default?: MicrofrontendComponent;
@@ -10,9 +13,13 @@ type MicrofrontendModule = {
   Component?: MicrofrontendComponent;
 };
 
-// Centralized resolver so we can switch between eager and lazy strategies without touching callers.
-const resolveMicrofrontendComponent = async (entryUrl: string): Promise<MicrofrontendComponent> => {
-  const module = (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
+const loadMicrofrontendModule = async (entryUrl: string): Promise<MicrofrontendModule> =>
+  (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
+
+const resolveMicrofrontendComponent = (
+  module: MicrofrontendModule,
+  entryUrl: string,
+): MicrofrontendComponent => {
   const Component = module.default ?? module.Microfrontend ?? module.Component;
 
   if (!Component) {
@@ -21,6 +28,15 @@ const resolveMicrofrontendComponent = async (entryUrl: string): Promise<Microfro
 
   return Component;
 };
+
+const createLazyMicrofrontendComponent = (entryUrl: string): LazyMicrofrontendComponent =>
+  lazy(async () => {
+    const module = await loadMicrofrontendModule(entryUrl);
+
+    return {
+      default: resolveMicrofrontendComponent(module, entryUrl),
+    };
+  });
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
@@ -111,10 +127,15 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
 
         const payload = parseMicrofrontends((await response.json()) as unknown);
         const loadedMicrofrontends = await Promise.all(
-          payload.map(async (manifest) => ({
-            ...manifest,
-            Component: await resolveMicrofrontendComponent(manifest.entryUrl),
-          })),
+          payload.map(async (manifest) => {
+            const module = await loadMicrofrontendModule(manifest.entryUrl);
+
+            return {
+              ...manifest,
+              Component: resolveMicrofrontendComponent(module, manifest.entryUrl),
+              LazyComponent: createLazyMicrofrontendComponent(manifest.entryUrl),
+            };
+          }),
         );
 
         if (isMounted) {
