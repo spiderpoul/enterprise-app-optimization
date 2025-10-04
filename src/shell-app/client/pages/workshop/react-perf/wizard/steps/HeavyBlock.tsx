@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Space, Text } from '@kaspersky/hexa-ui';
 import MetricBadge from '../components/MetricBadge';
-import { useLifecycleLog } from '../hooks/useLifecycleLog';
-import { useRenderCount } from '../hooks/useRenderCount';
 
 const Container = styled(Space)`
   padding: 20px 24px;
@@ -43,9 +41,6 @@ const runExpensiveSimulation = (seed: string) => {
 };
 
 const HeavyBlock: React.FC<HeavyBlockProps> = ({ inputValue }) => {
-  const renders = useRenderCount('HeavyBlock');
-  const { mounts, unmounts } = useLifecycleLog('HeavyBlock');
-
   const start = performance.now();
   // ❌ Anti-pattern: brutal synchronous work during render blocks the main thread for ~150ms every time.
   const checksum = runExpensiveSimulation(inputValue);
@@ -58,9 +53,6 @@ const HeavyBlock: React.FC<HeavyBlockProps> = ({ inputValue }) => {
   return (
     <Container direction="vertical">
       <MetricsRow direction="horizontal">
-        <MetricBadge label="renders" value={renders} />
-        <MetricBadge label="mounts" value={mounts} />
-        <MetricBadge label="unmounts" value={unmounts} />
         <MetricBadge label="compute" value={`${computeTimeMs}ms`} />
       </MetricsRow>
       <Text style={{ color: '#0f172a' }}>
