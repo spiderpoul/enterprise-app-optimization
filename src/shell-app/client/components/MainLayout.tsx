@@ -1,6 +1,5 @@
-import React, { Suspense, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
-import type { RouteObject } from 'react-router';
 import styled, { css } from 'styled-components';
 import {
   Alert,
@@ -21,7 +20,6 @@ import {
 import { AppUpdate, Grid, Settings2, UserAccount } from '@kaspersky/hexa-ui-icons/16';
 import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
-import MicrofrontendBoundary from '../microfrontends/MicrofrontendBoundary';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
 
@@ -318,70 +316,26 @@ const MainLayout: React.FC = () => {
     ];
   }, [handleNavigate, userDisplayName, userRole]);
 
-  const microfrontendRoutes = useMemo<RouteObject[]>(() => {
-    return microfrontends.map((microfrontend) => {
-      const { routeConfig } = microfrontend;
-      const {
-        Component: componentFromConfig,
-        element: elementFromConfig,
-        children: childRoutes,
-        ...rest
-      } = routeConfig;
-      const RouteComponent = componentFromConfig as React.ComponentType | undefined;
-      const routeElement = elementFromConfig as React.ReactNode | undefined;
-      const nestedRoutes = childRoutes as RouteObject[] | undefined;
-      const resolvedElement = routeElement ?? (RouteComponent ? <RouteComponent /> : null);
+  const microfrontendRoutes = useMemo(
+    () => microfrontends.map(({ routeConfig }) => routeConfig),
+    [microfrontends],
+  );
 
-      if (!resolvedElement) {
-        throw new Error(
-          `Microfrontend "${microfrontend.name}" must define an element or Component on its route configuration.`,
-        );
-      }
-
-      return {
-        ...rest,
-        element: (
-          <Suspense
-            fallback={
-              <LoaderContainer role="status">
-                <Space direction="vertical" align="center" gap={12}>
-                  <Loader centered size="large" />
-                  <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
-                </Space>
-              </LoaderContainer>
-            }
-          >
-            <MicrofrontendBoundary name={microfrontend.name}>
-              {resolvedElement}
-            </MicrofrontendBoundary>
-          </Suspense>
-        ),
-        children: nestedRoutes,
-      } satisfies RouteObject;
-    });
-  }, [microfrontends]);
-
-  const routes = useMemo<RouteObject[]>(() => {
-    const staticRoutes: RouteObject[] = [
-      {
-        path: '/',
-        element: <Navigate to="/dashboard" replace />,
-      },
-      {
-        path: '/dashboard',
-        Component: Dashboard,
-      },
-    ];
-
-    const notFoundRoute: RouteObject = {
+  const routes = useRoutes([
+    {
+      path: '/',
+      element: <Navigate to="/dashboard" replace />,
+    },
+    {
+      path: '/dashboard',
+      Component: Dashboard,
+    },
+    ...microfrontendRoutes,
+    {
       path: '*',
       Component: NotFound,
-    };
-
-    return [...staticRoutes, ...microfrontendRoutes, notFoundRoute];
-  }, [microfrontendRoutes]);
-
-  const routeElements = useRoutes(routes);
+    },
+  ]);
 
   if (isInitializing) {
     return (
@@ -472,7 +426,7 @@ const MainLayout: React.FC = () => {
               </AlertContainer>
             ) : null}
 
-            {routeElements}
+            {routes}
           </ContentArea>
 
           <FooterBar direction="horizontal" align="flex-start">
