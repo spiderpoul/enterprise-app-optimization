@@ -1,5 +1,6 @@
 import React, { Suspense, useCallback, useMemo, useState } from 'react';
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
+import type { RouteObject } from 'react-router';
 import styled, { css } from 'styled-components';
 import {
   Alert,
@@ -212,10 +213,7 @@ const MainLayout: React.FC = () => {
       title: 'Extensions',
       icon: AppUpdate,
       items: microfrontends.map((microfrontend) => {
-        const normalizedPath = microfrontend.routePath.startsWith('/')
-          ? microfrontend.routePath
-          : `/${microfrontend.routePath}`;
-        const trimmedPath = normalizedPath.replace(/\/\*$/, '');
+        const trimmedPath = microfrontend.routeConfig.path.replace(/\/\*$/, '');
 
         return {
           id: microfrontend.id,
@@ -319,6 +317,57 @@ const MainLayout: React.FC = () => {
     ];
   }, [handleNavigate, userDisplayName, userRole]);
 
+  const microfrontendRoutes = useMemo<RouteObject[]>(
+    () =>
+      microfrontends.map((microfrontend) => {
+        const routePath = microfrontend.routeConfig.path;
+        const MicrofrontendComponent = microfrontend.routeConfig.Component;
+
+        return {
+          path: routePath,
+          element: (
+            <Suspense
+              fallback={
+                <LoaderContainer role="status">
+                  <Space direction="vertical" align="center" gap={12}>
+                    <Loader centered size="large" />
+                    <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
+                  </Space>
+                </LoaderContainer>
+              }
+            >
+              <MicrofrontendBoundary name={microfrontend.name}>
+                <MicrofrontendComponent />
+              </MicrofrontendBoundary>
+            </Suspense>
+          ),
+        } satisfies RouteObject;
+      }),
+    [microfrontends],
+  );
+
+  const routes = useMemo<RouteObject[]>(() => {
+    const staticRoutes: RouteObject[] = [
+      {
+        path: '/',
+        element: <Navigate to="/dashboard" replace />,
+      },
+      {
+        path: '/dashboard',
+        Component: Dashboard,
+      },
+    ];
+
+    const notFoundRoute: RouteObject = {
+      path: '*',
+      Component: NotFound,
+    };
+
+    return [...staticRoutes, ...microfrontendRoutes, notFoundRoute];
+  }, [microfrontendRoutes]);
+
+  const routeElements = useRoutes(routes);
+
   if (isInitializing) {
     return (
       <InitializationContainer direction="vertical" size={32}>
@@ -408,44 +457,7 @@ const MainLayout: React.FC = () => {
               </AlertContainer>
             ) : null}
 
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              {microfrontends.map((microfrontend) => {
-                const normalizedPath = microfrontend.routePath.startsWith('/')
-                  ? microfrontend.routePath
-                  : `/${microfrontend.routePath}`;
-                const routePath = normalizedPath.endsWith('/*')
-                  ? normalizedPath
-                  : `${normalizedPath}/*`;
-
-                return (
-                  <Route
-                    key={microfrontend.id}
-                    path={routePath}
-                    element={
-                      <Suspense
-                        fallback={
-                          <LoaderContainer role="status">
-                            <Space direction="vertical" align="center" gap={12}>
-                              <Loader centered size="large" />
-                              <Text style={{ color: '#475467' }}>
-                                Loading {microfrontend.name}…
-                              </Text>
-                            </Space>
-                          </LoaderContainer>
-                        }
-                      >
-                        <MicrofrontendBoundary name={microfrontend.name}>
-                          <microfrontend.Component />
-                        </MicrofrontendBoundary>
-                      </Suspense>
-                    }
-                  />
-                );
-              })}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            {routeElements}
           </ContentArea>
 
           <FooterBar direction="horizontal" align="flex-start">

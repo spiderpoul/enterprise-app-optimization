@@ -5,6 +5,7 @@ import {
   MicrofrontendApiProxyConfig,
   MicrofrontendComponent,
   MicrofrontendManifest,
+  MicrofrontendRouteConfig,
 } from './types';
 
 type MicrofrontendModule = {
@@ -37,6 +38,20 @@ const createLazyMicrofrontendComponent = (entryUrl: string): LazyMicrofrontendCo
       default: resolveMicrofrontendComponent(module, entryUrl),
     };
   });
+
+const normalizeRoutePath = (routePath: string): string => {
+  const ensuredLeadingSlash = routePath.startsWith('/') ? routePath : `/${routePath}`;
+
+  return ensuredLeadingSlash.endsWith('/*') ? ensuredLeadingSlash : `${ensuredLeadingSlash}/*`;
+};
+
+const createMicrofrontendRouteConfig = (
+  manifest: MicrofrontendManifest,
+  Component: MicrofrontendComponent,
+): MicrofrontendRouteConfig => ({
+  path: normalizeRoutePath(manifest.routePath),
+  Component,
+});
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
@@ -129,11 +144,13 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         const loadedMicrofrontends = await Promise.all(
           payload.map(async (manifest) => {
             const module = await loadMicrofrontendModule(manifest.entryUrl);
+            const Component = resolveMicrofrontendComponent(module, manifest.entryUrl);
 
             return {
               ...manifest,
-              Component: resolveMicrofrontendComponent(module, manifest.entryUrl),
+              Component,
               LazyComponent: createLazyMicrofrontendComponent(manifest.entryUrl),
+              routeConfig: createMicrofrontendRouteConfig(manifest, Component),
             };
           }),
         );
