@@ -11,19 +11,18 @@ const { ModuleFederationPlugin } = container;
 const { dependencies = {} } = require('./package.json');
 
 const sharedLibraries = [
-  { shareKey: 'react' },
-  { shareKey: 'react-dom' },
+  { shareKey: 'react', packageName: 'react' },
+  { shareKey: 'react-dom', packageName: 'react-dom' },
   { shareKey: 'react-dom/client', packageName: 'react-dom' },
   { shareKey: 'react/jsx-runtime', packageName: 'react' },
   { shareKey: 'react/jsx-dev-runtime', packageName: 'react' },
-  { shareKey: 'react-router' },
-  { shareKey: 'react-router-dom' },
+  { shareKey: 'react-router', packageName: 'react-router' },
+  { shareKey: 'react-router-dom', packageName: 'react-router-dom' },
 ];
 
 const createSharedConfig = () =>
   sharedLibraries.reduce((shared, { shareKey, packageName }) => {
-    const dependencyName = packageName ?? shareKey;
-    const version = dependencies[dependencyName];
+    const version = dependencies[packageName];
 
     if (!version) {
       return shared;
@@ -34,8 +33,6 @@ const createSharedConfig = () =>
       eager: true,
       shareScope: 'default',
       requiredVersion: version,
-      import: shareKey,
-      packageName: dependencyName,
     };
 
     return shared;
