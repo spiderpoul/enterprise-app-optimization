@@ -11,10 +11,10 @@ const WizardQuickSetupPage: React.FC = () => {
   return (
     <PageLayout direction="vertical">
       <Space direction="vertical" gap={8} align="flex-start">
-        <Text style={{ fontWeight: 700, fontSize: 24 }}>React Perf • Wizard quick setup</Text>
+        <Text style={{ fontWeight: 700, fontSize: 24 }}>React Perf • Client security wizard</Text>
         <Text style={{ color: '#475569' }}>
-          A purposely problematic onboarding flow to demonstrate rerender storms, remount cascades
-          and sluggish inputs.
+          An intentionally flawed onboarding that remounts entire steps and couples heavy
+          computations to innocent inputs so you can showcase performance nightmares.
         </Text>
       </Space>
       <DemoContainer />

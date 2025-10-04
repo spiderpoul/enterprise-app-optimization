@@ -79,7 +79,7 @@ const PerfWizard: React.FC<PerfWizardProps> = ({ steps }) => {
           <Space direction="vertical" gap={4} align="flex-start">
             <Text style={{ fontWeight: 700, fontSize: 18 }}>{stepTitle}</Text>
             <Text style={{ color: '#64748b' }}>
-              Deliberately inefficient quick setup for perf workshops
+              Deliberately unsafe client security setup to highlight remount cascades and UI jank.
             </Text>
           </Space>
           <StepsMeta direction="horizontal" align="center">

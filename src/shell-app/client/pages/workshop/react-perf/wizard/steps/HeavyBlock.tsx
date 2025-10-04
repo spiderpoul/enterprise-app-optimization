@@ -64,11 +64,11 @@ const HeavyBlock: React.FC<HeavyBlockProps> = ({ inputValue }) => {
         <MetricBadge label="compute" value={`${computeTimeMs}ms`} />
       </MetricsRow>
       <Text style={{ color: '#0f172a' }}>
-        Heavy block digest: <strong>{checksum.toFixed(2)}</strong>
+        Policy digest checksum: <strong>{checksum.toFixed(2)}</strong>
       </Text>
       <Text style={{ color: '#475569' }}>
-        Every keystroke forces this component to sort thousands of numbers and crunch trigonometry
-        without any memoization.
+        Every keystroke forces this block to evaluate thousands of simulated device rules without
+        any memoization, freezing the wizard while the CPU churns.
       </Text>
     </Container>
   );
