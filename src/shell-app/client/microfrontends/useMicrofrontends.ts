@@ -12,110 +12,8 @@ type MicrofrontendModule = {
   routeConfig?: RouteObject;
 };
 
-declare global {
-  interface Window {
-    microfrontends?: Record<string, MicrofrontendModule | undefined>;
-  }
-}
-
-const scriptPromises = new Map<string, Promise<void>>();
-
-const loadScript = (entryUrl: string): Promise<void> => {
-  if (scriptPromises.has(entryUrl)) {
-    return scriptPromises.get(entryUrl)!;
-  }
-
-  const promise = new Promise<void>((resolve, reject) => {
-    if (typeof document === 'undefined') {
-      reject(new Error(`Cannot load script ${entryUrl} outside of a browser environment.`));
-      return;
-    }
-
-    const existingScript = Array.from(document.querySelectorAll<HTMLScriptElement>('script')).find(
-      (element) => {
-        if (element.getAttribute('data-microfrontend-entry') === entryUrl) {
-          return true;
-        }
-
-        if (!element.src) {
-          return false;
-        }
-
-        try {
-          const elementUrl = new URL(element.src, document.baseURI).href;
-          const requestedUrl = new URL(entryUrl, document.baseURI).href;
-
-          return elementUrl === requestedUrl;
-        } catch (error) {
-          console.warn('Unable to normalize microfrontend script URL', error);
-          return false;
-        }
-      },
-    );
-
-    if (existingScript) {
-      existingScript.setAttribute('data-microfrontend-entry', entryUrl);
-
-      if (
-        existingScript.dataset.microfrontendLoaded === 'true' ||
-        existingScript.readyState === 'complete'
-      ) {
-        resolve();
-        return;
-      }
-
-      const handleError = () => {
-        existingScript.removeEventListener('load', handleLoad);
-        existingScript.removeEventListener('error', handleError);
-        reject(new Error(`Failed to load microfrontend from ${entryUrl}.`));
-      };
-
-      const handleLoad = () => {
-        existingScript.dataset.microfrontendLoaded = 'true';
-        existingScript.removeEventListener('load', handleLoad);
-        existingScript.removeEventListener('error', handleError);
-        resolve();
-      };
-
-      existingScript.addEventListener('load', handleLoad);
-      existingScript.addEventListener('error', handleError);
-
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = entryUrl;
-    script.setAttribute('data-microfrontend-entry', entryUrl);
-
-    const handleLoad = () => {
-      script.dataset.microfrontendLoaded = 'true';
-      script.removeEventListener('load', handleLoad);
-      script.removeEventListener('error', handleError);
-      resolve();
-    };
-
-    const handleError = () => {
-      script.removeEventListener('load', handleLoad);
-      script.removeEventListener('error', handleError);
-      script.remove();
-      reject(new Error(`Failed to load microfrontend from ${entryUrl}.`));
-    };
-
-    script.addEventListener('load', handleLoad);
-    script.addEventListener('error', handleError);
-
-    document.head.appendChild(script);
-  });
-
-  scriptPromises.set(entryUrl, promise);
-
-  promise.catch(() => {
-    scriptPromises.delete(entryUrl);
-  });
-
-  return promise;
-};
+const loadMicrofrontendModule = async (entryUrl: string): Promise<MicrofrontendModule> =>
+  (await import(/* webpackIgnore: true */ entryUrl)) as MicrofrontendModule;
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null;
@@ -236,24 +134,7 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         const payload = parseMicrofrontends((await response.json()) as unknown);
         const loadedMicrofrontends = await Promise.all(
           payload.map(async (manifest) => {
-            await loadScript(manifest.entryUrl);
-
-            const registry = window.microfrontends;
-
-            if (!registry) {
-              throw new Error(
-                `Microfrontend registry is unavailable after loading ${manifest.entryUrl}.`,
-              );
-            }
-
-            const module = registry[manifest.id];
-
-            if (!module) {
-              throw new Error(
-                `Microfrontend ${manifest.id} did not register itself on window.microfrontends.`,
-              );
-            }
-
+            const module = await loadMicrofrontendModule(manifest.entryUrl);
             const routeConfig = resolveMicrofrontendRouteConfig(module, manifest.entryUrl);
 
             return {
