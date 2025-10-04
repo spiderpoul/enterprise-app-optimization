@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Button, Card, Paragraph, Space, Spin, Tag, Typography } from 'antd';
+import { Button, Card, Space, Spin, Tag, Typography } from 'antd';
 import { Clock } from '@kaspersky/hexa-ui-icons/24';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import DonutChart from '../components/charts/DonutChart';
 import { useReportsRouteContext } from './context';
 import { formatMetricValue, formatUpdatedAt } from './utils';
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 const ReportDetails: React.FC = () => {
   const navigate = useNavigate();

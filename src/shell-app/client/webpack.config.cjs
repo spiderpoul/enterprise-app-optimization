@@ -55,7 +55,7 @@ const analyzerPlugins = () => {
 
 /** @type {import('webpack').Configuration} */
 const config = {
-  entry: path.resolve(__dirname, 'main.tsx'),
+  entry: path.resolve(__dirname, 'index.ts'),
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'assets/[name].[contenthash].js',
