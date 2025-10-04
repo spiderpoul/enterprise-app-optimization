@@ -29,6 +29,7 @@ import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
 import WizardQuickSetupPage from '../pages/workshop/react-perf/WizardQuickSetupPage';
+import DeviceSecurityPage from '../pages/DeviceSecurityPage';
 
 interface ShellMenuItem {
   id: string;
@@ -53,6 +54,11 @@ const baseMenuSections: ShellMenuSection[] = [
         id: 'dashboard',
         title: 'Dashboard',
         path: '/dashboard',
+      },
+      {
+        id: 'device-security',
+        title: 'Device security',
+        path: '/device-security',
       },
     ],
   },
@@ -345,9 +351,13 @@ const MainLayout: React.FC = () => {
       path: '/',
       element: <Navigate to="/dashboard" replace />,
     },
-    {
+    { 
       path: '/dashboard',
       Component: Dashboard,
+    },
+    {
+      path: '/device-security',
+      Component: DeviceSecurityPage,
     },
     {
       path: '/workshop/react-perf/wizard',
