@@ -351,8 +351,8 @@ const MainLayout: React.FC = () => {
     },
     {
       path: '/workshop/react-perf/wizard',
-      Component: WizardQuickSetupPage
-    }
+      Component: WizardQuickSetupPage,
+    },
     ...microfrontendRoutes,
     {
       path: '*',
@@ -448,7 +448,7 @@ const MainLayout: React.FC = () => {
                 </Alert>
               </AlertContainer>
             ) : null}
-            
+
             {routes}
           </ContentArea>
 
