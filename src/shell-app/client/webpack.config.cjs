@@ -52,7 +52,7 @@ const analyzerPlugins = () => {
   return [
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
-      openAnalyzer: false,
+      openAnalyzer: true,
       reportFilename: path.resolve(__dirname, 'dist', 'reports', 'shell-client-bundle.html'),
     }),
     new StatoscopeWebpackPlugin({

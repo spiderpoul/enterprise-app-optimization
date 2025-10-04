@@ -18,7 +18,7 @@ const createAnalyzerPlugins = ({ rootDir, bundleName, shouldAnalyze }) => {
   return [
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',
-      openAnalyzer: false,
+      openAnalyzer: true,
       reportFilename: path.resolve(reportsDir, `${bundleName}-bundle.html`),
     }),
     new StatoscopeWebpackPlugin({
