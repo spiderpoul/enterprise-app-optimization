@@ -1,5 +1,5 @@
-import React, { Suspense, useCallback, useMemo, useState } from 'react';
-import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
   Alert,
@@ -20,7 +20,6 @@ import {
 import { AppUpdate, Grid, Settings2, UserAccount } from '@kaspersky/hexa-ui-icons/16';
 import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
-import MicrofrontendBoundary from '../microfrontends/MicrofrontendBoundary';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
 
@@ -212,10 +211,8 @@ const MainLayout: React.FC = () => {
       title: 'Extensions',
       icon: AppUpdate,
       items: microfrontends.map((microfrontend) => {
-        const normalizedPath = microfrontend.routePath.startsWith('/')
-          ? microfrontend.routePath
-          : `/${microfrontend.routePath}`;
-        const trimmedPath = normalizedPath.replace(/\/\*$/, '');
+        const path = microfrontend.routeConfig.path;
+        const trimmedPath = path === '/' ? '/' : path.replace(/\/+$/, '');
 
         return {
           id: microfrontend.id,
@@ -319,6 +316,27 @@ const MainLayout: React.FC = () => {
     ];
   }, [handleNavigate, userDisplayName, userRole]);
 
+  const microfrontendRoutes = useMemo(
+    () => microfrontends.map(({ routeConfig }) => routeConfig),
+    [microfrontends],
+  );
+
+  const routes = useRoutes([
+    {
+      path: '/',
+      element: <Navigate to="/dashboard" replace />,
+    },
+    {
+      path: '/dashboard',
+      Component: Dashboard,
+    },
+    ...microfrontendRoutes,
+    {
+      path: '*',
+      Component: NotFound,
+    },
+  ]);
+
   if (isInitializing) {
     return (
       <InitializationContainer direction="vertical" size={32}>
@@ -408,42 +426,7 @@ const MainLayout: React.FC = () => {
               </AlertContainer>
             ) : null}
 
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              {microfrontends.map((microfrontend) => {
-                const normalizedPath = microfrontend.routePath.startsWith('/')
-                  ? microfrontend.routePath
-                  : `/${microfrontend.routePath}`;
-                const routePath = normalizedPath.endsWith('/*')
-                  ? normalizedPath
-                  : `${normalizedPath}/*`;
-
-                return (
-                  <Route
-                    key={microfrontend.id}
-                    path={routePath}
-                    element={
-                    <Suspense
-                      fallback={
-                        <LoaderContainer role="status">
-                          <Space direction="vertical" align="center" gap={12}>
-                            <Loader centered size="large" />
-                            <Text style={{ color: '#475467' }}>Loading {microfrontend.name}…</Text>
-                          </Space>
-                        </LoaderContainer>
-                      }
-                    >
-                      <MicrofrontendBoundary name={microfrontend.name}>
-                        <microfrontend.Component />
-                      </MicrofrontendBoundary>
-                    </Suspense>
-                  }
-                  />
-                );
-              })}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            {routes}
           </ContentArea>
 
           <FooterBar direction="horizontal" align="flex-start">
