@@ -17,11 +17,18 @@ import {
   type NavItemData,
   Hamburger,
 } from '@kaspersky/hexa-ui';
-import { AppUpdate, Grid, Settings2, UserAccount } from '@kaspersky/hexa-ui-icons/16';
+import {
+  ActivityMonitor,
+  AppUpdate,
+  Grid,
+  Settings2,
+  UserAccount,
+} from '@kaspersky/hexa-ui-icons/16';
 import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
+import WizardQuickSetupPage from '../pages/workshop/react-perf/WizardQuickSetupPage';
 
 interface ShellMenuItem {
   id: string;
@@ -46,6 +53,18 @@ const baseMenuSections: ShellMenuSection[] = [
         id: 'dashboard',
         title: 'Dashboard',
         path: '/dashboard',
+      },
+    ],
+  },
+  {
+    id: 'react-perf',
+    title: 'React Perf',
+    icon: ActivityMonitor,
+    items: [
+      {
+        id: 'react-perf-wizard',
+        title: 'Wizard Quick Setup',
+        path: '/workshop/react-perf/wizard',
       },
     ],
   },
@@ -330,6 +349,10 @@ const MainLayout: React.FC = () => {
       path: '/dashboard',
       Component: Dashboard,
     },
+    {
+      path: '/workshop/react-perf/wizard',
+      Component: WizardQuickSetupPage
+    }
     ...microfrontendRoutes,
     {
       path: '*',
@@ -425,7 +448,7 @@ const MainLayout: React.FC = () => {
                 </Alert>
               </AlertContainer>
             ) : null}
-
+            
             {routes}
           </ContentArea>
 
