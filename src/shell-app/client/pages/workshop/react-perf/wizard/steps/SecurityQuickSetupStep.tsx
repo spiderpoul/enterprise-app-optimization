@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import type { ColumnsType } from 'antd/es/table';
 import { Space, Table, Text } from '@kaspersky/hexa-ui';
 import MetricBadge from '../components/MetricBadge';
-import { useLifecycleLog } from '../hooks/useLifecycleLog';
-import { useRenderCount } from '../hooks/useRenderCount';
 import { useWizardState } from '../WizardStateContext';
 import { deviceInventory, type DeviceInventoryItem } from './deviceInventory';
 
@@ -33,8 +31,6 @@ const SelectControl = styled.select`
 `;
 
 const SecurityQuickSetupStep: React.FC = () => {
-  const renders = useRenderCount('SecurityQuickSetupStep');
-  const { mounts, unmounts } = useLifecycleLog('SecurityQuickSetupStep');
   const { wizardState, setWizardState } = useWizardState();
 
   const handleAppChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -90,9 +86,6 @@ const SecurityQuickSetupStep: React.FC = () => {
   return (
     <Layout direction="vertical">
       <MetricsRow direction="horizontal">
-        <MetricBadge label="renders" value={renders} />
-        <MetricBadge label="mounts" value={mounts} />
-        <MetricBadge label="unmounts" value={unmounts} />
         <MetricBadge label="selected" value={selectedIds.length} />
       </MetricsRow>
 

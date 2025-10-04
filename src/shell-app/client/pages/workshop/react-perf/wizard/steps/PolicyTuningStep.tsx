@@ -2,8 +2,6 @@ import React, { ChangeEvent, useState } from 'react';
 import styled from 'styled-components';
 import { Space, Text } from '@kaspersky/hexa-ui';
 import MetricBadge from '../components/MetricBadge';
-import { useLifecycleLog } from '../hooks/useLifecycleLog';
-import { useRenderCount } from '../hooks/useRenderCount';
 import HeavyBlock from './HeavyBlock';
 import { useWizardState } from '../WizardStateContext';
 import { deviceInventory } from './deviceInventory';
@@ -106,8 +104,6 @@ const RiskBadge = styled.span<{ level: string }>`
 `;
 
 const PolicyTuningStep: React.FC = () => {
-  const renders = useRenderCount('PolicyTuningStep');
-  const { mounts, unmounts } = useLifecycleLog('PolicyTuningStep');
   const { wizardState, setWizardState } = useWizardState();
 
   const [templateId, setTemplateId] = useState(wizardState.templateId);
@@ -164,9 +160,6 @@ const PolicyTuningStep: React.FC = () => {
   return (
     <Layout direction="vertical">
       <MetricsRow direction="horizontal">
-        <MetricBadge label="renders" value={renders} />
-        <MetricBadge label="mounts" value={mounts} />
-        <MetricBadge label="unmounts" value={unmounts} />
         <MetricBadge label="picked" value={pickedIds.length} />
       </MetricsRow>
 
