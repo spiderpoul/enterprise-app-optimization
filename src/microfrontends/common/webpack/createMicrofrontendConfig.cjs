@@ -1,10 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { container } = require('webpack');
 const { default: StatoscopeWebpackPlugin } = require('@statoscope/webpack-plugin');
-
-const { ModuleFederationPlugin } = container;
 
 const parsePort = (value, fallback) => {
   const parsed = Number.parseInt(String(value ?? '').trim(), 10);
@@ -31,40 +28,20 @@ const createAnalyzerPlugins = ({ rootDir, bundleName, shouldAnalyze }) => {
   ];
 };
 
-const normalizeModuleFederationName = (value) =>
-  String(value)
-    .trim()
-    .replace(/[^a-zA-Z0-9_]/g, '-')
-    .replace(/-+(\w)/g, (_match, letter) => letter.toUpperCase())
-    .replace(/^-/, '')
-    .replace(/[^a-zA-Z0-9_]/g, '') || 'microfrontend';
-
-const sharedLibraries = [
-  { shareKey: 'react', packageName: 'react' },
-  { shareKey: 'react-dom', packageName: 'react-dom' },
-  { shareKey: 'react-dom/client', packageName: 'react-dom' },
-  { shareKey: 'react/jsx-runtime', packageName: 'react' },
-  { shareKey: 'react/jsx-dev-runtime', packageName: 'react' },
-  { shareKey: 'react-router', packageName: 'react-router' },
-  { shareKey: 'react-router-dom', packageName: 'react-router-dom' },
+const externalLibraries = [
+  { moduleName: 'react', globalVariable: 'React' },
+  { moduleName: 'react-dom', globalVariable: 'ReactDOM' },
+  { moduleName: 'react-dom/client', globalVariable: 'ReactDOMClient' },
+  { moduleName: 'react/jsx-runtime', globalVariable: 'ReactJSXRuntime' },
+  { moduleName: 'react/jsx-dev-runtime', globalVariable: 'ReactJSXDevRuntime' },
+  { moduleName: 'react-router', globalVariable: 'ReactRouter' },
+  { moduleName: 'react-router-dom', globalVariable: 'ReactRouterDOM' },
 ];
 
-const createSharedConfig = (dependencies = {}) =>
-  sharedLibraries.reduce((shared, { shareKey, packageName }) => {
-    const version = dependencies[packageName];
-
-    if (!version) {
-      return shared;
-    }
-
-    shared[shareKey] = {
-      singleton: true,
-      eager: true,
-      shareScope: 'default',
-      requiredVersion: version,
-    };
-
-    return shared;
+const createExternalsConfig = () =>
+  externalLibraries.reduce((externals, { moduleName, globalVariable }) => {
+    externals[moduleName] = globalVariable;
+    return externals;
   }, {});
 
 const createMicrofrontendConfig = ({
@@ -78,9 +55,6 @@ const createMicrofrontendConfig = ({
 
   const isProduction = process.env.NODE_ENV === 'production';
   const shouldAnalyze = String(process.env.ANALYZE ?? '').trim() === 'true';
-  const dependencies = require(path.resolve(rootDir, 'package.json')).dependencies ?? {};
-  const mfName = normalizeModuleFederationName(bundleName);
-
   return {
     entry: path.resolve(rootDir, entryFile),
     output: {
@@ -134,11 +108,9 @@ const createMicrofrontendConfig = ({
         },
       ],
     },
+    externalsType: 'window',
+    externals: createExternalsConfig(),
     plugins: [
-      new ModuleFederationPlugin({
-        name: mfName,
-        shared: createSharedConfig(dependencies),
-      }),
       new CopyWebpackPlugin({
         patterns: [
           {
