@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "nx": "nx",
-    "build": "nx run-many --target=build --all",
+    "build": "nx run-many --target=build --all --output-style=stream",
     "build:prod:run": "npm run build && nx run-many --target=serve-dist --projects shell-server,operations-reports-server,users-and-roles-server --parallel=3 --output-style=stream",
     "dev": "nx run-many --target=serve --projects shell-client,shell-server,operations-reports-client,operations-reports-server,users-and-roles-client,users-and-roles-server --parallel=6 --output-style=stream",
     "lint": "eslint --ext .ts,.tsx src",
