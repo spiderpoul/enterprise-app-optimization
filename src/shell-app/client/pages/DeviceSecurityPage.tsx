@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { Table } from 'antd';
 import { useAutoTrimCells } from '../shared/useAutoTrimCells';
@@ -42,11 +42,22 @@ const DEVICE_ROWS: Row[] = Array.from({ length: TOTAL_ROWS }, (_, i) => ({
     audit: createAuditTrail(i), // 🧱 тяжёлый объект утащит с собой мегабайты истории
   },
   status: i % 5 === 0 ? 'At Risk' : 'Compliant',
-  lastSeen: `2025-10-${(i % 28 + 1).toString().padStart(2, '0')} 12:${(i % 60)
+  lastSeen: `2025-10-${((i % 28) + 1).toString().padStart(2, '0')} 12:${(i % 60)
     .toString()
     .padStart(2, '0')}`,
   vulns: (i * 7) % 31,
 }));
+
+const withDataTestAttribute = (element: React.ReactNode, dataTest: string): React.ReactElement => {
+  if (React.isValidElement(element)) {
+    const reactElement = element as React.ReactElement;
+    return React.cloneElement(reactElement, {
+      'data-test': dataTest,
+    });
+  }
+
+  return <span data-test={dataTest}>{element}</span>;
+};
 
 export default function DeviceSecurityPage() {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -54,8 +65,34 @@ export default function DeviceSecurityPage() {
 
   const [page, setPage] = useState(0);
 
+  const renderPolicyCell = useCallback(
+    (_value: Row['policy'], record: Row): React.ReactElement => (
+      <span title={record.policy.audit.summary}>{record.policy.label}</span>
+    ),
+    [],
+  );
+
   const pageData = useMemo<Row[]>(
     () => DEVICE_ROWS.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE),
+    [page],
+  );
+
+  const pagination = useMemo<TablePaginationConfig>(
+    () => ({
+      pageSize: PAGE_SIZE,
+      current: page + 1,
+      total: DEVICE_ROWS.length,
+      onChange: (nextPage) => setPage(nextPage - 1),
+      showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+      itemRender: (pageNumber, type, originalElement) => {
+        const dataTest =
+          type === 'page'
+            ? `device-security-pagination-item-${pageNumber}`
+            : `device-security-pagination-${type}`;
+
+        return withDataTestAttribute(originalElement, dataTest);
+      },
+    }),
     [page],
   );
 
@@ -74,9 +111,7 @@ export default function DeviceSecurityPage() {
         title: 'Policy',
         width: 280,
         ellipsis: true,
-        render: (_value, record) => (
-          <span title={record.policy.summary}>{record.policy.label}</span>
-        ),
+        render: renderPolicyCell,
       },
       {
         key: 'status',
@@ -102,32 +137,42 @@ export default function DeviceSecurityPage() {
         align: 'right',
       },
     ],
-    [],
+    [renderPolicyCell],
   );
 
-  const pagination = useMemo<TablePaginationConfig>(
-    () => ({
-      pageSize: PAGE_SIZE,
-      current: page + 1,
-      total: DEVICE_ROWS.length,
-      onChange: (nextPage) => setPage(nextPage - 1),
-      showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-    }),
-    [page],
-  );
+  const totalWidth = columns.reduce<number>((sum, column) => {
+    const width =
+      typeof column === 'object' &&
+      column !== null &&
+      'width' in column &&
+      typeof column.width === 'number'
+        ? column.width
+        : 0;
 
-  const totalWidth = columns.reduce((sum, column) => sum + (column.width ?? 0), 0);
+    return sum + width;
+  }, 0);
 
   return (
-    <div style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <h2 style={{ margin: 0 }}>Безопасность устройств</h2>
-      <div ref={hostRef} style={{ border: '1px solid #333', borderRadius: 8, overflow: 'hidden' }}>
+    <div
+      data-test="device-security-page"
+      style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}
+    >
+      <h2 data-test="device-security-title" style={{ margin: 0 }}>
+        Безопасность устройств
+      </h2>
+      <div
+        data-test="device-security-table-container"
+        ref={hostRef}
+        style={{ border: '1px solid #333', borderRadius: 8, overflow: 'hidden' }}
+      >
         <Table
+          data-test="device-security-table"
           rowKey="id"
           dataSource={pageData}
           columns={columns}
           pagination={pagination}
           scroll={{ x: totalWidth }}
+          onRow={() => ({ 'data-test': 'device-security-row' })}
         />
       </div>
     </div>
