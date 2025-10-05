@@ -51,12 +51,16 @@ const parseProxyTarget = (value) => {
   }
 };
 
+const resolveServerRoot = (serverDir) =>
+  path.basename(serverDir) === 'dist' ? path.resolve(serverDir, '..') : serverDir;
+
 const resolveClientDistDirectory = ({ explicitDistPath, serverDir }) => {
+  const normalizedServerDir = resolveServerRoot(serverDir);
   if (explicitDistPath) {
-    return path.resolve(explicitDistPath);
+    return path.resolve(normalizedServerDir, explicitDistPath);
   }
 
-  return path.resolve(serverDir, '..', 'client', 'dist');
+  return path.resolve(normalizedServerDir, '..', 'client', 'dist');
 };
 
 const createEnvironment = ({ env, serverDir }) => {
@@ -96,4 +100,5 @@ module.exports = {
   parseProxyTarget,
   resolveClientDevServerUrl,
   resolveClientDistDirectory,
+  resolveServerRoot,
 };

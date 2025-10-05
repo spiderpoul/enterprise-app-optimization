@@ -17,6 +17,13 @@
         "cwd": "src/microfrontends/users-and-roles/server",
         "command": "npm run dev"
       }
+    },
+    "serve-dist": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/users-and-roles/server",
+        "command": "npm run start:dist"
+      }
     }
   },
   "tags": []

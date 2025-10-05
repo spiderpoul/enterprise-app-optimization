@@ -1,43 +1,63 @@
 const path = require('path');
 
-require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+const resolveServerRoot = (directory) =>
+  path.basename(directory) === 'dist' ? path.resolve(directory, '..') : directory;
+
+const serverRoot = resolveServerRoot(__dirname);
+const shellRoot = path.resolve(serverRoot, '..');
+const srcRoot = path.resolve(shellRoot, '..');
+const microfrontendsRoot = path.resolve(srcRoot, 'microfrontends');
+
+require('dotenv').config({ path: path.resolve(shellRoot, '.env') });
 
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const { initializationPlan } = require('./data/initialization-plan');
-const { dashboardData } = require('./data/dashboard');
-const { createEnvironment } = require('./lib/env');
-const { createRequestLogger } = require('./lib/request-logger');
-const { createMicrofrontendProxyManager } = require('./lib/microfrontend-proxy');
-const { registerFilteredProxy } = require('../../server/lib/filtered-proxy');
+const { initializationPlan } = require(path.resolve(
+  serverRoot,
+  'data',
+  'initialization-plan.js',
+));
+const { dashboardData } = require(path.resolve(serverRoot, 'data', 'dashboard.js'));
+const { createEnvironment } = require(path.resolve(serverRoot, 'lib', 'env.js'));
+const { createRequestLogger } = require(path.resolve(serverRoot, 'lib', 'request-logger.js'));
+const { createMicrofrontendProxyManager } = require(path.resolve(
+  serverRoot,
+  'lib',
+  'microfrontend-proxy.js',
+));
+const { registerFilteredProxy } = require(path.resolve(
+  srcRoot,
+  'server',
+  'lib',
+  'filtered-proxy.js',
+));
 const {
   createMicrofrontendRegistry,
   sanitizeRegistryEntry,
-} = require('./lib/registry');
-const { cloneDeep, delay } = require('./lib/utils');
+} = require(path.resolve(serverRoot, 'lib', 'registry.js'));
+const { cloneDeep, delay } = require(path.resolve(serverRoot, 'lib', 'utils.js'));
 
-const microfrontendsRoot = path.resolve(__dirname, '..', '..', 'microfrontends');
-const { users } = require(path.join(
+const { users } = require(path.resolve(
   microfrontendsRoot,
   'users-and-roles',
   'server',
   'data',
   'users.js',
 ));
-const { reports } = require(path.join(
+const { reports } = require(path.resolve(
   microfrontendsRoot,
   'operations-reports',
   'server',
   'data',
   'reports.js',
 ));
-const shellApiDocumentation = require('./swagger/shell-api.json');
+const shellApiDocumentation = require(path.resolve(serverRoot, 'swagger', 'shell-api.json'));
 
-const environment = createEnvironment({ env: process.env, serverDir: __dirname });
+const environment = createEnvironment({ env: process.env, serverDir: serverRoot });
 
 const registry = createMicrofrontendRegistry({
-  dataFile: path.join(__dirname, 'dist', 'data', 'microfrontends.json'),
-  sourceDataFile: path.join(__dirname, 'data', 'microfrontends.json'),
+  dataFile: path.join(serverRoot, 'dist', 'data', 'microfrontends.json'),
+  sourceDataFile: path.join(serverRoot, 'data', 'microfrontends.json'),
 });
 
 const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));

@@ -17,6 +17,13 @@
         "cwd": "src/shell-app/server",
         "command": "npm run dev"
       }
+    },
+    "serve-dist": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/shell-app/server",
+        "command": "npm run start:dist"
+      }
     }
   },
   "tags": []

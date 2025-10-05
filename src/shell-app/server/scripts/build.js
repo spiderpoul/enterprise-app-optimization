@@ -4,7 +4,7 @@ const path = require('path');
 const projectRoot = __dirname;
 const distDir = path.resolve(projectRoot, '..', 'dist');
 const filesToCopy = ['shell-server.js'];
-const directoriesToCopy = ['data'];
+const directoriesToCopy = ['data', 'lib', 'swagger'];
 
 const copyFile = (source, destination) => {
   fs.copyFileSync(source, destination);

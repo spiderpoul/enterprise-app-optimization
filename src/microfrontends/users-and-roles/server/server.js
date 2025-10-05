@@ -1,13 +1,20 @@
 const path = require('path');
 
-require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
+const resolveServerRoot = (directory) =>
+  path.basename(directory) === 'dist' ? path.resolve(directory, '..') : directory;
+
+const SERVER_DIR = resolveServerRoot(__dirname);
+const PROJECT_ROOT = path.resolve(SERVER_DIR, '..');
+const COMMON_ROOT = path.resolve(PROJECT_ROOT, '..', 'common');
+
+require('dotenv').config({ path: path.resolve(PROJECT_ROOT, '.env') });
 
 const express = require('express');
-const manifest = require('../manifest.json');
+const manifest = require(path.resolve(PROJECT_ROOT, 'manifest.json'));
 const {
   buildMicrofrontendDescriptor,
   createMicrofrontendAcknowledger,
-} = require('../../common/bootstrap');
+} = require(path.resolve(COMMON_ROOT, 'bootstrap.js'));
 const {
   createRequestLogger,
   createResponseDelayMiddleware,
@@ -16,10 +23,14 @@ const {
   registerClientAssetHandling,
   resolveClientDevServerUrl,
   resolveClientDistDirectory,
-} = require('../../common/server');
+} = require(path.resolve(COMMON_ROOT, 'server'));
 const swaggerUi = require('swagger-ui-express');
-const apiDocumentation = require('./swagger/users-api.json');
-const { users } = require('./data/users');
+const apiDocumentation = require(path.resolve(
+  SERVER_DIR,
+  'swagger',
+  'users-api.json',
+));
+const { users } = require(path.resolve(SERVER_DIR, 'data', 'users.js'));
 
 const MICROFRONT_PORT = parsePort(process.env.MICROFRONT_PORT, 4402);
 const MICROFRONT_HOST = String(process.env.MICROFRONT_HOST ?? '0.0.0.0');
@@ -39,7 +50,7 @@ const CLIENT_DEV_SERVER_URL = resolveClientDevServerUrl({
 
 const DIST_DIR = resolveClientDistDirectory({
   explicitDistPath: process.env.CLIENT_DIST_DIR,
-  serverDir: __dirname,
+  serverDir: SERVER_DIR,
 });
 
 const app = express();

@@ -32,10 +32,16 @@ const resolveClientDevServerUrl = ({ explicitUrl, host, port }) => {
   return `http://${normalizeHost(host)}:${port}`;
 };
 
+const resolveServerRoot = (serverDir) =>
+  path.basename(serverDir) === 'dist' ? path.resolve(serverDir, '..') : serverDir;
+
 const resolveClientDistDirectory = ({ explicitDistPath, serverDir }) => {
-  return explicitDistPath
-    ? path.resolve(explicitDistPath)
-    : path.resolve(serverDir, '..', 'client', 'dist');
+  const normalizedServerDir = resolveServerRoot(serverDir);
+  if (explicitDistPath) {
+    return path.resolve(normalizedServerDir, explicitDistPath);
+  }
+
+  return path.resolve(normalizedServerDir, '..', 'client', 'dist');
 };
 
 const createRequestLogger = (label) => (req, res, next) => {
@@ -106,4 +112,5 @@ module.exports = {
   registerClientAssetHandling,
   resolveClientDevServerUrl,
   resolveClientDistDirectory,
+  resolveServerRoot,
 };
