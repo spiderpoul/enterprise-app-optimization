@@ -53,8 +53,10 @@ const defaultPublicUrl = isProduction
   ? `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`
   : `http://${normalizeHost(CLIENT_HOST)}:${CLIENT_PORT}`;
 
-const MICROFRONT_PUBLIC_URL =
-  process.env.MICROFRONT_PUBLIC_URL?.trim() || defaultPublicUrl;
+const publicUrlFromEnv = process.env.MICROFRONT_PUBLIC_URL?.trim();
+const MICROFRONT_PUBLIC_URL = isProduction
+  ? defaultPublicUrl
+  : publicUrlFromEnv || defaultPublicUrl;
 
 const DIST_DIR = resolveClientDistDirectory({
   explicitDistPath: process.env.CLIENT_DIST_DIR,
