@@ -117,10 +117,6 @@ const config = {
     ],
   },
   plugins: [
-    new ModuleFederationPlugin({
-      name: 'shellApp',
-      shared: createSharedConfig(),
-    }),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, '..', '..', '..', 'public', 'index.html'),
       inject: 'body',
