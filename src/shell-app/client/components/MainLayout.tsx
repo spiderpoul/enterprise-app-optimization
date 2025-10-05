@@ -351,7 +351,7 @@ const MainLayout: React.FC = () => {
       path: '/',
       element: <Navigate to="/dashboard" replace />,
     },
-    { 
+    {
       path: '/dashboard',
       Component: Dashboard,
     },
