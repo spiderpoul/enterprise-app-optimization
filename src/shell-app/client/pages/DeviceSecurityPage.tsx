@@ -158,7 +158,7 @@ export default function DeviceSecurityPage() {
       style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}
     >
       <h2 data-test="device-security-title" style={{ margin: 0 }}>
-        Безопасность устройств
+        Device security
       </h2>
       <div
         data-test="device-security-table-container"
