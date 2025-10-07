@@ -293,6 +293,7 @@ const MainLayout: React.FC = () => {
           expanded: !menuMinimized || sectionActive,
           items: section.items.map((item) => ({
             state: item.path,
+            klId: item.id,
             key: item.title,
             onClick: () => handleNavigate(item.path),
             active: matchRoute(item.path),
