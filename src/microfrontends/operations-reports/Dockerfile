@@ -7,7 +7,7 @@ COPY src/shell-app/client/package.json src/shell-app/client/package.json
 COPY src/shell-app/server/package.json src/shell-app/server/package.json
 COPY src/microfrontends/operations-reports/client/package.json src/microfrontends/operations-reports/client/package.json
 COPY src/microfrontends/operations-reports/server/package.json src/microfrontends/operations-reports/server/package.json
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 RUN npx nx run operations-reports-client:build
@@ -17,7 +17,7 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY src/microfrontends/operations-reports/server/package.json ./package.json
-RUN npm install --omit=dev
+RUN npm install --omit=dev --legacy-peer-deps
 
 COPY src/microfrontends/operations-reports/server ./server
 COPY --from=builder /workspace/src/microfrontends/operations-reports/client/dist ./client/dist
