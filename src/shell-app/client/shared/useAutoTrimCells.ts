@@ -1,6 +1,7 @@
 import { RefObject, useEffect } from 'react';
 
-const CELLS = new Map<HTMLElement, true>();
+// ✅ WeakSet позволяет сборщику мусора забирать отсоединённые ячейки, ликвидируя утечку памяти.
+const CELLS = new WeakSet<HTMLElement>();
 const CELL_SELECTOR = 'th.ant-table-cell,td.ant-table-cell,[data-cell]';
 
 export function useAutoTrimCells(tableRef: RefObject<HTMLElement>) {
@@ -11,8 +12,8 @@ export function useAutoTrimCells(tableRef: RefObject<HTMLElement>) {
     const obs = new ResizeObserver(() => {});
 
     const add = (el: HTMLElement) => {
-      if (CELLS.has(el)) return;
-      CELLS.set(el, true);
+      if (CELLS.has(el)) return; // ✅ Уже отслеживаем эту ячейку, повторно не подписываемся.
+      CELLS.add(el);
       obs.observe(el);
     };
 
@@ -28,8 +29,13 @@ export function useAutoTrimCells(tableRef: RefObject<HTMLElement>) {
         });
         m.removedNodes.forEach((n) => {
           if (n instanceof HTMLElement) {
-            if (n.matches?.(CELL_SELECTOR)) obs.unobserve(n);
-            n.querySelectorAll?.(CELL_SELECTOR).forEach((el) => obs.unobserve(el as HTMLElement));
+            if (n.matches?.(CELL_SELECTOR)) {
+              // ✅ Достаточно остановить ResizeObserver — WeakSet сам отпустит ссылку.
+              obs.unobserve(n);
+            }
+            n.querySelectorAll?.(CELL_SELECTOR).forEach((el) => {
+              obs.unobserve(el as HTMLElement);
+            });
           }
         });
       }
@@ -38,6 +44,7 @@ export function useAutoTrimCells(tableRef: RefObject<HTMLElement>) {
 
     return () => {
       mo.disconnect();
+      // ✅ При отписке достаточно отключить наблюдателей — WeakSet не требует ручной очистки.
       obs.disconnect();
     };
   }, [tableRef]);
