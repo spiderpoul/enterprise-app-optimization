@@ -10,15 +10,14 @@ COPY src/microfrontends/users-and-roles/server/package.json src/microfrontends/u
 RUN npm install --legacy-peer-deps
 
 COPY . .
-RUN npm install --prefix src/microfrontends/users-and-roles/server --omit=dev --legacy-peer-deps
 RUN npx nx run users-and-roles-client:build
 
 FROM node:20-bullseye-slim AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY --from=builder /workspace/src/microfrontends/users-and-roles/server/package.json ./package.json
-COPY --from=builder /workspace/src/microfrontends/users-and-roles/server/node_modules ./node_modules
+COPY src/microfrontends/users-and-roles/server/package.json ./package.json
+RUN npm install --omit=dev --legacy-peer-deps
 
 COPY src/microfrontends/common /common
 COPY src/microfrontends/common ./common

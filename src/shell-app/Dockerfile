@@ -10,15 +10,14 @@ COPY src/microfrontends/operations-reports/server/package.json src/microfrontend
 RUN npm install --legacy-peer-deps
 
 COPY . .
-RUN npm install --prefix src/shell-app/server --omit=dev --legacy-peer-deps
 RUN npx nx run shell-client:build
 
 FROM node:20-bullseye-slim AS runtime
 ENV NODE_ENV=production
 WORKDIR /app
 
-COPY --from=builder /workspace/src/shell-app/server/package.json ./package.json
-COPY --from=builder /workspace/src/shell-app/server/node_modules ./node_modules
+COPY src/shell-app/server/package.json ./package.json
+RUN npm install --omit=dev --legacy-peer-deps
 
 COPY src/shell-app/server ./server
 COPY src/server /server
