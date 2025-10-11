@@ -19,6 +19,8 @@ WORKDIR /app
 COPY src/microfrontends/operations-reports/server/package.json ./package.json
 RUN npm install --omit=dev --legacy-peer-deps
 
+COPY src/microfrontends/common ./common
+COPY src/microfrontends/operations-reports/manifest.json ./manifest.json
 COPY src/microfrontends/operations-reports/server ./server
 COPY --from=builder /workspace/src/microfrontends/operations-reports/client/dist ./client/dist
 
