@@ -19,7 +19,9 @@ WORKDIR /app
 COPY src/microfrontends/users-and-roles/server/package.json ./package.json
 RUN npm install --omit=dev --legacy-peer-deps
 
+COPY src/microfrontends/common /common
 COPY src/microfrontends/common ./common
+COPY src/server /server
 COPY src/microfrontends/users-and-roles/manifest.json ./manifest.json
 COPY src/microfrontends/users-and-roles/server ./server
 COPY --from=builder /workspace/src/microfrontends/users-and-roles/client/dist ./client/dist
