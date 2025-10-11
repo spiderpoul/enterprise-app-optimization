@@ -1,4 +1,8 @@
 const express = require('express');
+const { ensureDebugExtend } = require('./patch-debug-extend');
+
+ensureDebugExtend();
+
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const { createPathRewriter } = require('./proxy-config');
 
