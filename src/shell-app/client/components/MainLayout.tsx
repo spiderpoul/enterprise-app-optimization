@@ -221,7 +221,7 @@ const MainLayout: React.FC = () => {
   const { microfrontends, isLoading, error } = useMicrofrontends();
   const userDisplayName = 'Enterprise operator';
   const userRole = 'Workspace automation lead';
-  const { isInitializing, currentStep } = useShellInitialization();
+  const { isInitializing } = useShellInitialization();
   const [menuMinimized, setMenuMinimized] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -375,7 +375,6 @@ const MainLayout: React.FC = () => {
     return (
       <InitializationContainer direction="vertical" size={32}>
         <Loader size="large" centered />
-        {currentStep?.label ? <Text style={{ color: '#1f2937' }}>{currentStep.label}</Text> : null}
       </InitializationContainer>
     );
   }
