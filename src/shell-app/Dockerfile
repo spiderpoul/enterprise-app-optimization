@@ -20,6 +20,8 @@ COPY src/shell-app/server/package.json ./package.json
 RUN npm install --omit=dev --legacy-peer-deps
 
 COPY src/shell-app/server ./server
+COPY src/server /server
+COPY src/microfrontends /microfrontends
 COPY --from=builder /workspace/src/shell-app/client/dist ./client/dist
 
 EXPOSE 4300
