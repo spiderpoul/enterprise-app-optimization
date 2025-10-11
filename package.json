@@ -28,6 +28,7 @@
     "@types/react-dom": "18.2.24",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
+    "copy-webpack-plugin": "^13.0.1",
     "dotenv": "16.4.7",
     "eslint": "8.57.1",
     "eslint-config-prettier": "9.1.0",
@@ -39,6 +40,9 @@
     "memlab": "^1.1.60",
     "nx": "21.5.3",
     "prettier": "3.4.2",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "webpack": "^5.102.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }
