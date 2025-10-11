@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "webpack --config webpack.config.cjs --mode=production",
     "start": "node server.js",
     "start:dist": "node scripts/start-dist.js",
     "dev": "nodemon --watch server.js --watch data --ext js,json --exec node server.js"
