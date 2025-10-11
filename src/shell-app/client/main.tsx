@@ -5,6 +5,8 @@ import * as ReactJSXRuntime from 'react/jsx-runtime';
 import * as ReactJSXDevRuntime from 'react/jsx-dev-runtime';
 import * as ReactRouter from 'react-router';
 import * as ReactRouterDOM from 'react-router-dom';
+import * as antd from 'antd';
+import moment from 'moment';
 import type { Metric } from 'web-vitals';
 import App from './App';
 import reportWebVitals from './metrics/reportWebVitals';
@@ -19,6 +21,8 @@ declare global {
     ReactJSXDevRuntime: typeof ReactJSXDevRuntime;
     ReactRouter: typeof ReactRouter;
     ReactRouterDOM: typeof ReactRouterDOM;
+    antd: typeof antd;
+    moment: typeof moment;
   }
 }
 
@@ -30,6 +34,8 @@ if (typeof window !== 'undefined') {
   window.ReactJSXDevRuntime = ReactJSXDevRuntime;
   window.ReactRouter = ReactRouter;
   window.ReactRouterDOM = ReactRouterDOM;
+  window.antd = antd;
+  window.moment = moment;
 }
 
 const markPerformance = (label: string) => {

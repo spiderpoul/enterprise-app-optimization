@@ -12,6 +12,7 @@
     "@kaspersky/hexa-ui-icons": "^2.6.11",
     "antd": "5.27.4",
     "core-js": "^3.38.0",
+    "moment": "2.30.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-is": "^19.1.1",
