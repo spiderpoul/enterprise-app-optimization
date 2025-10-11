@@ -30,31 +30,10 @@
         }
       }
     },
-    "/api/initialization/steps": {
-      "get": {
-        "summary": "Retrieve initialization steps",
-        "description": "Returns the initialization plan that the client renders while the workspace is loading.",
-        "responses": {
-          "200": {
-            "description": "List of initialization steps in execution order.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/InitializationStep"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/initialization/steps/{stepId}/complete": {
+    "/api/initialization/steps/{stepId}": {
       "post": {
-        "summary": "Mark initialization step complete",
-        "description": "Simulates completion of a specific initialization step and returns the acknowledged payload.",
+        "summary": "Execute initialization step",
+        "description": "Simulates execution of a specific initialization step and returns the acknowledged payload.",
         "parameters": [
           {
             "name": "stepId",

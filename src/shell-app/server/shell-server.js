@@ -95,11 +95,7 @@ app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.get('/api/initialization/steps', (_req, res) => {
-  res.json(initializationPlan);
-});
-
-app.post('/api/initialization/steps/:stepId/complete', async (req, res) => {
+app.post('/api/initialization/steps/:stepId', async (req, res) => {
   const { stepId } = req.params;
   const step = initializationPlanById.get(stepId);
 
