@@ -18,6 +18,13 @@
         "command": "npm run serve"
       }
     },
+    "serve-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/microfrontends/operations-reports/client",
+        "command": "npm run serve:prod"
+      }
+    },
     "analyze": {
       "executor": "nx:run-commands",
       "options": {
