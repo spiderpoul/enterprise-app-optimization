@@ -7,6 +7,8 @@ COPY src/shell-app/client/package.json src/shell-app/client/package.json
 COPY src/shell-app/server/package.json src/shell-app/server/package.json
 COPY src/microfrontends/operations-reports/client/package.json src/microfrontends/operations-reports/client/package.json
 COPY src/microfrontends/operations-reports/server/package.json src/microfrontends/operations-reports/server/package.json
+COPY src/microfrontends/users-and-roles/client/package.json src/microfrontends/users-and-roles/client/package.json
+COPY src/microfrontends/users-and-roles/server/package.json src/microfrontends/users-and-roles/server/package.json
 RUN npm install --legacy-peer-deps
 
 COPY . .
@@ -19,11 +21,11 @@ WORKDIR /app
 COPY src/shell-app/server/package.json ./package.json
 RUN npm install --omit=dev --legacy-peer-deps
 
-COPY src/shell-app/server ./server
-COPY src/server /server
-COPY src/microfrontends /microfrontends
-COPY --from=builder /workspace/src/shell-app/client/dist ./client/dist
+COPY src/shell-app/server ./src/shell-app/server
+COPY src/server ./src/server
+COPY src/microfrontends ./src/microfrontends
+COPY --from=builder /workspace/src/shell-app/client/dist ./src/shell-app/client/dist
 
 EXPOSE 4300
 ENV SHELL_PORT=4300
-CMD ["node", "server/shell-server.js"]
+CMD ["node", "src/shell-app/server/shell-server.js"]

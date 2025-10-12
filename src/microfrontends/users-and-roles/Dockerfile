@@ -5,6 +5,8 @@ WORKDIR /workspace
 COPY package.json nx.json tsconfig.base.json tsconfig.json ./
 COPY src/shell-app/client/package.json src/shell-app/client/package.json
 COPY src/shell-app/server/package.json src/shell-app/server/package.json
+COPY src/microfrontends/operations-reports/client/package.json src/microfrontends/operations-reports/client/package.json
+COPY src/microfrontends/operations-reports/server/package.json src/microfrontends/operations-reports/server/package.json
 COPY src/microfrontends/users-and-roles/client/package.json src/microfrontends/users-and-roles/client/package.json
 COPY src/microfrontends/users-and-roles/server/package.json src/microfrontends/users-and-roles/server/package.json
 RUN npm install --legacy-peer-deps
@@ -19,13 +21,12 @@ WORKDIR /app
 COPY src/microfrontends/users-and-roles/server/package.json ./package.json
 RUN npm install --omit=dev --legacy-peer-deps
 
-COPY src/microfrontends/common /common
-COPY src/microfrontends/common ./common
-COPY src/server /server
-COPY src/microfrontends/users-and-roles/manifest.json ./manifest.json
-COPY src/microfrontends/users-and-roles/server ./server
-COPY --from=builder /workspace/src/microfrontends/users-and-roles/client/dist ./client/dist
+COPY src/microfrontends/common ./src/microfrontends/common
+COPY src/microfrontends/users-and-roles/server ./src/microfrontends/users-and-roles/server
+COPY src/microfrontends/users-and-roles/manifest.json ./src/microfrontends/users-and-roles/manifest.json
+COPY src/server ./src/server
+COPY --from=builder /workspace/src/microfrontends/users-and-roles/client/dist ./src/microfrontends/users-and-roles/client/dist
 
 EXPOSE 4402
 ENV MICROFRONT_PORT=4402
-CMD ["node", "server/server.js"]
+CMD ["node", "src/microfrontends/users-and-roles/server/server.js"]

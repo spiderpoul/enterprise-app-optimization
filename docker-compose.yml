@@ -8,14 +8,14 @@ services:
       - '${SHELL_HOST_PORT:-4300}:4300'
     environment:
       - NODE_ENV=${NODE_ENV:-production}
-      - CLIENT_DIST_DIR=/app/client/dist
+      - CLIENT_DIST_DIR=/app/src/shell-app/client/dist
   operations-reports:
     build:
       context: .
       dockerfile: src/microfrontends/operations-reports/Dockerfile
     environment:
       - NODE_ENV=${NODE_ENV:-production}
-      - CLIENT_DIST_DIR=/app/client/dist
+      - CLIENT_DIST_DIR=/app/src/microfrontends/operations-reports/client/dist
       - SHELL_URL=http://shell:4300
     depends_on:
       - shell
@@ -25,7 +25,7 @@ services:
       dockerfile: src/microfrontends/users-and-roles/Dockerfile
     environment:
       - NODE_ENV=${NODE_ENV:-production}
-      - CLIENT_DIST_DIR=/app/client/dist
+      - CLIENT_DIST_DIR=/app/src/microfrontends/users-and-roles/client/dist
       - SHELL_URL=http://shell:4300
     depends_on:
       - shell
