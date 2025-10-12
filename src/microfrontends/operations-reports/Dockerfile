@@ -2,14 +2,14 @@
 FROM node:20-bullseye-slim AS builder
 WORKDIR /workspace
 
-COPY package.json nx.json tsconfig.base.json tsconfig.json ./
+COPY package.json package-lock.json nx.json tsconfig.base.json tsconfig.json ./
 COPY src/shell-app/client/package.json src/shell-app/client/package.json
 COPY src/shell-app/server/package.json src/shell-app/server/package.json
 COPY src/microfrontends/operations-reports/client/package.json src/microfrontends/operations-reports/client/package.json
 COPY src/microfrontends/operations-reports/server/package.json src/microfrontends/operations-reports/server/package.json
 COPY src/microfrontends/users-and-roles/client/package.json src/microfrontends/users-and-roles/client/package.json
 COPY src/microfrontends/users-and-roles/server/package.json src/microfrontends/users-and-roles/server/package.json
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
 
 COPY . .
 RUN npx nx run operations-reports-client:build
