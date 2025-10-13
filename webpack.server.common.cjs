@@ -53,15 +53,35 @@ const createServerWebpackConfig = ({
     : path.resolve(resolvedProjectRoot, entry);
 
   const plugins = [];
+  const baseCopyPatterns = [
+    {
+      from: path.resolve(resolvedProjectRoot, 'package.json'),
+      to: path.resolve(resolvedProjectRoot, 'dist', 'package.json'),
+      noErrorOnMissing: true,
+    },
+    {
+      from: path.resolve(resolvedProjectRoot, 'package-lock.json'),
+      to: path.resolve(resolvedProjectRoot, 'dist', 'package-lock.json'),
+      noErrorOnMissing: true,
+    },
+    {
+      from: path.resolve(resolvedProjectRoot, 'node_modules'),
+      to: path.resolve(resolvedProjectRoot, 'dist', 'node_modules'),
+      noErrorOnMissing: true,
+    },
+  ];
+
   const normalizedCopyPatterns = normalizeCopyPatterns({
     projectRoot: resolvedProjectRoot,
     patterns: copyPatterns,
   });
 
-  if (normalizedCopyPatterns.length > 0) {
+  const pluginCopyPatterns = [...baseCopyPatterns, ...normalizedCopyPatterns];
+
+  if (pluginCopyPatterns.length > 0) {
     plugins.push(
       new CopyWebpackPlugin({
-        patterns: normalizedCopyPatterns,
+        patterns: pluginCopyPatterns,
       }),
     );
   }
