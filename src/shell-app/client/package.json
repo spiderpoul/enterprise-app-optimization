@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "webpack --config webpack.config.cjs --mode production",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.cjs --mode production",
     "serve": "webpack serve --config webpack.config.cjs --mode development",
     "serve:prod": "webpack serve --config webpack.config.cjs --mode production",
-    "analyze": "cross-env ANALYZE=true webpack --config webpack.config.cjs --mode production"
+    "analyze": "cross-env ANALYZE=true NODE_ENV=production webpack --config webpack.config.cjs --mode production"
   },
   "dependencies": {
     "@kaspersky/hexa-ui": "^6.198.2",
@@ -40,10 +40,10 @@
     "mini-css-extract-plugin": "2.9.4",
     "postcss": "8.5.6",
     "postcss-loader": "8.2.0",
+    "react-scan": "^0.4.3",
     "style-loader": "4.0.0",
     "ts-node": "10.9.2",
     "typescript": "5.5.4",
-    "react-scan": "^0.4.3",
     "webpack": "5.101.3",
     "webpack-bundle-analyzer": "4.10.2",
     "webpack-cli": "6.0.1",
