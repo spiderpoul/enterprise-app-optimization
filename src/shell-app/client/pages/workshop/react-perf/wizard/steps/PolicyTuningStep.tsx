@@ -5,6 +5,7 @@ import MetricBadge from '../components/MetricBadge';
 import HeavyBlock from './HeavyBlock';
 import { useWizardState } from '../WizardStateContext';
 import { deviceInventory } from './deviceInventory';
+import { useDebouncedValue } from '../../../../../shared/useDebauncedValue';
 
 const Layout = styled(Space)`
   gap: 16px;
@@ -157,6 +158,10 @@ const PolicyTuningStep: React.FC = () => {
     return haystack.includes(normalizedFilter);
   });
 
+  const { value: debouncedFilter } = useDebouncedValue(
+    `${templateId}|${filter}|${pickedIds.join(',')}`,
+  );
+
   return (
     <Layout direction="vertical">
       <MetricsRow direction="horizontal">
@@ -223,7 +228,7 @@ const PolicyTuningStep: React.FC = () => {
         )}
       </DeviceList>
 
-      <HeavyBlock inputValue={`${templateId}|${filter}|${pickedIds.join(',')}`} />
+      <HeavyBlock inputValue={debouncedFilter} />
     </Layout>
   );
 };
