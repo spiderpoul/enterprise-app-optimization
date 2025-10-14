@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
@@ -24,12 +24,15 @@ import {
   Settings2,
   UserAccount,
 } from '@kaspersky/hexa-ui-icons/16';
-import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
-import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
-import WizardQuickSetupPage from '../pages/workshop/react-perf/WizardQuickSetupPage';
-import DeviceSecurityPage from '../pages/DeviceSecurityPage';
+
+const Dashboard = lazy(() => import('./dashboard/Dashboard'));
+const DeviceSecurityPage = lazy(() => import('../pages/DeviceSecurityPage'));
+const WizardQuickSetupPage = lazy(
+  () => import('../pages/workshop/react-perf/WizardQuickSetupPage'),
+);
+const NotFound = lazy(() => import('../pages/NotFound'));
 
 interface ShellMenuItem {
   id: string;
@@ -458,8 +461,7 @@ const MainLayout: React.FC = () => {
                 </Alert>
               </AlertContainer>
             ) : null}
-
-            {routes}
+            <Suspense fallback={<Loader centered size="large" />}>{routes}</Suspense>
           </ContentArea>
 
           <FooterBar direction="horizontal" align="flex-start">
