@@ -144,7 +144,7 @@ const config = {
       directory: path.resolve(__dirname, 'dist'),
     },
   },
-  devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
+  devtool: isProduction ? false : 'eval-cheap-module-source-map',
 };
 
 module.exports = config;
