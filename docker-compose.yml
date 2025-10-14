@@ -17,6 +17,9 @@ services:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/src/microfrontends/operations-reports/client/dist
       - SHELL_URL=http://shell:4300
+      - MICROFRONT_PUBLIC_URL=http://localhost:4300/microfrontends/operations-reports
+      - MICROFRONT_API_URL=http://operations-reports:4400
+      - MICROFRONT_ASSET_URL=http://operations-reports:4400
     depends_on:
       - shell
   users-and-roles:
@@ -27,5 +30,8 @@ services:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/src/microfrontends/users-and-roles/client/dist
       - SHELL_URL=http://shell:4300
+      - MICROFRONT_PUBLIC_URL=http://localhost:4300/microfrontends/users-and-roles
+      - MICROFRONT_API_URL=http://users-and-roles:4402
+      - MICROFRONT_ASSET_URL=http://users-and-roles:4402
     depends_on:
       - shell

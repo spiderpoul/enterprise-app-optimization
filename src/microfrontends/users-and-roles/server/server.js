@@ -35,8 +35,8 @@ const { users } = require(path.resolve(SERVER_DIR, 'data', 'users.js'));
 const MICROFRONT_PORT = parsePort(process.env.MICROFRONT_PORT, 4402);
 const MICROFRONT_HOST = String(process.env.MICROFRONT_HOST ?? '0.0.0.0');
 const SHELL_URL = process.env.SHELL_URL || 'http://localhost:4300';
-const MICROFRONT_API_URL =
-  process.env.MICROFRONT_API_URL || `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`;
+const defaultInternalBase = `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`;
+const MICROFRONT_API_URL = (process.env.MICROFRONT_API_URL || '').trim() || defaultInternalBase;
 const ACK_INTERVAL = Number(process.env.MICROFRONT_ACK_INTERVAL || 30000);
 const isProduction = process.env.NODE_ENV === 'production';
 const CLIENT_HOST = String(process.env.CLIENT_HOST ?? '0.0.0.0');
@@ -50,13 +50,14 @@ const CLIENT_DEV_SERVER_URL = isProduction
     });
 
 const defaultPublicUrl = isProduction
-  ? `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`
+  ? defaultInternalBase
   : `http://${normalizeHost(CLIENT_HOST)}:${CLIENT_PORT}`;
 
 const publicUrlFromEnv = process.env.MICROFRONT_PUBLIC_URL?.trim();
-const MICROFRONT_PUBLIC_URL = isProduction
-  ? defaultPublicUrl
-  : publicUrlFromEnv || defaultPublicUrl;
+const MICROFRONT_PUBLIC_URL = publicUrlFromEnv || defaultPublicUrl;
+
+const assetUrlFromEnv = process.env.MICROFRONT_ASSET_URL?.trim();
+const MICROFRONT_ASSET_URL = assetUrlFromEnv || MICROFRONT_API_URL || defaultInternalBase;
 
 const DIST_DIR = resolveClientDistDirectory({
   explicitDistPath: process.env.CLIENT_DIST_DIR,
@@ -97,6 +98,7 @@ const descriptor = buildMicrofrontendDescriptor({
   manifest,
   port: MICROFRONT_PORT,
   publicUrl: MICROFRONT_PUBLIC_URL,
+  assetBaseUrl: MICROFRONT_ASSET_URL,
   apiBaseUrl: MICROFRONT_API_URL,
 });
 

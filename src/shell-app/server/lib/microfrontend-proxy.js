@@ -16,10 +16,8 @@ const createMicrofrontendProxyManager = ({ app }) => {
 
   app.use(router);
 
-  const register = (entry) => {
-    const config = entry?.apiProxy;
-
-    if (!config) {
+  const registerProxy = (config, label) => {
+    if (!config || !config.prefix || !config.target) {
       return;
     }
 
@@ -53,11 +51,20 @@ const createMicrofrontendProxyManager = ({ app }) => {
 
     const targetPathSuffix = config.pathRewrite === '/' ? '' : config.pathRewrite;
     console.log(
-      `Proxying microfrontend API requests from ${config.prefix} to ${config.target}${targetPathSuffix}`,
+      `Proxying microfrontend ${label} requests from ${config.prefix} to ${config.target}${targetPathSuffix}`,
     );
   };
 
-  const unregister = (prefix) => {
+  const register = (entry) => {
+    registerProxy(entry?.apiProxy, 'API');
+    registerProxy(entry?.assetProxy, 'asset');
+  };
+
+  const unregisterProxy = (prefix) => {
+    if (!prefix) {
+      return;
+    }
+
     const existing = proxyRegistry.get(prefix);
 
     if (!existing) {
@@ -66,6 +73,15 @@ const createMicrofrontendProxyManager = ({ app }) => {
 
     router.stack = router.stack.filter((layer) => layer.handle !== existing.middleware);
     proxyRegistry.delete(prefix);
+  };
+
+  const unregister = (entry) => {
+    if (!entry) {
+      return;
+    }
+
+    unregisterProxy(entry.apiProxy?.prefix);
+    unregisterProxy(entry.assetProxy?.prefix);
   };
 
   return {

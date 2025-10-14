@@ -31,6 +31,19 @@ const normalizeProxyPrefix = (value) => {
   return withoutTrailingSlash;
 };
 
+const normalizeProxyRewrite = (value) => {
+  const trimmed = typeof value === 'string' ? value.trim() : '';
+
+  if (!trimmed || trimmed === '/') {
+    return '/';
+  }
+
+  const withLeadingSlash = ensureLeadingSlash(trimmed);
+  const withoutTrailingSlash = withLeadingSlash.replace(/\/+$/, '');
+
+  return withoutTrailingSlash || '/';
+};
+
 const normalizeProxyTarget = (value) => {
   const trimmed = typeof value === 'string' ? value.trim() : '';
 
@@ -43,6 +56,42 @@ const normalizeProxyTarget = (value) => {
   }
 
   return ensureLeadingSlash(trimmed);
+};
+
+const resolveAssetsBaseUrl = ({ publicUrl, port }) => {
+  const trimmed = typeof publicUrl === 'string' ? publicUrl.trim() : '';
+
+  if (trimmed) {
+    try {
+      const normalized = trimmed.endsWith('/') ? trimmed : `${trimmed}/`;
+      return new URL(normalized);
+    } catch (_error) {
+      // fall through to default
+    }
+  }
+
+  const fallbackPort = Number.isFinite(port) ? port : Number.parseInt(`${port ?? ''}`, 10);
+  const normalizedPort = Number.isFinite(fallbackPort) ? fallbackPort : 0;
+
+  return new URL(`http://localhost:${normalizedPort}/`);
+};
+
+const resolveEntryUrl = ({ assetsBaseUrl, entryPath }) => {
+  const normalizedEntryPath = typeof entryPath === 'string' ? entryPath.trim() : '';
+
+  if (!normalizedEntryPath) {
+    return assetsBaseUrl.href;
+  }
+
+  if (/^https?:\/\//i.test(normalizedEntryPath)) {
+    return normalizedEntryPath;
+  }
+
+  const relativePath = normalizedEntryPath.startsWith('/')
+    ? normalizedEntryPath.slice(1)
+    : normalizedEntryPath;
+
+  return new URL(relativePath, assetsBaseUrl).href;
 };
 
 const createApiProxyDescriptor = ({ manifest, apiBaseUrl }) => {
@@ -74,6 +123,33 @@ const createApiProxyDescriptor = ({ manifest, apiBaseUrl }) => {
   }
 };
 
+const createAssetProxyDescriptor = ({ publicUrl, assetBaseUrl }) => {
+  const trimmedPublicUrl = typeof publicUrl === 'string' ? publicUrl.trim() : '';
+  const trimmedAssetBaseUrl = typeof assetBaseUrl === 'string' ? assetBaseUrl.trim() : '';
+
+  if (!trimmedPublicUrl || !trimmedAssetBaseUrl) {
+    return null;
+  }
+
+  try {
+    const publicUrlObject = new URL(trimmedPublicUrl);
+    const assetBaseObject = new URL(trimmedAssetBaseUrl);
+    const prefix = normalizeProxyPrefix(publicUrlObject.pathname);
+
+    if (!prefix) {
+      return null;
+    }
+
+    return {
+      pathRewrite: normalizeProxyRewrite(assetBaseObject.pathname),
+      prefix,
+      target: assetBaseObject.origin,
+    };
+  } catch (_error) {
+    return null;
+  }
+};
+
 /**
  * @typedef {Object} Manifest
  * @property {string} id
@@ -92,25 +168,35 @@ const createApiProxyDescriptor = ({ manifest, apiBaseUrl }) => {
  *   manifest: Manifest;
  *   port?: number;
  *   publicUrl?: string;
+ *   assetBaseUrl?: string;
  *   apiBaseUrl?: string;
  * }} params
  */
-function buildMicrofrontendDescriptor({ manifest, port, publicUrl, apiBaseUrl }) {
+function buildMicrofrontendDescriptor({
+  manifest,
+  port,
+  publicUrl,
+  assetBaseUrl,
+  apiBaseUrl,
+}) {
   if (!manifest) {
     throw new Error('Manifest is required to build microfrontend descriptor.');
   }
 
-  const assetsBaseUrl = new URL('/', publicUrl || `http://localhost:${port ?? 0}`);
+  const assetsBaseUrl = resolveAssetsBaseUrl({ publicUrl, port });
   const apiBase = new URL('/', apiBaseUrl || `http://localhost:${port ?? 0}`);
+  const entryUrl = resolveEntryUrl({ assetsBaseUrl, entryPath: manifest.entryPath });
+  const manifestUrl = new URL('manifest.json', assetsBaseUrl).href;
 
   return {
+    assetProxy: createAssetProxyDescriptor({ publicUrl: assetsBaseUrl.href, assetBaseUrl }),
     id: manifest.id,
     name: manifest.name,
     menuLabel: manifest.menuLabel,
     routePath: manifest.routePath,
     description: manifest.description || '',
-    entryUrl: new URL(manifest.entryPath, assetsBaseUrl).href,
-    manifestUrl: new URL('manifest.json', assetsBaseUrl).href,
+    entryUrl,
+    manifestUrl,
     apiProxy: createApiProxyDescriptor({ manifest, apiBaseUrl: apiBase }),
   };
 }
@@ -186,5 +272,6 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
 
 module.exports = {
   buildMicrofrontendDescriptor,
+  createAssetProxyDescriptor,
   createMicrofrontendAcknowledger,
 };

@@ -20,7 +20,7 @@ const ensureDataFile = ({ dataFile, sourceDataFile }) => {
   }
 };
 
-const sanitizeApiProxyConfig = (value) => {
+const sanitizeProxyConfig = (value) => {
   if (!value || typeof value !== 'object') {
     return null;
   }
@@ -69,7 +69,8 @@ const sanitizeRegistryEntry = (entry) => {
   }
 
   return {
-    apiProxy: sanitizeApiProxyConfig(entry.apiProxy),
+    apiProxy: sanitizeProxyConfig(entry.apiProxy),
+    assetProxy: sanitizeProxyConfig(entry.assetProxy),
     description,
     entryUrl,
     id,
@@ -138,6 +139,7 @@ const createMicrofrontendRegistry = ({ dataFile, sourceDataFile }) => {
 
 module.exports = {
   createMicrofrontendRegistry,
-  sanitizeApiProxyConfig,
+  sanitizeApiProxyConfig: sanitizeProxyConfig,
+  sanitizeAssetProxyConfig: sanitizeProxyConfig,
   sanitizeRegistryEntry,
 };

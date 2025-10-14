@@ -10,6 +10,7 @@ export interface MicrofrontendManifest {
   lastAcknowledgedAt?: string;
   manifestUrl?: string | null;
   apiProxy?: MicrofrontendApiProxyConfig | null;
+  assetProxy?: MicrofrontendAssetProxyConfig | null;
 }
 
 export interface MicrofrontendRouteObject extends RouteObject {
@@ -21,6 +22,12 @@ export interface LoadedMicrofrontend extends MicrofrontendManifest {
 }
 
 export interface MicrofrontendApiProxyConfig {
+  prefix: string;
+  target: string;
+  pathRewrite: string;
+}
+
+export interface MicrofrontendAssetProxyConfig {
   prefix: string;
   target: string;
   pathRewrite: string;

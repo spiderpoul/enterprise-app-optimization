@@ -148,6 +148,7 @@ app.get('/api/mf/reports/error', (_req, res) => {
 app.get('/api/microfrontends', (_req, res) => {
   const microfrontends = registry.values().map((entry) => ({
     apiProxy: entry.apiProxy || null,
+    assetProxy: entry.assetProxy || null,
     description: entry.description || '',
     entryUrl: entry.entryUrl,
     id: entry.id,
@@ -162,8 +163,17 @@ app.get('/api/microfrontends', (_req, res) => {
 });
 
 app.post('/api/microfrontends/ack', (req, res) => {
-  const { id, name, menuLabel, routePath, entryUrl, description, manifestUrl, apiProxy } =
-    req.body || {};
+  const {
+    id,
+    name,
+    menuLabel,
+    routePath,
+    entryUrl,
+    description,
+    manifestUrl,
+    apiProxy,
+    assetProxy,
+  } = req.body || {};
 
   if (!id || !name || !menuLabel || !routePath || !entryUrl) {
     return res.status(400).json({
@@ -176,6 +186,7 @@ app.post('/api/microfrontends/ack', (req, res) => {
 
   const entry = sanitizeRegistryEntry({
     apiProxy,
+    assetProxy,
     description,
     entryUrl,
     id,
@@ -190,7 +201,9 @@ app.post('/api/microfrontends/ack', (req, res) => {
     return res.status(400).json({ message: 'Unable to register microfrontend acknowledgement.' });
   }
 
+  const previous = registry.get(entry.id);
   registry.set(entry);
+  microfrontendProxyManager.unregister(previous);
   microfrontendProxyManager.register(entry);
   registry.persist();
 
@@ -207,9 +220,7 @@ app.delete('/api/microfrontends/:id', (req, res) => {
 
   registry.remove(id);
 
-  if (existing.apiProxy?.prefix) {
-    microfrontendProxyManager.unregister(existing.apiProxy.prefix);
-  }
+  microfrontendProxyManager.unregister(existing);
 
   registry.persist();
   res.status(204).end();
