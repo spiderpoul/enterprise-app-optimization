@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "cross-env webpack --config ./webpack.config.cjs --mode production",
+    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.cjs --mode production",
     "build:dev": "cross-env webpack --config ./webpack.config.cjs --mode development",
     "serve": "cross-env webpack serve --config ./webpack.config.cjs --mode development",
     "serve:prod": "cross-env webpack serve --config ./webpack.config.cjs --mode production",
-    "analyze": "cross-env ANALYZE=true webpack --config ./webpack.config.cjs --mode production"
+    "analyze": "cross-env ANALYZE=true NODE_ENV=production webpack --config ./webpack.config.cjs --mode production"
   },
   "dependencies": {
     "@kaspersky/hexa-ui-icons": "^2.6.11",
