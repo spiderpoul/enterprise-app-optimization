@@ -5,16 +5,15 @@ const resolveServerRoot = (directory) =>
 
 const SERVER_DIR = resolveServerRoot(__dirname);
 const PROJECT_ROOT = path.resolve(SERVER_DIR, '..');
-const COMMON_ROOT = path.resolve(PROJECT_ROOT, '..', 'common');
 
 require('dotenv').config({ path: path.resolve(PROJECT_ROOT, '.env') });
 
 const express = require('express');
-const manifest = require(path.resolve(PROJECT_ROOT, 'manifest.json'));
+const manifest = require('../manifest.json');
 const {
   buildMicrofrontendDescriptor,
   createMicrofrontendAcknowledger,
-} = require(path.resolve(COMMON_ROOT, 'bootstrap.js'));
+} = require('../../common/bootstrap.js');
 const {
   createRequestLogger,
   createResponseDelayMiddleware,
@@ -23,14 +22,10 @@ const {
   registerClientAssetHandling,
   resolveClientDevServerUrl,
   resolveClientDistDirectory,
-} = require(path.resolve(COMMON_ROOT, 'server'));
+} = require('../../common/server');
 const swaggerUi = require('swagger-ui-express');
-const apiDocumentation = require(path.resolve(
-  SERVER_DIR,
-  'swagger',
-  'reports-api.json',
-));
-const { reports } = require(path.resolve(SERVER_DIR, 'data', 'reports.js'));
+const apiDocumentation = require('./swagger/reports-api.json');
+const { reports } = require('./data/reports.js');
 
 const MICROFRONT_PORT = parsePort(process.env.MICROFRONT_PORT, 4400);
 const MICROFRONT_HOST = String(process.env.MICROFRONT_HOST ?? '0.0.0.0');
