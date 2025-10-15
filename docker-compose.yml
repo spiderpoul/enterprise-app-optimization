@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   shell:
+    image: 'enterprise-app-shell:${APP_IMAGE_TAG:-latest}'
     build:
       context: .
       dockerfile: Dockerfile.shell
@@ -10,6 +11,7 @@ services:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
   operations-reports:
+    image: 'enterprise-app-operations-reports:${APP_IMAGE_TAG:-latest}'
     build:
       context: .
       dockerfile: Dockerfile.operations-reports
@@ -22,6 +24,7 @@ services:
     depends_on:
       - shell
   users-and-roles:
+    image: 'enterprise-app-users-and-roles:${APP_IMAGE_TAG:-latest}'
     build:
       context: .
       dockerfile: Dockerfile.users-and-roles

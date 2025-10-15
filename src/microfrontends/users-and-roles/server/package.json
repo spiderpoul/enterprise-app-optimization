@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --config webpack.config.cjs --mode=production",
+    "build:dev": "webpack --config webpack.config.cjs --mode=development",
     "start": "node server.js",
     "start:dist": "node scripts/start-dist.js",
     "dev": "nodemon --watch server.js --watch data --ext js,json --exec node server.js"

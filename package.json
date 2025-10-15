@@ -14,9 +14,11 @@
   "scripts": {
     "nx": "nx",
     "build": "nx run-many --target=build --all --output-style=stream",
+    "build:dev": "nx run-many --target=build-dev --all --output-style=stream",
     "build:prod:run": "npm run build && nx run-many --target=serve-dist --projects shell-server,operations-reports-server,users-and-roles-server --parallel=3 --output-style=stream",
     "dev": "nx run-many --target=serve --projects shell-client,shell-server,operations-reports-client,operations-reports-server,users-and-roles-client,users-and-roles-server --parallel=6 --output-style=stream",
     "dev:prod": "nx run-many --target=serve-prod --projects shell-client,operations-reports-client,users-and-roles-client --parallel=3 --output-style=stream",
+    "compose:run": "node scripts/run-compose.js",
     "lint": "eslint --ext .ts,.tsx src",
     "format": "prettier --write .",
     "analyze": "nx run shell-client:analyze && nx run operations-reports-client:analyze && nx run users-and-roles-client:analyze",
