@@ -3,7 +3,7 @@ services:
   shell:
     build:
       context: .
-      dockerfile: src/shell-app/Dockerfile
+      dockerfile: Dockerfile.shell
     ports:
       - '${SHELL_HOST_PORT:-4300}:4300'
     environment:
@@ -12,7 +12,7 @@ services:
   operations-reports:
     build:
       context: .
-      dockerfile: src/microfrontends/operations-reports/Dockerfile
+      dockerfile: Dockerfile.operations-reports
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
@@ -22,7 +22,7 @@ services:
   users-and-roles:
     build:
       context: .
-      dockerfile: src/microfrontends/users-and-roles/Dockerfile
+      dockerfile: Dockerfile.users-and-roles
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist

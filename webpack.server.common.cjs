@@ -1,8 +1,5 @@
-const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
-const { createRequire } = require('module');
 
 const normalizeCopyPatterns = ({ projectRoot, patterns }) => {
   if (!patterns || patterns.length === 0) {
@@ -39,93 +36,6 @@ const normalizeCopyPatterns = ({ projectRoot, patterns }) => {
   });
 };
 
-const readPackageJson = (pkgPath) => {
-  try {
-    const contents = fs.readFileSync(pkgPath, 'utf8');
-    return JSON.parse(contents);
-  } catch (error) {
-    if (error.code === 'ENOENT') {
-      return null;
-    }
-
-    throw error;
-  }
-};
-
-const getDependencyCopyPatterns = (projectRoot) => {
-  const pkgPath = path.resolve(projectRoot, 'package.json');
-  const pkg = readPackageJson(pkgPath);
-
-  if (!pkg) {
-    return [];
-  }
-
-  const projectRequire = createRequire(pkgPath);
-  const visited = new Set();
-  const patterns = [];
-
-  const queue = [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.optionalDependencies || {}),
-  ];
-
-  const enqueueDependency = (dependency) => {
-    if (!dependency) {
-      return;
-    }
-
-    let dependencyPackageJsonPath;
-
-    try {
-      dependencyPackageJsonPath = projectRequire.resolve(`${dependency}/package.json`);
-    } catch (error) {
-      if (error.code === 'MODULE_NOT_FOUND') {
-        return;
-      }
-
-      throw error;
-    }
-
-    if (visited.has(dependencyPackageJsonPath)) {
-      return;
-    }
-
-    visited.add(dependencyPackageJsonPath);
-
-    patterns.push({
-      from: path.dirname(dependencyPackageJsonPath),
-      to: path.resolve(projectRoot, 'dist', 'node_modules', dependency),
-      noErrorOnMissing: true,
-    });
-
-    const dependencyPackageJson = readPackageJson(dependencyPackageJsonPath);
-
-    if (!dependencyPackageJson) {
-      return;
-    }
-
-    const childDependencies = [
-      ...Object.keys(dependencyPackageJson.dependencies || {}),
-      ...Object.keys(dependencyPackageJson.optionalDependencies || {}),
-      ...Object.keys(dependencyPackageJson.peerDependencies || {}),
-    ];
-
-    childDependencies.forEach((child) => queue.push(child));
-  };
-
-  while (queue.length > 0) {
-    const dependency = queue.shift();
-
-    if (!dependency) {
-      continue;
-    }
-
-    enqueueDependency(dependency);
-  }
-
-  return patterns;
-};
-
 const createServerWebpackConfig = ({
   projectRoot,
   entry = './server.js',
@@ -142,34 +52,12 @@ const createServerWebpackConfig = ({
     : path.resolve(resolvedProjectRoot, entry);
 
   const plugins = [];
-  const baseCopyPatterns = [
-    {
-      from: path.resolve(resolvedProjectRoot, 'package.json'),
-      to: path.resolve(resolvedProjectRoot, 'dist', 'package.json'),
-      noErrorOnMissing: true,
-    },
-    {
-      from: path.resolve(resolvedProjectRoot, 'package-lock.json'),
-      to: path.resolve(resolvedProjectRoot, 'dist', 'package-lock.json'),
-      noErrorOnMissing: true,
-    },
-    {
-      from: path.resolve(resolvedProjectRoot, 'node_modules'),
-      to: path.resolve(resolvedProjectRoot, 'dist', 'node_modules'),
-      noErrorOnMissing: true,
-    },
-  ];
-
-  const dependencyCopyPatterns = getDependencyCopyPatterns(resolvedProjectRoot);
-
   const normalizedCopyPatterns = normalizeCopyPatterns({
     projectRoot: resolvedProjectRoot,
     patterns: copyPatterns,
   });
 
   const pluginCopyPatterns = [
-    ...baseCopyPatterns,
-    ...dependencyCopyPatterns,
     ...normalizedCopyPatterns,
   ];
 
@@ -192,7 +80,7 @@ const createServerWebpackConfig = ({
       clean: true,
     },
     externalsPresets: { node: true },
-    externals: [nodeExternals()],
+    externals: [],
     resolve: {
       extensions: ['.js', '.json'],
     },
