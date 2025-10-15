@@ -13,23 +13,23 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.operations-reports
-    ports:
-      - '${OPERATIONS_HOST_PORT:-4400}:4400'
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
       - SHELL_URL=http://shell:4300
+      - MICROFRONT_PUBLIC_URL=http://operations-reports:4400
+      - MICROFRONT_API_URL=http://operations-reports:4400
     depends_on:
       - shell
   users-and-roles:
     build:
       context: .
       dockerfile: Dockerfile.users-and-roles
-    ports:
-      - '${USERS_HOST_PORT:-4402}:4402'
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
       - SHELL_URL=http://shell:4300
+      - MICROFRONT_PUBLIC_URL=http://users-and-roles:4402
+      - MICROFRONT_API_URL=http://users-and-roles:4402
     depends_on:
       - shell

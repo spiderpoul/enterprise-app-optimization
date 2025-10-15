@@ -393,7 +393,11 @@
           },
           "entryUrl": {
             "type": "string",
-            "format": "uri"
+            "description": "Location of the microfrontend entry bundle. When acknowledging, this value must be an absolute URL; responses from the shell provide a relative path served from the shell domain."
+          },
+          "assetPath": {
+            "type": "string",
+            "description": "Relative path exposed by the shell that proxies microfrontend bundle requests."
           },
           "manifestUrl": {
             "type": "string",

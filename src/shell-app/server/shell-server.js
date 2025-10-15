@@ -122,7 +122,7 @@ app.get('/api/microfrontends', (_req, res) => {
   const microfrontends = registry.values().map((entry) => ({
     apiProxy: entry.apiProxy || null,
     description: entry.description || '',
-    entryUrl: entry.entryUrl,
+    entryUrl: entry.assetPath || entry.entryUrl,
     id: entry.id,
     lastAcknowledgedAt: entry.lastAcknowledgedAt,
     manifestUrl: entry.manifestUrl || null,
@@ -135,8 +135,17 @@ app.get('/api/microfrontends', (_req, res) => {
 });
 
 app.post('/api/microfrontends/ack', (req, res) => {
-  const { id, name, menuLabel, routePath, entryUrl, description, manifestUrl, apiProxy } =
-    req.body || {};
+  const {
+    id,
+    name,
+    menuLabel,
+    routePath,
+    entryUrl,
+    assetPath,
+    description,
+    manifestUrl,
+    apiProxy,
+  } = req.body || {};
 
   if (!id || !name || !menuLabel || !routePath || !entryUrl) {
     return res.status(400).json({
@@ -151,6 +160,7 @@ app.post('/api/microfrontends/ack', (req, res) => {
     apiProxy,
     description,
     entryUrl,
+    assetPath,
     id,
     lastAcknowledgedAt: acknowledgementTimestamp,
     manifestUrl,
@@ -180,9 +190,7 @@ app.delete('/api/microfrontends/:id', (req, res) => {
 
   registry.remove(id);
 
-  if (existing.apiProxy?.prefix) {
-    microfrontendProxyManager.unregister(existing.apiProxy.prefix);
-  }
+  microfrontendProxyManager.unregister(existing.id);
 
   registry.persist();
   res.status(204).end();

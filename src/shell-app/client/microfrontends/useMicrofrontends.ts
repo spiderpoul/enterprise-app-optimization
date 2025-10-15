@@ -30,7 +30,7 @@ const resolveMicrofrontendRouteConfig = (
   entryUrl: string,
   fallbackPath: string | null,
 ): MicrofrontendRouteObject => {
-  const routeConfig = module.routeConfig ?? module.default;
+  const routeConfig = module.routeConfig || module.default?.default || module.default;
 
   if (!routeConfig || !isRecord(routeConfig)) {
     throw new Error(`Microfrontend at ${entryUrl} does not provide a route configuration.`);

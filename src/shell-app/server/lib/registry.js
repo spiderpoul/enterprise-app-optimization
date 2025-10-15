@@ -55,7 +55,10 @@ const sanitizeRegistryEntry = (entry) => {
   const name = typeof entry.name === 'string' ? entry.name : id;
   const menuLabel = typeof entry.menuLabel === 'string' ? entry.menuLabel : name;
   const routePath = ensureLeadingSlash(entry.routePath || '/');
-  const entryUrl = typeof entry.entryUrl === 'string' ? entry.entryUrl : '';
+  const entryUrlValue = typeof entry.entryUrl === 'string' ? entry.entryUrl.trim() : '';
+  const assetPathValue = typeof entry.assetPath === 'string' ? entry.assetPath : '';
+  let assetPath = assetPathValue ? ensureLeadingSlash(assetPathValue) : '';
+  let entryUrl = '';
   const description = typeof entry.description === 'string' ? entry.description : '';
   const manifestUrl =
     typeof entry.manifestUrl === 'string' && entry.manifestUrl.trim()
@@ -64,12 +67,36 @@ const sanitizeRegistryEntry = (entry) => {
   const lastAcknowledgedAt =
     typeof entry.lastAcknowledgedAt === 'string' ? entry.lastAcknowledgedAt : null;
 
+  if (entryUrlValue) {
+    try {
+      const parsed = new URL(entryUrlValue);
+      entryUrl = parsed.href;
+
+      if (!assetPath) {
+        assetPath = parsed.pathname || '';
+      }
+    } catch (_error) {
+      entryUrl = entryUrlValue;
+
+      if (!assetPath) {
+        assetPath = ensureLeadingSlash(entryUrlValue);
+      }
+    }
+  }
+
+  assetPath = assetPath ? ensureLeadingSlash(assetPath) : '';
+
+  if (assetPath === '/') {
+    assetPath = '';
+  }
+
   if (!entryUrl) {
     return null;
   }
 
   return {
     apiProxy: sanitizeApiProxyConfig(entry.apiProxy),
+    assetPath: assetPath || null,
     description,
     entryUrl,
     id,

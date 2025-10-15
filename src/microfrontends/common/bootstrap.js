@@ -102,6 +102,7 @@ function buildMicrofrontendDescriptor({ manifest, port, publicUrl, apiBaseUrl })
 
   const assetsBaseUrl = new URL('/', publicUrl || `http://localhost:${port ?? 0}`);
   const apiBase = new URL('/', apiBaseUrl || `http://localhost:${port ?? 0}`);
+  const assetPath = ensureLeadingSlash(manifest.entryPath || '/');
 
   return {
     id: manifest.id,
@@ -110,6 +111,7 @@ function buildMicrofrontendDescriptor({ manifest, port, publicUrl, apiBaseUrl })
     routePath: manifest.routePath,
     description: manifest.description || '',
     entryUrl: new URL(manifest.entryPath, assetsBaseUrl).href,
+    assetPath,
     manifestUrl: new URL('manifest.json', assetsBaseUrl).href,
     apiProxy: createApiProxyDescriptor({ manifest, apiBaseUrl: apiBase }),
   };
