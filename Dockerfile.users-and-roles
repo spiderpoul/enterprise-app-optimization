@@ -7,7 +7,7 @@ COPY src/server ./src/server
 COPY src/microfrontends/common ./src/microfrontends/common
 COPY src/microfrontends/users-and-roles/.env ./src/microfrontends/users-and-roles/.env
 COPY src/microfrontends/users-and-roles/manifest.json ./src/microfrontends/users-and-roles/manifest.json
-COPY src/microfrontends/users-and-roles/client/dist ./src/microfrontends/users-and-roles/client/dist
+COPY src/microfrontends/users-and-roles/client/dist ./client/dist
 COPY src/microfrontends/users-and-roles/server/dist ./src/microfrontends/users-and-roles/server/dist
 COPY src/microfrontends/users-and-roles/server/dist/data ./src/microfrontends/users-and-roles/server/data
 COPY src/microfrontends/users-and-roles/server/dist/swagger ./src/microfrontends/users-and-roles/server/swagger

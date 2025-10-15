@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY src/server ./src/server
 COPY src/shell-app/.env ./src/shell-app/.env
-COPY src/shell-app/client/dist ./src/shell-app/client/dist
+COPY src/shell-app/client/dist ./client/dist
 COPY src/shell-app/server/dist ./src/shell-app/server/dist
 COPY src/shell-app/server/dist/data ./src/shell-app/server/data
 COPY src/shell-app/server/dist/lib ./src/shell-app/server/lib
