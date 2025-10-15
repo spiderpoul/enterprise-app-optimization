@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
+const { createRequire } = require('module');
 
 const normalizeCopyPatterns = ({ projectRoot, patterns }) => {
   if (!patterns || patterns.length === 0) {
@@ -55,31 +56,74 @@ const getDependencyCopyPatterns = (projectRoot) => {
   const pkgPath = path.resolve(projectRoot, 'package.json');
   const pkg = readPackageJson(pkgPath);
 
-  if (!pkg || !pkg.dependencies) {
+  if (!pkg) {
     return [];
   }
 
-  return Object.keys(pkg.dependencies).flatMap((dependency) => {
-    try {
-      const dependencyPackageJson = require.resolve(`${dependency}/package.json`, {
-        paths: [projectRoot],
-      });
+  const projectRequire = createRequire(pkgPath);
+  const visited = new Set();
+  const patterns = [];
 
-      return [
-        {
-          from: path.dirname(dependencyPackageJson),
-          to: path.resolve(projectRoot, 'dist', 'node_modules', dependency),
-          noErrorOnMissing: true,
-        },
-      ];
+  const queue = [
+    ...Object.keys(pkg.dependencies || {}),
+    ...Object.keys(pkg.optionalDependencies || {}),
+  ];
+
+  const enqueueDependency = (dependency) => {
+    if (!dependency) {
+      return;
+    }
+
+    let dependencyPackageJsonPath;
+
+    try {
+      dependencyPackageJsonPath = projectRequire.resolve(`${dependency}/package.json`);
     } catch (error) {
       if (error.code === 'MODULE_NOT_FOUND') {
-        return [];
+        return;
       }
 
       throw error;
     }
-  });
+
+    if (visited.has(dependencyPackageJsonPath)) {
+      return;
+    }
+
+    visited.add(dependencyPackageJsonPath);
+
+    patterns.push({
+      from: path.dirname(dependencyPackageJsonPath),
+      to: path.resolve(projectRoot, 'dist', 'node_modules', dependency),
+      noErrorOnMissing: true,
+    });
+
+    const dependencyPackageJson = readPackageJson(dependencyPackageJsonPath);
+
+    if (!dependencyPackageJson) {
+      return;
+    }
+
+    const childDependencies = [
+      ...Object.keys(dependencyPackageJson.dependencies || {}),
+      ...Object.keys(dependencyPackageJson.optionalDependencies || {}),
+      ...Object.keys(dependencyPackageJson.peerDependencies || {}),
+    ];
+
+    childDependencies.forEach((child) => queue.push(child));
+  };
+
+  while (queue.length > 0) {
+    const dependency = queue.shift();
+
+    if (!dependency) {
+      continue;
+    }
+
+    enqueueDependency(dependency);
+  }
+
+  return patterns;
 };
 
 const createServerWebpackConfig = ({
