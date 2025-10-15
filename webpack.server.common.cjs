@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
@@ -37,6 +38,50 @@ const normalizeCopyPatterns = ({ projectRoot, patterns }) => {
   });
 };
 
+const readPackageJson = (pkgPath) => {
+  try {
+    const contents = fs.readFileSync(pkgPath, 'utf8');
+    return JSON.parse(contents);
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return null;
+    }
+
+    throw error;
+  }
+};
+
+const getDependencyCopyPatterns = (projectRoot) => {
+  const pkgPath = path.resolve(projectRoot, 'package.json');
+  const pkg = readPackageJson(pkgPath);
+
+  if (!pkg || !pkg.dependencies) {
+    return [];
+  }
+
+  return Object.keys(pkg.dependencies).flatMap((dependency) => {
+    try {
+      const dependencyPackageJson = require.resolve(`${dependency}/package.json`, {
+        paths: [projectRoot],
+      });
+
+      return [
+        {
+          from: path.dirname(dependencyPackageJson),
+          to: path.resolve(projectRoot, 'dist', 'node_modules', dependency),
+          noErrorOnMissing: true,
+        },
+      ];
+    } catch (error) {
+      if (error.code === 'MODULE_NOT_FOUND') {
+        return [];
+      }
+
+      throw error;
+    }
+  });
+};
+
 const createServerWebpackConfig = ({
   projectRoot,
   entry = './server.js',
@@ -71,12 +116,18 @@ const createServerWebpackConfig = ({
     },
   ];
 
+  const dependencyCopyPatterns = getDependencyCopyPatterns(resolvedProjectRoot);
+
   const normalizedCopyPatterns = normalizeCopyPatterns({
     projectRoot: resolvedProjectRoot,
     patterns: copyPatterns,
   });
 
-  const pluginCopyPatterns = [...baseCopyPatterns, ...normalizedCopyPatterns];
+  const pluginCopyPatterns = [
+    ...baseCopyPatterns,
+    ...dependencyCopyPatterns,
+    ...normalizedCopyPatterns,
+  ];
 
   if (pluginCopyPatterns.length > 0) {
     plugins.push(
