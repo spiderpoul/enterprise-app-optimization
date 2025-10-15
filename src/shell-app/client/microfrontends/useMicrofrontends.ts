@@ -28,6 +28,7 @@ const ensureLeadingSlash = (path: string): string => {
 const resolveMicrofrontendRouteConfig = (
   module: MicrofrontendModule,
   entryUrl: string,
+  fallbackPath: string | null,
 ): MicrofrontendRouteObject => {
   const routeConfig = module.routeConfig ?? module.default;
 
@@ -35,11 +36,18 @@ const resolveMicrofrontendRouteConfig = (
     throw new Error(`Microfrontend at ${entryUrl} does not provide a route configuration.`);
   }
 
-  if (typeof routeConfig.path !== 'string' || routeConfig.path.trim() === '') {
+  const pathFromConfig =
+    typeof routeConfig.path === 'string' && routeConfig.path.trim() !== ''
+      ? routeConfig.path
+      : null;
+
+  const rawPath = pathFromConfig ?? (fallbackPath && fallbackPath.trim() !== '' ? fallbackPath : null);
+
+  if (!rawPath) {
     throw new Error(`Microfrontend at ${entryUrl} must define a string path on its route config.`);
   }
 
-  const normalizedPath = ensureLeadingSlash(routeConfig.path);
+  const normalizedPath = ensureLeadingSlash(rawPath);
 
   return {
     ...routeConfig,
@@ -135,7 +143,11 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         const loadedMicrofrontends = await Promise.all(
           payload.map(async (manifest) => {
             const module = await loadMicrofrontendModule(manifest.entryUrl);
-            const routeConfig = resolveMicrofrontendRouteConfig(module, manifest.entryUrl);
+            const routeConfig = resolveMicrofrontendRouteConfig(
+              module,
+              manifest.entryUrl,
+              manifest.routePath,
+            );
 
             return {
               ...manifest,
