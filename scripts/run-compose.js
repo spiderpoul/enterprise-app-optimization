@@ -138,7 +138,7 @@ const main = () => {
   });
 
   console.log(`Building docker images with tag "${sanitizedVersion}" (project ${projectName})...`);
-  runCommand('docker', ['compose', '-p', projectName, 'build'], {
+  runCommand('docker', ['compose', '-p', projectName, 'build', '--no-cache'], {
     cwd: rootDir,
     env: sharedEnv,
   });
