@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Space, Text } from '@kaspersky/hexa-ui';
 import MetricBadge from '../components/MetricBadge';
@@ -66,4 +66,4 @@ const HeavyBlock: React.FC<HeavyBlockProps> = ({ inputValue }) => {
   );
 };
 
-export default HeavyBlock;
+export default memo(HeavyBlock);
