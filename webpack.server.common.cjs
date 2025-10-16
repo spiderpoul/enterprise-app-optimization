@@ -36,6 +36,20 @@ const normalizeCopyPatterns = ({ projectRoot, patterns }) => {
   });
 };
 
+const resolveBuildMode = () => {
+  const envMode = (process.env.BUILD_MODE || process.env.NODE_ENV || '').toLowerCase();
+
+  if (envMode === 'development') {
+    return 'development';
+  }
+
+  if (envMode === 'production') {
+    return 'production';
+  }
+
+  return 'production';
+};
+
 const createServerWebpackConfig = ({
   projectRoot,
   entry = './server.js',
@@ -69,8 +83,10 @@ const createServerWebpackConfig = ({
     );
   }
 
+  const mode = resolveBuildMode();
+
   return {
-    mode: 'production',
+    mode,
     target: 'node',
     entry: resolvedEntry,
     output: {
