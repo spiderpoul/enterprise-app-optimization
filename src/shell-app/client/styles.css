@@ -718,6 +718,17 @@ body {
   gap: 16px;
 }
 
+.anticon-spin {
+  display: inline-block;
+  animation: hexa-loading-circle 0.9s linear infinite;
+}
+
+@keyframes hexa-loading-circle {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .uif-stack--space-l {
   gap: 24px;
 }
