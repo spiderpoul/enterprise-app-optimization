@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import type { DeviceInventoryItem } from './deviceInventory';
 
@@ -41,15 +41,6 @@ const Cell = styled.td`
 
 const SelectionCell = styled(Cell)`
   width: 72px;
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 160px;
-  color: #475569;
-  font-size: 14px;
 `;
 
 interface SecurityDevicesTableProps {
@@ -97,31 +88,10 @@ const SecurityDevicesTable: React.FC<SecurityDevicesTableProps> = ({
   selectedIds,
   onToggleSelection,
 }) => {
-  const [rows, setRows] = useState<JSX.Element[]>([]);
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    let cancelled = false;
-
-    startTransition(() => {
-      const computedRows = buildDeviceRows(devices, selectedIds, onToggleSelection);
-      if (!cancelled) {
-        setRows(computedRows);
-      }
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [devices, onToggleSelection, selectedIds, startTransition]);
-
-  if (isPending || rows.length === 0) {
-    return (
-      <TableWrapper>
-        <LoadingContainer>Preparing device table…</LoadingContainer>
-      </TableWrapper>
-    );
-  }
+  const rows = useMemo(
+    () => buildDeviceRows(devices, selectedIds, onToggleSelection),
+    [devices, onToggleSelection, selectedIds],
+  );
 
   return (
     <TableWrapper>
