@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import type { ColumnsType } from 'antd/es/table';
-import { Space, Table, Text } from '@kaspersky/hexa-ui';
+import { Space, Text } from '@kaspersky/hexa-ui';
 import MetricBadge from '../components/MetricBadge';
 import { useWizardState } from '../WizardStateContext';
 import { deviceInventory, type DeviceInventoryItem } from './deviceInventory';
@@ -28,6 +27,47 @@ const SelectControl = styled.select`
   font-weight: 500;
   color: #0f172a;
   background: rgba(255, 255, 255, 0.9);
+`;
+
+const TableWrapper = styled.div`
+  overflow: auto;
+  max-height: 320px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 12px;
+`;
+
+const SimpleTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 480px;
+`;
+
+const HeaderCell = styled.th`
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: rgba(15, 23, 42, 0.6);
+  background: rgba(248, 250, 252, 0.9);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+`;
+
+const Row = styled.tr`
+  &:nth-child(even) {
+    background: rgba(248, 250, 252, 0.6);
+  }
+`;
+
+const Cell = styled.td`
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #0f172a;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+`;
+
+const SelectionCell = styled(Cell)`
+  width: 72px;
 `;
 
 const SecurityQuickSetupStep: React.FC = () => {
@@ -59,30 +99,6 @@ const SecurityQuickSetupStep: React.FC = () => {
 
   const selectedIds = wizardState.selectedDeviceIds;
 
-  const columns: ColumnsType<DeviceInventoryItem> = [
-    {
-      key: 'select',
-      width: 72,
-      render: (_, record) => (
-        <input
-          type="checkbox"
-          checked={selectedIds.includes(record.id)}
-          onChange={(event) => toggleDeviceSelection(record.id, event.target.checked)}
-        />
-      ),
-    },
-    {
-      key: 'name',
-      dataIndex: 'name',
-      title: 'Device name',
-    },
-    {
-      key: 'os',
-      dataIndex: 'os',
-      title: 'Operating system',
-    },
-  ];
-
   return (
     <Layout direction="vertical">
       <MetricsRow direction="horizontal">
@@ -112,14 +128,32 @@ const SecurityQuickSetupStep: React.FC = () => {
           <Text style={{ color: '#1d4ed8', fontWeight: 600 }}>{selectedIds.length}</Text>
         </Space>
       </Controls>
-
-      <Table<DeviceInventoryItem>
-        dataSource={deviceInventory}
-        columns={columns}
-        pagination={{ pageSize: 6 }}
-        rowKey="id"
-        scroll={{ y: 320 }}
-      />
+      <TableWrapper>
+        <SimpleTable>
+          <thead>
+            <tr>
+              <HeaderCell style={{ width: 72 }} />
+              <HeaderCell>Device name</HeaderCell>
+              <HeaderCell>Operating system</HeaderCell>
+            </tr>
+          </thead>
+          <tbody>
+            {deviceInventory.map((device) => (
+              <Row key={device.id}>
+                <SelectionCell>
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(device.id)}
+                    onChange={(event) => toggleDeviceSelection(device.id, event.target.checked)}
+                  />
+                </SelectionCell>
+                <Cell>{device.name}</Cell>
+                <Cell>{device.os}</Cell>
+              </Row>
+            ))}
+          </tbody>
+        </SimpleTable>
+      </TableWrapper>
     </Layout>
   );
 };
