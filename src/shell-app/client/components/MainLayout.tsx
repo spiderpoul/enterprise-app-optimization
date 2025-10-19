@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
@@ -81,7 +81,7 @@ const surfaceStyles = css`
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.94) 0%, rgba(244, 247, 255, 0.88) 100%);
 `;
 
-const LayoutGrid = styled.div<{ menuWidth: number; collapsed: boolean }>`
+const LayoutGrid = styled.div<{ menuWidth: number }>`
   height: 100vh;
   min-height: 100vh;
   display: grid;
@@ -89,18 +89,9 @@ const LayoutGrid = styled.div<{ menuWidth: number; collapsed: boolean }>`
   grid-template-areas: 'sidebar main';
   background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
   overflow: hidden;
-
-  @media (max-width: 720px) {
-    grid-template-columns: ${({ collapsed }) => (collapsed ? '0 1fr' : 'minmax(260px, 78vw) 1fr')};
-    grid-template-areas: 'main';
-    height: auto;
-    min-height: 100vh;
-    position: relative;
-    overflow: visible;
-  }
 `;
 
-const SidebarContainer = styled.div<{ collapsed: boolean }>`
+const SidebarContainer = styled.div`
   grid-area: sidebar;
   display: flex;
   flex-direction: column;
@@ -112,20 +103,6 @@ const SidebarContainer = styled.div<{ collapsed: boolean }>`
   min-height: 0;
   overflow: hidden;
   background: #ffffff;
-  transition: transform 0.3s ease;
-
-  @media (max-width: 720px) {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: min(320px, 78vw);
-    max-width: 320px;
-    transform: ${({ collapsed }) => (collapsed ? 'translateX(-100%)' : 'translateX(0)')};
-    box-shadow: 24px 0 48px -24px rgba(15, 23, 42, 0.35);
-    border-right: 1px solid rgba(15, 23, 42, 0.08);
-    z-index: 3;
-  }
 `;
 
 const MainColumn = styled.div`
@@ -134,13 +111,6 @@ const MainColumn = styled.div`
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-  position: relative;
-  z-index: 1;
-
-  @media (max-width: 720px) {
-    min-height: 100vh;
-    overflow: visible;
-  }
 `;
 
 const ScrollContainer = styled.div`
@@ -149,10 +119,6 @@ const ScrollContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-
-  @media (max-width: 720px) {
-    overflow-y: visible;
-  }
 `;
 
 const ShellMenu = styled(Menu)`
@@ -171,10 +137,6 @@ const Branding = styled(Space)<{ minimized: boolean }>`
   gap: 12px;
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
   transition: padding 0.2s ease;
-
-  @media (max-width: 720px) {
-    padding: ${({ minimized }) => (minimized ? '16px 16px' : '20px 20px 16px')};
-  }
 `;
 
 const BrandingLogo = styled.div`
@@ -202,10 +164,10 @@ const HeaderBar = styled(Space)`
   ${surfaceStyles};
 
   @media (max-width: 720px) {
-    padding: 24px 20px;
+    padding: 24px 20px 20px;
     gap: 20px;
-    align-items: stretch;
     flex-direction: column;
+    align-items: stretch;
   }
 `;
 
@@ -245,13 +207,12 @@ const MobileHeading = styled(H2)`
   }
 `;
 
-const HeaderTitleRow = styled(Space)`
-  width: 100%;
-  align-items: center;
-  gap: 12px;
+const HeaderDescription = styled(Text)`
+  color: #475467;
 
-  @media (min-width: 721px) {
-    display: none !important;
+  @media (max-width: 720px) {
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
 `;
 
@@ -261,6 +222,11 @@ const UserChip = styled(Space)`
   padding: 8px 16px;
   gap: 12px;
   align-items: center;
+
+  @media (max-width: 720px) {
+    width: 100%;
+    justify-content: space-between;
+  }
 `;
 
 const ContentArea = styled.div`
@@ -298,10 +264,10 @@ const FooterBar = styled(Space)`
 
 const FooterActions = styled(Space)`
   gap: 12px;
-  flex-wrap: wrap;
 
   @media (max-width: 720px) {
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
 `;
 
@@ -313,46 +279,6 @@ const InitializationContainer = styled(Space)`
   justify-content: center;
 `;
 
-const MobileMenuBackdrop = styled.div<{ visible: boolean }>`
-  display: none;
-
-  @media (max-width: 720px) {
-    display: ${({ visible }) => (visible ? 'block' : 'none')};
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(2px);
-    z-index: 2;
-    cursor: pointer;
-  }
-`;
-
-const MobileMenuTrigger = styled.button`
-  display: none;
-
-  @media (max-width: 720px) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    border-radius: 12px;
-    padding: 8px;
-    background: rgba(15, 23, 42, 0.08);
-    color: #0f172a;
-    cursor: pointer;
-    box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.45);
-  }
-
-  &:focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
-  }
-
-  & > * {
-    pointer-events: none;
-  }
-`;
-
 const MainLayout: React.FC = () => {
   const { microfrontends, isLoading, error } = useMicrofrontends();
   const userDisplayName = 'Enterprise operator';
@@ -361,6 +287,38 @@ const MainLayout: React.FC = () => {
   const [menuMinimized, setMenuMinimized] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia('(max-width: 720px)');
+
+    const applyMatch = (matches: boolean) => {
+      setMenuMinimized(matches);
+    };
+
+    applyMatch(mediaQuery.matches);
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      applyMatch(event.matches);
+    };
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange);
+    } else {
+      mediaQuery.addListener(handleChange);
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        mediaQuery.removeListener(handleChange);
+      }
+    };
+  }, []);
 
   const extensionSection = useMemo<ShellMenuSection | null>(() => {
     if (microfrontends.length === 0) {
@@ -518,8 +476,8 @@ const MainLayout: React.FC = () => {
   const activeMenuWidth = menuMinimized ? 72 : 292;
 
   return (
-    <LayoutGrid menuWidth={activeMenuWidth} collapsed={menuMinimized}>
-      <SidebarContainer id="shell-sidebar" collapsed={menuMinimized}>
+    <LayoutGrid menuWidth={activeMenuWidth}>
+      <SidebarContainer>
         <ShellMenu
           applyAppTheme
           theme="light"
@@ -533,8 +491,6 @@ const MainLayout: React.FC = () => {
               className="item left"
               role="button"
               name="hamburger"
-              aria-expanded={!menuMinimized}
-              aria-controls="shell-sidebar"
               onClick={() => setMenuMinimized((value) => !value)}
             />
           </ServicesNav>
@@ -552,33 +508,16 @@ const MainLayout: React.FC = () => {
         </ShellMenu>
       </SidebarContainer>
 
-      <MobileMenuBackdrop
-        role="presentation"
-        visible={!menuMinimized}
-        onClick={() => setMenuMinimized(true)}
-      />
-
       <MainColumn>
         <ScrollContainer>
           <HeaderBar direction="horizontal" justify="space-between">
             <HeaderTitles direction="vertical" align="flex-start">
-              <HeaderTitleRow direction="horizontal">
-                <MobileMenuTrigger
-                  type="button"
-                  aria-label="Toggle navigation menu"
-                  aria-controls="shell-sidebar"
-                  aria-expanded={!menuMinimized}
-                  onClick={() => setMenuMinimized((value) => !value)}
-                >
-                  <Hamburger name="mobile-hamburger" />
-                </MobileMenuTrigger>
-                <MobileHeading>Enterprise optimisation centre</MobileHeading>
-              </HeaderTitleRow>
               <DesktopHeading>Enterprise optimisation centre</DesktopHeading>
-              <Text style={{ color: '#475467' }}>
+              <MobileHeading>Enterprise optimisation centre</MobileHeading>
+              <HeaderDescription>
                 Monitor posture, orchestrate response playbooks, and track automation coverage from
                 a unified shell.
-              </Text>
+              </HeaderDescription>
             </HeaderTitles>
             <HeaderActions direction="horizontal" align="flex-start">
               <UserChip direction="horizontal">
