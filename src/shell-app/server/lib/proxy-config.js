@@ -44,13 +44,30 @@ const normalizeProxyRewrite = (value) => {
 
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|\[\]\\]/g, '\\$&');
 
+const stripQuery = (value) => {
+  if (typeof value !== 'string') {
+    return { pathname: '', search: '' };
+  }
+
+  const queryStart = value.indexOf('?');
+
+  if (queryStart === -1) {
+    return { pathname: value, search: '' };
+  }
+
+  return {
+    pathname: value.slice(0, queryStart),
+    search: value.slice(queryStart),
+  };
+};
+
 const createPathRewriter = (prefix, rewriteBase) => {
   const escapedPrefix = escapeRegex(prefix);
   const matcher = new RegExp(`^${escapedPrefix}`);
   const normalizedBase = rewriteBase === '/' ? '/' : normalizeProxyRewrite(rewriteBase);
 
-  return (path) => {
-    const stripped = path.replace(matcher, '');
+  const rewritePathname = (pathname) => {
+    const stripped = pathname.replace(matcher, '');
 
     if (!stripped || stripped === '/') {
       return normalizedBase;
@@ -63,6 +80,13 @@ const createPathRewriter = (prefix, rewriteBase) => {
     }
 
     return suffix === '/' ? normalizedBase : `${normalizedBase}${suffix}`;
+  };
+
+  return (path) => {
+    const { pathname, search } = stripQuery(path);
+    const rewrittenPath = rewritePathname(pathname);
+
+    return `${rewrittenPath}${search}`;
   };
 };
 

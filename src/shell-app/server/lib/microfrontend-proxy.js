@@ -77,6 +77,7 @@ const createMicrofrontendProxyManager = ({ app }) => {
           logLevel: 'warn',
           pathRewrite: (_path, req) => rewritePath(req.originalUrl || req.url || ''),
           target: targetUrl.origin,
+          ws: true,
         });
 
         router.use(entry.assetPath, middleware);

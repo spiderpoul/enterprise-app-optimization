@@ -201,7 +201,7 @@ app.use((_req, res, next) => {
   next();
 });
 
-if (environment.isProduction) {
+if (environment.serveStaticClient) {
   app.use(express.static(environment.distDir));
   app.get('*', (_req, res) => {
     res.sendFile(path.join(environment.distDir, 'index.html'));
