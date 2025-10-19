@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
 import styled from 'styled-components';
 import type { DeviceInventoryItem } from './deviceInventory';
 
@@ -58,46 +58,64 @@ interface SecurityDevicesTableProps {
   onToggleSelection: (deviceId: string, checked: boolean) => void;
 }
 
-const RENDER_DELAY_MS = 320;
+const COMPLEXITY_ITERATIONS = 48000;
+
+const buildDeviceRows = (
+  devices: DeviceInventoryItem[],
+  selectedIds: string[],
+  onToggleSelection: (deviceId: string, checked: boolean) => void,
+) => {
+  return devices.map((device) => {
+    const fingerprint = `${device.id}:${device.name}:${device.os}`;
+    let complexityScore = 0;
+
+    for (let iteration = 0; iteration < COMPLEXITY_ITERATIONS; iteration += 1) {
+      const charCode = fingerprint.charCodeAt(iteration % fingerprint.length);
+      complexityScore = (complexityScore * 33 + charCode * (iteration + 1)) % 1_000_003;
+    }
+
+    const isSelected = selectedIds.includes(device.id);
+
+    return (
+      <Row key={device.id} data-complexity={complexityScore}>
+        <SelectionCell>
+          <input
+            type="checkbox"
+            checked={isSelected}
+            onChange={(event) => onToggleSelection(device.id, event.target.checked)}
+          />
+        </SelectionCell>
+        <Cell>{device.name}</Cell>
+        <Cell>{device.os}</Cell>
+      </Row>
+    );
+  });
+};
 
 const SecurityDevicesTable: React.FC<SecurityDevicesTableProps> = ({
   devices,
   selectedIds,
   onToggleSelection,
 }) => {
-  const [isReady, setIsReady] = useState(false);
+  const [rows, setRows] = useState<JSX.Element[]>([]);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    setIsReady(false);
-    const timer = window.setTimeout(() => setIsReady(true), RENDER_DELAY_MS);
+    let cancelled = false;
+
+    startTransition(() => {
+      const computedRows = buildDeviceRows(devices, selectedIds, onToggleSelection);
+      if (!cancelled) {
+        setRows(computedRows);
+      }
+    });
 
     return () => {
-      window.clearTimeout(timer);
+      cancelled = true;
     };
-  }, [devices]);
+  }, [devices, onToggleSelection, selectedIds, startTransition]);
 
-  const rows = useMemo(
-    () =>
-      devices.map((device) => {
-        const isSelected = selectedIds.includes(device.id);
-        return (
-          <Row key={device.id}>
-            <SelectionCell>
-              <input
-                type="checkbox"
-                checked={isSelected}
-                onChange={(event) => onToggleSelection(device.id, event.target.checked)}
-              />
-            </SelectionCell>
-            <Cell>{device.name}</Cell>
-            <Cell>{device.os}</Cell>
-          </Row>
-        );
-      }),
-    [devices, onToggleSelection, selectedIds],
-  );
-
-  if (!isReady) {
+  if (isPending || rows.length === 0) {
     return (
       <TableWrapper>
         <LoadingContainer>Preparing device table…</LoadingContainer>

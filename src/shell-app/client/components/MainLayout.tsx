@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { Avatar, Dropdown, type MenuProps } from 'antd';
 import {
   Alert,
   Button,
@@ -13,17 +14,10 @@ import {
   ServicesNav,
   Space,
   Text,
-  UserNav,
   type NavItemData,
   Hamburger,
 } from '@kaspersky/hexa-ui';
-import {
-  ActivityMonitor,
-  AppUpdate,
-  Grid,
-  Settings2,
-  UserAccount,
-} from '@kaspersky/hexa-ui-icons/16';
+import { ActivityMonitor, AppUpdate, Grid, Settings2 } from '@kaspersky/hexa-ui-icons/16';
 import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import NotFound from '../pages/NotFound';
@@ -43,6 +37,8 @@ interface ShellMenuSection {
   icon: React.ComponentType;
   items: ShellMenuItem[];
 }
+
+type MenuClickHandler = NonNullable<MenuProps['onClick']>;
 
 const baseMenuSections: ShellMenuSection[] = [
   {
@@ -183,6 +179,129 @@ const UserChip = styled(Space)`
   align-items: center;
 `;
 
+const SidebarUserNavContainer = styled.div`
+  padding: 16px 16px 24px;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const UserDropdownTrigger = styled.button<{ minimized: boolean }>`
+  appearance: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: ${({ minimized }) => (minimized ? 'center' : 'flex-start')};
+  gap: ${({ minimized }) => (minimized ? '0' : '12px')};
+  border-radius: 12px;
+  padding: ${({ minimized }) => (minimized ? '10px' : '12px 16px')};
+  color: #0f172a;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: rgba(15, 23, 42, 0.06);
+    outline: none;
+  }
+`;
+
+const UserTriggerDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
+const UserTriggerName = styled.span`
+  font-weight: 600;
+  color: #0f172a;
+`;
+
+const UserTriggerRole = styled.span`
+  font-size: 12px;
+  color: #475467;
+`;
+
+const SettingsTriggerLabel = styled.span`
+  font-weight: 500;
+  color: #0f172a;
+`;
+
+const SettingsIcon = styled(Settings2)`
+  width: 20px;
+  height: 20px;
+  color: #1d4ed8;
+`;
+
+interface SidebarUserNavProps {
+  minimized: boolean;
+  userName: string;
+  userRole: string;
+  profileMenuItems: MenuProps['items'];
+  settingsMenuItems: MenuProps['items'];
+  onProfileMenuClick: MenuClickHandler;
+  onSettingsMenuClick: MenuClickHandler;
+}
+
+const SidebarUserNav: React.FC<SidebarUserNavProps> = memo(
+  ({
+    minimized,
+    userName,
+    userRole,
+    profileMenuItems,
+    settingsMenuItems,
+    onProfileMenuClick,
+    onSettingsMenuClick,
+  }) => {
+    const initials = userName
+      .split(' ')
+      .filter(Boolean)
+      .map((part) => part[0]?.toUpperCase() ?? '')
+      .join('')
+      .slice(0, 2);
+
+    return (
+      <SidebarUserNavContainer>
+        <Dropdown
+          trigger={['click']}
+          placement="top"
+          menu={{ items: profileMenuItems, onClick: onProfileMenuClick }}
+        >
+          <UserDropdownTrigger type="button" minimized={minimized}>
+            <Avatar size={minimized ? 32 : 40} style={{ backgroundColor: '#1d4ed8', fontWeight: 600 }}>
+              {initials || 'OP'}
+            </Avatar>
+            {!minimized ? (
+              <UserTriggerDetails>
+                <UserTriggerName>{userName}</UserTriggerName>
+                <UserTriggerRole>{userRole}</UserTriggerRole>
+              </UserTriggerDetails>
+            ) : null}
+          </UserDropdownTrigger>
+        </Dropdown>
+
+        <Dropdown
+          trigger={['click']}
+          placement="top"
+          menu={{ items: settingsMenuItems, onClick: onSettingsMenuClick }}
+        >
+          <UserDropdownTrigger type="button" minimized={minimized}>
+            <SettingsIcon />
+            {!minimized ? <SettingsTriggerLabel>Settings</SettingsTriggerLabel> : null}
+          </UserDropdownTrigger>
+        </Dropdown>
+      </SidebarUserNavContainer>
+    );
+  },
+);
+
+SidebarUserNav.displayName = 'SidebarUserNav';
+
 const ContentArea = styled.div`
   padding: 0 40px 40px;
   ${surfaceStyles};
@@ -216,8 +335,6 @@ const InitializationContainer = styled(Space)`
   align-items: center;
   justify-content: center;
 `;
-
-const MemoizedUserNav = memo(UserNav);
 
 const MainLayout: React.FC = () => {
   const { microfrontends, isLoading, error } = useMicrofrontends();
@@ -305,44 +422,36 @@ const MainLayout: React.FC = () => {
     [handleNavigate, matchRoute, menuMinimized, sections],
   );
 
-  const userNavItems = useMemo<NavItemData[]>(() => {
-    return [
-      {
-        mode: 'user',
-        state: 'user-profile',
-        key: userDisplayName,
-        icon: UserAccount,
-        isRoot: true,
-        userProps: {
-          name: userDisplayName,
-          role: userRole,
-          status: 'available',
-        },
-        items: [
-          {
-            key: 'Profile preferences',
-            onClick: () => handleNavigate('/dashboard'),
-          },
-          {
-            key: 'Notification settings',
-            onClick: () => handleNavigate('/dashboard'),
-          },
-        ],
-      },
-      {
-        state: 'settings',
-        key: 'Settings',
-        icon: Settings2,
-        isRoot: true,
-        items: [
-          {
-            key: 'Automation catalog',
-            onClick: () => handleNavigate('/dashboard'),
-          },
-        ],
-      },
-    ];
-  }, [handleNavigate, userDisplayName, userRole]);
+  const profileMenuItems = useMemo<MenuProps['items']>(
+    () => [
+      { key: 'profile-preferences', label: 'Profile preferences' },
+      { key: 'notification-settings', label: 'Notification settings' },
+    ],
+    [],
+  );
+
+  const settingsMenuItems = useMemo<MenuProps['items']>(
+    () => [{ key: 'automation-catalog', label: 'Automation catalog' }],
+    [],
+  );
+
+  const handleProfileMenuClick = useCallback<MenuClickHandler>(
+    ({ key }) => {
+      if (key === 'profile-preferences' || key === 'notification-settings') {
+        handleNavigate('/dashboard');
+      }
+    },
+    [handleNavigate],
+  );
+
+  const handleSettingsMenuClick = useCallback<MenuClickHandler>(
+    ({ key }) => {
+      if (key === 'automation-catalog') {
+        handleNavigate('/dashboard');
+      }
+    },
+    [handleNavigate],
+  );
 
   const microfrontendRoutes = useMemo(
     () => microfrontends.map(({ routeConfig }) => routeConfig),
@@ -412,7 +521,15 @@ const MainLayout: React.FC = () => {
             ) : null}
           </Branding>
           <Nav navItems={navItems} minimized={menuMinimized} favsEnabled={false} />
-          <MemoizedUserNav navItems={userNavItems} minimized={menuMinimized} childPop />
+          <SidebarUserNav
+            minimized={menuMinimized}
+            userName={userDisplayName}
+            userRole={userRole}
+            profileMenuItems={profileMenuItems}
+            settingsMenuItems={settingsMenuItems}
+            onProfileMenuClick={handleProfileMenuClick}
+            onSettingsMenuClick={handleSettingsMenuClick}
+          />
         </ShellMenu>
       </SidebarContainer>
 
