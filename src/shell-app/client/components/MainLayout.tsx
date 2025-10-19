@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
@@ -28,6 +28,7 @@ import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
+import { useResponsiveMenuMinimization } from '../hooks/useResponsiveMenuMinimization';
 import WizardQuickSetupPage from '../pages/workshop/react-perf/WizardQuickSetupPage';
 import DeviceSecurityPage from '../pages/DeviceSecurityPage';
 
@@ -284,41 +285,10 @@ const MainLayout: React.FC = () => {
   const userDisplayName = 'Enterprise operator';
   const userRole = 'Workspace automation lead';
   const { isInitializing } = useShellInitialization();
-  const [menuMinimized, setMenuMinimized] = useState(false);
+  const { isMinimized: menuMinimized, setIsMinimized: setMenuMinimized } =
+    useResponsiveMenuMinimization();
   const navigate = useNavigate();
   const location = useLocation();
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-
-    const mediaQuery = window.matchMedia('(max-width: 720px)');
-
-    const applyMatch = (matches: boolean) => {
-      setMenuMinimized(matches);
-    };
-
-    applyMatch(mediaQuery.matches);
-
-    const handleChange = (event: MediaQueryListEvent) => {
-      applyMatch(event.matches);
-    };
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange);
-    } else {
-      mediaQuery.addListener(handleChange);
-    }
-
-    return () => {
-      if (mediaQuery.removeEventListener) {
-        mediaQuery.removeEventListener('change', handleChange);
-      } else {
-        mediaQuery.removeListener(handleChange);
-      }
-    };
-  }, []);
 
   const extensionSection = useMemo<ShellMenuSection | null>(() => {
     if (microfrontends.length === 0) {

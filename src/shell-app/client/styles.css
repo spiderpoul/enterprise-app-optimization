@@ -305,7 +305,7 @@ body {
 }
 
 .ant-layout-sider-children {
-  max-height: 100vh;
+  height: 100vh;
 }
 
 
