@@ -22,7 +22,8 @@ body {
   min-height: 100vh;
   height: 100%;
   background-color: inherit;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 #root {
@@ -303,10 +304,29 @@ body {
   line-height: 1.6;
 }
 
+
 .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 28px;
+  padding: 4px 0 12px;
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.5) transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.5);
+  border-radius: 999px;
 }
 
 .sidebar-menu__section {
@@ -320,7 +340,7 @@ body {
   font-size: 0.75rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(243, 245, 250, 0.6);
+  color: rgba(226, 232, 240, 0.68);
 }
 
 .sidebar-menu__list {
@@ -339,9 +359,9 @@ body {
 .sidebar-menu__button {
   width: 100%;
   padding: 12px 14px;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid transparent;
-  background: transparent;
+  background: rgba(15, 23, 42, 0.12);
   color: inherit;
   text-align: left;
   display: flex;
@@ -350,18 +370,21 @@ body {
   cursor: pointer;
   transition:
     background 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 10px 24px -18px rgba(15, 23, 42, 0.6);
 }
 
 .sidebar-menu__button:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(148, 163, 184, 0.45);
 }
 
 .sidebar-menu__button--active {
-  background: rgba(76, 145, 255, 0.18);
-  border-color: rgba(115, 175, 255, 0.6);
+  background: rgba(76, 145, 255, 0.2);
+  border-color: rgba(115, 175, 255, 0.85);
   color: #ffffff;
+  box-shadow: 0 18px 32px -18px rgba(37, 99, 235, 0.45);
 }
 
 .sidebar-menu__button-main {
@@ -377,7 +400,7 @@ body {
 
 .sidebar-menu__description {
   font-size: 0.85rem;
-  color: rgba(243, 245, 250, 0.7);
+  color: rgba(226, 232, 240, 0.76);
 }
 
 .sidebar-menu__badge {
@@ -464,17 +487,21 @@ body {
   .app-shell__sidebar {
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 20px;
+    padding: 24px 24px 16px;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .sidebar-menu {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     width: 100%;
+    gap: 16px;
   }
 
   .sidebar-menu__section {
@@ -483,6 +510,33 @@ body {
 }
 
 @media (max-width: 720px) {
+  .app-shell {
+    min-height: 100vh;
+  }
+
+  .app-shell__sidebar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+  }
+
+  .sidebar-menu {
+    grid-template-columns: 1fr;
+    max-height: none;
+    padding-right: 4px;
+  }
+
+  .sidebar-menu__section {
+    padding: 0;
+  }
+
+  .sidebar-menu__button {
+    padding: 10px 12px;
+  }
+
   .app-shell__header,
   .app-shell__content,
   .app-shell__footer {
@@ -491,7 +545,8 @@ body {
   }
 
   .dashboard__section {
-    padding: 24px;
+    padding: 20px;
+    gap: 24px;
   }
 
   .dashboard__section-header {
@@ -505,7 +560,32 @@ body {
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+
+  .app-shell__header {
+    padding-top: 24px;
+    gap: 20px;
+  }
+
+  .app-shell__content {
+    padding-bottom: 32px;
+  }
+
+  .dashboard-card {
+    padding: 20px;
+  }
+
+  .dashboard__grid {
+    gap: 16px;
+  }
+
+  .app-shell__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 32px;
+  }
 }
+
 .microfrontend-loading,
 .microfrontend-error {
   border: 1px solid rgba(15, 23, 42, 0.12);
