@@ -69,16 +69,22 @@ const createEnvironment = ({ env, serverDir }) => {
   const responseDelayMs = parseDelayMs(env.SERVER_RESPONSE_DELAY_MS, DEFAULT_RESPONSE_DELAY_MS);
   const clientHost = String(env.CLIENT_HOST ?? '0.0.0.0');
   const clientPort = parsePort(env.CLIENT_PORT, 4301);
-  const clientDevServerUrl = resolveClientDevServerUrl({
-    explicitUrl: env.CLIENT_DEV_SERVER_URL,
-    host: clientHost,
-    port: clientPort,
-  });
-  const clientDevServerTarget = parseProxyTarget(clientDevServerUrl);
   const distDir = resolveClientDistDirectory({
     explicitDistPath: env.CLIENT_DIST_DIR,
     serverDir,
   });
+  const explicitDevServerUrl = String(env.CLIENT_DEV_SERVER_URL ?? '').trim();
+  const hasExplicitDevServerUrl = Boolean(explicitDevServerUrl);
+  const hasExplicitDistDir = Boolean(String(env.CLIENT_DIST_DIR ?? '').trim());
+  const serveStaticClient = env.NODE_ENV === 'production' || (!hasExplicitDevServerUrl && hasExplicitDistDir);
+  const clientDevServerUrl = serveStaticClient
+    ? null
+    : resolveClientDevServerUrl({
+        explicitUrl: explicitDevServerUrl,
+        host: clientHost,
+        port: clientPort,
+      });
+  const clientDevServerTarget = parseProxyTarget(clientDevServerUrl);
 
   return {
     clientDevServerTarget,
@@ -88,6 +94,7 @@ const createEnvironment = ({ env, serverDir }) => {
     isProduction: env.NODE_ENV === 'production',
     port,
     responseDelayMs,
+    serveStaticClient,
   };
 };
 
