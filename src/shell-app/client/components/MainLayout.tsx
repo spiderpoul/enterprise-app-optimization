@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo, useState } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
@@ -217,6 +217,8 @@ const InitializationContainer = styled(Space)`
   justify-content: center;
 `;
 
+const MemoizedUserNav = memo(UserNav);
+
 const MainLayout: React.FC = () => {
   const { microfrontends, isLoading, error } = useMicrofrontends();
   const userDisplayName = 'Enterprise operator';
@@ -410,7 +412,7 @@ const MainLayout: React.FC = () => {
             ) : null}
           </Branding>
           <Nav navItems={navItems} minimized={menuMinimized} favsEnabled={false} />
-          <UserNav navItems={userNavItems} minimized={menuMinimized} childPop />
+          <MemoizedUserNav navItems={userNavItems} minimized={menuMinimized} childPop />
         </ShellMenu>
       </SidebarContainer>
 
