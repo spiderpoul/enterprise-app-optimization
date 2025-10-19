@@ -44,9 +44,7 @@ const CLIENT_DEV_SERVER_URL = isProduction
       port: CLIENT_PORT,
     });
 
-const defaultPublicUrl = isProduction
-  ? `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`
-  : `http://${normalizeHost(CLIENT_HOST)}:${CLIENT_PORT}`;
+const defaultPublicUrl = `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`;
 
 const publicUrlFromEnv = process.env.MICROFRONT_PUBLIC_URL?.trim();
 const MICROFRONT_PUBLIC_URL = publicUrlFromEnv || defaultPublicUrl;
