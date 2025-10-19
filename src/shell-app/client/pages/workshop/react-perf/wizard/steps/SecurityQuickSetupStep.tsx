@@ -1,10 +1,10 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useCallback } from 'react';
 import styled from 'styled-components';
-import type { ColumnsType } from 'antd/es/table';
-import { Space, Table, Text } from '@kaspersky/hexa-ui';
+import { Space, Text } from '@kaspersky/hexa-ui';
 import MetricBadge from '../components/MetricBadge';
 import { useWizardState } from '../WizardStateContext';
-import { deviceInventory, type DeviceInventoryItem } from './deviceInventory';
+import { deviceInventory } from './deviceInventory';
+import SecurityDevicesTable from './SecurityDevicesTable';
 
 const Layout = styled(Space)`
   gap: 16px;
@@ -42,46 +42,25 @@ const SecurityQuickSetupStep: React.FC = () => {
     }));
   };
 
-  const toggleDeviceSelection = (deviceId: string, checked: boolean) => {
-    setWizardState((prev) => {
-      const nextSelection = checked
-        ? [...prev.selectedDeviceIds, deviceId]
-        : prev.selectedDeviceIds.filter((id) => id !== deviceId);
+  const toggleDeviceSelection = useCallback(
+    (deviceId: string, checked: boolean) => {
+      setWizardState((prev) => {
+        const nextSelection = checked
+          ? [...prev.selectedDeviceIds, deviceId]
+          : prev.selectedDeviceIds.filter((id) => id !== deviceId);
 
-      console.log('[SecurityQuickSetupStep] selected devices →', nextSelection);
+        console.log('[SecurityQuickSetupStep] selected devices →', nextSelection);
 
-      return {
-        ...prev,
-        selectedDeviceIds: nextSelection,
-      };
-    });
-  };
+        return {
+          ...prev,
+          selectedDeviceIds: nextSelection,
+        };
+      });
+    },
+    [setWizardState],
+  );
 
   const selectedIds = wizardState.selectedDeviceIds;
-
-  const columns: ColumnsType<DeviceInventoryItem> = [
-    {
-      key: 'select',
-      width: 72,
-      render: (_, record) => (
-        <input
-          type="checkbox"
-          checked={selectedIds.includes(record.id)}
-          onChange={(event) => toggleDeviceSelection(record.id, event.target.checked)}
-        />
-      ),
-    },
-    {
-      key: 'name',
-      dataIndex: 'name',
-      title: 'Device name',
-    },
-    {
-      key: 'os',
-      dataIndex: 'os',
-      title: 'Operating system',
-    },
-  ];
 
   return (
     <Layout direction="vertical">
@@ -92,9 +71,9 @@ const SecurityQuickSetupStep: React.FC = () => {
       <Space direction="vertical" gap={8} align="flex-start">
         <Text style={{ fontWeight: 600, color: '#0f172a' }}>Quick hardening setup</Text>
         <Text style={{ color: '#475569' }}>
-          Choose the application profile to harden and tick the devices that must receive it.
-          Because this component is defined inline in the steps array, any wizardState change
-          remounts it and rebuilds the entire table.
+          Choose the application profile to harden and tick the devices that must receive it. Because
+          this component is defined inline in the steps array, any wizardState change remounts it and
+          rebuilds the entire table.
         </Text>
       </Space>
 
@@ -113,12 +92,10 @@ const SecurityQuickSetupStep: React.FC = () => {
         </Space>
       </Controls>
 
-      <Table<DeviceInventoryItem>
-        dataSource={deviceInventory}
-        columns={columns}
-        pagination={{ pageSize: 6 }}
-        rowKey="id"
-        scroll={{ y: 320 }}
+      <SecurityDevicesTable
+        devices={deviceInventory}
+        selectedIds={selectedIds}
+        onToggleSelection={toggleDeviceSelection}
       />
     </Layout>
   );
