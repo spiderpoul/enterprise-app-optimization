@@ -1,5 +1,3 @@
-import './initialization/blockingInitialization';
-
 const shouldEnableReactScan = process.env.REACT_SCAN === '1';
 
 const enableReactScan = async () => {
