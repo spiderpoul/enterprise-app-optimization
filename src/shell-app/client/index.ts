@@ -20,7 +20,7 @@ const bootstrap = async () => {
     await enableReactScan();
   }
 
-  awai import('./main');
+  await import('./main');
 };
 
 void bootstrap();
