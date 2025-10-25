@@ -23,7 +23,23 @@
     "format": "prettier --write .",
     "analyze": "nx run shell-client:analyze && nx run operations-reports-client:analyze && nx run users-and-roles-client:analyze",
     "memlab:device-security": "memlab run --scenario tests/memlab/device-security.scenario.js",
-    "find-duplicates": "node scripts/find-dup-deps.cjs"
+    "find-duplicates": "node scripts/find-dup-deps.cjs",
+
+    "demo-step-BEFORE": "node scripts/run-compose --no-detach --mode prod --version BEFORE --port 4300",
+    "demo-step-INIT": "node scripts/run-compose --no-detach --mode prod --version INIT --port 4301",
+    "demo-step-INIT-analyze": "nx run operations-reports-client:analyze",
+
+    "run-find-duplicates": "node scripts/find-dup-deps.cjs",
+    "demo-step-BUNDLE": "node scripts/run-compose --no-detach --mode prod --version BUNDLE --port 4302",
+    "demo-step-BUNDLE-analyze": "nx run operations-reports-client:analyze",
+    "demo-step-SPLIT": "node scripts/run-compose --no-detach --mode prod --version SPLIT --port 4303",
+
+    "demo-step-REACT_BEFORE": "node scripts/run-compose --no-detach --mode dev --version REACT_BEFORE --port 4304",
+    "demo-step-REACT_AFTER": "REACT_SCAN=1 node scripts/run-compose --no-detach --mode dev --version REACT_AFTER --port 4305",
+    
+    "demo-step-MEMORY": "node scripts/run-compose --no-detach --mode dev --version MEMORY_FIX --port 4306",
+    "run-memlab:device-security": "memlab run --scenario tests/memlab/device-security.scenario.js",
+    "demo-step-MEMORY_FIX": "node scripts/run-compose --no-detach --mode dev --version MEMORY_FIX --port 4307"
   },
   "devDependencies": {
     "@types/react": "18.2.74",
