@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile:1
+FROM node:20-bullseye-slim AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
+
+COPY src/server ./src/server
+COPY src/shell-app/.env ./src/shell-app/.env
+COPY src/shell-app/client/dist ./client/dist
+COPY src/shell-app/server/dist ./src/shell-app/server/dist
+COPY src/shell-app/server/dist/data ./src/shell-app/server/data
+COPY src/shell-app/server/dist/lib ./src/shell-app/server/lib
+COPY src/shell-app/server/dist/swagger ./src/shell-app/server/swagger
+COPY src/microfrontends/users-and-roles/manifest.json ./src/microfrontends/users-and-roles/manifest.json
+COPY src/microfrontends/operations-reports/manifest.json ./src/microfrontends/operations-reports/manifest.json
+COPY src/microfrontends/users-and-roles/server/dist/data ./src/microfrontends/users-and-roles/server/data
+COPY src/microfrontends/operations-reports/server/dist/data ./src/microfrontends/operations-reports/server/data
+
+EXPOSE 4300
+ENV SHELL_PORT=4300
+CMD ["node", "src/shell-app/server/dist/shell-server.js"]

@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "build": "cross-env webpack --config ./webpack.config.cjs --mode production",
+    "build:dev": "cross-env webpack --config ./webpack.config.cjs --mode development",
     "serve": "cross-env webpack serve --config ./webpack.config.cjs --mode development",
+    "serve:prod": "cross-env webpack serve --config ./webpack.config.cjs --mode production",
     "analyze": "cross-env ANALYZE=true webpack --config ./webpack.config.cjs --mode production"
   },
   "dependencies": {

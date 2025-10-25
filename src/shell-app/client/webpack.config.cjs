@@ -4,7 +4,8 @@ require('dotenv').config({ path: path.resolve(__dirname, '..', '.env') });
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-const { container } = require('webpack');
+const webpack = require('webpack');
+const { container } = webpack;
 const statoscope = require('@statoscope/webpack-plugin');
 
 const { ModuleFederationPlugin } = container;
@@ -123,6 +124,9 @@ const config = {
     }),
     new MiniCssExtractPlugin({
       filename: 'assets/[name].[contenthash].css',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.REACT_SCAN': JSON.stringify(process.env.REACT_SCAN ?? ''),
     }),
     ...analyzerPlugins(),
   ],

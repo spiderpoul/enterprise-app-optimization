@@ -5,16 +5,15 @@ const resolveServerRoot = (directory) =>
 
 const SERVER_DIR = resolveServerRoot(__dirname);
 const PROJECT_ROOT = path.resolve(SERVER_DIR, '..');
-const COMMON_ROOT = path.resolve(PROJECT_ROOT, '..', 'common');
 
 require('dotenv').config({ path: path.resolve(PROJECT_ROOT, '.env') });
 
 const express = require('express');
-const manifest = require(path.resolve(PROJECT_ROOT, 'manifest.json'));
+const manifest = require('../manifest.json');
 const {
   buildMicrofrontendDescriptor,
   createMicrofrontendAcknowledger,
-} = require(path.resolve(COMMON_ROOT, 'bootstrap.js'));
+} = require('../../common/bootstrap.js');
 const {
   createRequestLogger,
   createResponseDelayMiddleware,
@@ -23,14 +22,10 @@ const {
   registerClientAssetHandling,
   resolveClientDevServerUrl,
   resolveClientDistDirectory,
-} = require(path.resolve(COMMON_ROOT, 'server'));
+} = require('../../common/server');
 const swaggerUi = require('swagger-ui-express');
-const apiDocumentation = require(path.resolve(
-  SERVER_DIR,
-  'swagger',
-  'reports-api.json',
-));
-const { reports } = require(path.resolve(SERVER_DIR, 'data', 'reports.js'));
+const apiDocumentation = require('./swagger/reports-api.json');
+const { reports } = require('./data/reports.js');
 
 const MICROFRONT_PORT = parsePort(process.env.MICROFRONT_PORT, 4400);
 const MICROFRONT_HOST = String(process.env.MICROFRONT_HOST ?? '0.0.0.0');
@@ -41,22 +36,22 @@ const ACK_INTERVAL = Number(process.env.MICROFRONT_ACK_INTERVAL || 30000);
 const isProduction = process.env.NODE_ENV === 'production';
 const CLIENT_HOST = String(process.env.CLIENT_HOST ?? '0.0.0.0');
 const CLIENT_PORT = parsePort(process.env.CLIENT_PORT, 4401);
-const CLIENT_DEV_SERVER_URL = isProduction
+const explicitClientDevServerUrl = process.env.CLIENT_DEV_SERVER_URL?.trim();
+const hasExplicitClientDevServerUrl = Boolean(explicitClientDevServerUrl);
+const hasExplicitDistDir = Boolean(process.env.CLIENT_DIST_DIR?.trim());
+const serveStaticAssets = isProduction || (!hasExplicitClientDevServerUrl && hasExplicitDistDir);
+const CLIENT_DEV_SERVER_URL = serveStaticAssets
   ? undefined
   : resolveClientDevServerUrl({
-      explicitUrl: process.env.CLIENT_DEV_SERVER_URL,
+      explicitUrl: explicitClientDevServerUrl,
       host: CLIENT_HOST,
       port: CLIENT_PORT,
     });
 
-const defaultPublicUrl = isProduction
-  ? `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`
-  : `http://${normalizeHost(CLIENT_HOST)}:${CLIENT_PORT}`;
+const defaultPublicUrl = `http://${normalizeHost(MICROFRONT_HOST)}:${MICROFRONT_PORT}`;
 
 const publicUrlFromEnv = process.env.MICROFRONT_PUBLIC_URL?.trim();
-const MICROFRONT_PUBLIC_URL = isProduction
-  ? defaultPublicUrl
-  : publicUrlFromEnv || defaultPublicUrl;
+const MICROFRONT_PUBLIC_URL = publicUrlFromEnv || defaultPublicUrl;
 
 const DIST_DIR = resolveClientDistDirectory({
   explicitDistPath: process.env.CLIENT_DIST_DIR,
@@ -81,7 +76,7 @@ registerClientAssetHandling({
   app,
   distDir: DIST_DIR,
   devServerUrl: CLIENT_DEV_SERVER_URL,
-  isProduction,
+  isProduction: serveStaticAssets,
   label: 'operations-reports',
 });
 

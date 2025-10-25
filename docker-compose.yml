@@ -1,31 +1,38 @@
 version: '3.9'
 services:
   shell:
+    image: 'enterprise-app-shell:${APP_IMAGE_TAG:-latest}'
     build:
       context: .
-      dockerfile: src/shell-app/Dockerfile
+      dockerfile: Dockerfile.shell
     ports:
       - '${SHELL_HOST_PORT:-4300}:4300'
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
   operations-reports:
+    image: 'enterprise-app-operations-reports:${APP_IMAGE_TAG:-latest}'
     build:
       context: .
-      dockerfile: src/microfrontends/operations-reports/Dockerfile
+      dockerfile: Dockerfile.operations-reports
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
       - SHELL_URL=http://shell:4300
+      - MICROFRONT_PUBLIC_URL=http://operations-reports:4400
+      - MICROFRONT_API_URL=http://operations-reports:4400
     depends_on:
       - shell
   users-and-roles:
+    image: 'enterprise-app-users-and-roles:${APP_IMAGE_TAG:-latest}'
     build:
       context: .
-      dockerfile: src/microfrontends/users-and-roles/Dockerfile
+      dockerfile: Dockerfile.users-and-roles
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - CLIENT_DIST_DIR=/app/client/dist
       - SHELL_URL=http://shell:4300
+      - MICROFRONT_PUBLIC_URL=http://users-and-roles:4402
+      - MICROFRONT_API_URL=http://users-and-roles:4402
     depends_on:
       - shell

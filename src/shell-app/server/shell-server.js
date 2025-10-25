@@ -5,53 +5,26 @@ const resolveServerRoot = (directory) =>
 
 const serverRoot = resolveServerRoot(__dirname);
 const shellRoot = path.resolve(serverRoot, '..');
-const srcRoot = path.resolve(shellRoot, '..');
-const microfrontendsRoot = path.resolve(srcRoot, 'microfrontends');
 
 require('dotenv').config({ path: path.resolve(shellRoot, '.env') });
 
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
-const { initializationPlan } = require(path.resolve(
-  serverRoot,
-  'data',
-  'initialization-plan.js',
-));
-const { dashboardData } = require(path.resolve(serverRoot, 'data', 'dashboard.js'));
-const { createEnvironment } = require(path.resolve(serverRoot, 'lib', 'env.js'));
-const { createRequestLogger } = require(path.resolve(serverRoot, 'lib', 'request-logger.js'));
-const { createMicrofrontendProxyManager } = require(path.resolve(
-  serverRoot,
-  'lib',
-  'microfrontend-proxy.js',
-));
-const { registerFilteredProxy } = require(path.resolve(
-  srcRoot,
-  'server',
-  'lib',
-  'filtered-proxy.js',
-));
+const { initializationPlan } = require('./data/initialization-plan.js');
+const { dashboardData } = require('./data/dashboard.js');
+const { createEnvironment } = require('./lib/env.js');
+const { createRequestLogger } = require('./lib/request-logger.js');
+const { createMicrofrontendProxyManager } = require('./lib/microfrontend-proxy.js');
+const { registerFilteredProxy } = require('../../server/lib/filtered-proxy.js');
 const {
   createMicrofrontendRegistry,
   sanitizeRegistryEntry,
-} = require(path.resolve(serverRoot, 'lib', 'registry.js'));
-const { cloneDeep, delay } = require(path.resolve(serverRoot, 'lib', 'utils.js'));
+} = require('./lib/registry.js');
+const { cloneDeep, delay } = require('./lib/utils.js');
 
-const { users } = require(path.resolve(
-  microfrontendsRoot,
-  'users-and-roles',
-  'server',
-  'data',
-  'users.js',
-));
-const { reports } = require(path.resolve(
-  microfrontendsRoot,
-  'operations-reports',
-  'server',
-  'data',
-  'reports.js',
-));
-const shellApiDocumentation = require(path.resolve(serverRoot, 'swagger', 'shell-api.json'));
+const { users } = require('../../microfrontends/users-and-roles/server/data/users.js');
+const { reports } = require('../../microfrontends/operations-reports/server/data/reports.js');
+const shellApiDocumentation = require('./swagger/shell-api.json');
 
 const environment = createEnvironment({ env: process.env, serverDir: serverRoot });
 
@@ -149,7 +122,7 @@ app.get('/api/microfrontends', (_req, res) => {
   const microfrontends = registry.values().map((entry) => ({
     apiProxy: entry.apiProxy || null,
     description: entry.description || '',
-    entryUrl: entry.entryUrl,
+    entryUrl: entry.assetPath || entry.entryUrl,
     id: entry.id,
     lastAcknowledgedAt: entry.lastAcknowledgedAt,
     manifestUrl: entry.manifestUrl || null,
@@ -162,8 +135,17 @@ app.get('/api/microfrontends', (_req, res) => {
 });
 
 app.post('/api/microfrontends/ack', (req, res) => {
-  const { id, name, menuLabel, routePath, entryUrl, description, manifestUrl, apiProxy } =
-    req.body || {};
+  const {
+    id,
+    name,
+    menuLabel,
+    routePath,
+    entryUrl,
+    assetPath,
+    description,
+    manifestUrl,
+    apiProxy,
+  } = req.body || {};
 
   if (!id || !name || !menuLabel || !routePath || !entryUrl) {
     return res.status(400).json({
@@ -178,6 +160,7 @@ app.post('/api/microfrontends/ack', (req, res) => {
     apiProxy,
     description,
     entryUrl,
+    assetPath,
     id,
     lastAcknowledgedAt: acknowledgementTimestamp,
     manifestUrl,
@@ -207,9 +190,7 @@ app.delete('/api/microfrontends/:id', (req, res) => {
 
   registry.remove(id);
 
-  if (existing.apiProxy?.prefix) {
-    microfrontendProxyManager.unregister(existing.apiProxy.prefix);
-  }
+  microfrontendProxyManager.unregister(existing.id);
 
   registry.persist();
   res.status(204).end();
@@ -220,7 +201,7 @@ app.use((_req, res, next) => {
   next();
 });
 
-if (environment.isProduction) {
+if (environment.serveStaticClient) {
   app.use(express.static(environment.distDir));
   app.get('*', (_req, res) => {
     res.sendFile(path.join(environment.distDir, 'index.html'));

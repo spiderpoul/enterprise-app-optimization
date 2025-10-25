@@ -11,11 +11,25 @@
         "command": "npm run build"
       }
     },
+    "build-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/shell-app/client",
+        "command": "npm run build:dev"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "cwd": "src/shell-app/client",
         "command": "npm run serve"
+      }
+    },
+    "serve-prod": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "src/shell-app/client",
+        "command": "npm run serve:prod"
       }
     },
     "analyze": {

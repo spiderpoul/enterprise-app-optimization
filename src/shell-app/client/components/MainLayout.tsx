@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
@@ -28,6 +28,7 @@ import Dashboard from './dashboard/Dashboard';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
+import { useResponsiveMenuMinimization } from '../hooks/useResponsiveMenuMinimization';
 import WizardQuickSetupPage from '../pages/workshop/react-perf/WizardQuickSetupPage';
 import DeviceSecurityPage from '../pages/DeviceSecurityPage';
 
@@ -162,17 +163,58 @@ const HeaderBar = styled(Space)`
   gap: 24px;
   align-items: flex-start;
   ${surfaceStyles};
+
+  @media (max-width: 720px) {
+    padding: 24px 20px 20px;
+    gap: 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
 `;
 
 const HeaderTitles = styled(Space)`
   max-width: 640px;
   gap: 8px;
+
+  @media (max-width: 720px) {
+    gap: 12px;
+  }
 `;
 
 const HeaderActions = styled(Space)`
   gap: 12px;
   flex-wrap: wrap;
   justify-content: flex-end;
+
+  @media (max-width: 720px) {
+    justify-content: flex-start;
+    width: 100%;
+  }
+`;
+
+const DesktopHeading = styled(H2)`
+  margin: 0;
+
+  @media (max-width: 720px) {
+    display: none;
+  }
+`;
+
+const MobileHeading = styled(H2)`
+  margin: 0;
+
+  @media (min-width: 721px) {
+    display: none;
+  }
+`;
+
+const HeaderDescription = styled(Text)`
+  color: #475467;
+
+  @media (max-width: 720px) {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
 `;
 
 const UserChip = styled(Space)`
@@ -181,11 +223,20 @@ const UserChip = styled(Space)`
   padding: 8px 16px;
   gap: 12px;
   align-items: center;
+
+  @media (max-width: 720px) {
+    width: 100%;
+    justify-content: space-between;
+  }
 `;
 
 const ContentArea = styled.div`
   padding: 0 40px 40px;
   ${surfaceStyles};
+
+  @media (max-width: 720px) {
+    padding: 0 20px 28px;
+  }
 `;
 
 const LoaderContainer = styled.div`
@@ -203,10 +254,22 @@ const FooterBar = styled(Space)`
   flex-wrap: wrap;
   gap: 16px;
   ${surfaceStyles};
+
+  @media (max-width: 720px) {
+    padding: 24px 20px 28px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
 `;
 
 const FooterActions = styled(Space)`
   gap: 12px;
+
+  @media (max-width: 720px) {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
 `;
 
 const InitializationContainer = styled(Space)`
@@ -222,7 +285,8 @@ const MainLayout: React.FC = () => {
   const userDisplayName = 'Enterprise operator';
   const userRole = 'Workspace automation lead';
   const { isInitializing } = useShellInitialization();
-  const [menuMinimized, setMenuMinimized] = useState(false);
+  const { isMinimized: menuMinimized, setIsMinimized: setMenuMinimized } =
+    useResponsiveMenuMinimization();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -418,11 +482,12 @@ const MainLayout: React.FC = () => {
         <ScrollContainer>
           <HeaderBar direction="horizontal" justify="space-between">
             <HeaderTitles direction="vertical" align="flex-start">
-              <H2>Enterprise optimisation centre</H2>
-              <Text style={{ color: '#475467' }}>
+              <DesktopHeading>Enterprise optimisation centre</DesktopHeading>
+              <MobileHeading>Enterprise optimisation centre</MobileHeading>
+              <HeaderDescription>
                 Monitor posture, orchestrate response playbooks, and track automation coverage from
                 a unified shell.
-              </Text>
+              </HeaderDescription>
             </HeaderTitles>
             <HeaderActions direction="horizontal" align="flex-start">
               <UserChip direction="horizontal">
