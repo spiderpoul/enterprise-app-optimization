@@ -32,7 +32,7 @@
     "demo-step-INIT-analyze": "nx run operations-reports-client:analyze",
     "run-find-duplicates": "node scripts/find-dup-deps.cjs",
 
-    "go-to-demo-step-BUNDLE": "git cherry-pick 2578988",
+    "go-to-demo-step-BUNDLE": "git cherry-pick 93746f5",
     "demo-step-BUNDLE": "node scripts/run-compose --no-detach --mode prod --version BUNDLE --port 4302",
     "demo-step-BUNDLE-analyze": "nx run operations-reports-client:analyze",
 
