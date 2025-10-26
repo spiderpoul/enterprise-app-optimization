@@ -36,6 +36,8 @@ const externalLibraries = [
   { moduleName: 'react/jsx-dev-runtime', globalVariable: 'ReactJSXDevRuntime' },
   { moduleName: 'react-router', globalVariable: 'ReactRouter' },
   { moduleName: 'react-router-dom', globalVariable: 'ReactRouterDOM' },
+  { moduleName: 'antd', globalVariable: 'antd' },
+  { moduleName: 'moment', globalVariable: 'moment' },
 ];
 
 const createExternalsConfig = () =>
@@ -133,7 +135,7 @@ const createMicrofrontendConfig = ({
         overlay: true,
       },
     },
-    devtool: isProduction ? 'source-map' : 'eval-cheap-module-source-map',
+    devtool: isProduction ? false : 'eval-cheap-module-source-map',
   };
 };
 
