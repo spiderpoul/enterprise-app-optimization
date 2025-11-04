@@ -25,30 +25,28 @@
     "memlab:device-security": "memlab run --scenario tests/memlab/device-security.scenario.js",
     "find-duplicates": "node scripts/find-dup-deps.cjs",
 
+    "-----demo scripts-----": "-----------------------",
+
     "demo-step-BEFORE": "node scripts/run-compose --no-detach --mode prod --version BEFORE --port 4300",
 
-    "go-to-demo-step-INIT": "git cherry-pick 9bd2714",
+    "go-to-demo-step-INIT": "git checkout 9bd2714",
     "demo-step-INIT": "node scripts/run-compose --no-detach --mode prod --version INIT --port 4301",
+    
     "demo-step-INIT-analyze": "nx run operations-reports-client:analyze",
     "run-find-duplicates": "node scripts/find-dup-deps.cjs",
+    "go-to-demo-step-SPLIT": "git checkout 6161db2",
+    "demo-step-SPLIT": "node scripts/run-compose --no-detach --mode prod --version SPLIT --port 4302",
+    "demo-step-SPLIT-analyze": "nx run operations-reports-client:analyze",
 
-    "go-to-demo-step-BUNDLE": "git cherry-pick 93746f5",
-    "demo-step-BUNDLE": "node scripts/run-compose --no-detach --mode prod --version BUNDLE --port 4302",
-    "demo-step-BUNDLE-analyze": "nx run operations-reports-client:analyze",
-
-    "go-to-demo-step-SPLIT": "git cherry-pick 6161db2",
-    "demo-step-SPLIT": "node scripts/run-compose --no-detach --mode prod --version SPLIT --port 4303",
-
-    "demo-step-REACT_BEFORE": "node scripts/run-compose --no-detach --mode dev --version REACT_BEFORE --port 4304",
-
-    "go-to-demo-step-REACT_AFTER": "git cherry-pick 1b83a67",
-    "demo-step-REACT_AFTER": "REACT_SCAN=1 node scripts/run-compose --no-detach --mode dev --version REACT_AFTER --port 4305",
+    "demo-step-REACT_BEFORE": "node scripts/run-compose --no-detach --mode dev --version REACT_BEFORE --port 4303",
+    "go-to-demo-step-REACT_AFTER": "git checkout 1b83a67",
+    "demo-step-REACT_AFTER": "node scripts/run-compose --no-detach --mode dev --version REACT_AFTER --port 4304",
     
-    "demo-step-MEMORY": "node scripts/run-compose --no-detach --mode dev --version MEMORY_FIX --port 4306",
+    "demo-step-MEMORY": "node scripts/run-compose --no-detach --mode dev --version MEMORY --port 4305",
     "run-memlab:device-security": "memlab run --scenario tests/memlab/device-security.scenario.js",
-    
-    "go-to-demo-step-MEMORY_FIX": "git cherry-pick 0359e0c",
-    "demo-step-MEMORY_FIX": "node scripts/run-compose --no-detach --mode dev --version MEMORY_FIX --port 4307"
+    "go-to-demo-step-MEMORY_FIX": "git checkout 0359e0c",
+    "demo-step-MEMORY_FIX": "node scripts/run-compose --no-detach --mode dev --version MEMORY_FIX --port 4306",
+    "go-to-INIT": "git checkout 11111"
   },
   "devDependencies": {
     "@types/react": "18.2.74",

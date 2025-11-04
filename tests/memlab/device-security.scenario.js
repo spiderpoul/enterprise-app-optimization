@@ -1,6 +1,6 @@
 'use strict';
 
-const DEFAULT_BASE_URL = 'http://127.0.0.1:4306';
+const DEFAULT_BASE_URL = 'http://127.0.0.1:4305';
 
 function getBaseUrl() {
   const fromEnv = process.env.MEMLAB_APP_BASE_URL;

@@ -5,3 +5,4 @@ npm-debug.log*
 .nx
 .npmrc
 dist-dup-report
+.reports
