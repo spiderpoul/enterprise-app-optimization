@@ -517,7 +517,7 @@ flowchart LR
 
 </div>
 
-<div class="three-col" style="margin-top: 1.2rem">
+<div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.2rem">
   <div v-click class="flat-card"><h3>Same task</h3><p class="muted">Baseline и candidate решают одну задачу</p></div>
   <div v-click class="flat-card"><h3>Objective graders</h3><p class="muted">Tests, perf budget, scope, forbidden paths</p></div>
   <div v-click class="flat-card"><h3>Clean trials</h3><p class="muted">Повторяем запуск при недетерминированности</p></div>
