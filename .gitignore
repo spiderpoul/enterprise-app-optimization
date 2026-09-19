@@ -6,3 +6,4 @@ npm-debug.log*
 .npmrc
 dist-dup-report
 .reports
+.preview

@@ -30,7 +30,9 @@ const resolveMicrofrontendRouteConfig = (
   entryUrl: string,
   fallbackPath: string | null,
 ): MicrofrontendRouteObject => {
-  const routeConfig = module.routeConfig || module.default?.default || module.default;
+  const defaultExport = module.default;
+  const nestedDefault = isRecord(defaultExport) ? defaultExport.default : undefined;
+  const routeConfig = module.routeConfig ?? nestedDefault ?? defaultExport;
 
   if (!routeConfig || !isRecord(routeConfig)) {
     throw new Error(`Microfrontend at ${entryUrl} does not provide a route configuration.`);
@@ -41,7 +43,8 @@ const resolveMicrofrontendRouteConfig = (
       ? routeConfig.path
       : null;
 
-  const rawPath = pathFromConfig ?? (fallbackPath && fallbackPath.trim() !== '' ? fallbackPath : null);
+  const rawPath =
+    pathFromConfig ?? (fallbackPath && fallbackPath.trim() !== '' ? fallbackPath : null);
 
   if (!rawPath) {
     throw new Error(`Microfrontend at ${entryUrl} must define a string path on its route config.`);
