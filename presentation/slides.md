@@ -81,7 +81,7 @@ layout: center
 <div v-click class="statement" style="margin-top: 2.1rem">Облачный инструмент полезен разработчику. Корпоративный процесс требует собственной опоры.</div>
 
 <!--
-Время: 2:30.
+Время: 2:00.
 Не превращать блок в спор «облако против on-prem». Объяснить, почему крупная команда не может строить весь процесс вокруг личной подписки.
 -->
 
@@ -114,7 +114,7 @@ layout: center
 <div v-click class="statement" style="margin-top: 1.8rem">Качество нужно оценивать после подключения контекста, инструментов и проверок</div>
 
 <!--
-Время: 2:30.
+Время: 2:00.
 Сказать честно: внутренняя модель слабее на длинном контексте и чаще ошибается. Но «голый промпт» не является честным тестом её пригодности.
 -->
 
@@ -184,7 +184,7 @@ layout: center
 <div v-click class="statement" style="margin-top: 2rem">Большое окно позволяет загрузить больше legacy. Оно не объясняет, что из него правильно.</div>
 
 <!--
-Время: 2:00.
+Время: 1:30.
 Подчеркнуть двойную цену: токены и качество. Слабая модель запутается раньше, сильная может увереннее обобщить плохой паттерн.
 -->
 
@@ -219,53 +219,37 @@ export function OrdersTable({ orders }) {
   </div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.5rem">Агент выполнил просьбу точно. Источник истины оказался плохим.</div>
+<div v-click class="statement" style="margin-top: 1.5rem">Репозиторий для агента — набор <span class="green">in-context примеров</span>. Golden path должен быть заметнее legacy.</div>
 
 <!--
-Время: 2:30.
-Связать с реальным демопроектом: там намеренно оставлены perf-ошибки. Не утверждать, что конкретный код всегда медленный. Проблема в неконтролируемом копировании паттерна и отсутствии проверяемого требования.
--->
-
----
-layout: center
----
-
-<div class="statement">Для одной задачи репозиторий работает как набор <span class="green">in-context примеров</span></div>
-
-<div class="two-col" style="margin-top: 2.4rem">
-  <div v-click class="flat-card"><h3>Golden path</h3><p class="muted">Ускоряет правильное решение</p></div>
-  <div v-click class="flat-card bad"><h3>Legacy path</h3><p class="muted">Масштабирует старый технический долг</p></div>
-</div>
-
-<!--
-Время: 1:30.
-Уточнить: модель не переобучается на репозитории. Речь про примеры, которые она видит в контексте текущей задачи.
+Время: 2:00.
+Связать с реальным демопроектом: там намеренно оставлены perf-ошибки. Не утверждать, что конкретный код всегда медленный. Проблема в неконтролируемом копировании паттерна и отсутствии проверяемого требования. Модель не переобучается на репозитории — речь про примеры, которые она видит в контексте текущей задачи.
 -->
 
 ---
 ---
 
-# Пять шагов к agent-ready проекту
+# Пять слоёв agent-ready проекта
 
 <div class="roadmap">
-  <div v-click><b>01</b><strong>Точка входа</strong><span>Куда смотреть и как проверять</span></div>
-  <div v-click><b>02</b><strong>Источники истины</strong><span>Что копировать и чего избегать</span></div>
-  <div v-click><b>03</b><strong>Спецификация</strong><span>Что меняется и зачем</span></div>
-  <div v-click><b>04</b><strong>Узкий контекст</strong><span>Rules, skills и инструменты</span></div>
+  <div v-click><b>01</b><strong>Entry point</strong><span>AGENTS.md: куда смотреть и как проверять</span></div>
+  <div v-click><b>02</b><strong>Knowledge</strong><span>Docs, architecture и golden paths</span></div>
+  <div v-click><b>03</b><strong>Change contract</strong><span>Spec / OpenSpec: что меняется сейчас</span></div>
+  <div v-click><b>04</b><strong>Procedures</strong><span>Skills, tools и контекст по запросу</span></div>
   <div v-click><b>05</b><strong>Backpressure</strong><span>Среда проверяет результат</span></div>
 </div>
 
 <div v-click class="statement" style="margin-top: 2rem">Цель: сделать неправильный путь заметным до code review</div>
 
 <!--
-Время: 1:30.
-Это карта оставшейся теории и будущего демо. На практике пройти те же шаги в том же порядке.
+Время: 1:15.
+Это карта оставшейся теории и будущего демо. Это не последовательные фазы, а слои harness, которые дополняют друг друга.
 -->
 
 ---
 ---
 
-# 1. AGENTS.md: карта, не энциклопедия
+# 1. Entry point: AGENTS.md — карта, не энциклопедия
 
 <div class="two-col wide-left">
   <div v-click>
@@ -305,7 +289,7 @@ AGENTS.md не должен пересказывать всю архитекту
 ---
 ---
 
-# Документация ближе к источнику
+# 2. Knowledge: документация ближе к источнику
 
 <div class="two-col">
   <pre v-click class="repo-tree">repo/
@@ -335,7 +319,7 @@ AGENTS.md не должен пересказывать всю архитекту
 ---
 ---
 
-# 2. OpenSpec: контракт изменения
+# 3. Change contract: OpenSpec
 
 <div class="two-col">
   <pre v-click class="repo-tree">openspec/changes/
@@ -391,7 +375,7 @@ layout: center
 ---
 ---
 
-# 3. Контекст по запросу
+# 4. Procedures & capabilities: контекст по запросу
 
 <div class="two-col wide-right">
   <div v-click>
@@ -416,51 +400,89 @@ layout: center
 ---
 ---
 
-# Rules, skills и MCP решают разные задачи
+# Knowledge, rules, skills и tools — не одно и то же
 
 <table class="comparison">
   <thead><tr><th>Механизм</th><th>Вопрос</th><th>Пример</th></tr></thead>
 <tbody>
-    <tr v-click><td><b>Rules</b></td><td>Как здесь работают всегда?</td><td>Не нарушать границы Nx</td></tr>
+    <tr v-click><td><b>Knowledge</b></td><td>Что агент должен знать?</td><td>docs/architecture, performance.md</td></tr>
+    <tr v-click><td><b>Rules</b></td><td>Что обязательно соблюдать?</td><td>Не нарушать границы Nx</td></tr>
     <tr v-click><td><b>Spec</b></td><td>Что меняется сейчас?</td><td>Виртуализация списка заказов</td></tr>
-    <tr v-click><td><b>Skill</b></td><td>Как выполнить повторяемую процедуру?</td><td>Добавить новый plugin route</td></tr>
-    <tr v-click><td><b>MCP / tools</b></td><td>Где взять данные и что выполнить?</td><td>Поиск по коду, docs, CI, Jira</td></tr>
+    <tr v-click><td><b>Skill</b></td><td>Как выполнить процедуру?</td><td>Performance check</td></tr>
+    <tr v-click><td><b>Tool / MCP</b></td><td>Что агент умеет вызвать?</td><td>Code search, CI, Jira</td></tr>
   </tbody>
 </table>
 
-<div v-click class="statement" style="margin-top: 1.8rem">Инструмент даёт действие. Skill задаёт порядок и проверки.</div>
+<div v-click class="statement" style="margin-top: 1.6rem">Tool даёт capability. Skill даёт procedure.</div>
 
 <!--
-Время: 2:30.
-Это база, которая убирает путаницу между папкой guidelines, rules, skills и MCP. Не превращать каждое правило в skill.
+Время: 2:00.
+Это база, которая убирает путаницу между knowledge, rules, skills и MCP. Главное: не превращать каждое знание и каждое правило в skill.
 -->
 
 ---
 ---
 
-# Как не вырастить зоопарк skills
+# Не всё — skill
+
+<div class="two-col">
+  <pre v-click class="repo-tree">❌ skills/
+├─ react-best-practices/
+├─ webpack-rules/
+├─ microfrontend-rules/
+├─ memory-rules/
+├─ tables/
+├─ lazy-loading/
+├─ hooks/
+└─ optimization/</pre>
+
+  <pre v-click class="repo-tree">✅ docs/
+├─ architecture/
+│  └─ microfrontends.md
+└─ performance.md
+
+✅ AGENTS.md / rules/
+└─ стабильные ограничения
+
+✅ skills/
+└─ performance-check/</pre>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.5rem">KNOW → docs · OBEY → rules · DO → skill · ACCESS → tool</div>
+
+<!--
+Время: 1:45.
+Архитектура — knowledge. Инварианты — rules. Повторяемая многошаговая проверка производительности — procedure, поэтому может быть skill. Если skill — просто обёртка над одной командой, он, скорее всего, не нужен.
+-->
+
+---
+---
+
+# Хороший skill — это процедура
 
 <div class="flow">
-  <div v-click class="step"><span class="n">ТРИГГЕР</span><strong>Реальная задача</strong><span>Skill начинается с повторяющегося сценария</span></div>
-  <div v-click class="step"><span class="n">SCOPE</span><strong>Узкое описание</strong><span>Не перехватывает соседние запросы</span></div>
-  <div v-click class="step"><span class="n">OWNER</span><strong>Владелец</strong><span>Кто обновляет и принимает изменения</span></div>
-  <div v-click class="step"><span class="n">RETIRE</span><strong>Удаление</strong><span>Skill уходит, когда больше не даёт пользы</span></div>
+  <div v-click class="step"><span class="n">01</span><strong>Один класс задач</strong><span>Coherent unit of work, а не энциклопедия</span></div>
+  <div v-click class="step"><span class="n">02</span><strong>Default path</strong><span>Явный порядок действий и stop conditions</span></div>
+  <div v-click class="step"><span class="n">03</span><strong>Deterministic steps</strong><span>Scripts там, где не нужно рассуждение</span></div>
+  <div v-click class="step"><span class="n">04</span><strong>Objective checks</strong><span>Результат можно проверить без самооценки модели</span></div>
 </div>
 
-<div class="two-col" style="margin-top: 1.8rem">
-  <div v-click class="flat-card"><h3>Точная операция</h3><p class="muted">Скрипт, схема, шаблон</p></div>
-  <div v-click class="flat-card"><h3>Инженерное решение</h3><p class="muted">Цель, ограничения, критерии</p></div>
+<div v-click class="flat-card" style="margin-top: 1.6rem">
+  <b>Progressive disclosure:</b>
+  <span class="muted"> description → SKILL.md → references / scripts по необходимости</span>
 </div>
+
+<div v-click class="statement" style="margin-top: 1.3rem">Если без skill задача решается так же хорошо — возможно, skill не нужен.</div>
 
 <!--
-Время: 2:30.
-Упор на большую команду: общий versioned-каталог, review, CODEOWNERS и проверки ссылок. Личные папки каждого разработчика не масштабируются.
+Время: 1:45.
+Пример performance-check имеет смысл только как многошаговая процедура: определить затронутый plugin → собрать bundle → прогнать perf scenario → сравнить с budget → при regression найти источник → сформировать report. OWNER, versioning и retire перенести мысленно на уровень командного governance.
 -->
 
 ---
 ---
 
-# 4. Среда не позволяет соврать об успехе
+# 5. Backpressure: среда не позволяет соврать об успехе
 
 <div class="roadmap">
   <div v-click><b>01</b><strong>Types</strong><span>Компилятор ловит несовместимость</span></div>
@@ -480,29 +502,37 @@ Backpressure особенно важен для слабой модели. Ко�
 ---
 ---
 
-# 5. Evals проверяют систему
+# Evals: фейл один раз — regression case навсегда
 
-<div class="two-col">
+<div class="two-col wide-left">
   <div v-click>
-    <div class="metric">10–20</div>
-    <p>реальных задач для первого набора</p>
-    <ul>
-      <li>успешные сценарии;</li>
-      <li>production failures;</li>
-      <li>негативные триггеры;</li>
-      <li>несколько trials одной задачи.</li>
-    </ul>
+    <div class="flow" style="grid-template-columns: 1fr">
+      <div class="step"><strong>Реальная ошибка агента</strong><span>Сохраняем task + состояние repo</span></div>
+      <div class="step"><strong>Добавляем criteria</strong><span>Tests, perf budget, scope, forbidden paths</span></div>
+      <div class="step"><strong>Меняем harness</strong><span>Rule, skill, docs или проверку</span></div>
+      <div class="step"><strong>Запускаем снова</strong><span>Чистый контекст, те же graders</span></div>
+    </div>
   </div>
   <div>
-    <div v-click class="flat-card"><h3>Capability</h3><p>Можем ли мы решать этот класс задач?</p></div>
-    <div v-click class="flat-card" style="margin-top: 1.4rem"><h3>Regression</h3><p>Не сломали ли уже достигнутое качество?</p></div>
-    <div v-click class="flat-card warn" style="margin-top: 1.4rem"><h3>Ablation</h3><p>Стало ли лучше со skill, чем без него?</p></div>
+    <div v-click class="flat-card">
+      <h3>Один и тот же task</h3>
+      <p><b>baseline</b> — without skill</p>
+      <p><b>candidate</b> — with skill</p>
+      <p><b>compare</b> — outcome, а не красоту ответа</p>
+    </div>
+    <div v-click class="flat-card warn" style="margin-top: 1.3rem">
+      <h3>Demo ≠ benchmark</h3>
+      <p>Сегодня: 1 task × 2 runs</p>
+      <p>В команде: tasks × clean trials × graders</p>
+    </div>
   </div>
 </div>
 
+<div v-click class="statement" style="margin-top: 1.3rem">Skill — гипотеза об улучшении harness. Eval показывает, действительно ли он помогает.</div>
+
 <!--
 Время: 2:30.
-Не читать лекцию по статистике. Evals здесь нужны как способ сравнить две версии harness на одинаковых задачах. Outcome важнее фразы агента «готово».
+Привязать к текущему demo: task «Добавь новый режим таблицы в orders-v2». Criteria: tests pass, performance budget проходит, legacy-orders не используется, изменения не выходят за scope. Несколько trials нужны из-за недетерминированности, но не вводить магическое число прогонов.
 -->
 
 ---
@@ -514,9 +544,13 @@ Backpressure особенно важен для слабой модели. Ко�
   <pre v-click class="repo-tree">agent-platform/
 ├─ rules/
 ├─ skills/
-├─ templates/
+│  └─ performance-check/
+│     ├─ SKILL.md
+│     ├─ scripts/
+│     └─ evals/
 ├─ evals/
-├─ scripts/
+│  └─ agent-workflows/
+├─ templates/
 └─ owners.yaml</pre>
   <div v-click>
     <ul>
@@ -532,8 +566,8 @@ Backpressure особенно важен для слабой модели. Ко�
 <div v-click class="statement" style="margin-top: 1.6rem">Команду убеждает снижение возвратов, а не красивое AI-demo</div>
 
 <!--
-Время: 2:30.
-Это enterprise-акцент. Общий репозиторий может быть отдельным или частью монорепо, но изменения должны проходить тот же инженерный процесс, что и код.
+Время: 2:00.
+Это enterprise-акцент. Структура каталогов — пример, не стандарт: eval конкретного skill удобно держать рядом со skill, end-to-end agent evals — на уровне общей платформы. Общий репозиторий может быть отдельным или частью монорепо, но изменения должны проходить тот же инженерный процесс, что и код.
 -->
 
 ---
@@ -661,7 +695,7 @@ class: compact-table
   <div v-click>Golden paths отделены от legacy</div>
   <div v-click>Change начинается со spec</div>
   <div v-click>Контекст загружается по запросу</div>
-  <div v-click>Rules, skills и tools не смешаны</div>
+  <div v-click>Knowledge, rules, skills и tools не смешаны</div>
   <div v-click>Результат проверяет среда</div>
   <div v-click>Ошибки становятся regression cases</div>
 </div>
