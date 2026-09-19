@@ -400,24 +400,21 @@ layout: center
 ---
 ---
 
-# Knowledge, rules, skills и tools — не одно и то же
+# Из чего складывается harness
 
-<table class="comparison">
-  <thead><tr><th>Механизм</th><th>Вопрос</th><th>Пример</th></tr></thead>
-<tbody>
-    <tr v-click><td><b>Knowledge</b></td><td>Что агент должен знать?</td><td>docs/architecture, performance.md</td></tr>
-    <tr v-click><td><b>Rules</b></td><td>Что обязательно соблюдать?</td><td>Не нарушать границы Nx</td></tr>
-    <tr v-click><td><b>Spec</b></td><td>Что меняется сейчас?</td><td>Виртуализация списка заказов</td></tr>
-    <tr v-click><td><b>Skill</b></td><td>Как выполнить процедуру?</td><td>Performance check</td></tr>
-    <tr v-click><td><b>Tool / MCP</b></td><td>Что агент умеет вызвать?</td><td>Code search, CI, Jira</td></tr>
-  </tbody>
-</table>
+<div class="roadmap">
+  <div v-click><b>01</b><strong>Context</strong><span>Docs, golden paths, code search</span></div>
+  <div v-click><b>02</b><strong>Constraints</strong><span>AGENTS, rules, текущий spec</span></div>
+  <div v-click><b>03</b><strong>Procedures</strong><span>Skills и повторяемые workflows</span></div>
+  <div v-click><b>04</b><strong>Actions</strong><span>Tools, MCP, shell, CI</span></div>
+  <div v-click><b>05</b><strong>Feedback</strong><span>Types, tests, perf, review</span></div>
+</div>
 
-<div v-click class="statement" style="margin-top: 1.6rem">Tool даёт capability. Skill даёт procedure.</div>
+<div v-click class="statement" style="margin-top: 2rem">Harness не хранит всё в одном prompt — он подаёт нужное знание, действие и обратную связь в нужный момент.</div>
 
 <!--
-Время: 2:00.
-Это база, которая убирает путаницу между knowledge, rules, skills и MCP. Главное: не превращать каждое знание и каждое правило в skill.
+Время: 1:45.
+Это не ещё одна классификация терминов, а карта состава harness. Context отвечает за то, что агент видит; constraints — за границы решения; procedures — за повторяемый путь; actions — за доступные действия; feedback — за проверяемый результат. Дальше зумимся в skills как самый частый источник «зоопарка».
 -->
 
 ---
@@ -504,35 +501,33 @@ Backpressure особенно важен для слабой модели. Ко�
 
 # Evals: фейл один раз — regression case навсегда
 
-<div class="two-col wide-left">
-  <div v-click>
-    <div class="flow" style="grid-template-columns: 1fr">
-      <div class="step"><strong>Реальная ошибка агента</strong><span>Сохраняем task + состояние repo</span></div>
-      <div class="step"><strong>Добавляем criteria</strong><span>Tests, perf budget, scope, forbidden paths</span></div>
-      <div class="step"><strong>Меняем harness</strong><span>Rule, skill, docs или проверку</span></div>
-      <div class="step"><strong>Запускаем снова</strong><span>Чистый контекст, те же graders</span></div>
-    </div>
-  </div>
-  <div>
-    <div v-click class="flat-card">
-      <h3>Один и тот же task</h3>
-      <p><b>baseline</b> — without skill</p>
-      <p><b>candidate</b> — with skill</p>
-      <p><b>compare</b> — outcome, а не красоту ответа</p>
-    </div>
-    <div v-click class="flat-card warn" style="margin-top: 1.3rem">
-      <h3>Demo ≠ benchmark</h3>
-      <p>Сегодня: 1 task × 2 runs</p>
-      <p>В команде: tasks × clean trials × graders</p>
-    </div>
-  </div>
+<div v-click>
+
+```mermaid
+flowchart LR
+    A[Реальный фейл] --> B[Eval case<br/>task + repo state + graders]
+    B --> C[Baseline]
+    C --> D[Меняем harness]
+    D --> E[Candidate]
+    E --> F{Criteria passed?}
+    F -- нет --> D
+    F -- да --> G[Regression suite]
+    G --> B
+```
+
 </div>
 
-<div v-click class="statement" style="margin-top: 1.3rem">Skill — гипотеза об улучшении harness. Eval показывает, действительно ли он помогает.</div>
+<div class="three-col" style="margin-top: 1.2rem">
+  <div v-click class="flat-card"><h3>Same task</h3><p class="muted">Baseline и candidate решают одну задачу</p></div>
+  <div v-click class="flat-card"><h3>Objective graders</h3><p class="muted">Tests, perf budget, scope, forbidden paths</p></div>
+  <div v-click class="flat-card"><h3>Clean trials</h3><p class="muted">Повторяем запуск при недетерминированности</p></div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.1rem">Skill — гипотеза об улучшении harness. Eval показывает, действительно ли он помогает.</div>
 
 <!--
-Время: 2:30.
-Привязать к текущему demo: task «Добавь новый режим таблицы в orders-v2». Criteria: tests pass, performance budget проходит, legacy-orders не используется, изменения не выходят за scope. Несколько trials нужны из-за недетерминированности, но не вводить магическое число прогонов.
+Время: 2:15.
+Привязать к текущему demo: task «Добавь новый режим таблицы в orders-v2». Criteria: tests pass, performance budget проходит, legacy-orders не используется, изменения не выходят за scope. Сегодня 1 task × 2 runs — это demo механизма. В команде тот же принцип превращается в набор regression cases с чистыми trials и одинаковыми graders.
 -->
 
 ---
