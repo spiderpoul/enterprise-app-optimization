@@ -37,37 +37,59 @@ canvasWidth: 1440
 
 <div class="speaker-grid">
   <div>
-    <div class="eyebrow">Павел · enterprise-разработка</div>
+    <div class="eyebrow">Павел Уваров</div>
+    <div class="speaker-role">Software Expert в Kaspersky</div>
+    <div class="speaker-role muted">Спикер Podlodka React Crew · HolyJS</div>
+
     <div v-click class="speaker-fact"><b>9+ лет</b><span>разрабатываю enterprise-проекты</span></div>
     <div v-click class="speaker-fact"><b>200+</b><span>технических собеседований — и продолжаю проводить</span></div>
     <div v-click class="speaker-fact"><b>Челлендж</b><span>как только у нас появилась агентная разработка — перестать писать код руками</span></div>
-    <div v-click class="statement" style="margin-top: 1.5rem">Пока держусь 🙂</div>
+    <div v-click class="statement" style="margin-top: 1.25rem">Пока держусь 🙂</div>
   </div>
   <div v-click class="speaker-photo">
-    <img src="https://avatars.githubusercontent.com/u/23116531?v=4" alt="Фото Павла" />
-    <div class="source">Временно использую фото из GitHub-профиля — заменим на приложенную фотографию.</div>
+    <img src="/assets/pavel-uvarov.jpg" alt="Павел Уваров" />
   </div>
 </div>
 
 <!--
 Время: 1:00.
-Не превращать в резюме. Последний пункт — мостик к докладу:
-если меньше пишешь руками, инженерного решения и ответственности становится не меньше, а больше.
+Коротко представиться: Software Expert в Kaspersky, Podlodka React Crew, HolyJS.
+Челлендж «не писать код руками» — мостик к вопросу на следующем слайде:
+если руками кода меньше, инженерного понимания всё равно нужно не меньше.
 -->
 
 ---
 layout: center
 ---
 
-<div class="meme-image meme-spider">
-  <img src="/assets/1.jfif" alt="Мем с Питером Паркером и Тони Старком про зависимость от Claude" />
+# Нужно ли сегодня ещё уметь писать код?
+
+<div class="two-col wide-left">
+  <div>
+    <div v-click class="big-quote" style="font-size: 41px">«На собеседованиях всё чаще вижу: человек не может без агента написать даже простой цикл»</div>
+
+    <div v-click class="flat-card" style="margin-top: 1.3rem">
+      <h3>Мой тезис</h3>
+      <p>Если без Claude ты не можешь объяснить и поддержать решение, Claude это не исправит.</p>
+    </div>
+
+    <div v-click class="statement" style="margin-top: 1.25rem">Сильная модель без контекста тоже ошибается — только дороже.</div>
+  </div>
+
+  <div v-click class="meme-image meme-spider meme-spider-small">
+    <img src="/assets/1.jfif" alt="Мем про зависимость от Claude" />
+  </div>
 </div>
 
-<div v-click class="meme-caption">План A: Claude Code. План B: попросить доступ к Claude Code.</div>
+<p v-click class="muted" style="margin-top: 1.15rem; font-size: 1.08rem">Сильная облачная модель особенно полезна там, где высока неопределённость. Но сначала нужно научиться правильно готовить контекст для агента.</p>
 
 <!--
-Время: 0:50.
-Шутка → тезис: если весь AI-процесс держится на одном внешнем инструменте, это SPOF, а не engineering strategy.
+Время: 1:40.
+Спросить аудиторию: «Как считаете, нужно ли сегодня вообще уметь писать код?»
+На собеседованиях всё чаще вижу людей, которые без AI теряются даже на базовой задаче.
+Если кажется, что Claude — волшебная таблетка, а внутренняя модель — «шлак»,
+скорее всего, мы ещё не научились выжимать максимум и из Claude.
+Хороший контекст и хороший harness усиливают любую модель.
 -->
 
 ---
@@ -77,35 +99,32 @@ layout: center
 
 <div class="grid-4">
   <div v-click class="flat-card bad">
-    <h3>«Быстрее самому»</h3>
-    <p class="muted">Объяснял задачу дольше, чем писал бы фикс</p>
+    <h3 style="font-size: 29px">«Да самому быстрее сделать»</h3>
   </div>
   <div v-click class="flat-card bad">
-    <h3>«Опять не туда»</h3>
-    <p class="muted">Нашёл соседний код — и выбрал именно legacy</p>
+    <h3 style="font-size: 29px">«Не хочу ревьювить AI-slop»</h3>
   </div>
   <div v-click class="flat-card bad">
-    <h3>«Зачем 30 файлов?»</h3>
-    <p class="muted">Контекст уже забит, а первая правка ещё не сделана</p>
+    <h3 style="font-size: 27px">«Я полчаса объяснял — за 15 минут уже написал бы»</h3>
   </div>
   <div v-click class="flat-card bad">
-    <h3>«Готово»</h3>
-    <p class="muted">Тесты не запускал, ограничения не проверил, зато уверен</p>
+    <h3 style="font-size: 26px">«Он вроде починил баг, но теперь я не понимаю, что он сломал»</h3>
   </div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.7rem">Это не обязательно «глупая модель». Часто ей просто негде узнать, что правильно именно у нас.</div>
+<div v-click class="statement" style="margin-top: 1.7rem">И здесь очень хочется обвинить модель. Но часто мы просто не подготовили ей нормальную среду.</div>
 
 <!--
 Время: 1:20.
-Поднять руки: кто узнаёт хотя бы два пункта.
-Главная мысль — не оправдывать модель, а поменять объект инженерной работы: не prompt, а среду вокруг агента.
+Попросить поднять руки, кому знакомы хотя бы две фразы.
+Это не оправдание модели: дальше разбираем, что именно должен подготовить разработчик,
+чтобы результат перестал зависеть от удачи.
 -->
 
 ---
 ---
 
-# Проект, на котором это особенно заметно: Kaspersky Security Center
+# Настоящий enterprise-гигант
 
 <div class="two-col wide-left">
   <div>
@@ -115,81 +134,70 @@ layout: center
   </div>
   <div>
     <div v-click class="flat-card">
-      <h3>KSC</h3>
+      <h3>Kaspersky Security Center</h3>
       <p>Платформа централизованного управления защитой и корпоративной инфраструктурой.</p>
       <p class="muted">Три вида поставки: XDR · Cloud · on-prem</p>
     </div>
     <div v-click class="flat-card" style="margin-top: 1.2rem">
-      <h3>Frontend</h3>
+      <h3>9+ лет эволюции</h3>
       <p>Микрофронты · Node.js · React · Hexa UI</p>
-      <p class="muted">Проекту 9+ лет — значит, рядом живут несколько поколений решений.</p>
+      <p class="muted">За это время менялись команды, требования, библиотеки и архитектурные подходы — следы разных эпох остаются в коде.</p>
     </div>
   </div>
 </div>
 
 <!--
 Время: 1:30.
-Это не попытка похвастаться размером. Масштаб объясняет, почему «прочитай репозиторий и разберись» — плохая постановка даже для сильной модели.
+Размер здесь важен не ради цифр.
+Главное: большой живой enterprise-проект хранит историю решений.
+Для агента «прочитай код и разберись» — это уже отдельная исследовательская задача.
 -->
 
 ---
 ---
 
-# Почему enterprise сложнее для агента
+# С чем сталкиваемся в большом enterprise
 
 <div class="flow">
   <div v-click class="step"><span class="n">01</span><strong>Масштаб</strong><span>Десятки команд, сотни модулей, пересекающиеся зависимости</span></div>
-  <div v-click class="step"><span class="n">02</span><strong>История</strong><span>Legacy, reverts, временные решения, устаревшие технологии</span></div>
-  <div v-click class="step"><span class="n">03</span><strong>Процессы</strong><span>CI, security, owners, release flow и внутренние инструменты</span></div>
-  <div v-click class="step"><span class="n">04</span><strong>Границы</strong><span>Код, логи и документацию часто нельзя отправлять наружу</span></div>
+  <div v-click class="step"><span class="n">02</span><strong>Контекст взрывается</strong><span>Один запрос «сделай как рядом» превращается в десятки файлов до первой правки</span></div>
+  <div v-click class="step"><span class="n">03</span><strong>Legacy</strong><span>Временные решения, обходы и старые подходы выглядят как нормальные примеры</span></div>
+  <div v-click class="step"><span class="n">04</span><strong>Закрытый контур</strong><span>Код, логи, traces и конфиденциальные данные нельзя просто отправить наружу</span></div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.7rem">Большое context window помогает прочитать больше. Оно не объясняет, что из прочитанного — текущий стандарт.</div>
+<div v-click class="statement" style="margin-top: 1.7rem">Агенту приходится не только решать задачу — сначала нужно отделить актуальное знание от шума.</div>
 
 <!--
 Время: 1:30.
-В закрытом security-контуре внешняя модель может быть запрещена полностью или доступна с сильно урезанными правами:
-без внутренних MCP, Confluence, логов, трейсинга и production-like данных.
+Ключевой pain: раздутый контекст.
+Даже большое context window не отвечает на вопрос, какой из найденных паттернов текущий и правильный.
 -->
 
 ---
 ---
 
-# Поэтому внутренняя модель — не «запасной вариант»
+# Почему облачная модель не всегда спасает
 
-<div class="two-col">
-  <div v-click class="flat-card">
-    <h3 class="green">Что она получает внутри контура</h3>
-    <ul>
-      <li>репозиторий и историю изменений;</li>
-      <li>внутренние docs / Confluence / code search;</li>
-      <li>MCP и корпоративные инструменты;</li>
-      <li>E2E-логи, traces, дампы и отчёты проверок.</li>
-    </ul>
-  </div>
-  <div v-click class="flat-card">
-    <h3 class="green">Что получает команда</h3>
-    <ul>
-      <li>данные не уходят во внешний сервис;</li>
-      <li>единый управляемый набор прав;</li>
-      <li>воспроизводимый workflow для всех;</li>
-      <li>возможность встроить агента в существующий SDLC.</li>
-    </ul>
-  </div>
+<div class="flow">
+  <div v-click class="step"><span class="n">01</span><strong>Данные</strong><span>Передача кода, логов и traces наружу — отдельный security-риск и часто просто запрещена policy</span></div>
+  <div v-click class="step"><span class="n">02</span><strong>Нет внутренних доступов</strong><span>MCP, Confluence, code search, внутренние сервисы и инфраструктура остаются за стеной</span></div>
+  <div v-click class="step"><span class="n">03</span><strong>Цена и лимиты</strong><span>Тарифы, квоты и условия использования контролирует внешний поставщик</span></div>
+  <div v-click class="step"><span class="n">04</span><strong>Интеграция</strong><span>Чем больше данных и прав даём облаку, тем больше согласований и поверхность передачи данных</span></div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.6rem">В enterprise доступ к правильному контексту часто важнее доступа к самой модной модели.</div>
+<div v-click class="statement" style="margin-top: 1.7rem">Облачная модель может быть сильнее сама по себе — и при этом знать слишком мало о вашей реальности.</div>
 
 <!--
 Время: 1:30.
-Не противопоставлять «облако плохое / on-prem хорошее».
-Если внешняя модель разрешена и интегрирована — отлично. Но доклад про случай, когда этого нет.
+Не делать вывод «облако плохое».
+Если Claude разрешён и имеет нужные доступы — отлично.
+Но в закрытом контуре его преимущество в интеллекте легко упирается в отсутствие контекста и прав.
 -->
 
 ---
 ---
 
-# Модели уже достаточно сильные, чтобы начать
+# Модели на собственной инфраструктуре уже достаточно сильные
 
 <div class="benchmark-strip">
   <div v-click class="benchmark">
@@ -210,84 +218,85 @@ layout: center
   </div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.8rem">Это не «open-weight победил Claude». Это сигнал: разрыв уже не настолько большой, чтобы откладывать engineering вокруг модели.</div>
+<div v-click class="statement" style="margin-top: 1.65rem">При правильном контексте, инструментах и проверках внутренняя модель может не уступать по эффективности топовой облачной на типовых инженерных задачах.</div>
 
-<p v-click class="source">Источник: Artificial Analysis, данные на сентябрь 2026. Разные benchmark-наборы и режимы не равны реальной работе в вашем репозитории.</p>
+<p v-click class="source">Источник: Artificial Analysis, данные на сентябрь 2026. Benchmark показывает уровень моделей, но не заменяет проверку на вашем репозитории.</p>
 
 <!--
 Время: 1:40.
-Не продавать leaderboard.
-Смысл: даже если внутренняя модель не №1, она уже умеет исследовать код, делать bounded changes, писать тесты и выполнять процедуры.
-Проверять нужно не «голую модель», а agent system в вашем репозитории.
+Не продавать leaderboard и не говорить, что open-weight «победил Claude».
+Тезис другой: модели, которые можно разворачивать внутри контура, уже достаточно сильны для полезной разработки.
+А доступ к внутренним данным и хороший harness компенсируют часть разницы в чистом интеллекте.
 -->
 
 ---
 ---
 
-# Модель задаёт потолок. Harness — траекторию
+# Модель — только часть системы
 
-<div class="two-col wide-right">
-  <div>
-    <div v-click class="metric">Модель</div>
-    <p v-click>рассуждает, пишет код и выбирает следующий шаг</p>
-    <div v-click class="metric" style="margin-top: 1.35rem">Harness</div>
-    <p v-click>подсовывает нужный контекст, ограничения, действия и обратную связь</p>
-    <div v-click class="statement" style="margin-top: 1.4rem">Не обязательно ждать ещё +5 пунктов benchmark. Сначала уберите неопределённость вокруг модели.</div>
-  </div>
-  <div>
-    <div v-click class="image-frame"><img src="/assets/harness-anatomy.png" alt="Harness anatomy" /></div>
-    <p v-after class="source">Источник: The New SDLC with Vibe Coding, май 2026, figure 7. Соотношение 10/90 — метафора авторов, не измерение.</p>
-  </div>
+<div v-click class="image-frame harness-hero-frame">
+  <img src="/assets/harness-anatomy.png" alt="Harness anatomy" />
 </div>
+
+<div class="harness-legend">
+  <div v-click><b>Модель</b><span>рассуждает и генерирует</span></div>
+  <div v-click><b>Harness</b><span>контекст · ограничения · инструменты · feedback</span></div>
+</div>
+
+<p v-after class="source">Источник: The New SDLC with Vibe Coding, май 2026, figure 7. Соотношение 10/90 — метафора авторов, не измерение.</p>
 
 <!--
 Время: 2:00.
-Сильная модель тоже может переусложнить задачу, зациклиться, захламить контекст или уверенно выбрать не тот паттерн.
-Harness не заменяет интеллект — он делает решения воспроизводимыми и ограничивает пространство ошибки.
+Слайд должен визуально показать: модель — маленькая часть всей системы.
+Сильная модель всё равно может переусложнить задачу, забить контекст или уверенно выбрать не тот паттерн.
+Harness нужен, чтобы эти ошибки ограничивать и быстро обнаруживать.
 -->
 
 ---
 layout: center
 ---
 
-<div class="meme-image meme-rescue">
-  <img src="/assets/3.png" alt="Мем: harness спасает модель из горящего legacy" />
+<div v-click class="meme-kicker">Примерно так же выглядела модель, когда я впервые сказал ей: «Пройдись по нашему репозиторию и найди баг»</div>
+
+<div v-click class="meme-image meme-rescue">
+  <img src="/assets/3.png" alt="Мем: испуганная модель в большом legacy-репозитории" />
 </div>
 
-<div v-click class="meme-caption">Модель: «Я разобрался». Harness: «Сначала AGENTS.md. Потом проверки.»</div>
+<div v-click class="meme-caption">Обвязка нужна не для красоты: она переводит агента из «мечусь по репозиторию» в нормальный инженерный процесс.</div>
 
 <!--
-Время: 0:45.
-Мем как переход к конкретике: обвязку не «сгенерит магически агент».
-Разработчик должен определить, что давать модели, чем ограничивать и как проверять.
+Время: 0:55.
+Первый клик — фраза сверху. Второй — картинка. Третий — вывод.
+Сказать живо: первый запуск реально выглядел как метание по огромному проекту.
+Наша работа — дать агенту карту, правила движения и возможность проверить себя.
 -->
 
 ---
 ---
 
-# Соседний код — это не стандарт. Это археология
+# Сильная модель может очень убедительно ошибаться
 
 <div class="timeline">
-  <div v-click class="timeline-item"><b>PR #12 / #13</b><span>Module Federation + shared / eager React</span></div>
+  <div v-click class="timeline-item"><b>Сначала</b><span>Module Federation + shared runtime</span></div>
   <div v-click class="timeline-arrow">→</div>
-  <div v-click class="timeline-item"><b>PR #25</b><span>Ещё одна версия shared runtime</span></div>
+  <div v-click class="timeline-item"><b>Потом</b><span>другая версия того же архитектурного подхода</span></div>
   <div v-click class="timeline-arrow">→</div>
-  <div v-click class="timeline-item bad"><b>PR #26</b><span>Revert</span></div>
+  <div v-click class="timeline-item bad"><b>Затем</b><span>откат</span></div>
   <div v-click class="timeline-arrow">→</div>
-  <div v-click class="timeline-item"><b>PR #31</b><span>window externals вместо Federation</span></div>
+  <div v-click class="timeline-item"><b>Сегодня</b><span>другой runtime-механизм и другой golden path</span></div>
 </div>
 
-<div v-click class="flat-card" style="margin-top: 1.6rem">
-  <h3>Промпт: «Добавь новый microfrontend как соседний»</h3>
-  <p class="muted">Какой соседний? Какой период истории? Как отличить действующий паттерн от уже отменённого?</p>
+<div v-click class="flat-card" style="margin-top: 1.55rem">
+  <h3>Все эти куски кода выглядят правдоподобно</h3>
+  <p class="muted">Если сказать «сделай как рядом», модель ещё должна угадать, какой из соседних вариантов — актуальный стандарт.</p>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.25rem">Чем сильнее модель, тем убедительнее она может обобщить неправильный пример.</div>
+<div v-click class="statement" style="margin-top: 1.2rem">Слабая модель может ошибиться заметно. Сильная — ошибиться красиво, последовательно и очень убедительно.</div>
 
 <!--
 Время: 2:00.
-Это реальный advanced-пример из истории demo-репозитория.
-Он сильнее синтетического «плохая сортировка в таблице»: архитектурно правдоподобных путей несколько.
+Не показывать номера PR на слайде — это история проекта, а не экскурсия по GitHub.
+Главная мысль: интеллект модели не даёт ей знания о том, какой исторический паттерн сегодня считается правильным.
 -->
 
 ---
@@ -404,7 +413,7 @@ AGENTS.md загружается рано, поэтому каждый лишн�
 ---
 ---
 
-# Spec-Driven Development: сначала договор о change
+# Spec-Driven Development: сначала фиксируем, что именно меняем
 
 <div class="click-flow">
   <div v-click class="click-node"><b>1. Intent</b><span>что меняем и зачем</span></div>
@@ -421,7 +430,8 @@ AGENTS.md загружается рано, поэтому каждый лишн�
 <!--
 Время: 2:00.
 OpenSpec — один из вариантов, не золотой стандарт.
-Минимальная спека должна убрать продуктовую и архитектурную неоднозначность до написания кода.
+Смысл SDD: до реализации убрать продуктовую и архитектурную неоднозначность,
+а не заставить команду принять конкретный framework.
 -->
 
 ---
@@ -460,28 +470,23 @@ OpenSpec — один из вариантов, не золотой станда�
 layout: center
 ---
 
-# В коде не должно появляться нового смысла
+# Минимальная спецификация, которой уже достаточно
 
-<div class="two-col" style="margin-top: 1.5rem">
-  <div v-click class="flat-card">
-    <h3 class="green">До реализации уже определено</h3>
-    <p>Что меняется · что не меняется · критерии готовности · обязательные ограничения</p>
-  </div>
-  <div v-click class="flat-card warn">
-    <h3 class="yellow">Код выбирает</h3>
-    <p>Локальную форму реализации, но не изобретает продуктовую семантику на ходу</p>
-  </div>
+<div class="spec-grid">
+  <div v-click class="flat-card"><h3>Что меняем</h3><p class="muted">Наблюдаемое поведение после изменения</p></div>
+  <div v-click class="flat-card"><h3>Зачем</h3><p class="muted">Пользовательская или инженерная причина</p></div>
+  <div v-click class="flat-card"><h3>Scope</h3><p class="muted">Где можно менять код</p></div>
+  <div v-click class="flat-card bad"><h3>Out of scope</h3><p class="muted">Что точно не трогаем</p></div>
+  <div v-click class="flat-card"><h3>Constraints</h3><p class="muted">Архитектура · security · performance</p></div>
+  <div v-click class="flat-card"><h3>Done</h3><p class="muted">Какими проверками докажем результат</p></div>
 </div>
 
-<div class="pattern-pair" style="margin-top: 1.5rem">
-  <div v-click class="pattern-good"><b>✓ Хорошо определено</b><span>lazy route обязателен · один shared React · manifest id уникален</span></div>
-  <div v-click class="pattern-bad"><b>✕ Плохо определено</b><span>«сделай красиво» · «как-нибудь быстро» · «примерно как соседний»</span></div>
-</div>
+<div v-click class="statement" style="margin-top: 1.25rem">Этого уже хватает, чтобы агент перестал додумывать смысл задачи на ходу.</div>
 
 <!--
 Время: 1:40.
-«Новый смысл» — не каждая строка кода.
-Это продуктовые решения, архитектурные инварианты и критерии приёмки, которые модель не должна придумывать сама.
+Не нужна идеальная энциклопедия.
+Даже короткая spec ценна, если она фиксирует поведение, scope, ограничения и definition of done.
 -->
 
 ---
