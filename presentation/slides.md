@@ -479,6 +479,40 @@ layout: center
 ---
 ---
 
+# Субагенты: делегируем независимые ветки
+
+<div v-click>
+
+```mermaid
+flowchart LR
+    A[Root agent<br/>держит цель и state]
+    A --> B[Explore code<br/>read-only]
+    A --> C[Tests / perf review<br/>read-only]
+    A --> D[Docs / constraints<br/>read-only]
+    B --> E[Короткий результат]
+    C --> E
+    D --> E
+    E --> A
+```
+
+</div>
+
+<div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.1rem">
+  <div v-click class="flat-card"><h3>Когда да</h3><p class="muted">Параллельные независимые ветки, отдельный контекст, разные роли</p></div>
+  <div v-click class="flat-card bad"><h3>Когда нет</h3><p class="muted">Один файл, последовательные шаги, общий mutable state</p></div>
+  <div v-click class="flat-card"><h3>Контракт</h3><p class="muted">Узкий scope, ожидаемый output, stop condition</p></div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.1rem">Субагент — способ изолировать контекст, а не размножить хаос.</div>
+
+<!--
+Время: 1:45.
+Для enterprise и более слабых моделей полезный default: root agent держит задачу и принимает решение, а субагенты исследуют независимые области или делают review. Не спавнить агента там, где один grep или один последовательный шаг быстрее. Параллельная запись в одни и те же файлы требует отдельной координации — для demo лучше оставить субагентов read-only.
+-->
+
+---
+---
+
 # 5. Backpressure: среда не позволяет соврать об успехе
 
 <div class="roadmap">
