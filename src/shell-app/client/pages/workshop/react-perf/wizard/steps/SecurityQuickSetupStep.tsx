@@ -71,9 +71,9 @@ const SecurityQuickSetupStep: React.FC = () => {
       <Space direction="vertical" gap={8} align="flex-start">
         <Text style={{ fontWeight: 600, color: '#0f172a' }}>Quick hardening setup</Text>
         <Text style={{ color: '#475569' }}>
-          Choose the application profile to harden and tick the devices that must receive it. Because
-          this component is defined inline in the steps array, any wizardState change remounts it and
-          rebuilds the entire table.
+          Choose the application profile to harden and tick the devices that must receive it.
+          Because this component is defined inline in the steps array, any wizardState change
+          remounts it and rebuilds the entire table.
         </Text>
       </Space>
 
