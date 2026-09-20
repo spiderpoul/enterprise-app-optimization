@@ -834,3 +834,99 @@
   background: rgb(13 27 21 / 80%);
   text-align: center;
 }
+
+
+/* Presentation refinement: speaker, opening, harness hero, SDD */
+.speaker-role {
+  margin: -8px 0 12px;
+  color: var(--text);
+  font-size: 29px;
+  font-weight: 720;
+  line-height: 1.2;
+}
+
+.speaker-role.muted {
+  margin-top: 0;
+  margin-bottom: 22px;
+  color: var(--muted);
+  font-size: 21px;
+  font-weight: 560;
+}
+
+.speaker-photo {
+  padding: 12px;
+}
+
+.speaker-photo img {
+  height: 520px;
+  max-height: none;
+  object-fit: cover;
+  object-position: center 24%;
+}
+
+.meme-spider-small img {
+  height: 485px;
+}
+
+.harness-hero-frame {
+  height: 465px;
+  padding: 10px;
+}
+
+.harness-legend {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 16px;
+}
+
+.harness-legend > div {
+  padding: 13px 18px;
+  border-left: 5px solid var(--green);
+  background: rgb(13 27 21 / 78%);
+}
+
+.harness-legend b {
+  margin-right: 12px;
+  color: var(--green);
+  font-size: 23px;
+}
+
+.harness-legend span {
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.meme-kicker {
+  max-width: 1120px;
+  margin: 0 auto 14px;
+  color: var(--text);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.22;
+  text-align: center;
+}
+
+.meme-rescue img {
+  height: 495px;
+}
+
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.spec-grid .flat-card {
+  min-height: 150px;
+  padding: 21px 23px;
+}
+
+.spec-grid .flat-card h3 {
+  margin-bottom: 9px;
+  font-size: 25px;
+}
+
+.spec-grid .flat-card p {
+  font-size: 20px;
+}
