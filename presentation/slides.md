@@ -582,10 +582,8 @@ layout: center
 ├─ architecture/
 │  └─ microfrontends.md
 └─ performance.md
-
 ✅ AGENTS.md / rules/
 └─ стабильные ограничения
-
 ✅ skills/
 └─ performance-check/</pre>
 </div>
@@ -886,7 +884,6 @@ Speaker-only trace checklist:
 
 <div class="two-col">
   <pre v-click class="repo-tree">RUN A
-
 repo
   ↓
 neighboring code
@@ -894,7 +891,6 @@ neighboring code
 агент сам угадывает правила</pre>
 
   <pre v-click class="repo-tree">RUN B
-
 AGENTS.md
   ↓
 canonical docs
