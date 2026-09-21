@@ -492,30 +492,31 @@ layout: center
 ---
 ---
 
-# Контекст агента: постоянный и по запросу
+# Контекст агента: что уже внутри, а что подтягиваем по ходу
 
 <div class="two-col wide-right">
   <div>
     <div v-click class="flat-card">
-      <h3>На старте</h3>
-      <p>AGENTS.md · global/team memory · доступные tools · обязательные gates</p>
+      <h3>Сразу доступно агенту</h3>
+      <p>AGENTS.md · global/team memory · system/project rules · текущий task / spec · описание доступных tools / MCP</p>
     </div>
     <div v-click class="flat-card" style="margin-top: 1.15rem">
-      <h3>По мере работы</h3>
-      <p>Code search · RAG · MCP · Confluence · PR history · logs / traces · deep references</p>
+      <h3>Подгружается по мере работы</h3>
+      <p>Code search · RAG · MCP responses · Confluence / docs · PR / Git history · logs / traces · deep references из skills</p>
     </div>
-    <div v-click class="statement" style="margin-top: 1.3rem">Не максимум данных. Минимум, достаточный для текущего решения.</div>
+    <div v-click class="statement" style="margin-top: 1.3rem">Не максимальный контекст. Нужный контекст для текущего решения.</div>
   </div>
   <div>
-    <div v-click class="image-frame"><img src="/assets/context-static-dynamic.png" alt="Шесть типов статического и динамического агентного контекста" /></div>
+    <div v-click class="image-frame"><img src="/assets/context-static-dynamic.png" alt="Статический и динамически получаемый контекст агента" /></div>
     <p v-after class="source">Источник: The New SDLC with Vibe Coding, май 2026, figure 4.</p>
   </div>
 </div>
 
 <!--
 Время: 2:00.
-Слайд специально без терминов Procedures/Capabilities.
-Контекст не обязан физически лежать в prompt: важно, что агент знает, где его получить и когда.
+«Сразу доступно» не означает, что содержимое всех tools или всей документации целиком лежит в prompt.
+На старте агент знает базовые правила, текущую задачу и доступные возможности.
+Тяжёлый контекст — ответы MCP, история, логи, deep refs — подтягивается только когда нужен.
 -->
 
 ---
@@ -538,6 +539,27 @@ layout: center
 <!--
 Время: 1:30.
 Это ответ на проблему «забил контекст до первой правки».
+-->
+
+---
+---
+
+# Хороший skill — это процедура
+
+<div class="flow">
+  <div v-click class="step"><span class="n">01</span><strong>Один класс задач</strong><span>Например, performance review change</span></div>
+  <div v-click class="step"><span class="n">02</span><strong>Default path</strong><span>Порядок действий и stop conditions</span></div>
+  <div v-click class="step"><span class="n">03</span><strong>Scripts</strong><span>Детерминированное не поручаем рассуждению</span></div>
+  <div v-click class="step"><span class="n">04</span><strong>Objective output</strong><span>Отчёт и проверки вместо «кажется, всё хорошо»</span></div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.55rem">Если задача без skill решается так же хорошо и стабильно — skill, скорее всего, не нужен.</div>
+
+<!--
+Время: 1:35.
+Сначала дать положительное определение: skill — повторяемая процедура.
+Пример из PR #66: performance-check выбирает нужные проверки и порядок,
+но не дублирует архитектуру проекта внутри skill.
 -->
 
 ---
@@ -572,27 +594,7 @@ layout: center
 
 <!--
 Время: 1:35.
-Не делать зоопарк. Skill имеет смысл, когда это повторяемая процедура, а не ещё один кусок документации.
--->
-
----
----
-
-# Хороший skill — это процедура
-
-<div class="flow">
-  <div v-click class="step"><span class="n">01</span><strong>Один класс задач</strong><span>Например, performance review change</span></div>
-  <div v-click class="step"><span class="n">02</span><strong>Default path</strong><span>Порядок действий и stop conditions</span></div>
-  <div v-click class="step"><span class="n">03</span><strong>Scripts</strong><span>Детерминированное не поручаем рассуждению</span></div>
-  <div v-click class="step"><span class="n">04</span><strong>Objective output</strong><span>Отчёт и проверки вместо «кажется, всё хорошо»</span></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.55rem">Если задача без skill решается так же хорошо и стабильно — skill, скорее всего, не нужен.</div>
-
-<!--
-Время: 1:35.
-Пример из PR #66: performance-check выбирает нужные проверки и порядок,
-но не дублирует архитектуру проекта внутри skill.
+После определения skill показать антипример: если это не процедура, не надо складывать знание в skills/.
 -->
 
 ---
@@ -622,6 +624,22 @@ layout: center
 -->
 
 ---
+layout: center
+---
+
+<div v-click class="meme-image">
+  <img src="/assets/2.jfif" alt="Мем про наблюдение за работой нескольких агентов" style="height: 570px; max-height: 64vh;" />
+</div>
+
+<div v-click class="meme-caption" style="margin-top: 1rem">А потом так сидим и смотрим, как всё крутится</div>
+
+<!--
+Время: 0:35.
+Короткая эмоциональная пауза после orchestration/subagents.
+Не объяснять мем дольше одной фразы.
+-->
+
+---
 ---
 
 # Backpressure: среда не позволяет соврать об успехе
@@ -634,12 +652,46 @@ layout: center
   <div v-click><b>05</b><strong>Review</strong><span>Человек принимает смысл и риск</span></div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.5rem">Один хороший gate полезнее десяти строк «обязательно будь внимателен».</div>
+<div v-click class="statement" style="margin-top: 1.25rem">Один хороший gate полезнее десяти строк «обязательно будь внимателен».</div>
+<div v-click class="muted" style="margin-top: 0.9rem; font-size: 1.08rem; text-align: center">Пусть флагманская модель находит хоть 100× больше проблем — она всё равно не знает сама, что считается «правильно» именно в вашем проекте.</div>
 
 <!--
-Время: 1:50.
-Для более слабой модели backpressure особенно ценен:
-короткий шаг → быстрый сигнал → исправление → ограниченное число повторов → stop condition.
+Время: 1:55.
+Не тезис «слабая модель лучше сильной».
+Тезис: frontier intelligence не заменяет deterministic feedback и project-specific Definition of Done.
+Модель не должна сама решать, прошла ли она DoD.
+-->
+
+---
+---
+
+# Eval — тест не кода, а агентной системы
+
+<div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px">
+  <div v-click class="flat-card">
+    <h3>Test</h3>
+    <p>код / приложение</p>
+    <p class="muted">route lazy? · bundle budget? · memory leak?</p>
+  </div>
+  <div v-click class="flat-card">
+    <h3>Skill</h3>
+    <p>процедура для агента</p>
+    <p class="muted">как выполнить класс задач · например performance-check</p>
+  </div>
+  <div v-click class="flat-card">
+    <h3>Eval</h3>
+    <p>task + repo state + harness + graders</p>
+    <p class="muted">Task · invariants · machine checks · failure classes</p>
+  </div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.55rem">Test проверяет продукт. Skill помогает агенту действовать. Eval проверяет агента + harness на воспроизводимой задаче.</div>
+
+<!--
+Время: 1:35.
+Не путать eval с unit/e2e test.
+Eval нужен, чтобы сравнивать одну и ту же модель на одной и той же задаче
+между baseline-repository и agent-ready repository.
 -->
 
 ---
@@ -648,23 +700,36 @@ layout: center
 # Evals: один реальный фейл → regression case
 
 <div class="click-flow eval-flow">
-  <div v-click class="click-node"><b>Фейл</b><span>агент выбрал плохой путь</span></div>
+  <div v-click class="click-node"><b>Real failure</b><span>реальный промах агента</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Eval case</b><span>task + repo state + graders</span></div>
+  <div v-click class="click-node"><b>Eval case</b><span>task + fixed repo + graders</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Baseline</b><span>как система ведёт себя сейчас</span></div>
+  <div v-click class="click-node"><b>Baseline</b><span>как harness ведёт себя сейчас</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Harness change</b><span>rule / docs / skill / tool</span></div>
+  <div v-click class="click-node"><b>Harness change</b><span>docs / rule / skill / tool</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Candidate</b><span>те же objective graders</span></div>
+  <div v-click class="click-node"><b>Candidate</b><span>те же graders</span></div>
+  <div v-click class="click-arrow">→</div>
+  <div v-click class="click-node"><b>Regression suite</b><span>кейс остаётся с нами</span></div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.55rem">Skill — гипотеза об улучшении. Eval показывает, помог он или просто добавил ещё текста.</div>
+<div class="two-col" style="margin-top: 1.2rem">
+  <div v-click class="flat-card">
+    <h3>Сравниваем честно</h3>
+    <p class="muted">same task · fixed repo state · same graders · clean context · несколько trials</p>
+  </div>
+  <div v-click class="flat-card">
+    <h3>Начинаем с малого</h3>
+    <p class="muted">objective / machine graders · representative dataset · без LLM judge, dashboard и eval-platform</p>
+  </div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.05rem">Skill — гипотеза об улучшении harness. Eval показывает, действительно ли он помогает.</div>
 
 <!--
-Время: 1:50.
-На сцене будет 1 task × 2 runs — демонстрация механизма, а не benchmark.
-В реальной команде кейсы накапливаются из реальных ошибок и прогоняются в clean trials.
+Время: 2:00.
+На сцене — lightweight representative case, а не статистический benchmark.
+Недетерминированность требует нескольких trials, но сейчас не строим отдельную eval-platform.
 -->
 
 ---
@@ -721,161 +786,6 @@ layout: center
 -->
 
 ---
-layout: center
----
-
-<div class="eyebrow">Практика · 20 минут</div>
-
-<div v-click class="huge">Одна задача.<br><span class="green">Одна модель. Две среды.</span></div>
-
-<p v-click class="muted" style="font-size: 1.4rem; margin-top: 2rem">Сравниваем не интеллект модели, а окружение, в котором она принимает решения.</p>
-
-<!--
-Время: 0:40.
-Переключиться в IDE.
-Одинаковые model settings и продуктовая задача; независимая переменная — repository harness.
--->
-
----
----
-
-# Задача: новый Application Security microfrontend
-
-<div v-click class="big-quote" style="font-size: 48px">«Добавь новую страницу Application Security и microfrontend как в соседней реализации»</div>
-
-<div class="two-col" style="margin-top: 1.5rem">
-  <div v-click class="flat-card bad">
-    <h3>Run A · main</h3>
-    <p>Никакого подготовленного harness.</p>
-    <p class="muted">Наблюдаем, куда модель пойдёт сама.</p>
-  </div>
-  <div v-click class="flat-card">
-    <h3>Run B · demo/agent-ready</h3>
-    <p>Тот же продуктовый change, но проект уже описывает правильный путь.</p>
-    <p class="muted">Prompt: Implement openspec/changes/add-application-security/</p>
-  </div>
-</div>
-
-<!--
-Время: 1:00.
-Run A exact prompt:
-Add a new Application Security page and microfrontend like the neighboring implementation.
-
-Run B exact prompt:
-Implement openspec/changes/add-application-security/.
--->
-
----
----
-
-# Run A: смотрим не на текст ответа, а на trace
-
-<div class="grid-4">
-  <div v-click class="flat-card"><h3>Что читает</h3><p class="muted">Сколько файлов / PR открыл до первой правки</p></div>
-  <div v-click class="flat-card"><h3>Что считает нормой</h3><p class="muted">Federation? externals? registry?</p></div>
-  <div v-click class="flat-card"><h3>Что проверяет</h3><p class="muted">Build? architecture? bundle? memory?</p></div>
-  <div v-click class="flat-card"><h3>Где говорит «готово»</h3><p class="muted">Есть ли доказательство или только self-assessment</p></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.6rem">PR archaeology показывает: правдоподобных исторических решений несколько.</div>
-
-<!--
-Время: 4:00.
-Показывать историю действий и diff, а не ждать модель в тишине.
-Подсветить PR #12/#13/#25/#26/#31 и открытые perf PR #52–#55/#64 как реальные конкурирующие сигналы.
--->
-
----
----
-
-# Что уже лежит в agent-ready ветке
-
-<div class="grid-4">
-  <div v-click class="flat-card"><h3>Knowledge</h3><p>AGENTS.md + frontend / microfrontend / performance docs</p></div>
-  <div v-click class="flat-card"><h3>Change contract</h3><p>Spec для Application Security</p></div>
-  <div v-click class="flat-card"><h3>Executable constraints</h3><p>Architecture + bundle + lazy route checks</p></div>
-  <div v-click class="flat-card"><h3>Feedback</h3><p>Route-specific MemLab + performance workflow</p></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.6rem">Мы не подсказываем модели решение в prompt. Мы изменяем репозиторий так, чтобы правильный путь был наблюдаемым.</div>
-
-<!--
-Время: 3:00.
-Коротко открыть артефакты из PR #66:
-AGENTS.md → docs → spec → scripts/check-* → performance-check skill.
--->
-
----
----
-
-# Run B: модель сама проходит по harness
-
-<div class="click-flow">
-  <div v-click class="click-node"><b>AGENTS.md</b><span>карта + gates</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Canonical docs</b><span>текущая архитектура</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Change spec</b><span>scope + DoD</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Implement</b><span>bounded change</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Feedback loop</b><span>architecture · bundle · memory</span></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.55rem">Если gate падает — агент получает конкретную причину, а не совет «подумай ещё».</div>
-
-<!--
-Время: 6:00.
-Не коучить модель в сторону решения.
-Показать хотя бы один fail → correction loop, если он возникает; иначе использовать сохранённый rehearsal artifact.
--->
-
----
-class: compact-table
----
-
-# Сравниваем наблюдаемые результаты
-
-<table class="comparison">
-  <thead><tr><th>Смотрим</th><th>Run A</th><th>Run B</th></tr></thead>
-  <tbody>
-    <tr v-click><td>Architecture / runtime</td><td>Что модель выбрала из истории</td><td>Соответствует canonical docs + gate</td></tr>
-    <tr v-click><td>Route chunking / bundle</td><td>Проверила ли вообще</td><td>Budget проверяется автоматически</td></tr>
-    <tr v-click><td>Memory / navigation</td><td>Самооценка или generic test</td><td>Route-specific MemLab scenario</td></tr>
-    <tr v-click><td>Scope</td><td>Может расползтись</td><td>Ограничен spec</td></tr>
-    <tr v-click><td>«Готово»</td><td>Модель решила сама</td><td>Есть inspectable evidence</td></tr>
-  </tbody>
-</table>
-
-<div v-click class="statement" style="margin-top: 1.3rem">Мы не сделали модель умнее. Мы уменьшили число решений, которые ей приходится угадывать.</div>
-
-<!--
-Время: 3:00.
-Не делать статистический вывод по двум запускам.
-Это demonstration of mechanism; устойчивость подтверждают eval trials.
--->
-
----
----
-
-# Если live demo решит жить своей жизнью
-
-<div class="grid-4">
-  <div v-click class="flat-card"><h3>Trace</h3><p class="muted">Сохранённая история исследования для обоих runs</p></div>
-  <div v-click class="flat-card"><h3>Diff</h3><p class="muted">Финальные изменения Run A / Run B</p></div>
-  <div v-click class="flat-card"><h3>Failed gate</h3><p class="muted">Реальный пример actionable feedback</p></div>
-  <div v-click class="flat-card"><h3>Passed gates</h3><p class="muted">Evidence после исправления</p></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.55rem">Демо должно пережить недетерминированность модели.</div>
-
-<!--
-Время: 0:50.
-Это speaker fallback, но аудитории можно показать одной фразой:
-инженерный эксперимент не должен зависеть от того, повезло ли сегодня live-run.
--->
-
----
 ---
 
 # Agent-ready checklist
@@ -895,7 +805,148 @@ class: compact-table
 
 <!--
 Время: 1:10.
-Слайд для фотографии.
+Слайд для фотографии и сборка всей теории перед live-demo.
+После него теорию уже не добавлять.
+-->
+
+---
+layout: center
+---
+
+<div class="eyebrow">Практика · 20 минут</div>
+
+<div v-click class="huge">Одна задача.<br><span class="green">Одна модель. Две среды.</span></div>
+
+<p v-click class="muted" style="font-size: 1.4rem; margin-top: 2rem">Сравниваем не интеллект модели, а окружение, в котором она принимает решения.</p>
+
+<!--
+Время: 0:40.
+Переключиться в IDE.
+Одинаковые model settings и одна продуктовая задача.
+Не позиционировать demo как benchmark модели.
+-->
+
+---
+---
+
+# Application Security: на первый взгляд простая задача
+
+<div v-click class="big-quote" style="font-size: 43px">«Добавь новую страницу / microfrontend Application Security по аналогии с существующей реализацией»</div>
+
+<div class="checklist" style="margin-top: 1.2rem">
+  <div v-click>canonical frontend architecture</div>
+  <div v-click>canonical microfrontend runtime</div>
+  <div v-click>route-level code splitting</div>
+  <div v-click>no bundle regression</div>
+  <div v-click>no memory regression</div>
+  <div v-click>architecture / performance checks</div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1rem">Сложность начинается в словах «сделай production-ready».</div>
+
+<!--
+Время: 1:20.
+Сначала показать только формулировку задачи, затем по кликам раскрыть реальный Definition of Done.
+-->
+
+---
+---
+
+# Run A vs Run B
+
+<div class="two-col">
+  <div v-click class="flat-card bad">
+    <h3>Run A · main</h3>
+    <p>“Add a new Application Security page and microfrontend like the neighboring implementation.”</p>
+  </div>
+  <div v-click class="flat-card">
+    <h3>Run B · demo/agent-ready</h3>
+    <p>“Implement openspec/changes/add-application-security/”</p>
+  </div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.5rem">Same model · Same product task · Different repository environment</div>
+
+<!--
+Время: 1:00.
+Run A: не коучить модель к правильному решению.
+
+Speaker-only trace checklist:
+- сколько файлов / PR открыл до первой правки;
+- что считает canonical;
+- какие checks запускает;
+- когда говорит done;
+- есть ли evidence или только self-assessment.
+-->
+
+---
+---
+
+# Что изменилось между Run A и Run B
+
+<div class="two-col">
+  <pre v-click class="repo-tree">RUN A
+
+repo
+  ↓
+neighboring code
+  ↓
+агент сам угадывает правила</pre>
+
+  <pre v-click class="repo-tree">RUN B
+
+AGENTS.md
+  ↓
+canonical docs
+  ↓
+spec
+  ↓
+implementation
+  ↓
+architecture / bundle / memory feedback</pre>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.35rem">Мы не сделали модель умнее. Мы уменьшили количество вещей, которые ей приходится угадывать.</div>
+
+<!--
+Время: 6:00.
+Коротко открыть реальные артефакты agent-ready ветки:
+AGENTS.md → canonical docs → spec → scripts/check-* → performance-check.
+
+Если gate падает — показать fail → correction loop.
+Не подсказывать модели конкретное решение в prompt.
+-->
+
+---
+class: compact-table
+---
+
+# Сравниваем наблюдаемые результаты
+
+<table class="comparison">
+  <thead><tr><th>Смотрим</th><th>Baseline</th><th>Agent-ready</th></tr></thead>
+  <tbody>
+    <tr v-click><td>Architecture</td><td>агент выбирает из истории</td><td>canonical docs + gate</td></tr>
+    <tr v-click><td>Loading</td><td>может не проверить</td><td>bundle gate</td></tr>
+    <tr v-click><td>Memory</td><td>может не заметить</td><td>MemLab scenario</td></tr>
+    <tr v-click><td>Scope</td><td>может расползтись</td><td>ограничен spec</td></tr>
+    <tr v-click><td>Done</td><td>self-assessment</td><td>machine evidence</td></tr>
+  </tbody>
+</table>
+
+<div v-click class="statement" style="margin-top: 1.3rem">Harness не гарантирует идеальный ответ. Он делает ошибку заметной и исправимой.</div>
+
+<!--
+Время: 3:00.
+Это demonstration of mechanism, не benchmark модели и не доказательство по одному запуску.
+
+Speaker-only fallback, если live demo ломается:
+- saved trace;
+- saved diff;
+- failed gate с actionable feedback;
+- passed gates после исправления.
+
+Не показывать отдельный fallback-слайд аудитории.
 -->
 
 ---
@@ -910,6 +961,6 @@ layout: center
 
 <!--
 Время: 0:50.
+После практики — только этот финальный вывод.
 Вернуться к коту и пожарному.
-Финальная мысль: сильная модель полезна, но enterprise-эффект появляется, когда знания, ограничения и feedback принадлежат команде, а не одной сессии.
 -->
