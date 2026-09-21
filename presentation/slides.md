@@ -262,29 +262,26 @@ layout: center
 
 ---
 
-# Сильная модель может очень убедительно ошибаться
+# Интеллект модели ≠ знание нормы проекта
 
-<div class="timeline">
-  <div v-click class="timeline-item"><b>Сначала</b><span>Module Federation + shared runtime</span></div>
-  <div v-click class="timeline-arrow">→</div>
-  <div v-click class="timeline-item"><b>Потом</b><span>другая версия того же архитектурного подхода</span></div>
-  <div v-click class="timeline-arrow">→</div>
-  <div v-click class="timeline-item bad"><b>Затем</b><span>откат</span></div>
-  <div v-click class="timeline-arrow">→</div>
-  <div v-click class="timeline-item"><b>Сегодня</b><span>другой runtime-механизм и другой golden path</span></div>
+<div class="two-col wide-left">
+  <div>
+    <div v-click class="big-quote" style="font-size: 39px">Код — это архив решений, а не инструкция «как правильно сегодня».</div>
+    <div v-click class="flat-card" style="margin-top: 1.15rem">
+      <h3>Модель видит правдоподобные примеры</h3>
+      <p class="muted">Module Federation, shared runtime, deprecated loader, обходы и откаты могут одинаково убедительно выглядеть в поиске по коду.</p>
+    </div>
+    <div v-click class="statement" style="margin-top: 1.1rem">Без явно названного golden path она не узнает, какой исторический паттерн сегодня считается правильным.</div>
+  </div>
+  <div v-click class="meme-image">
+    <img src="/assets/office-legacy-patterns.jpg" alt="Офисный мем о выборе устаревшего паттерна" style="height: 430px; max-height: 49vh;" />
+  </div>
 </div>
-
-<div v-click class="flat-card" style="margin-top: 1.55rem">
-  <h3>Все эти куски кода выглядят правдоподобно</h3>
-  <p class="muted">Если сказать «сделай как рядом», модель ещё должна угадать, какой из соседних вариантов — актуальный стандарт.</p>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.2rem">Слабая модель может ошибиться заметно. Сильная — ошибиться красиво, последовательно и очень убедительно.</div>
 
 <!--
 Время: 2:00.
-Не показывать номера PR на слайде — это история проекта, а не экскурсия по GitHub.
 Главная мысль: интеллект модели не даёт ей знания о том, какой исторический паттерн сегодня считается правильным.
+Мем — эмоциональная реакция на ответ агента «я нашёл четыре одинаково убедительных способа».
 -->
 
 ---
@@ -323,6 +320,86 @@ layout: center
 Время: 1:40.
 Это основная карта доклада.
 Progressive disclosure — сквозной принцип: не грузим всю организацию знаний в первый prompt.
+-->
+
+---
+
+# Harness — общий продукт команды
+
+<div class="two-col wide-left">
+  <div v-click class="flat-card">
+    <h3>Не набор личных промптов</h3>
+    <p>Это общие правила принятия решений, процедуры и проверки, которыми пользуется вся команда.</p>
+  </div>
+  <div v-click class="flat-card">
+    <h3>Не «вторая документация»</h3>
+    <p>Harness связывает существующие источники истины, делает норму явной и добавляет feedback.</p>
+  </div>
+</div>
+
+<div class="roadmap" style="margin-top: 1.35rem">
+  <div v-click><b>01</b><strong>Owners</strong><span>кто отвечает за правило</span></div>
+  <div v-click><b>02</b><strong>Versioning</strong><span>изменения видны и обсуждаемы</span></div>
+  <div v-click><b>03</b><strong>CI</strong><span>ссылки и gates не протухают</span></div>
+  <div v-click><b>04</b><strong>Learning loop</strong><span>ошибка становится правилом, test или eval</span></div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.25rem">Иначе команда создаст ещё один legacy — только уже в <code>.agents/</code>.</div>
+
+<!--
+Время: 1:30.
+Этот слайд задаёт масштаб: harness — часть инженерной платформы команды.
+Дальше раскрываем, как именно агент получает контекст и действует внутри этой системы.
+-->
+
+---
+
+# Контекст агента: что уже внутри, а что подтягиваем по ходу
+
+<div class="two-col wide-right">
+  <div>
+    <div v-click class="flat-card">
+      <h3>Сразу доступно агенту</h3>
+      <p>AGENTS.md · global/team memory · system/project rules · текущий task / spec · описание доступных tools / MCP</p>
+    </div>
+    <div v-click class="flat-card" style="margin-top: 1.15rem">
+      <h3>Подгружается по мере работы</h3>
+      <p>Code search · RAG · MCP responses · Confluence / docs · PR / Git history · logs / traces · deep references из skills</p>
+    </div>
+    <div v-click class="statement" style="margin-top: 1.3rem">Не максимальный контекст. Нужный контекст для текущего решения.</div>
+  </div>
+  <div>
+    <div v-click class="image-frame"><img src="/assets/context-static-dynamic.png" alt="Статический и динамически получаемый контекст агента" /></div>
+    <p v-after class="source">Источник: The New SDLC with Vibe Coding, май 2026, figure 4.</p>
+  </div>
+</div>
+
+<!--
+Время: 2:00.
+«Сразу доступно» не означает, что содержимое всех tools или всей документации целиком лежит в prompt.
+На старте агент знает базовые правила, текущую задачу и доступные возможности.
+Тяжёлый контекст — ответы MCP, история, логи, deep refs — подтягивается только когда нужен.
+-->
+
+---
+
+# Progressive disclosure: контекст раскрывается слоями
+
+<div class="click-flow">
+  <div v-click class="click-node"><b>AGENTS.md</b><span>куда смотреть</span></div>
+  <div v-click class="click-arrow">→</div>
+  <div v-click class="click-node"><b>Skill description</b><span>нужен ли workflow</span></div>
+  <div v-click class="click-arrow">→</div>
+  <div v-click class="click-node"><b>SKILL.md</b><span>default path + stop conditions</span></div>
+  <div v-click class="click-arrow">→</div>
+  <div v-click class="click-node"><b>Refs / scripts</b><span>только если понадобились</span></div>
+</div>
+
+<div v-click class="statement" style="margin-top: 1.8rem">Не грузим 50 страниц «на всякий случай» — оставляем агенту место думать о текущей задаче.</div>
+
+<!--
+Время: 1:30.
+Это ответ на проблему «забил контекст до первой правки».
 -->
 
 ---
@@ -396,56 +473,39 @@ AGENTS.md загружается рано, поэтому каждый лишн�
 
 ---
 
-# Spec-Driven Development: сначала фиксируем, что именно меняем
+# SDD в legacy: сначала договориться, потом менять
 
 <div class="click-flow">
-  <div v-click class="click-node"><b>1. Intent</b><span>что меняем и зачем</span></div>
+  <div v-click class="click-node"><b>Наблюдаем факт</b><span>код, тесты, продуктовый запрос</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>2. Contract</b><span>scope · scenarios · constraints</span></div>
+  <div v-click class="click-node"><b>Фиксируем intent</b><span>что меняем, зачем и что не трогаем</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>3. Implement</b><span>код + локальные решения</span></div>
+  <div v-click class="click-node"><b>Снимаем неоднозначность</b><span>scenarios · constraints · definition of done</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>4. Verify</b><span>tests · architecture · perf</span></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.8rem">Формат вторичен: OpenSpec, Spec Kit, свой Markdown. Важен versioned contract изменения.</div>
-
-<!--
-Время: 2:00.
-OpenSpec — один из вариантов, не золотой стандарт.
-Смысл SDD: до реализации убрать продуктовую и архитектурную неоднозначность,
-а не заставить команду принять конкретный framework.
--->
-
----
-
-# Как завести SDD в legacy, где спек никогда не было
-
-<div class="click-flow">
-  <div v-click class="click-node"><b>Код сегодня</b><span>реальное поведение</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Agent draft</b><span>восстановить spec из кода и тестов</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Human review</b><span>отделить intent от случайности</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Next change</b><span>уже начинается со spec</span></div>
+  <div v-click class="click-node"><b>Реализуем и проверяем</b><span>agent + gates + human review</span></div>
 </div>
 
 <div class="two-col" style="margin-top: 1.5rem">
   <div v-click class="flat-card">
-    <h3 class="green">Не требуем идеала</h3>
-    <p>Не нужно сначала описать весь девятилетний продукт.</p>
+    <h3 class="green">Начинаем с будущих изменений</h3>
+    <p>Не нужно документировать девятилетний продукт. На первом change агент может подготовить draft по коду и тестам.</p>
   </div>
   <div v-click class="flat-card warn">
-    <h3 class="yellow">Spec может отставать</h3>
-    <p>Bugfix или hotfix иногда появляется раньше обновления документа — тогда синхронизируем постфактум.</p>
+    <h3 class="yellow">Код — факт, spec — намерение</h3>
+    <p>Если они расходятся, не выбираем автоматически: человек отделяет актуальную норму от случайности legacy.</p>
   </div>
 </div>
 
+<div v-click class="statement" style="margin-top: 1.25rem">OpenSpec, Spec Kit или Markdown — не принципиально. Ценность в снятой до кода неоднозначности.</div>
+
 <!--
-Время: 1:50.
-Если spec расходится с кодом, нельзя слепо генерировать код из устаревшего текста.
-В legacy код и тесты остаются важным наблюдаемым источником факта; spec фиксирует intent и должна поддерживаться как инженерный артефакт.
+Время: 2:20.
+Смысл SDD: до реализации убрать продуктовую и архитектурную неоднозначность,
+а не заставить команду принять конкретный framework.
+Раскрыть этапы: 1) агент собирает evidence из кода и тестов, но не объявляет их нормой;
+2) product / tech owner подтверждает цель и out of scope;
+3) фиксируем сценарии, инварианты и machine-checkable DoD;
+4) агент исполняет согласованный контракт и приносит evidence.
 -->
 
 ---
@@ -470,58 +530,6 @@ layout: center
 Не нужна идеальная энциклопедия.
 Даже короткая spec ценна, если она фиксирует поведение, scope, ограничения и definition of done.
 -->
-
----
-
-# Контекст агента: что уже внутри, а что подтягиваем по ходу
-
-<div class="two-col wide-right">
-  <div>
-    <div v-click class="flat-card">
-      <h3>Сразу доступно агенту</h3>
-      <p>AGENTS.md · global/team memory · system/project rules · текущий task / spec · описание доступных tools / MCP</p>
-    </div>
-    <div v-click class="flat-card" style="margin-top: 1.15rem">
-      <h3>Подгружается по мере работы</h3>
-      <p>Code search · RAG · MCP responses · Confluence / docs · PR / Git history · logs / traces · deep references из skills</p>
-    </div>
-    <div v-click class="statement" style="margin-top: 1.3rem">Не максимальный контекст. Нужный контекст для текущего решения.</div>
-  </div>
-  <div>
-    <div v-click class="image-frame"><img src="/assets/context-static-dynamic.png" alt="Статический и динамически получаемый контекст агента" /></div>
-    <p v-after class="source">Источник: The New SDLC with Vibe Coding, май 2026, figure 4.</p>
-  </div>
-</div>
-
-<!--
-Время: 2:00.
-«Сразу доступно» не означает, что содержимое всех tools или всей документации целиком лежит в prompt.
-На старте агент знает базовые правила, текущую задачу и доступные возможности.
-Тяжёлый контекст — ответы MCP, история, логи, deep refs — подтягивается только когда нужен.
--->
-
----
-
-# Progressive disclosure: контекст раскрывается слоями
-
-<div class="click-flow">
-  <div v-click class="click-node"><b>AGENTS.md</b><span>куда смотреть</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Skill description</b><span>нужен ли workflow</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>SKILL.md</b><span>default path + stop conditions</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Refs / scripts</b><span>только если понадобились</span></div>
-</div>
-
-<div v-click class="statement" style="margin-top: 1.8rem">Не грузим 50 страниц «на всякий случай» — оставляем агенту место думать о текущей задаче.</div>
-
-<!--
-Время: 1:30.
-Это ответ на проблему «забил контекст до первой правки».
--->
-
----
 
 # Хороший skill — это процедура
 
@@ -638,65 +646,64 @@ layout: center
 
 ---
 
-# Eval — тест не кода, а агентной системы
+# Eval отвечает на один вопрос: улучшили ли мы среду агента?
 
 <div style="display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px">
   <div v-click class="flat-card">
-    <h3>Test</h3>
-    <p>код / приложение</p>
-    <p class="muted">route lazy? · bundle budget? · memory leak?</p>
+    <h3>Test / gate</h3>
+    <p>проверяет результат в продукте</p>
+    <p class="muted">lazy route? · bundle budget? · memory leak?</p>
   </div>
   <div v-click class="flat-card">
     <h3>Skill</h3>
-    <p>процедура для агента</p>
+    <p>подсказывает агенту порядок действий</p>
     <p class="muted">как выполнить класс задач · например performance-check</p>
   </div>
   <div v-click class="flat-card">
     <h3>Eval</h3>
-    <p>task + repo state + harness + graders</p>
-    <p class="muted">Task · invariants · machine checks · failure classes</p>
+    <p>измеряет, помогло ли изменение harness</p>
+    <p class="muted">одна задача · зафиксированный repo · одинаковые graders · несколько запусков</p>
   </div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.55rem">Test проверяет продукт. Skill помогает агенту действовать. Eval проверяет агента + harness на воспроизводимой задаче.</div>
+<div v-click class="statement" style="margin-top: 1.55rem">Test говорит: «результат проходит требование». Skill говорит: «попробуй сделать так». Eval говорит: «после этого изменения агенты стали справляться лучше?»</div>
 
 <!--
-Время: 1:35.
-Не путать eval с unit/e2e test.
-Eval нужен, чтобы сравнивать одну и ту же модель на одной и той же задаче
-между baseline-repository и agent-ready repository.
+Время: 1:50.
+Eval — контролируемый эксперимент над агентной системой, а не новый вид unit-теста.
+Фиксируем задачу, состояние репозитория, model settings и graders; меняем одну часть harness и смотрим на повторяемый результат.
 -->
 
 ---
 
-# Evals: один реальный фейл → regression case
+# Реальный промах агента превращаем в eval-case
 
 <div class="click-flow eval-flow">
-  <div v-click class="click-node"><b>Real failure</b><span>реальный промах агента</span></div>
+  <div v-click class="click-node"><b>Промах</b><span>выбрал deprecated loader</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Eval case</b><span>task + fixed repo + graders</span></div>
+  <div v-click class="click-node"><b>Eval-case</b><span>task + fixed repo + grader</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Baseline</b><span>как harness ведёт себя сейчас</span></div>
+  <div v-click class="click-node"><b>Baseline</b><span>сколько запусков выбирают устаревший путь</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Harness change</b><span>docs / rule / skill / tool</span></div>
+  <div v-click class="click-node"><b>Изменение harness</b><span>canonical doc / rule / skill</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Candidate</b><span>те же graders</span></div>
+  <div v-click class="click-node"><b>Повторяем</b><span>та же задача · тот же grader</span></div>
   <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Regression suite</b><span>кейс остаётся с нами</span></div>
+  <div v-click class="click-node"><b>Оставляем кейс</b><span>защита от регрессии harness</span></div>
 </div>
 
 <div class="two-col" style="margin-top: 1.2rem">
   <div v-click class="flat-card">
-    <h3>Сравниваем честно</h3>
-    <p class="muted">same task · fixed repo state · same graders · clean context · несколько trials</p>
+    <h3>Что оцениваем</h3>
+    <p class="muted">выбран canonical path · diff в scope · все gates passed · есть evidence, а не «done»</p>
   </div>
   <div v-click class="flat-card">
-    <h3>Начинаем с малого</h3>
-    <p class="muted">objective / machine graders · representative dataset · без LLM judge, dashboard и eval-platform</p>
+    <h3>Как не усложнить</h3>
+    <p class="muted">начать с одного реального фейла и machine grader; без LLM judge, dashboard и отдельной платформы</p>
   </div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.05rem">Skill — гипотеза об улучшении harness. Eval показывает, действительно ли он помогает.</div>
+<div v-click class="statement" style="margin-top: 1.05rem">Skill — гипотеза об улучшении harness. Eval показывает, помогла ли она на повторяемой задаче.</div>
 
 <!--
 Время: 2:00.
@@ -706,34 +713,35 @@ Eval нужен, чтобы сравнивать одну и ту же моде�
 
 ---
 
-# Harness живёт на уровне команды
+# В командный harness попадает только доказанное
 
 <div class="two-col wide-left">
-  <pre v-click class="repo-tree">agent-platform/
-├─ docs/
-├─ rules/
-├─ skills/
-│  └─ performance-check/
-├─ evals/
-├─ templates/
-└─ owners.yaml</pre>
+  <pre v-click class="repo-tree">real failure
+  ↓
+eval case
+  ↓
+proven improvement
+  ↓
+docs / rule / skill / gate
+  ↓
+team release</pre>
   <div v-click>
     <ul>
-      <li>owners для доменных правил и skills;</li>
-      <li>versioning и release notes;</li>
-      <li>CI валидирует структуру и ссылки;</li>
-      <li>ошибка оставляет test / eval / rule;</li>
-      <li>метрики: rework, bugs, cycle time.</li>
+      <li>owner принимает изменение и отвечает за актуальность;</li>
+      <li>versioning / release notes делают новую норму видимой;</li>
+      <li>CI проверяет структуру, ссылки и executable gates;</li>
+      <li>не доказали пользу — не добавляем ещё один skill;</li>
+      <li>меряем rework, bugs и cycle time, а не красоту demo.</li>
     </ul>
   </div>
 </div>
 
-<div v-click class="statement" style="margin-top: 1.5rem">Команду убеждает снижение возвратов и регрессий, а не красивое AI-demo.</div>
+<div v-click class="statement" style="margin-top: 1.5rem">Так harness растёт из реальных инженерных проблем, а не из коллекции модных инструкций.</div>
 
 <!--
 Время: 1:40.
-Структура примерная. Главное — ownership и lifecycle.
-Иначе через полгода получим второй legacy, только уже в .agents/.
+После определения eval замыкаем цикл: промах не просто фиксится один раз,
+а становится проверяемым улучшением, которое команда может безопасно распространить.
 -->
 
 ---
@@ -762,7 +770,7 @@ layout: center
 
 <div class="checklist">
   <div v-click>Есть короткая точка входа</div>
-  <div v-click>Документация живёт рядом с кодом</div>
+  <div v-click>У знаний есть понятный источник истины</div>
   <div v-click>Pattern и anti-pattern названы явно</div>
   <div v-click>Change начинается с versioned spec</div>
   <div v-click>Контекст раскрывается постепенно</div>
