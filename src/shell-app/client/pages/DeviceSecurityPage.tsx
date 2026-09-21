@@ -155,6 +155,7 @@ export default function DeviceSecurityPage() {
   return (
     <div
       data-test="device-security-page"
+      data-page={page + 1}
       style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 16 }}
     >
       <h2 data-test="device-security-title" style={{ margin: 0 }}>

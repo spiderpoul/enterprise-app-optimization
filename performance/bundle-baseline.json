@@ -1,0 +1,7 @@
+{
+  "entries": {
+    "shell-client": { "directory": "src/shell-app/client/dist/assets", "assetPattern": "^main\\..+\\.js$", "bytes": 443606, "maxDeltaBytes": 262144, "maxDeltaPercent": 5 },
+    "operations-reports-client": { "directory": "src/microfrontends/operations-reports/client/dist", "assetPattern": "^operations-reports\\.js$", "bytes": 21075599, "maxDeltaBytes": 262144, "maxDeltaPercent": 5 },
+    "users-and-roles-client": { "directory": "src/microfrontends/users-and-roles/client/dist", "assetPattern": "^users-and-roles\\.js$", "bytes": 48144439, "maxDeltaBytes": 262144, "maxDeltaPercent": 5 }
+  }
+}
