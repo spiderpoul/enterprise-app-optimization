@@ -39,7 +39,6 @@ canvasWidth: 1440
     <div class="eyebrow">Павел Уваров</div>
     <div class="speaker-role">Software Expert в Kaspersky</div>
     <div class="speaker-role muted">Спикер Podlodka React Crew · HolyJS</div>
-
     <div v-click class="speaker-fact"><b>9+ лет</b><span>разрабатываю enterprise-проекты</span></div>
     <div v-click class="speaker-fact"><b>200+</b><span>технических собеседований — и продолжаю проводить</span></div>
     <div v-click class="speaker-fact"><b>Челлендж</b><span>как только у нас появилась агентная разработка — перестать писать код руками</span></div>
@@ -66,15 +65,12 @@ layout: center
 <div class="two-col wide-left">
   <div>
     <div v-click class="big-quote" style="font-size: 41px">«На собеседованиях всё чаще вижу: человек не может без агента написать даже простой цикл»</div>
-
     <div v-click class="flat-card" style="margin-top: 1.3rem">
       <h3>Мой тезис</h3>
       <p>Если без Claude ты не можешь объяснить и поддержать решение, Claude это не исправит.</p>
     </div>
-
     <div v-click class="statement" style="margin-top: 1.25rem">Сильная модель без контекста тоже ошибается — только дороже.</div>
   </div>
-
   <div v-click class="meme-image meme-spider meme-spider-small">
     <img src="/assets/1.jfif" alt="Мем про зависимость от Claude" />
   </div>
