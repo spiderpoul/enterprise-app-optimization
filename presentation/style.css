@@ -29,24 +29,17 @@
   line-height: 1.42;
 }
 
-.slidev-layout::after {
-  position: absolute;
-  right: 84px;
-  bottom: 28px;
-  width: 64px;
-  height: 3px;
-  border-radius: 999px;
-  background: var(--green);
-  content: "";
-  opacity: 0.7;
-}
-
 .slidev-layout.center {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   justify-content: center;
   text-align: left;
+}
+
+.context-key-message {
+  margin-top: 0.8rem;
+  font-size: 29px;
 }
 
 .slidev-layout h1,
@@ -235,6 +228,10 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 22px;
+}
+
+.engineer-multiplier {
+  margin-top: 2.3rem;
 }
 
 .step {
@@ -601,17 +598,14 @@
 }
 
 .speaker-photo {
-  padding: 18px;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  background: var(--surface);
+  padding: 0;
   text-align: center;
 }
 
 .speaker-photo img {
   width: 100%;
   max-height: 500px;
-  border-radius: 14px;
+  border-radius: 0;
   object-fit: cover;
 }
 
@@ -854,7 +848,7 @@
 }
 
 .speaker-photo {
-  padding: 12px;
+  padding: 0;
 }
 
 .speaker-photo img {
@@ -862,6 +856,100 @@
   max-height: none;
   object-fit: cover;
   object-position: center 24%;
+}
+
+.agenda-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.agenda-grid > div {
+  min-height: 220px;
+  padding: 24px 22px;
+  border-top: 4px solid var(--green);
+  background: rgb(13 27 21 / 80%);
+}
+
+.agenda-grid b {
+  display: block;
+  margin-bottom: 38px;
+  color: var(--green);
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 20px;
+}
+
+.agenda-grid span {
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.22;
+}
+
+.project-overview {
+  grid-template-columns: 1.32fr 0.68fr;
+}
+
+.project-metrics {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 6px 0;
+}
+
+.project-metrics .metric {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.project-metrics .metric b {
+  font-size: 62px;
+}
+
+.project-metrics .metric span {
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 620;
+}
+
+.slide-footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  display: flex;
+  height: 27px;
+  align-items: center;
+  gap: 14px;
+  padding: 0 84px;
+  pointer-events: none;
+}
+
+.slide-page {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.slide-progress-track {
+  display: block;
+  flex: 1;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(115 242 167 / 18%);
+}
+
+.slide-progress-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--green);
+  transition: width 250ms ease;
 }
 
 .meme-spider-small img {
