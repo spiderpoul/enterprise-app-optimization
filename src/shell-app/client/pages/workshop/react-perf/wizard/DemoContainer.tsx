@@ -48,9 +48,9 @@ const DemoContainer: React.FC = () => {
     {
       id: 'quick-setup',
       title: 'Quick Setup',
-      // ❌ Anti-pattern: inline arrow recreates the Component identity on every render.
-      //    Any wizardState update rebuilds `steps` and forces React to remount this step from scratch.
-      Component: () => <SecurityQuickSetupStep />,
+      // ✅ Fix: hand the component reference directly so React keeps the same identity between renders.
+      //    This prevents unnecessary unmounts when the surrounding wizard state changes.
+      Component: SecurityQuickSetupStep,
     },
     {
       id: 'policy-tuning',
