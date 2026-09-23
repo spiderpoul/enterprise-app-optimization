@@ -342,7 +342,7 @@ Never — четыре запрета. Не «пиши хороший код», 
 <div class="file code-sm">
 <div class="file-head"><span>AGENTS.md (продолжение)</span><span>demo/agent-ready-v2</span></div>
 
-```md {1-9|11-14|all}
+```md {1-8|10-13|all}
 ## What else you touch
 | You change                           | It also affects                              | Run                  |
 |--------------------------------------|----------------------------------------------|----------------------|
@@ -393,9 +393,10 @@ Owner: @platform-frontend (see CODEOWNERS).
 
 - webpack/createMicrofrontendConfig.cjs declares window
   externals for React, JSX runtimes and React Router.
-  Drop one → each product bundles its own React →
+  Drop `react` → each product bundles its own React →
   "Invalid hook call" at runtime, the build stays green.
-- server/index.js serves `entryPath` for every product.
+- server/index.js serves each product's client/dist at `/`
+  in production — where the manifest `entryPath` points.
   Changing the static path breaks all manifests.
 
 Before editing: use the safe-change skill,
@@ -517,7 +518,7 @@ layout: center
 <div class="file code-xs">
 <div class="file-head"><span>docs/architecture/microfrontends.md</span><span>фрагмент</span></div>
 
-```md {1|3-8|10-15|17-24|all}
+```md {1|3-9|11-16|18-24|all}
 Owner: @platform-frontend · Reviewed: 2026-09 · Check: `npm run check:architecture`
 
 ## Current contract (do this)
@@ -525,22 +526,23 @@ Owner: @platform-frontend · Reviewed: 2026-09 · Check: `npm run check:architec
 2. Build with `common/webpack/createMicrofrontendConfig.cjs` — never a local copy.
 3. Export a React Router `RouteObject`; keep the page behind a dynamic import.
 4. Register `<name>-client` / `<name>-server` in nx.json and root workspaces.
-Reference implementation: `src/microfrontends/users-and-roles/`.
+Reference implementation: `src/microfrontends/users-and-roles/`
+(except step 3: its pages are still imported statically — read Pitfalls before step 3).
 
 ## Do not copy (looks valid, is not)
 | Pattern                  | Where you will see it     | Why not                                 |
 |--------------------------|---------------------------|-----------------------------------------|
 | Module Federation        | PR #25, reverted in #26   | second runtime, duplicated React        |
-| eager singleton sharing  | PR #27, #29               | pulls every product into the shell      |
-| script-tag registry      | PR #33, reverted in #34   | bypasses manifest discovery             |
+| eager singleton sharing  | PR #27, #29               | each product bundles its own React      |
+| script-tag registry      | PR #33, reverted in #34   | second registry beside the manifest     |
 
 ## Pitfalls
 - A copied webpack config loses the window externals. The build passes, the page
   fails with "Invalid hook call". check:architecture catches it.
-- manifest `routePath` must equal the exported route. Otherwise the page opens by
-  direct URL but not from the menu.
-- `entryPath` is served by the product's own server. Rename the output file without
-  updating the manifest → 404 only in production-like mode.
+- manifest `routePath` must equal the exported route. Menu and router use the exported
+  `path`, so the menu works but links to `routePath` show Not Found.
+- `entryPath` must equal the client's `outputFileName`. Rename the output file alone →
+  its entry 404s and the shell drops every product from the menu (one `Promise.all`).
 ```
 
 </div>
@@ -798,12 +800,12 @@ references и scripts — только когда реально понадоб�
 <div class="file code-xs">
 <div class="file-head"><span>.agents/skills/safe-change/SKILL.md</span><span>demo/agent-ready-v2</span></div>
 
-```md {1-5|8-10|11-14|15-17|18-20|all}
+```md {1-6|8-11|12-13|14-15|16-19|all}
 ---
 name: safe-change
-description: Use before changing shared code or public contracts — anything in the
+description: 'Use before changing shared code or public contracts — anything in the
   AGENTS.md "What else you touch" table: common/, manifests, shell discovery, shared
-  dependencies. Not needed for changes inside a single product.
+  dependencies. Not needed for changes inside a single product.'
 ---
 
 1. Name the contract you touch and start from the "What else you touch" table and the
@@ -858,16 +860,18 @@ description: Use when a task includes logs, HAR
 
   </div>
   <div>
-    <pre v-click class="repo-tree" style="font-size: 18px">$ node …/summarize.cjs stand-42.log
- 2 481 lines · 3 error groups
- #1  12:04:17.201  trace 9f3c…
-     502 /api/mf/application-security/apps
-     × 118 (first seen, 5 services)
- #2  12:04:17.388  TypeError: rows.map …
-     × 118 (after #1, same traces)
- #3  12:05:02.914  WS reconnect
-     × 4 (unrelated)</pre>
-    <p v-click style="margin-top: 1rem; font-size: 23px">В контекст модели попадает 12 строк вместо 2,5 тысяч. Решение о причине — всё ещё за моделью.</p>
+    <pre v-click class="repo-tree" style="font-size: 17px">$ node …/summarize.cjs fixtures/sample.log
+68 lines · 3 error groups
+#1  12:04:17.201  trace 9f3c1a7e…
+    502 /api/mf/application-security/apps
+    × 6 (first seen, 3 services)
+#2  12:04:17.388  trace 9f3c1a7e…
+    TypeError: rows.map is not a function
+    × 6 (after #1, same traces)
+#3  12:05:02.914  trace 51aa07c2…
+    WS reconnect: socket closed (1006)
+    × 4 (unrelated)</pre>
+    <p v-click style="margin-top: 1rem; font-size: 23px">Сколько бы строк ни было в логе, в контекст модели попадает только сводка. Решение о причине — всё ещё за моделью.</p>
   </div>
 </div>
 
@@ -875,6 +879,7 @@ description: Use when a task includes logs, HAR
 Время: 1:20.
 Группировка, подсчёт, сортировка по времени — детерминированная работа, её не нужно поручать рассуждению.
 Модель подключается там, где нужна интерпретация: какая ошибка первопричина, а какая следствие.
+Вывод справа — реальный запуск скрипта на fixtures/sample.log из demo-ветки, его можно повторить вживую.
 [TODO: реальный эффект skill в KSC — например, сколько времени занимал разбор инцидента до и после.]
 -->
 
@@ -997,7 +1002,7 @@ Reviewer не видел рассуждений автора, поэтому с�
   <div v-click class="file code-sm">
   <div class="file-head"><span>.agents/agents/explorer.md</span></div>
 
-```md {1-6|7|9-13|15|all}
+```md {1-7|8|10-15|17|all}
 ---
 name: explorer
 description: Read-only research of code, docs and git
@@ -1331,6 +1336,7 @@ Eval проверяет не код, а обвязку: стали ли аген
 Время: 1:20.
 Ночной прогон особенно полезен, когда обновляется внутренняя модель: сразу видно, какие кейсы просели.
 Пять прогонов — не статистика, но достаточно, чтобы отличить «помогло» от «повезло один раз».
+[TODO: если есть — заменить пример промаха на реальный случай из KSC.]
 -->
 
 ---
@@ -1343,7 +1349,7 @@ Eval проверяет не код, а обвязку: стали ли аген
 
 ```md
 # Add microfrontend
-Start commit: 29fdb72
+Start commit: f9dbc81
 
 ## Task            ← only this goes to the agent
 Add a product microfrontend and register it
