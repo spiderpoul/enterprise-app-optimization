@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { Navigate, useLocation, useNavigate, useRoutes } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import {
   Alert,
@@ -25,6 +26,7 @@ import {
   UserAccount,
 } from '@kaspersky/hexa-ui-icons/16';
 import Dashboard from './dashboard/Dashboard';
+import { MicrofrontendBoundary } from '../microfrontends/MicrofrontendBoundary';
 import { useMicrofrontends } from '../microfrontends/useMicrofrontends';
 import NotFound from '../pages/NotFound';
 import { useShellInitialization } from '../hooks/useShellInitialization';
@@ -281,7 +283,7 @@ const InitializationContainer = styled(Space)`
 `;
 
 const MainLayout: React.FC = () => {
-  const { microfrontends, isLoading, error } = useMicrofrontends();
+  const { microfrontends, failedMicrofrontends, isLoading, error } = useMicrofrontends();
   const userDisplayName = 'Enterprise operator';
   const userRole = 'Workspace automation lead';
   const { isInitializing } = useShellInitialization();
@@ -407,7 +409,17 @@ const MainLayout: React.FC = () => {
   }, [handleNavigate, userDisplayName, userRole]);
 
   const microfrontendRoutes = useMemo(
-    () => microfrontends.map(({ routeConfig }) => routeConfig),
+    () =>
+      microfrontends.map(({ name, routeConfig }) => {
+        const { Component, element, ...route } = routeConfig as RouteObject;
+        const content = element ?? (Component ? <Component /> : null);
+
+        // A product that throws while rendering must not unmount the whole shell.
+        return {
+          ...route,
+          element: <MicrofrontendBoundary name={name}>{content}</MicrofrontendBoundary>,
+        } as RouteObject;
+      }),
     [microfrontends],
   );
 
@@ -519,6 +531,21 @@ const MainLayout: React.FC = () => {
                   <Space direction="vertical" gap={4} align="flex-start">
                     <H4>Microfrontend registry unreachable</H4>
                     <Text>{error}</Text>
+                  </Space>
+                </Alert>
+              </AlertContainer>
+            ) : null}
+
+            {failedMicrofrontends.length > 0 ? (
+              <AlertContainer>
+                <Alert mode="warning">
+                  <Space direction="vertical" gap={4} align="flex-start">
+                    <H4>Some microfrontends are unavailable</H4>
+                    {failedMicrofrontends.map(({ id, name, message }) => (
+                      <Text key={id}>
+                        {name}: {message}
+                      </Text>
+                    ))}
                   </Space>
                 </Alert>
               </AlertContainer>

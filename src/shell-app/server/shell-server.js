@@ -28,15 +28,42 @@ const shellApiDocumentation = require('./swagger/shell-api.json');
 
 const environment = createEnvironment({ env: process.env, serverDir: serverRoot });
 
+// Products acknowledge every 30s by default; three missed acknowledgements drop the entry. 0 disables expiry.
+const DEFAULT_MICROFRONTEND_TTL_MS = 90000;
+function parseMicrofrontendTtl(value) {
+  const parsed = Number.parseInt(String(value ?? '').trim(), 10);
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : DEFAULT_MICROFRONTEND_TTL_MS;
+}
+
 const registry = createMicrofrontendRegistry({
   dataFile: path.join(serverRoot, 'dist', 'data', 'microfrontends.json'),
   sourceDataFile: path.join(serverRoot, 'data', 'microfrontends.json'),
+  ttlMs: parseMicrofrontendTtl(process.env.MICROFRONTEND_TTL_MS),
 });
 
 const initializationPlanById = new Map(initializationPlan.map((step) => [step.id, step]));
 
 const app = express();
 const microfrontendProxyManager = createMicrofrontendProxyManager({ app });
+
+const pruneStaleMicrofrontends = () => {
+  const removed = registry.pruneStale();
+
+  if (removed.length === 0) {
+    return;
+  }
+
+  for (const entry of removed) {
+    microfrontendProxyManager.unregister(entry.id);
+    console.warn(
+      `Dropped microfrontend "${entry.id}": no acknowledgement since ${entry.lastAcknowledgedAt || 'never'}.`,
+    );
+  }
+
+  registry.persist();
+};
+
+pruneStaleMicrofrontends();
 
 for (const entry of registry.values()) {
   microfrontendProxyManager.register(entry);
@@ -119,6 +146,8 @@ app.get('/api/mf/reports/error', (_req, res) => {
 });
 
 app.get('/api/microfrontends', (_req, res) => {
+  pruneStaleMicrofrontends();
+
   const microfrontends = registry.values().map((entry) => ({
     apiProxy: entry.apiProxy || null,
     description: entry.description || '',
@@ -173,8 +202,14 @@ app.post('/api/microfrontends/ack', (req, res) => {
     return res.status(400).json({ message: 'Unable to register microfrontend acknowledgement.' });
   }
 
+  const previous = registry.get(entry.id);
+  const withoutTimestamp = (value) => JSON.stringify({ ...value, lastAcknowledgedAt: null });
+  const isHeartbeat = previous && withoutTimestamp(previous) === withoutTimestamp(entry);
+
   registry.set(entry);
-  microfrontendProxyManager.register(entry);
+  if (!isHeartbeat) {
+    microfrontendProxyManager.register(entry);
+  }
   registry.persist();
 
   res.status(204).end();

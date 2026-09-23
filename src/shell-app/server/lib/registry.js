@@ -125,7 +125,7 @@ const loadRegistryEntries = (dataFile) => {
   }
 };
 
-const createMicrofrontendRegistry = ({ dataFile, sourceDataFile }) => {
+const createMicrofrontendRegistry = ({ dataFile, sourceDataFile, ttlMs = 0 }) => {
   if (!dataFile) {
     throw new Error('dataFile is required to create the microfrontend registry.');
   }
@@ -147,6 +147,22 @@ const createMicrofrontendRegistry = ({ dataFile, sourceDataFile }) => {
     registry.delete(id);
     return existing;
   };
+  // Products acknowledge the shell periodically. An entry without a fresh acknowledgement belongs to a
+  // product that was stopped or removed; serving it makes every client try to import a dead entry.
+  const isStale = (entry, now) => {
+    if (!ttlMs) {
+      return false;
+    }
+
+    const acknowledgedAt = Date.parse(entry.lastAcknowledgedAt || '');
+
+    return !Number.isFinite(acknowledgedAt) || now - acknowledgedAt > ttlMs;
+  };
+  const pruneStale = (now = Date.now()) => {
+    const removed = values().filter((entry) => isStale(entry, now));
+    removed.forEach((entry) => registry.delete(entry.id));
+    return removed;
+  };
   const persist = () => {
     ensureDataFile({ dataFile, sourceDataFile });
     const serialized = JSON.stringify(values(), null, 2);
@@ -157,6 +173,7 @@ const createMicrofrontendRegistry = ({ dataFile, sourceDataFile }) => {
     dataFile,
     get,
     persist,
+    pruneStale,
     remove,
     set,
     values,

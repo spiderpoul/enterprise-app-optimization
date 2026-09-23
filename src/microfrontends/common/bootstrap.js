@@ -132,9 +132,13 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
   }
 
   const acknowledgementEndpoint = new URL('/api/microfrontends/ack', shellUrl).href;
+  const registrationEndpoint = new URL(
+    `/api/microfrontends/${encodeURIComponent(descriptor.id)}`,
+    shellUrl,
+  ).href;
 
   let timer = null;
-  let hasAcknowledged = false;
+  let isAcknowledged = false;
 
   const stopTimer = () => {
     if (timer) {
@@ -143,6 +147,8 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
     }
   };
 
+  // The acknowledgement doubles as a heartbeat: the shell drops entries that stop acknowledging, and a
+  // restarted shell with an empty registry gets the product back within one interval.
   const sendAcknowledgement = async () => {
     try {
       const response = await fetch(acknowledgementEndpoint, {
@@ -157,21 +163,47 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
         throw new Error(`Shell acknowledgement failed with status ${response.status}`);
       }
 
-      console.log(`Microfrontend "${descriptor.id}" acknowledged by shell.`);
-      hasAcknowledged = true;
-      stopTimer();
+      if (!isAcknowledged) {
+        console.log(`Microfrontend "${descriptor.id}" acknowledged by shell.`);
+      }
+      isAcknowledged = true;
     } catch (error) {
-      console.error('Unable to acknowledge shell:', error.message || error);
+      if (isAcknowledged) {
+        console.error('Lost connection to shell:', error.message || error);
+      } else {
+        console.error('Unable to acknowledge shell:', error.message || error);
+      }
+      isAcknowledged = false;
     }
   };
 
-  const start = () => {
-    void sendAcknowledgement();
+  const unregister = async () => {
+    try {
+      await fetch(registrationEndpoint, { method: 'DELETE', signal: AbortSignal.timeout(1000) });
+    } catch (_error) {
+      // The shell drops the entry by TTL when it cannot be reached now.
+    }
+  };
 
-    if (!hasAcknowledged) {
-      timer = setInterval(() => {
-        void sendAcknowledgement();
-      }, intervalMs);
+  const stop = async () => {
+    stopTimer();
+    await unregister();
+  };
+
+  const start = ({ unregisterOnExit = true } = {}) => {
+    void sendAcknowledgement();
+    stopTimer();
+    timer = setInterval(() => {
+      void sendAcknowledgement();
+    }, intervalMs);
+    timer.unref?.();
+
+    if (unregisterOnExit) {
+      for (const signal of ['SIGINT', 'SIGTERM']) {
+        process.once(signal, () => {
+          void stop().finally(() => process.exit(0));
+        });
+      }
     }
 
     return () => {
@@ -183,6 +215,7 @@ function createMicrofrontendAcknowledger({ descriptor, shellUrl, intervalMs = DE
     descriptor,
     sendAcknowledgement,
     start,
+    stop,
   };
 }
 

@@ -57,7 +57,9 @@ shell when it becomes available.
 
 - **Shell discovery API** – `src/shell-app/server/shell-server.js` persists acknowledgements and exposes REST endpoints for discovery and
   lifecycle management. Client-side code fetches `/api/microfrontends` on boot and constructs lazy React routes for each
-  registered plugin.
+  registered plugin. An entry that has not acknowledged for `MICROFRONTEND_TTL_MS` (default 90 s, `0` disables it) is
+  dropped, and a stopping microfrontend unregisters itself, so a removed plugin is not served from the persisted registry.
+  A plugin whose entry fails to load is skipped with a warning; the others still load.
 - **Dynamic module loading** – The shell uses `React.lazy` together with dynamic `import()` calls (`webpackIgnore: true`) so that
   remote bundles are fetched only when a user navigates to the corresponding route.
 - **Error isolation** – `MicrofrontendBoundary` wraps every remote component to keep failures contained and provide actionable

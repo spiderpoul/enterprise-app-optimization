@@ -120,14 +120,23 @@ const parseMicrofrontends = (input: unknown): MicrofrontendManifest[] => {
     .filter((manifest): manifest is MicrofrontendManifest => manifest !== null);
 };
 
+export interface FailedMicrofrontend {
+  id: string;
+  name: string;
+  message: string;
+}
+
 export interface UseMicrofrontendsResult {
   microfrontends: LoadedMicrofrontend[];
+  /** Registered products whose entry could not be loaded; the others still work. */
+  failedMicrofrontends: FailedMicrofrontend[];
   isLoading: boolean;
   error: string | null;
 }
 
 export const useMicrofrontends = (): UseMicrofrontendsResult => {
   const [microfrontends, setMicrofrontends] = useState<LoadedMicrofrontend[]>([]);
+  const [failedMicrofrontends, setFailedMicrofrontends] = useState<FailedMicrofrontend[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -143,7 +152,8 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
         }
 
         const payload = parseMicrofrontends((await response.json()) as unknown);
-        const loadedMicrofrontends = await Promise.all(
+        // One unavailable product (stopped, removed, broken build) must not hide the others.
+        const results = await Promise.allSettled(
           payload.map(async (manifest) => {
             const module = await loadMicrofrontendModule(manifest.entryUrl);
             const routeConfig = resolveMicrofrontendRouteConfig(
@@ -159,8 +169,26 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
           }),
         );
 
+        const loadedMicrofrontends: LoadedMicrofrontend[] = [];
+        const failed: FailedMicrofrontend[] = [];
+
+        results.forEach((result, index) => {
+          const manifest = payload[index];
+
+          if (result.status === 'fulfilled') {
+            loadedMicrofrontends.push(result.value);
+            return;
+          }
+
+          const message =
+            result.reason instanceof Error ? result.reason.message : String(result.reason);
+          console.error(`Failed to load microfrontend "${manifest.id}"`, result.reason);
+          failed.push({ id: manifest.id, name: manifest.name, message });
+        });
+
         if (isMounted) {
           setMicrofrontends(loadedMicrofrontends);
+          setFailedMicrofrontends(failed);
           setError(null);
         }
       } catch (err) {
@@ -169,6 +197,7 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
           const message = err instanceof Error ? err.message : 'Unable to retrieve microfrontends.';
           setError(message);
           setMicrofrontends([]);
+          setFailedMicrofrontends([]);
         }
       } finally {
         if (isMounted) {
@@ -186,6 +215,7 @@ export const useMicrofrontends = (): UseMicrofrontendsResult => {
 
   return {
     microfrontends,
+    failedMicrofrontends,
     isLoading,
     error,
   };
