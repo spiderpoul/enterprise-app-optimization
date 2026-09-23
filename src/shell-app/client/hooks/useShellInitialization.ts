@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 
-const INITIALIZATION_STEP_IDS = [
-  'services-bootstrap',
-  'user-settings',
-  'catalog-sync',
-  'permissions',
-  'final-handshake',
-];
+import {
+  BACKGROUND_INITIALIZATION_STEP_IDS,
+  runInitializationStep,
+} from '../initialization/initializationSteps';
+import { waitForBlockingInitialization } from '../initialization/blockingInitialization';
 
 export interface UseShellInitializationResult {
   isInitializing: boolean;
@@ -18,29 +16,30 @@ export const useShellInitialization = (): UseShellInitializationResult => {
   useEffect(() => {
     let isMounted = true;
 
+    const runBackgroundSteps = async (): Promise<void> => {
+      await Promise.all(
+        BACKGROUND_INITIALIZATION_STEP_IDS.map((stepId) =>
+          runInitializationStep(stepId).catch((error) => {
+            console.error(
+              `Background initialization step "${stepId}" failed.`,
+              error,
+            );
+          }),
+        ),
+      );
+    };
+
     const runInitialization = async () => {
       try {
-        for (const stepId of INITIALIZATION_STEP_IDS) {
-          if (!isMounted) {
-            return;
-          }
-
-          const response = await fetch(`/api/initialization/steps/${encodeURIComponent(stepId)}`, {
-            method: 'POST',
-          });
-
-          if (!response.ok) {
-            throw new Error(
-              `Initialization step "${stepId}" failed with status ${response.status}.`,
-            );
-          }
-        }
+        await waitForBlockingInitialization();
 
         if (!isMounted) {
           return;
         }
 
         setIsInitializing(false);
+
+        void runBackgroundSteps();
       } catch (error) {
         console.error('Shell initialization failed.', error);
 
