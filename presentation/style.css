@@ -1018,3 +1018,83 @@
 .spec-grid .flat-card p {
   font-size: 20px;
 }
+
+/* Repository file frames: a filename header above a code block */
+.file {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--green);
+  border-radius: 16px;
+  background: #091711;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 22%);
+}
+
+.file.bad {
+  border-top-color: var(--red);
+}
+
+.file-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--green);
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 17px;
+  font-weight: 650;
+}
+
+.file-head span:last-child:not(:first-child) {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.file pre {
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.code-sm pre code,
+.code-sm pre code span {
+  font-size: 17px !important;
+  line-height: 1.42 !important;
+}
+
+.code-xs pre code,
+.code-xs pre code span {
+  font-size: 15px !important;
+  line-height: 1.38 !important;
+}
+
+.slidev-layout .flat-card + pre,
+.slidev-layout .flat-card + .slidev-code-wrapper {
+  margin-top: 12px;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.skill-grid .flat-card {
+  padding: 20px 24px;
+}
+
+.skill-grid .flat-card h3 {
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 23px;
+}
+
+.skill-grid .flat-card p {
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.file:not(.slidev-vclick-target) {
+  animation: block-enter 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
