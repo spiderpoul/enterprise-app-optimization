@@ -548,7 +548,7 @@ Reference implementation: `src/microfrontends/users-and-roles/`
 - manifest `routePath` must equal the exported route. Menu and router use the exported
   `path`, so the menu works but links to `routePath` show Not Found.
 - `entryPath` must equal the client's `outputFileName`. Rename the output file alone →
-  its entry 404s and the shell drops every product from the menu (one `Promise.all`).
+  its entry 404s and the shell skips the product with an "unavailable" warning.
 ```
 
 </div>
