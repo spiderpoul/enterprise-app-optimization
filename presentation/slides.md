@@ -208,7 +208,12 @@ layout: center
   </div>
 </div>
 
-<p v-click style="margin-top: 1.5rem; font-size: 26px">Модель, настройки и продуктовая задача одинаковые. Отличается только то, что лежит в репозитории.</p>
+<div v-click class="flat-card warn" style="margin-top: 1rem; padding: 18px 26px">
+  <h3 style="font-size: 23px; margin-bottom: 6px">Оба промпта заканчиваются одинаково</h3>
+  <p style="font-size: 20px">«When you are done, write a short report in Russian to <code>agent-report.md</code>: what you did, which checks you ran and their results, and your reasoning — key decisions, alternatives you rejected, doubts.»</p>
+</div>
+
+<p v-click style="margin-top: 1rem; font-size: 24px">Модель, настройки и продуктовая задача одинаковые. Отличается только то, что лежит в репозитории.</p>
 
 <!--
 Время: 1:30.
@@ -216,6 +221,7 @@ layout: center
 Одинаковые model settings. Run A не подсказываю ничего.
 Честно проговорить: spec у Run B — тоже часть harness. Это не нечестное преимущество,
 а ровно то, что мы и предлагаем делать: задача приходит к агенту уже разобранной.
+Отчёт в конце — одинаковая просьба для обоих: в финале сравним не только диффы, но и то, как каждый рассуждал.
 Если live-модель недоступна — дальше по тем же слайдам использую сохранённые трейсы и диффы репетиции.
 -->
 
@@ -629,7 +635,7 @@ Draft может написать агент — по коду, тестам и 
   <div>
     <div v-click class="flat-card"><h3>1 · Поведение, а не реализация</h3><p class="muted">Что увидит пользователь. Как — решает агент в рамках доков.</p></div>
     <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>2 · Сценарии WHEN / THEN</h3><p class="muted">Каждый можно проверить руками или тестом.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>3 · Out of scope списком</h3><p class="muted">Иначе агент «заодно порефакторит» common/.</p></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>3 · Scope и разрешения</h3><p class="muted">Что не трогаем — и что можно менять, если упёрлись: например, конфиг своего микрофронта.</p></div>
   </div>
   <div>
     <div v-click class="flat-card"><h3>4 · Ссылки на доки</h3><p class="muted">Не пересказываем архитектуру — ссылаемся.</p></div>
@@ -649,10 +655,10 @@ Draft может написать агент — по коду, тестам и 
 
 # Файл: <code>spec.md</code> для Application Security
 
-<div class="file code-xs">
+<div class="file code-xxs">
 <div class="file-head"><span>openspec/changes/add-application-security/spec.md</span><span>фрагмент</span></div>
 
-```md {1-3|5-9|11-13|15-17|19-23|all}
+```md {1-3|5-8|10-12|14-17|19-21|23-27|all}
 ### Requirement: Application Security inventory page
 The shell SHALL show "Application Security" in navigation and open a paginated
 inventory at `/application-security`.
@@ -661,15 +667,19 @@ inventory at `/application-security`.
 - WHEN the user clicks "Application Security"
 - THEN a table of applications is shown, with loading, empty and error states
 - AND the page code is downloaded only at this moment (lazy chunk)
-- AND long identifiers do not break the table layout
 
 #### Scenario: leave after paging
 - WHEN the user pages to the last page and navigates away
 - THEN no detached DOM is retained by application code
 
+## If the lazy chunk does not work
+You may change this microfrontend's own config (Babel, webpack, its server) until the
+chunk loads through the shell and the checks pass. Describe the workaround in the report.
+Recipe: "Lazy chunks through the shell" in docs/architecture/microfrontends.md.
+
 ## Out of scope
 - editing, filters, export
-- changes in `src/microfrontends/common/` or in other products
+- changes in `src/microfrontends/common/`, the shell or other products
 
 ## Done
 npm run lint · npm run build · npm run check:architecture · npm run check:bundle
@@ -682,6 +692,8 @@ route's scenario or report "build passed" as evidence.
 
 <!--
 Время: 1:30.
+Раздел «If the lazy chunk does not work» — разрешение: если упёрся в платформу, можно менять конфиг
+только своего микрофронта, и где лежит рецепт. Без него агент либо сдаётся, либо лезет чинить общий код.
 Обратите внимание на последние строки: мы заранее закрываем «дешёвые» способы объявить успех.
 Такие фразы появляются после прогонов, где агент именно так и поступил: подменил сценарий или отчитался сборкой.
 -->
@@ -1125,6 +1137,8 @@ createMicrofrontendConfig.cjs.
 <!--
 Время: 1:20.
 Правое сообщение — реальный вывод scripts/check-architecture.cjs из demo-ветки.
+Ещё пример в demo-ветке — check:bundle: «lazy chunks … load from publicPath "/", but the shell proxies only …
+Serve chunks through the product's API prefix … see "Lazy chunks through the shell"». Сообщение само называет обход.
 Один хороший gate с понятной ошибкой полезнее десяти строк «будь внимателен» в инструкциях.
 И ещё: агент не решает сам, что он закончил. Это решают проверки из Done в spec.
 -->
@@ -1140,6 +1154,7 @@ createMicrofrontendConfig.cjs.
       <li>какая проверка упала первой</li>
       <li>прочитал ли он сообщение и док по ссылке</li>
       <li>исправил код или попытался ослабить проверку</li>
+      <li>если чанк не грузится — чинит в своём микрофронте, не трогая common/ и shell</li>
     </ul>
   </div>
   <div v-click class="flat-card bad">
@@ -1475,10 +1490,10 @@ class: compact-table
   <thead><tr><th>Вопрос</th><th>Где смотреть</th><th>Что даёт harness в Run B</th></tr></thead>
   <tbody>
     <tr v-click><td>Какой runtime выбрал</td><td>diff: webpack-конфиг, manifest</td><td>«Do not copy» в доке + check:architecture</td></tr>
-    <tr v-click><td>Страница грузится лениво</td><td>вывод check:bundle, dist</td><td>сценарий в spec + bundle gate</td></tr>
+    <tr v-click><td>Страница грузится лениво и открывается</td><td>check:bundle, страница через shell</td><td>сценарий в spec, bundle gate, разрешённый обход в своём микрофронте</td></tr>
     <tr v-click><td>Нет утечки после пагинации</td><td>MemLab-сценарий для своего роута</td><td>Done в spec + performance-check</td></tr>
     <tr v-click><td>Не вышел за scope</td><td>список изменённых файлов</td><td>Out of scope + safe-change для common/</td></tr>
-    <tr v-click><td>На чём основано «готово»</td><td>финальный отчёт агента</td><td>команды и их вывод вместо самооценки</td></tr>
+    <tr v-click><td>Как рассуждал и на чём основано «готово»</td><td><code>agent-report.md</code> обоих прогонов</td><td>команды и их вывод вместо самооценки</td></tr>
   </tbody>
 </table>
 
