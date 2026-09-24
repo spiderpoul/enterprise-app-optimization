@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: Ревью diff merge request на соответствие контрактам этого репозитория. Используется
+description: Ревью diff в MR на соответствие контрактам этого репозитория. Используется
   в CI и локально перед MR.
 ---
 1. Прочитай AGENTS.md, затем только документацию по областям, которые задевает diff.
@@ -8,17 +8,25 @@ description: Ревью diff merge request на соответствие кон�
    запущены ли проверки из спеки.
 3. Каждое замечание ссылается на правило (документ + раздел) или на упавшую проверку.
    Нет правила — нет замечания.
-4. Серьёзность: blocker | risk. Мелочи не публикуются.
+4. Severity: blocker | risk. Nitpick'и не публикуем.
 5. Не больше 10 замечаний; остальное — в сводку.
 6. Никогда не одобряй, никогда не пушь.
 
+## Критичные пути
+Этот скилл — обычное ревью каждого diff. Если diff задевает критичный путь из
+`.agents/review/critical-paths.yml` (реестр и прокси shell, `common/`, manifest, проверки и baseline),
+к нему добавляется отдельный ревьюер: `platform-reviewer`, `security-reviewer`, `contract-reviewer` или `harness-reviewer`
+из `.agents/agents/`. Список печатает `node scripts/select-reviewers.cjs <файлы>`; CI запускает их сам.
+Локально перед MR по таким путям позови нужного ревьюера явно.
+
 ## Вход
-- CI: `mr.diff` из `.github/workflows/agent-review.yml`.
+- CI: `mr.diff` из `.github/workflows/agent-review.yml`; ревьюеры критичных путей получают тот же diff.
 - Локально: `git diff --merge-base origin/main` плюс `git status --short` для неотслеживаемых файлов.
 - Спека, если она есть у изменения: `openspec/changes/<id>/`.
 
 ## Результат
-CI пишет `review.json`, который `scripts/post-review.cjs` публикует одним ревью без одобрения:
+CI пишет `review-<ревьюер>.json`, который `scripts/post-review.cjs` публикует одним ревью без одобрения
+(у каждого ревьюера — своё):
 
 ```json
 {

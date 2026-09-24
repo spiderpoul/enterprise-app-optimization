@@ -1,0 +1,18 @@
+# Места, где одна строка может положить работу всех команд.
+# CI (scripts/select-reviewers.cjs) по изменённым путям добавляет отдельного ревьюера.
+critical:
+  - paths: [src/shell-app/server/lib/**, src/microfrontends/common/**]
+    reviewer: platform-reviewer          # .agents/agents/platform-reviewer.md
+    why: реестр, прокси и сборка всех продуктов — упадёт всё сразу
+  - paths: [src/shell-app/server/shell-server.js, src/shell-app/server/lib/**, 'src/microfrontends/*/server/**']
+    reviewer: security-reviewer
+    why: сюда приходят внешние данные — регистрация без проверки превращает shell в открытый прокси
+  - paths: ['src/microfrontends/*/manifest.json']
+    reviewer: contract-reviewer
+    why: id и routePath — публичный контракт, на них ссылки пользователей и MemLab
+  - paths: [performance/**, scripts/check-*.cjs]
+    reviewer: harness-reviewer
+    why: ослабить проверку — значит выключить её для всех команд
+default:
+  reviewer: code-review                  # скилл .agents/skills/code-review
+# Владельцев берём из CODEOWNERS. Агент комментирует и не аппрувит, мёрж — за человеком.
