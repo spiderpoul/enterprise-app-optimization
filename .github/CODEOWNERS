@@ -28,3 +28,6 @@
 # Проверки: ослабить проверку — значит выключить её для всех команд
 /performance/                        @perf-guild
 /scripts/check-*.cjs                 @perf-guild
+
+# Публичные контракты продуктов: id, routePath, entryPath, api.prefix
+/src/microfrontends/*/manifest.json  @platform-frontend
