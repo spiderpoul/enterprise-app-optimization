@@ -834,16 +834,17 @@ layout: center
 
 <div class="skill-grid">
   <div v-click class="flat-card"><h3>story-analysis</h3><p class="muted">Разбирает тикет до кода: задаёт недостающие вопросы, находит затронутые контракты и готовит черновик спеки.</p></div>
-  <div v-click class="flat-card"><h3>log-trace-analysis</h3><p class="muted">Скрипт сворачивает лог в сводку, модель находит первопричину и код-владельца.</p></div>
+  <div v-click class="flat-card"><h3>log-trace-analysis</h3><p class="muted">Скрипт сворачивает лог в сводку, модель находит первопричину и место в коде.</p></div>
   <div v-click class="flat-card"><h3>performance-check</h3><p class="muted">По типу изменения выбирает нужные проверки: бандл, память, рендер, рантайм.</p></div>
   <div v-click class="flat-card"><h3>ui-form</h3><p class="muted">Формы на нашем UI-ките: обёртки полей, валидация, все состояния, доступность.</p></div>
   <div v-click class="flat-card"><h3>safe-change</h3><p class="muted">Правка общего кода: сначала список потребителей и план отката, потом код.</p></div>
-  <div v-click class="flat-card"><h3>code-review</h3><p class="muted">Тот же чеклист, что у агента-ревьюера в CI. Можно запустить до MR.</p></div>
+  <div v-click class="flat-card"><h3>security-check</h3><p class="muted">Ищет, что приходит извне и куда уходит: авторизация эндпоинтов, allowlist прокси, CORS, секреты. Blocker не чинит сам.</p></div>
 </div>
 
 <!--
 Время: 1:20.
 Самый заметный по эффекту обычно story-analysis: он переносит вопросы в начало, пока они дешёвые.
+security-check — не пересказ OWASP, а короткий список того, что в этом репозитории уже было опасно. Его же использует security-reviewer в CI — покажу в блоке про ревью.
 [TODO: какой скилл оказался самым полезным у вас — одна живая история.]
 -->
 
@@ -1058,11 +1059,11 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/d47ea390515c6ea773b585e7fdcdb041cddcd915" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/3be94b70172c64afc26edf127a73ada72f479b09" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/performance-check/</code><br>разобрали на слайде — именно его возьмёт Run B после правки роута</div>
-  <div><code>story-analysis/</code> и <code>safe-change/</code><br>разбор тикета до кода; отчёт о влиянии до правки общего кода</div>
+  <div><code>story-analysis/</code>, <code>safe-change/</code>, <code>security-check/</code><br>разбор тикета до кода; отчёт о влиянии до правки общего кода; риски безопасности</div>
   <div><code>.agents/skills/log-trace-analysis/</code><br>запустить скрипт на fixture вживую</div>
   <div><code>.agents/skills/README.md</code> и <code>.github/CODEOWNERS</code><br>реестр скиллов и их владельцы</div>
 </div>
@@ -1158,7 +1159,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/a7e8ea4448cfd658a3f01fa2a15ebc79f6f1b06c" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/86aaa91c29cb9559a0c46d2cc776bf9615a96699" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1235,16 +1236,19 @@ layout: center
 # Ревью: агент в CI и отдельный ревьюер для критичного кода
 
 <div class="annotated wide">
-<div class="file code-xxs">
+<div class="file code-xxs wrap">
 <div class="file-head"><span>.agents/review/critical-paths.yml</span><span>demo/agent-ready-v2</span></div>
 
-```yaml {all|1-2|3-6|7-9|10-12|13-15}
+```yaml {all|1-2|3-6|7-9|10-12|13-15|16-18}
 # Где одна строка может остановить работу всех команд.
 # CI (scripts/select-reviewers.cjs) по изменённым путям добавляет отдельного ревьюера.
 critical:
   - paths: [src/shell-app/server/lib/**, src/microfrontends/common/**]
     reviewer: platform-reviewer          # .agents/agents/platform-reviewer.md
     why: реестр, прокси и сборка всех продуктов — упадёт всё сразу
+  - paths: [src/shell-app/server/shell-server.js, src/shell-app/server/lib/**, 'src/microfrontends/*/server/**']
+    reviewer: security-reviewer
+    why: сюда приходят чужие данные — регистрация без проверки делает shell открытым прокси
   - paths: ['src/microfrontends/*/manifest.json']
     reviewer: contract-reviewer
     why: id и routePath — публичный контракт, на них ссылки пользователей и MemLab
@@ -1261,9 +1265,10 @@ default:
   <div v-if="$clicks < 1" class="note intro"><b>Каждый MR проходит агента-ревьюера</b><p>Сначала детерминированная check:architecture, потом скилл code-review. Для критичных путей CI добавляет отдельного ревьюера со своим чеклистом.</p></div>
   <div v-click="[1, 2]" class="note"><b>Зачем этот файл</b><p>В большом проекте есть места, где одна строка останавливает все команды. Их нужно назвать явно.</p></div>
   <div v-click="[2, 3]" class="note"><b>Реестр, прокси, общая сборка</b><p>Отдельный ревьюер знает, что здесь ломается молча: TTL, прокси, externals.</p></div>
-  <div v-click="[3, 4]" class="note"><b>Публичные контракты</b><p>Переименованный id в manifest ломает ссылки пользователей и сценарии MemLab. Обычный ревьюер этого не заметит.</p></div>
-  <div v-click="[4, 5]" class="note"><b>Сами проверки</b><p>Ослабленный baseline выключает защиту для всех. Правку проверок смотрит отдельный ревьюер и владелец.</p></div>
-  <div v-click="5" class="note"><b>Решает человек</b><p>Агент комментирует со ссылкой на правило и не аппрувит. Мёрж остаётся за владельцем из CODEOWNERS.</p></div>
+  <div v-click="[3, 4]" class="note"><b>Безопасность</b><p>Регистрация продукта и цели прокси приходят из запроса. Живая находка в демо: ack и удаление продукта без авторизации — любой, кто достучался до shell, подменит продукт в меню.</p></div>
+  <div v-click="[4, 5]" class="note"><b>Публичные контракты</b><p>Переименованный id в manifest ломает ссылки пользователей и сценарии MemLab. Обычный ревьюер этого не заметит.</p></div>
+  <div v-click="[5, 6]" class="note"><b>Сами проверки</b><p>Ослабленный baseline выключает защиту для всех. Правку проверок смотрит отдельный ревьюер и владелец.</p></div>
+  <div v-click="6" class="note"><b>Решает человек</b><p>Агент комментирует со ссылкой на правило и не аппрувит. Мёрж остаётся за владельцем из CODEOWNERS.</p></div>
 </div>
 </div>
 
@@ -1283,19 +1288,20 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/081c1b9a5e766c66fc7faf32a73d13c6f350d6e7" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6bff1e09361a4e8edf71180d1d24eda06cb0c572" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, по которым можно исправить без человека</div>
   <div><code>.agents/review/critical-paths.yml</code> и <code>scripts/select-reviewers.cjs</code><br>какой ревьюер нужен для какого пути</div>
-  <div><code>.agents/agents/platform-reviewer.md</code> и соседи<br>чеклисты для критичного кода</div>
+  <div><code>.agents/agents/security-reviewer.md</code> и соседи<br>чеклисты для критичного кода; security-reviewer найдёт ack без авторизации</div>
   <div><code>.github/workflows/agent-review.yml</code> и <code>pull_request_template.md</code><br>как ревью запускается на каждом MR; к правке harness прикладываем прогон evals</div>
   <div><code>package.json</code>, <code>performance/bundle-baseline.json</code>, <code>tests/memlab/…</code><br>команды check:*, baseline бандла и сценарий памяти, на который опирается спека</div>
 </div>
 
 <!--
 Время: 1:00.
-Показать вживую: node scripts/select-reviewers.cjs src/shell-app/server/lib/registry.js src/microfrontends/users-and-roles/manifest.json README.md — обычный code-review плюс platform-reviewer и contract-reviewer; README.md ревьюера не добавляет.
+Показать вживую: node scripts/select-reviewers.cjs src/shell-app/server/shell-server.js src/shell-app/server/lib/registry.js src/microfrontends/users-and-roles/manifest.json README.md — обычный code-review плюс platform-, security- и contract-reviewer; README.md ревьюера не добавляет.
+Уязвимость в ack оставлена в демо намеренно, чтобы ревьюеру было что найти. Если спросят: в продукте регистрация закрывается авторизацией и allowlist хостов.
 -->
 
 ---
@@ -1503,7 +1509,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/ee490d21755ea20e7148be5bd82baaca48b7bffb" target="_blank">Шаг 7. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/5ae05cad5e7d02ac409fe6fc5ba6fa9f8654ce91" target="_blank">Шаг 7. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
