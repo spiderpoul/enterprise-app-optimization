@@ -149,9 +149,9 @@ canvasWidth: 1440
   <div>
     <div v-click class="flat-card">
       <h3>Как это выглядит в нашем репозитории</h3>
-      <p>За девять лет в нём успели пожить четыре способа подключать микрофронты. Module Federation попробовали и откатили, потом был общий eager-sharing, потом перешли на window externals — так работает и сейчас. Поверх ещё пробовали загрузчик через script-теги и тоже откатили.</p>
+      <p>Агенту нужна таблица с пагинацией. Он ищет «как сделано у соседей» и находит страницу Device Security с готовым хуком для ячеек. Хук аккуратный, страница работает, сборка зелёная. Только он навсегда складывает DOM-ячейки в Map: после сорока страниц пагинации память только растёт, а фикс так и лежит в открытом PR.</p>
     </div>
-    <p v-click style="margin-top: 1.1rem; font-size: 25px">Агент ищет «как сделано у соседей» и находит все четыре. В каждом есть рабочий код, и по самому коду не видно, какой из них сегодня считается правильным. Он берёт самый убедительный — и это не галлюцинация, а честная попытка угадать.</p>
+    <p v-click style="margin-top: 1.1rem; font-size: 25px">По коду не видно, что этот пример плохой. Рядом лежат визард с тяжёлым расчётом прямо в рендере и страницы, которые импортируются статически. Агент берёт самый убедительный пример — это не галлюцинация, а честная попытка угадать.</p>
   </div>
   <div v-click class="meme-image">
     <img src="/assets/office-legacy-patterns.jpg" alt="Офисный мем о выборе устаревшего паттерна" style="height: 430px; max-height: 49vh;" />
@@ -212,9 +212,9 @@ layout: center
 
 <div class="two-col" style="margin-top: 1rem">
   <div v-click class="flat-card bad">
-    <h3>Run A · <code>main</code></h3>
+    <h3>Run A · <code>demo-before</code></h3>
     <p>«Add a new Application Security page and microfrontend like the neighboring implementation.»</p>
-    <p class="muted">Обычный репозиторий: код, README, история PR и короткий общий AGENTS.md.</p>
+    <p class="muted">AI-сетап, какой бывает в жизни: AGENTS.md на 250 строк, зоопарк скиллов, «команда агентов», ревью-бот и проверка, которая ничего не проверяет.</p>
   </div>
   <div v-click class="flat-card">
     <h3>Run B · <code>demo/agent-ready-v2</code></h3>
@@ -231,6 +231,7 @@ layout: center
 <!--
 Время: 1:30.
 Переключиться в терминал, запустить обе сессии на одной внутренней модели с одинаковыми настройками, вернуться к слайдам.
+Важно: Run A — не пустой репозиторий. В ветке demo-before «всё есть», но сделано так, как делать не надо. Все антипримеры из доклада взяты оттуда.
 Спека у Run B — тоже часть подготовки проекта, а не подсказка: задача приходит к агенту уже разобранной.
 Отчёт в конце — одинаковая просьба для обоих: в финале сравним и код, и рассуждения.
 Если live-модель недоступна — дальше используем сохранённые трейсы и диффы репетиции.
@@ -271,14 +272,14 @@ Nx-монорепозиторий: shell и независимо развёрн�
 - Текущее изменение → `openspec/changes/<id>/` · Скиллы → `.agents/skills/`
 
 ## Источник истины
-Документация важнее соседнего кода. В истории есть Module Federation, script-loader
-и eager sharing — от всех отказались (см. docs/architecture/microfrontends.md).
+Документация важнее соседнего кода. Рядом лежит рабочий, но плохой код: хук useAutoTrimCells
+держит DOM-ячейки навсегда, визард React Perf собран с антипаттернами нарочно (docs/performance.md).
 Если код и документация расходятся, делай по документации и напиши об этом в отчёте.
 
 ## Никогда
-- не импортируй один микрофронт из другого
-- не собирай React / React Router внутрь микрофронта
-- не добавляй второй загрузчик, реестр или federation-рантайм
+- не импортируй страницу статически: только lazy-роут
+- не храни DOM-узлы в модульных Map и Set и не бери useAutoTrimCells
+- не добавляй эндпоинт без авторизации и не проксируй на адрес из запроса
 - не ослабляй baseline в `performance/`, чтобы проверка позеленела
 ```
 
@@ -311,10 +312,10 @@ Nx-монорепозиторий: shell и независимо развёрн�
 ## Что ещё заденешь
 | Меняешь                            | Заденешь                                   | Проверка             |
 |------------------------------------|--------------------------------------------|----------------------|
-| common/webpack/createMicrofront…   | сборку всех продуктов, общий React         | architecture, bundle |
+| common/webpack/createMicrofront…   | сборку всех 25 продуктов сразу             | architecture, bundle |
 | id или routePath в manifest.json   | меню, сохранённые ссылки, MemLab-селекторы | architecture         |
 | shell-app/server/lib/*             | загрузку всех продуктов сразу              | smoke всех продуктов |
-| версию React / React Router        | все продукты (window externals)            | npm run check        |
+| shell-app/client/shared/*          | все страницы, которые используют хук       | memory для каждой    |
 | таблицу или список с пагинацией    | detached DOM после ухода со страницы       | memory для роута     |
 
 ## Команды
@@ -397,7 +398,7 @@ Stop-условия важны для слабой модели: без них �
 
 <div class="annotated">
 <div class="file code-sm bad">
-<div class="file-head"><span>AGENTS.md — антипример</span></div>
+<div class="file-head"><span>AGENTS.md — антипример</span><span>demo-before</span></div>
 
 ```md {all|1-4|6-9|11-12}
 Ты senior React-разработчик с 20-летним опытом.
@@ -438,12 +439,12 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/2b71fbd69e9751a8699472a0d8dc99ba89b30647" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и что заденет</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/1a3ff0b34972808d00fb840223f7d5f99e5541d1" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и что заденет</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица «что заденешь», команды «готово»</div>
   <div><code>src/shell-app/server/AGENTS.md</code><br>реестр и прокси: что уже ломалось и как это проверить</div>
-  <div><code>src/microfrontends/common/AGENTS.md</code><br>общая сборка: какая строка даёт второй React в каждом продукте</div>
+  <div><code>src/microfrontends/common/AGENTS.md</code><br>общая сборка: какая строка сломает сразу все 25 продуктов</div>
   <div><span class="muted">Сказать</span><br>AGENTS.md мы переписали, а команды check:* из него появятся в шаге 6</div>
 </div>
 
@@ -460,7 +461,7 @@ layout: center
 <div class="two-col" style="align-items: start">
   <div v-click class="flat-card bad">
     <h3>Run A</h3>
-    <p class="muted">Смотрим в трейсе: сколько файлов открыл до первой правки, какой микрофронт взял за образец, полез ли в историю PR.</p>
+    <p class="muted">Смотрим в трейсе: дочитал ли AGENTS.md на 250 строк, какой скилл взял, утащил ли хук с утечкой по совету из старой документации.</p>
   </div>
   <div v-click class="flat-card">
     <h3>Run B</h3>
@@ -495,41 +496,41 @@ layout: center
 
 <div class="annotated wide">
 <div class="file code-xxs">
-<div class="file-head"><span>docs/architecture/microfrontends.md</span><span>фрагмент</span></div>
+<div class="file-head"><span>docs/performance.md</span><span>фрагмент</span></div>
 
-```md {all|2|4-9|11-15|17-23}
-# Архитектура микрофронтов
-Владелец: @platform-frontend · Проверено: 2026-09 · Проверка: npm run check:architecture
+```md {all|2|4-8|10-15|17-23}
+# Производительность фронтенда
+Владелец: @perf-guild · Проверено: 2026-09 · Проверки: npm run check:bundle, npm run check:memory
 
 ## Как сейчас правильно
-1. Опиши продукт в src/microfrontends/<name>/manifest.json.
-2. Собирай через common/webpack/createMicrofrontendConfig.cjs — не копируй конфиг.
-3. Экспортируй RouteObject, страницу подключай через динамический import.
-4. Зарегистрируй <name>-client и <name>-server в nx.json и в workspaces.
-Эталон: src/microfrontends/users-and-roles/ (кроме шага 3: там страницы пока статические).
+1. Страницу продукта подключай через lazy-роут: React.lazy + Suspense в элементе роута.
+2. Ресурс освобождает тот, кто его захватил: observer, таймер, подписка — в cleanup эффекта.
+3. Компоненты объявляй на уровне модуля, тяжёлые вычисления — от данных, а не от рендера.
+Таблицу с пагинацией проверяй сценарием MemLab на базе tests/memlab/create-route-pagination-scenario.js.
 
-## Не копируй: выглядит рабочим, но от этого отказались (остатки не «чини»)
-| Подход                  | Где встретишь       | Почему нельзя                   |
-|-------------------------|---------------------|---------------------------------|
-| Module Federation, eager sharing | PR #25–#29, остатки в shell-app/client/webpack.config.cjs | второй рантайм, два React   |
-| script-tag реестр                | PR #33, откат в #34                                        | второй реестр рядом с manifest |
+## Не копируй: рабочий код, но делать так нельзя
+| Что                                 | Где встретишь                   | Почему нельзя                     |
+|-------------------------------------|---------------------------------|-----------------------------------|
+| useAutoTrimCells                    | DeviceSecurityPage, PR #28      | держит DOM-ячейки в Map навсегда  |
+| тяжёлый расчёт прямо в рендере      | визард React Perf, HeavyBlock   | ~150 мс блокировки на каждый ввод |
+| статический import страницы         | users-and-roles/client/index    | код страницы в стартовом бандле   |
 
 ## Подводные камни
-- Скопированный webpack-конфиг теряет window externals. Сборка зелёная, а в браузере
-  «Invalid hook call» (в production — «Cannot read properties of null»). Ловит check:architecture.
-- routePath в manifest должен совпадать с path в экспортированном роуте. Иначе из меню
-  страница открывается, а по сохранённой ссылке — Not Found.
-- entryPath должен совпадать с outputFileName клиента. Переименуешь файл без manifest —
-  entry отдаст 404, и shell покажет продукт как недоступный.
+- Утечку не видно ни в сборке, ни в тестах: страница работает, а после 40 страниц
+  пагинации память только растёт. Ловит только npm run check:memory для этого роута.
+- Тяжёлый расчёт в рендере не выглядит ошибкой: код короткий и понятный. А в фильтре
+  визарда каждое нажатие клавиши блокирует UI на ~150 мс. Видно только в React Profiler.
+- `import()` в продукте без своего Babel-конфига не создаёт чанк, а чанк с publicPath «/»
+  через shell не загрузится — см. «Ленивые чанки через shell» в docs/architecture/microfrontends.md.
 ```
 
 </div>
 <div class="notes">
   <div v-if="$clicks < 1" class="note intro"><b>Четыре раздела, которые мы требуем</b><p>Как правильно, что не копировать, подводные камни и как проверить. Остальное — по желанию команды.</p></div>
   <div v-click="[1, 2]" class="note"><b>Владелец и дата</b><p>Документ без владельца протухает первым. Дата подсказывает агенту и человеку, насколько ему верить.</p></div>
-  <div v-click="[2, 3]" class="note"><b>Как правильно — шагами</b><p>Плюс ссылка на эталонный продукт и честная оговорка, где эталон отстаёт от нормы.</p></div>
-  <div v-click="[3, 4]" class="note"><b>Что не копировать</b><p>Человек помнит, что Module Federation откатили. Агент видит только рабочий код в истории — поэтому плохие варианты называем явно, с причиной.</p></div>
-  <div v-click="4" class="note"><b>Что ломается молча</b><p>Формат: что сделал → что увидишь → чем поймать. Именно этого Run A взять неоткуда.</p></div>
+  <div v-click="[2, 3]" class="note"><b>Как правильно — шагами</b><p>Lazy-роут, cleanup эффектов, компоненты вне рендера — и как проверить таблицу с пагинацией.</p></div>
+  <div v-click="[3, 4]" class="note"><b>Что не копировать</b><p>Человек помнит, что хук на Device Security течёт. Агент видит только рабочий код — поэтому плохие примеры называем явно: где лежат и чем плохи.</p></div>
+  <div v-click="4" class="note"><b>Что ломается молча</b><p>Формат: что сделал → что увидишь → чем поймать. У Run A вместо этого старая документация, которая уверенно советует взять этот самый хук.</p></div>
 </div>
 </div>
 
@@ -545,12 +546,12 @@ layout: center
 <div class="two-col">
   <div v-click class="flat-card bad">
     <h3>Так агенту бесполезно</h3>
-    <p>«Микрофронты должны следовать лучшим практикам и корректно использовать общие зависимости. Избегайте дублирования.»</p>
-    <p class="muted">Какие практики? Какие зависимости? Как понять, что дублирование уже есть?</p>
+    <p>«Следите за утечками памяти и своевременно освобождайте ресурсы.»</p>
+    <p class="muted">Какие ресурсы? Когда «своевременно»? Как понять, что утечка уже есть?</p>
   </div>
   <div v-click class="flat-card">
     <h3>Так работает</h3>
-    <p>«Webpack-конфиг микрофронта создаётся только через <code>common/webpack</code>. Скопированный конфиг теряет externals: сборка зелёная, а в браузере “Invalid hook call”. Ловит <code>npm run check:architecture</code>.»</p>
+    <p>«Не храни DOM-узлы в модульных Map и Set: они переживут уход со страницы. Так течёт <code>useAutoTrimCells</code> на Device Security — сборка зелёная, а после 40 страниц пагинации память растёт. Ловит <code>npm run check:memory</code> для роута.»</p>
   </div>
 </div>
 
@@ -568,12 +569,12 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/8934845f0b7569e587ffad1e8551cc5da729af03" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/3ec111117742a2437a45c60de18a980418bdaf11" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт ленивых чанков через shell</div>
   <div><code>docs/architecture/frontend.md</code><br>инварианты рендера, жизненного цикла и границ загрузки</div>
-  <div><code>docs/performance.md</code><br>что считается регрессией и какой проверкой её ловить</div>
+  <div><code>docs/performance.md</code><br>как правильно, что не копировать (useAutoTrimCells, HeavyBlock), подводные камни — разобрали на слайде</div>
   <div><span class="muted">Показать</span><br>раздел «Ленивые чанки через shell» — обход мы проверили руками на users-and-roles, в ветке он описан текстом</div>
 </div>
 
@@ -721,7 +722,7 @@ Shell SHALL показывать пункт «Application Security» в меню
   <div v-click="[2, 3]" class="note"><b>Требование</b><p>Одно предложение о поведении, без слов «быстро» и «красиво».</p></div>
   <div v-click="[3, 4]" class="note"><b>Сценарий</b><p>Каждая строка THEN проверяется руками или тестом. «Код скачивается только в этот момент» — это и есть требование к ленивой загрузке.</p></div>
   <div v-click="[4, 5]" class="note"><b>Разрешение, если упёрся</b><p>Можно менять конфиг только своего микрофронта. Без этого агент либо сдаётся, либо лезет чинить общий код.</p></div>
-  <div v-click="5" class="note"><b>Вне scope</b><p>Иначе агент «заодно» отрефакторит общий webpack-конфиг, и это заденет 25 плагинов.</p></div>
+  <div v-click="5" class="note"><b>Вне scope</b><p>Иначе агент «заодно» поправит общий код, и это заденет 25 плагинов.</p></div>
 </div>
 </div>
 
@@ -736,17 +737,17 @@ Shell SHALL показывать пункт «Application Security» в меню
 
 <div class="annotated">
 <div class="file code-sm bad">
-<div class="file-head"><span>spec.md — антипример</span></div>
+<div class="file-head"><span>spec.md — антипример</span><span>demo-before</span></div>
 
 ```md {all|3|4|5|8-10|12-13}
 # Страница Application Security
 
 Нужно сделать страницу безопасности приложений, как у соседей.
 Страница должна быстро загружаться и хорошо выглядеть.
-Заодно отрефакторить общий webpack-конфиг, он устарел.
+Заодно ускорить инициализацию shell, она медленная.
 
 ## Технические детали
-- Использовать Module Federation для обмена компонентами
+- Для ячеек таблицы переиспользовать useAutoTrimCells
 - Таблица на antd, 50 строк на странице
 - … ещё 300 строк кода компонентов
 
@@ -759,8 +760,8 @@ Shell SHALL показывать пункт «Application Security» в меню
   <div v-if="$clicks < 1" class="note intro bad"><b>Такие спеки пишут, когда торопятся</b><p>Агент выполнит её добросовестно — и сделает не то.</p></div>
   <div v-click="[1, 2]" class="note bad"><b>«Как у соседей»</b><p>У соседей четыре разных подхода. Спека вернула агента ровно к угадыванию.</p></div>
   <div v-click="[2, 3]" class="note bad"><b>«Быстро и хорошо»</b><p>Нечем проверить. Для агента любое состояние подходит под «быстро».</p></div>
-  <div v-click="[3, 4]" class="note bad"><b>«Заодно»</b><p>Scope уехал в общий код, который собирает все продукты. Одна фраза — и под угрозой работа десяти команд.</p></div>
-  <div v-click="[4, 5]" class="note bad"><b>Решения и код внутри спеки</b><p>Module Federation противоречит архитектуре, а код в спеке устаревает раньше, чем начнётся работа.</p></div>
+  <div v-click="[3, 4]" class="note bad"><b>«Заодно»</b><p>Scope уехал в инициализацию shell, которую грузят все продукты. Одна фраза — и под угрозой работа десяти команд.</p></div>
+  <div v-click="[4, 5]" class="note bad"><b>Решения и код внутри спеки</b><p>Спека прямо велит взять хук с утечкой, а код в спеке устаревает раньше, чем начнётся работа.</p></div>
   <div v-click="5" class="note bad"><b>«Протестировать»</b><p>Агент проверит, что собралось, и напишет «готово».</p></div>
 </div>
 </div>
@@ -777,7 +778,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/bb59cd787cd32abe103927061761bbfbbd29378a" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/8ea43d47fff61dc78a314860822a72fd505d3d95" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для ленивого чанка, «готово»</div>
@@ -812,8 +813,8 @@ layout: center
 <table class="comparison quiz">
   <thead><tr><th>Кусочек знания</th><th>Куда положить</th></tr></thead>
   <tbody>
-    <tr><td>«Микрофронты не импортируют друг друга»</td><td><span v-click class="answer">AGENTS.md → «Никогда», и проверка в CI</span></td></tr>
-    <tr><td>«Почему мы отказались от Module Federation»</td><td><span v-click class="answer">docs/architecture → «Не копируй»</span></td></tr>
+    <tr><td>«Страницу подключаем только через lazy-роут»</td><td><span v-click class="answer">AGENTS.md → «Никогда», и проверка check:bundle</span></td></tr>
+    <tr><td>«Почему хук useAutoTrimCells нельзя переиспользовать»</td><td><span v-click class="answer">docs/performance.md → «Не копируй»</span></td></tr>
     <tr><td>«Как разобрать лог упавшего стенда: четыре шага и скрипт»</td><td><span v-click class="answer">скилл log-trace-analysis</span></td></tr>
     <tr><td>«Список открытых инцидентов из трекера»</td><td><span v-click class="answer">инструмент или MCP-сервер</span></td></tr>
     <tr><td>«Стартовый бандл shell не растёт больше чем на 5%»</td><td><span v-click class="answer">проверка check:bundle и baseline</span></td></tr>
@@ -977,7 +978,7 @@ description: Разбирает логи, HAR и трейсы длиннее 300
 
 <div class="annotated">
 <div class="file code-sm bad">
-<div class="file-head"><span>.agents/skills/frontend-helper/SKILL.md — антипример</span></div>
+<div class="file-head"><span>.agents/skills/frontend-helper/SKILL.md — антипример</span><span>demo-before</span></div>
 
 ```md {all|1-4|6|8-11|13-14|16}
 ---
@@ -992,8 +993,8 @@ description: Помогает с фронтендом
 - Компоненты должны быть маленькими
 - … ещё 600 строк из статьи 2023 года
 
-## Микрофронты
-Используй Module Federation для обмена компонентами.
+## Таблицы
+Для ячеек бери готовый хук useAutoTrimCells — он уже есть в DeviceSecurityPage.
 
 Проверь, что всё работает.
 ```
@@ -1004,7 +1005,7 @@ description: Помогает с фронтендом
   <div v-click="[1, 2]" class="note bad"><b>Описание ни о чём</b><p>Под «помогает с фронтендом» подходит любая задача, и скилл грузится всегда — или никогда.</p></div>
   <div v-click="[2, 3]" class="note bad"><b>Роль вместо процедуры</b><p>Модели не нужно напоминать, кто она. Ей нужны шаги.</p></div>
   <div v-click="[3, 4]" class="note bad"><b>Знание вместо шагов</b><p>Это документация, причём устаревшая. «Всегда useMemo» — правило, которое вредит.</p></div>
-  <div v-click="[4, 5]" class="note bad"><b>Противоречит архитектуре</b><p>Скилл спорит с документацией, и слабая модель выберет того, кто сказал последним.</p></div>
+  <div v-click="[4, 5]" class="note bad"><b>Противоречит документации</b><p>Скилл советует хук с утечкой и спорит с документацией. Слабая модель выберет того, кто сказал последним.</p></div>
   <div v-click="5" class="note bad"><b>Нет результата</b><p>Нет stop-условий и формата отчёта — «проверь, что всё работает» ничего не проверяет.</p></div>
 </div>
 </div>
@@ -1059,7 +1060,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/3be94b70172c64afc26edf127a73ada72f479b09" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/14d3fe2ea3e419aa0e51c253ed5c3a33cda64915" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/performance-check/</code><br>разобрали на слайде — именно его возьмёт Run B после правки роута</div>
@@ -1159,7 +1160,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/86aaa91c29cb9559a0c46d2cc776bf9615a96699" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/09d19a04d2a9695becc51924a8ab4ee2c2e70def" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1264,7 +1265,7 @@ default:
 <div class="notes">
   <div v-if="$clicks < 1" class="note intro"><b>Каждый MR проходит агента-ревьюера</b><p>Сначала детерминированная check:architecture, потом скилл code-review. Для критичных путей CI добавляет отдельного ревьюера со своим чеклистом.</p></div>
   <div v-click="[1, 2]" class="note"><b>Зачем этот файл</b><p>В большом проекте есть места, где одна строка останавливает все команды. Их нужно назвать явно.</p></div>
-  <div v-click="[2, 3]" class="note"><b>Реестр, прокси, общая сборка</b><p>Отдельный ревьюер знает, что здесь ломается молча: TTL, прокси, externals.</p></div>
+  <div v-click="[2, 3]" class="note"><b>Реестр, прокси, общая сборка</b><p>Отдельный ревьюер знает, что здесь ломается молча: TTL реестра, прокси, общая сборка.</p></div>
   <div v-click="[3, 4]" class="note"><b>Безопасность</b><p>Регистрация продукта и цели прокси приходят из запроса. Живая находка в демо: ack и удаление продукта без авторизации — любой, кто достучался до shell, подменит продукт в меню.</p></div>
   <div v-click="[4, 5]" class="note"><b>Публичные контракты</b><p>Переименованный id в manifest ломает ссылки пользователей и сценарии MemLab. Обычный ревьюер этого не заметит.</p></div>
   <div v-click="[5, 6]" class="note"><b>Сами проверки</b><p>Ослабленный baseline выключает защиту для всех. Правку проверок смотрит отдельный ревьюер и владелец.</p></div>
@@ -1288,7 +1289,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6bff1e09361a4e8edf71180d1d24eda06cb0c572" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/24b9ae06477cc4b5b372e7ab98bd00081352c94b" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, по которым можно исправить без человека</div>
@@ -1322,6 +1323,7 @@ layout: center
     <h3>Что ищем в трейсе Run A</h3>
     <ul>
       <li>какие проверки вообще запускал</li>
+      <li>поверил ли check:ai, которая ничего не проверяет</li>
       <li>на каком основании написал «готово»</li>
     </ul>
   </div>
@@ -1404,14 +1406,14 @@ Anthropic пишет: команды без evals тратят недели на
 
 <div class="annotated">
 <div class="file code-sm bad">
-<div class="file-head"><span>evals/cases/microfrontend.md — антипример</span></div>
+<div class="file-head"><span>evals/cases/microfrontend.md — антипример</span><span>demo-before</span></div>
 
 ```md {all|3-5|7-8|10-11|1}
-# Кейс: микрофронт
+# Кейс: страница с таблицей
 
 ## Задача
-Добавь микрофронт. Используй common webpack helper и window
-externals, не используй Module Federation.
+Добавь страницу с таблицей. Подключи её через lazy-роут
+и не используй useAutoTrimCells — он течёт.
 
 ## Проверка
 Агент написал «готово», и сборка прошла.
@@ -1448,20 +1450,20 @@ externals, не используй Module Federation.
 
 ## Задача            ← агенту отдаём только это
 Добавь микрофронт audit-log (пункт меню «Audit log», роут
-/audit-log) и зарегистрируй его в shell.
+/audit-log) с постраничной таблицей событий.
 
 ## Критерии          ← агент их не видит
-- общий webpack helper и window externals на месте
-- имена client/server и регистрации совпадают
-- нет импортов соседей, второго рантайма и правок в common/
-- в отчёте агента есть check:architecture
+- страница подключена через lazy-роут: в сборке есть её чанк
+- таблица не берёт useAutoTrimCells и не держит DOM в Map
+- нет правок в common/ и shell-app/
+- в отчёте агента есть check:bundle
 
 ## Проверка
 node evals/graders/add-microfrontend.cjs
 
 ## Откуда кейс
-Агент скопировал webpack-конфиг соседа, в продукт
-попал второй React (см. «Подводные камни»)
+Агент подключил страницу статически и взял хук ячеек
+у соседа: код уехал в стартовый бандл, таблица потекла
 ```
 
 </div>
@@ -1509,7 +1511,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/5ae05cad5e7d02ac409fe6fc5ba6fa9f8654ce91" target="_blank">Шаг 7. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/491ff2099fc417c1cf92a430738646f82d44d2b1" target="_blank">Шаг 7. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
@@ -1546,7 +1548,7 @@ class: compact-table
 <table class="comparison">
   <thead><tr><th>Вопрос</th><th>Где смотреть</th><th>Что даёт подготовка в Run B</th></tr></thead>
   <tbody>
-    <tr v-click><td>Какой рантайм выбрал</td><td>diff: webpack-конфиг, manifest</td><td>«Не копируй» в документации и check:architecture</td></tr>
+    <tr v-click><td>Ререндеры: страница не пересчитывается при сворачивании меню</td><td>React Profiler, отчёт агента</td><td>сценарий «посторонний рендер» в спеке и «Не копируй» в документации</td></tr>
     <tr v-click><td>Страница грузится лениво и открывается</td><td>check:bundle, страница через shell</td><td>сценарий в спеке, проверка бандла, разрешённый обход в своём микрофронте</td></tr>
     <tr v-click><td>Нет утечки после пагинации</td><td>MemLab-сценарий для своего роута</td><td>«готово» в спеке и performance-check</td></tr>
     <tr v-click><td>Не вышел за scope</td><td>список изменённых файлов</td><td>«вне scope» в спеке и safe-change для общего кода</td></tr>
@@ -1565,14 +1567,16 @@ class: compact-table
 # Что поменялось между Run A и Run B
 
 <div class="two-col">
-  <pre v-click class="repo-tree">RUN A
-задача в одну строку, без спеки
+  <pre v-click class="repo-tree">RUN A · demo-before
+AGENTS.md на 250 строк → правила спорят
   ↓
-соседний код и история PR
+старая дока → «бери хук с соседней страницы»
   ↓
-модель угадывает норму
+скилл «помогает с фронтендом»
   ↓
-«готово» = собралось</pre>
+«команда агентов» пересказывает задачу
+  ↓
+check:ai → «✓ всё хорошо»</pre>
 
   <pre v-click class="repo-tree">RUN B
 AGENTS.md → карта, запреты, что заденешь
@@ -1588,7 +1592,7 @@ docs → норма, что не копировать
 «готово» = вывод проверок</pre>
 </div>
 
-<p v-click style="margin-top: 1.3rem; font-size: 27px">Модель мы не меняли. Мы убрали то, что ей приходилось угадывать, и сделали её ошибки заметными до ревью человеком.</p>
+<p v-click style="margin-top: 1.3rem; font-size: 27px">Модель одна и та же, и AI-сетап есть в обоих репозиториях. Разница в том, помогает он модели или сбивает её с толку.</p>
 
 <!--
 Время: 1:00.
