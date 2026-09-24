@@ -1,0 +1,30 @@
+# Harness — это код: у каждого правила есть владелец.
+# Команды ниже — примеры. В этом демо-репозитории их нет, поэтому GitHub покажет
+# их как неизвестных владельцев и не будет запрашивать ревью.
+
+# Карта проекта и документация
+/AGENTS.md                           @platform-frontend
+/docs/architecture/                  @platform-frontend
+/docs/performance.md                 @perf-guild
+
+# Общий код: одна строка задевает все продукты
+/src/microfrontends/common/          @platform-frontend
+/src/shell-app/server/               @platform-frontend
+
+# Скиллы: у каждого свой владелец
+/.agents/skills/story-analysis/      @platform-frontend
+/.agents/skills/safe-change/         @platform-frontend
+/.agents/skills/performance-check/   @perf-guild
+/.agents/skills/log-trace-analysis/  @observability
+/.agents/skills/ui-form/             @design-system
+/.agents/skills/code-review/         @platform-frontend
+/.agents/skills/security-check/      @security-champions
+
+# Субагенты, правила ревью и evals
+/.agents/agents/                     @platform-frontend
+/.agents/review/                     @platform-frontend
+/evals/                              @platform-frontend
+
+# Проверки: ослабить проверку — значит выключить её для всех команд
+/performance/                        @perf-guild
+/scripts/check-*.cjs                 @perf-guild
