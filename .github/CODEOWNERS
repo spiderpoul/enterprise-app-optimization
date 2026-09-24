@@ -1,6 +1,7 @@
 # Harness — это код: у каждого правила есть владелец.
 # Команды ниже — примеры. В этом демо-репозитории их нет, поэтому GitHub покажет
-# их как неизвестных владельцев и не будет запрашивать ревью.
+# их как неизвестных владельцев и не будет запрашивать ревью. Обязательный аппрув владельца
+# включается отдельно — правилом защищённой ветки.
 
 # Карта проекта и документация
 /AGENTS.md                           @platform-frontend
@@ -29,6 +30,13 @@
 /.agents/agents/                     @platform-frontend
 /.agents/review/                     @platform-frontend
 /evals/                              @platform-frontend
+/evals/graders/                      @platform-frontend @perf-guild
+/evals/run-case.sh                   @platform-frontend @security-champions
+
+# Агентное ревью: выбор ревьюеров, публикация и шаблоны workflow
+/scripts/select-reviewers.cjs        @platform-frontend
+/scripts/post-review.cjs             @platform-frontend @security-champions
+/.github/workflows/                  @platform-frontend @security-champions
 
 # Проверки: ослабить проверку — значит выключить её для всех команд
 /performance/                        @perf-guild

@@ -1,5 +1,6 @@
 # Места, где одна строка может положить работу всех команд.
 # CI (scripts/select-reviewers.cjs) по изменённым путям добавляет отдельного ревьюера.
+# Workflow — шаблон интеграции: в этом репозитории он выключен, пока не подключён внутренний agent CLI.
 critical:
   - paths: [src/shell-app/server/lib/**, src/microfrontends/common/**]
     reviewer: platform-reviewer          # .agents/agents/platform-reviewer.md
@@ -16,6 +17,12 @@ critical:
   - paths: [performance/**, scripts/check-*.cjs]
     reviewer: checks-reviewer
     why: ослабить проверку — значит выключить её для всех команд
+  - paths: [evals/graders/**, evals/run-case.sh, scripts/select-reviewers.cjs, scripts/post-review.cjs, .agents/review/**]
+    reviewer: checks-reviewer
+    why: grader и запуск evals решают, что считать успехом; selector и publisher — кто ревьюит и что дойдёт до MR
+  - paths: [.github/workflows/**, scripts/post-review.cjs, evals/run-case.sh]
+    reviewer: security-reviewer
+    why: workflow получает токен на запись в PR, publisher им пользуется, run-case.sh исполняет команды из окружения
 default:
   reviewer: code-review                  # скилл .agents/skills/code-review
 # Владельцев берём из CODEOWNERS. Агент комментирует и не аппрувит, мёрж — за человеком.
