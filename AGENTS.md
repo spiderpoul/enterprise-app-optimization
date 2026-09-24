@@ -1,24 +1,23 @@
 # Enterprise App Optimization
 
-Nx monorepo with a shell and independently hosted microfrontends. Use Node.js 22 or newer.
+Use Node.js 22 or newer. This Nx monorepo contains a shell and independently hosted React microfrontends.
 
-## Structure
+## Repository map
 
-- `src/shell-app`: host client and discovery/proxy server.
-- `src/microfrontends/<name>/client`: a React plugin bundle.
-- `src/microfrontends/<name>/server`: the plugin API and static host.
-- `src/microfrontends/<name>/manifest.json`: discovery contract presented to the shell.
-- `src/microfrontends/common`: shared bootstrap and webpack helpers.
+- Architecture: `docs/architecture/`
+- Performance: `docs/performance.md`
+- Change specifications: `openspec/changes/`
+- Agent skills: `.agents/skills/`
+- Shell: `src/shell-app/`
+- Microfrontends: `src/microfrontends/`
 
-## Working rules
+When repository documentation and neighboring legacy code disagree, treat canonical architecture documentation as the source of truth.
 
-- Inspect an existing microfrontend before creating or changing one.
-- Keep client and server project names aligned as `<name>-client` and `<name>-server`.
-- Register every project in `nx.json` and every workspace package in the root `package.json`.
-- Do not add direct dependencies between microfrontends.
-- Treat manifest IDs and route paths as stable public contracts.
-- Read `docs/architecture/microfrontends.md` before changing discovery, routing, manifests, or plugin layout.
+## Validation
 
-## Verification
+- `npm run check` — architecture, lint, and build validation
+- `npm run check:architecture` — microfrontend architecture invariants
+- `npm run check:bundle` — bundle/loading regression gate
+- `npm run check:memory -- tests/memlab/<route>.scenario.js` — explicit route-specific MemLab scenario
 
-Run `npm run check` before finishing repository changes. If the full build is intentionally skipped, state which target was skipped and why.
+Follow the validation required by the active specification. Do not report a change as complete while validation required by its spec is failing.

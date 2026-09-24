@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import type { RouteObject } from 'react-router';
 import {
   LoadedMicrofrontend,
   MicrofrontendApiProxyConfig,
@@ -8,8 +7,8 @@ import {
 } from './types';
 
 type MicrofrontendModule = {
-  default?: RouteObject;
-  routeConfig?: RouteObject;
+  default?: unknown;
+  routeConfig?: unknown;
 };
 
 const loadMicrofrontendModule = async (entryUrl: string): Promise<MicrofrontendModule> =>
