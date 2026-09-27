@@ -148,7 +148,7 @@ canvasWidth: 1440
 <div class="grid-4 reasons">
   <div v-click class="flat-card warn">
     <h3>Не знает, какой пример — норма</h3>
-    <p class="muted">В репозитории несколько таблиц с пагинацией, и все работают. Но одна из них, на Device Security, навсегда держит DOM-ячейки в Map. Что это утечка, по коду не видно.</p>
+    <p class="muted">В репозитории несколько таблиц с пагинацией, и все работают. Но одна из них, на Device Security, навсегда держит DOM-ячейки в Map. Со страницы, которая её использует, утечку не видно.</p>
   </div>
   <div v-click class="flat-card warn">
     <h3>Не видит неявных контрактов</h3>
@@ -1064,7 +1064,7 @@ layout: center
 <div class="file code-xs wrap">
 <div class="file-head"><span>.agents/agents/explorer.md</span><span>demo/agent-ready-v2</span></div>
 
-```md {all|1-5|6|8-12|14}
+```md {all|3|4,6|8-12|11}
 ---
 name: explorer
 description: Read-only исследует код, документацию и историю git. Используй, чтобы ответить «как X сделано сейчас, что из этого эталон и кто от этого зависит», не забивая файлами основной контекст.
@@ -1474,27 +1474,27 @@ node evals/graders/add-microfrontend.cjs
   <div class="file-head"><span>.github/pull_request_template.md</span><span>фрагмент</span></div>
 
 ```md
-## Изменение harness (AGENTS.md, docs, .agents/)
+## Изменение harness (AGENTS.md, docs/architecture, .agents/)
 Гипотеза: что агенты должны начать делать лучше?
 
-| Кейс            | До (main) | После (этот MR) |
-|-----------------|-----------|-----------------|
-| add-lazy-route  |   3 / 5   |   5 / 5         |
-| add-large-table |   4 / 5   |   4 / 5         |
+| Кейс              | До (main) | После (этот MR) |
+|-------------------|-----------|-----------------|
+| add-microfrontend |   3 / 5   |   5 / 5         |
+| add-lazy-route    |   4 / 5   |   4 / 5         |
 ```
 
   </div>
 </div>
 
 <div class="two-col" style="margin-top: 1rem; align-items: start">
-  <p v-click style="font-size: 22px; margin: 0">В реестре у каждого скилла указаны кейсы, которые его проверяют. Кейса нет — скилл помечен «пробный», и следующая правка приходит вместе с первым кейсом.</p>
+  <p v-click style="font-size: 22px; margin: 0">В реестре у скилла указаны кейсы, которые его проверяют. Кейса нет — скилл помечен «пробный», и следующая его правка приходит вместе с первым кейсом.</p>
   <p v-click style="font-size: 22px; margin: 0">В MR со скиллом прогоняем его кейсы на <code>main</code> и на ветке, цифры — в описание MR. Мёржим, если «после» лучше и соседние кейсы не просели.</p>
 </div>
 
 <!--
 Время: 1:00.
-Связь — обычная таблица в реестре скиллов, никакой платформы. Запуск: EVAL_REF=origin/main evals/run-case.sh add-lazy-route 5, затем EVAL_REF=HEAD — то же самое.
-Цифры в шаблоне PR на слайде для примера.
+Связь — обычная таблица в реестре скиллов, никакой платформы. Запуск: EVAL_REF=origin/main evals/run-case.sh add-microfrontend 5, затем EVAL_REF=HEAD — то же самое.
+Скриптовый grader пока есть только у add-microfrontend, остальные кейсы оцениваем руками по критериям. Цифры в шаблоне PR на слайде для примера.
 -->
 
 ---
