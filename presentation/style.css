@@ -1274,3 +1274,53 @@
   white-space: pre-wrap !important;
   overflow-wrap: anywhere;
 }
+
+/* Chat poll: the number of pluses marks how many statements apply */
+.poll.plus > div span {
+  min-width: 84px;
+  color: var(--green);
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 34px;
+  font-weight: 800;
+}
+
+.grid-4.reasons .flat-card {
+  min-height: 0;
+  padding: 22px 28px;
+}
+
+.grid-4.reasons .flat-card p {
+  font-size: 20px;
+  line-height: 1.38;
+}
+
+/* Review slide: pipeline on top, critical zones below */
+.review-flow .click-node {
+  min-height: 104px;
+}
+
+.review-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 22px;
+  margin-top: 1.1rem;
+}
+
+.review-grid .flat-card {
+  padding: 16px 24px;
+}
+
+.review-grid .flat-card h3 {
+  margin-bottom: 6px;
+  font-size: 23px;
+}
+
+.review-grid .flat-card p {
+  margin: 0 0 6px;
+  font-size: 19px;
+  line-height: 1.36;
+}
+
+.review-grid .flat-card p.paths code {
+  font-size: 16px;
+}
