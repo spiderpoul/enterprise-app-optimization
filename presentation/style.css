@@ -1324,3 +1324,15 @@
 .review-grid .flat-card p.paths code {
   font-size: 16px;
 }
+
+.skill-grid.four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.skill-grid.four .flat-card h3 {
+  font-size: 21px;
+}
+
+.skill-grid.four .flat-card p {
+  font-size: 18px;
+}
