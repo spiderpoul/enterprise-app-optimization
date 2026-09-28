@@ -13,7 +13,8 @@ npm run dev
 ```
 
 Slidev откроет презентацию в браузере. Исходник слайдов находится в
-[`slides.md`](./slides.md).
+[`slides.md`](./slides.md), сценарий live-показов с подготовкой демо и таймингом — в
+[`live-script.md`](./live-script.md), статус переработки — в [`review-plan.md`](./review-plan.md).
 
 ## Другие команды
 
