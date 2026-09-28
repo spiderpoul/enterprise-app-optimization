@@ -392,7 +392,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6bebdf60c409cbe60d49635f74ce96dfaaec2e7d" target="_blank">Шаг 1. AGENTS.md: карта проекта и запреты</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/3733f9d7b60eba17d841bcc4670f3abd144f78f4" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -407,7 +407,6 @@ layout: center
 Показать, что корневой файл короткий, а подробности — во вложенных. Не каждый CLI подхватывает вложенные файлы сам, поэтому корневой AGENTS.md перечисляет их явно.
 Историю с реестром рассказать подробно: это коммит 64f408a «drop stale microfrontends and isolate failed entries». Теперь в файле записано, как устроен реестр и почему нельзя отключать TTL.
 Команды check:*, на которые ссылается AGENTS.md, появятся в шаге 6.
-Разделы «Cross-zone» и «Definition of Done» названы так в последнем коммите ветки; в диффе шага 1 они ещё «Что ещё заденешь» и «Готово» — показывать файл из последнего коммита.
 Формат «что поменял → что сломается → как это проявится» и есть самое ценное во вложенных файлах.
 -->
 
@@ -527,7 +526,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/7f578702cb1cdd1a1a98dd4f0939b2e22813e290" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/3f2306f14c78bd9ab245ad6ffddcc1cfbec09459" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
@@ -714,7 +713,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/8799eaad75e6d15ad7a16610d56044909e7d7ccc" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/891c431b7586a378107dd6414c603e2658bbf556" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
@@ -976,7 +975,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/5affe52494dc48bc6350a87bab21b8fef2069041" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/a86a3e0dd49993b3bb445e1886b05482cc463a65" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1114,7 +1113,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/64e91e2bf5cb5e0939575551685ba5108cd08234" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/95b4cfa33cf385929208a69a081ac07ffbd60aa0" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1247,7 +1246,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/ae5d8a9988dc173e1c3b9428243bb9cab0a15a0d" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/65b5f2b7058fe74da1a100e72af5eaa1a9e1b2e0" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, по которым агент исправит ошибку без человека</div>
@@ -1520,7 +1519,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/5118db239a0f4e9e41d8462fa36d5d8121b5ad75" target="_blank">Шаг 7. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b324ec564a2edff543e7eebd778adb42a908fde7" target="_blank">Шаг 7. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
