@@ -17,11 +17,7 @@ aspectRatio: 16/9
 canvasWidth: 1440
 ---
 
-<div class="eyebrow">Демо-сессия</div>
-
-# «Не Claude единым:<br>агентная разработка в закрытом контуре большого фронтенда»
-
-<div class="muted" style="margin-top: 2.4rem; font-size: 1.05rem">Павел Уваров · Kaspersky</div>
+<div class="cover-fill"></div>
 
 <!--
 Время: 0:30.

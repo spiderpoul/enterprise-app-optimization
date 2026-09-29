@@ -1336,3 +1336,9 @@
 .skill-grid.four .flat-card p {
   font-size: 18px;
 }
+
+/* First slide: full-bleed cover photo */
+.slidev-page-1 .slidev-layout {
+  background: url("/assets/first_slide.png") no-repeat center center / cover;
+  color: #fff;
+}
