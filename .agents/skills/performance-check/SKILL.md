@@ -17,7 +17,7 @@ description: Выбирает и запускает проверки произ�
 | memory        | npm run dev, затем MEMLAB_APP_BASE_URL=<url> npm run check:memory -- tests/memlab/<роут>.scenario.js; результат — строка MemLab в выводе, не код выхода |
 | microfrontend | npm run check:architecture и npm run check:bundle                     |
 | rendering     | lint, сборка и запись React Profiler для затронутого действия         |
-| startup       | сборка и замер до интерактивного UI (скрипта нет — запиши замер)      |
+| startup       | npm run check:web-vitals для роута; разбор — скилл web-vitals-check   |
 
 ## 3. Чего не делать
 - не подменяй сценарий MemLab сценарием другого роута

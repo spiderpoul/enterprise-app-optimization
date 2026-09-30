@@ -1,7 +1,8 @@
 ---
 name: security-reviewer
 description: Дополнительное ревью изменений, через которые в shell приходят чужие данные — регистрация
-  и удаление микрофронтов, прокси, серверы продуктов, заголовки ответов. Только чтение. Зовёт CI по
+  и удаление микрофронтов, прокси, серверы продуктов, заголовки ответов, — а также MCP-конфигурации,
+  workflow и скриптов с токеном или чужими командами. Только чтение. Зовёт CI по
   .agents/review/critical-paths.yml; локально — перед MR, который трогает эти пути.
 tools: Read, Grep, Glob, Bash   # Bash — только git diff, git log и git show
 ---
@@ -14,6 +15,9 @@ tools: Read, Grep, Glob, Bash   # Bash — только git diff, git log и git
 2. Цели прокси (`entryUrl`, `apiProxy.target`) приходят из тела ack. Есть ли allowlist хостов?
 3. `Access-Control-Allow-Origin: *` на серверах продуктов и в dev-серверах: не расширяет ли diff
    его на ответы с данными пользователя.
+4. `.mcp.json` и `opencode.json` (тот же сервер для OpenCode): новый MCP-сервер или флаг. Версия закреплена в devDependencies (`npx --no-install`),
+   `--no-performance-crux`, `--no-usage-statistics` и `CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS` на месте —
+   иначе URL, статистика и запросы к registry уходят наружу. Фоновые запросы самого Chrome эти флаги не закрывают.
 
 Каждое замечание: severity (blocker | risk) · file:line · откуда вход и куда уходит · чем опасно ·
 как исправить. Замечание подтверждается правилом или контрактом, упавшей проверкой или воспроизводимым

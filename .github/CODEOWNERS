@@ -19,6 +19,11 @@
 /.agents/skills/ui-form/             @design-system
 /.agents/skills/code-review/         @platform-frontend
 /.agents/skills/security-check/      @security-champions
+/.agents/skills/web-vitals-check/    @perf-guild
+
+# MCP-серверы: исполняются у каждого разработчика и в CI, видят браузер и данные
+/.mcp.json                           @platform-frontend @security-champions
+/opencode.json                       @platform-frontend @security-champions
 
 # Субагенты, правила ревью и evals
 /.agents/agents/                     @platform-frontend

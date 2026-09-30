@@ -37,6 +37,8 @@ check:architecture сверяет конфигурацию статически:
 - memory → `MEMLAB_APP_BASE_URL=<url> npm run check:memory -- tests/memlab/<роут>.scenario.js`
 - smoke → `npm run dev`, открой http://localhost:4300, пройди по всем продуктам из меню, перезагрузи их URL;
   в консоли нет 404/504 на entry и чанки
+- web vitals → `npm run start:prod -- --build`, затем `WEB_VITALS_BASE_URL=http://localhost:4300 npm run check:web-vitals -- <роут>`;
+  разбор трейса — скилл web-vitals-check через MCP chrome-devtools (`.mcp.json`, для OpenCode — `opencode.json`)
 - всё сразу → `npm run check` (architecture + lint + build)
 
 ## Definition of Done

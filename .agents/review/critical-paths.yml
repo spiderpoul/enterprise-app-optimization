@@ -7,6 +7,9 @@ critical:
   - paths: [src/shell-app/server/shell-server.js, src/shell-app/server/lib/**, 'src/microfrontends/*/server/**']
     reviewer: security-reviewer
     why: сюда приходят внешние данные — регистрация без проверки превращает shell в открытый прокси
+  - paths: [.mcp.json, opencode.json]
+    reviewer: security-reviewer
+    why: MCP-сервер исполняется у каждого и видит браузер — новый сервер или флаг (CrUX, статистика) может вынести данные наружу
   - paths: ['src/microfrontends/*/manifest.json']
     reviewer: contract-reviewer
     why: id и routePath — публичный контракт, на них ссылки пользователей и MemLab

@@ -17,7 +17,7 @@ OpenCode-адаптерах `edit: deny` и список разрешённых 
 2. **Из шага скилла или спеки.** Процедура прямо называет субагента: шаг 2 в
    `openspec/changes/add-application-security/tasks.md` («Изучи один текущий микрофронт», сейчас шаг 2),
    шаг 2 скилла `safe-change`, шаг 2 скилла `story-analysis` → `explorer`; «Отдай свой diff субагенту
-   `reviewer`» в tasks.md (сейчас шаг 10) → `reviewer`.
+   `reviewer`» в tasks.md (сейчас шаг 13) → `reviewer`.
 3. **Явно, по имени.** Человек пишет в промпте «попроси explorer…» или упоминает его через `@explorer`.
 
 ## Синтаксис
