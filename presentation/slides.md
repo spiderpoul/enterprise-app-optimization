@@ -243,27 +243,28 @@ layout: center
 <div class="two-col" style="margin-top: 1rem">
   <div v-click class="flat-card bad">
     <h3>Run A · <code>demo-before</code></h3>
-    <p class="muted">AI-сетап, какой бывает в жизни: AGENTS.md из общих (местами вредных) советов, старая документация, зоопарк скиллов, «команда агентов», ревью-бот и проверка, которая ничего не проверяет.</p>
+    <p>«Implement <code>openspec/changes/add-application-security/</code>»</p>
+    <p class="muted">AI-сетап, какой бывает в жизни: AGENTS.md из общих (местами вредных) советов, зоопарк скиллов, «команда агентов», ревью-бот и проверка, которая ничего не проверяет.</p>
   </div>
   <div v-click class="flat-card">
     <h3>Run B · <code>demo/agent-ready-v2</code></h3>
+    <p>«Implement <code>openspec/changes/add-application-security/</code>»</p>
     <p class="muted">Тот же код плюс всё, что покажу дальше.</p>
   </div>
 </div>
 
-<div v-click class="flat-card warn" style="margin-top: 1rem; padding: 18px 26px">
-  <h3 style="font-size: 23px; margin-bottom: 6px">Один промпт и одна спека — байт в байт</h3>
-  <p style="font-size: 20px">«Implement <code>openspec/changes/add-application-security/specs/application-security/spec.md</code>. When you are done, write a short report in Russian to <code>agent-report.md</code>: what you did, which checks you ran and their results, and your reasoning — key decisions, alternatives you rejected, doubts.»</p>
-</div>
+<p v-click class="source">Демо-репозиторий — упрощённая копия продукта: два микрофронта вместо 25, но те же ловушки. Спека у обоих одна и та же — скопирована из Run B без изменений. Различается только репозиторий.</p>
 
-<p v-click class="source">Спека хорошая у обоих: поведение, контракт, scope и критерии приёмки — без команд и ссылок на документацию. Различается только репозиторий. Демо-репозиторий — упрощённая копия продукта: два микрофронта вместо 25, но те же ловушки.</p>
+<div v-click class="flat-card warn" style="margin-top: 1rem; padding: 18px 26px">
+  <h3 style="font-size: 23px; margin-bottom: 6px">Оба промпта заканчиваются одинаково</h3>
+  <p style="font-size: 20px">«When you are done, write a short report in Russian to <code>agent-report.md</code>: what you did, which checks you ran and their results, and your reasoning — key decisions, alternatives you rejected, doubts.»</p>
+</div>
 
 <!--
 Время: 1:30.
 Переключиться в терминал, запустить обе сессии на одной внутренней модели с одинаковыми настройками, вернуться к слайдам.
 Run A — не пустой репозиторий. В ветке demo-before «всё есть», но сделано так, как делать не надо. Все антипримеры из доклада взяты оттуда.
-Оба получают одну и ту же хорошую спеку — ту, что разберём в блоке про спеки; spec.md и proposal.md в ветках совпадают байт в байт. Так нельзя сказать «B просто получил промпт лучше»: сравниваем только подготовку репозитория.
-Какими командами проверить требования спеки, агент должен узнать из репозитория — в этом и разница.
+Оба получают одну и ту же хорошую спеку — ту, что разберём в блоке про спеки: в demo-before скопированы proposal.md и spec.md из Run B, без tasks.md. Так нельзя сказать «B просто получил промпт лучше»: сравниваем только подготовку репозитория.
 Перед стартом evals/ скрыт в обоих worktree: в demo-before кейс прямо подсказывает про CommonJS.
 Отчёт в конце — одинаковая просьба для обоих: в финале сравним и код, и рассуждения.
 Если live-модель недоступна — дальше используем сохранённые трейсы и диффы репетиции.
@@ -369,7 +370,7 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 
 ## Definition of Done
 
-Сопоставь каждый requirement спеки с проверкой: таблица cross-zone выше и скилл performance-check. Всегда — `npm run check`. В отчёте: команды, результаты, что не проверил и почему.
+Запусти проверки из активной спеки; без спеки — `npm run check`. В отчёте: команды, результаты, что не проверил и почему.
 
 </div>
 <div class="sec" :class="{ dim: $clicks > 0 && $clicks < 4 }">
@@ -385,7 +386,7 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
   <div v-if="$clicks < 1" class="note intro"><b>Вторая половина файла</b><p>Отвечает на два вопроса: на какие ещё зоны влияет правка и как доказать, что работа закончена.</p></div>
   <div v-click="[1, 2]" class="note"><b>Cross-zone-зависимости</b><p>Самое полезное, что мы добавили. Агент правит один файл и сразу видит, на что ещё это влияет и чем это проверить. В продукте такие таблицы есть и в корне, и в документации каждой области.</p></div>
   <div v-click="[2, 3]" class="note"><b>Точные команды</b><p>Не «проверь память», а готовая команда с переменной окружения. Слабая модель не угадает, что MemLab и замеру Web Vitals нужен адрес поднятого приложения.</p></div>
-  <div v-click="[3, 4]" class="note"><b>Definition of Done — команды и отчёт</b><p>Спека говорит «что проверить», AGENTS.md — «чем». Плюс честный список того, что не проверено.</p></div>
+  <div v-click="[3, 4]" class="note"><b>Definition of Done — команды и отчёт</b><p>Не «убедись, что работает», а проверки из спеки и честный список того, что не проверено.</p></div>
   <div v-click="4" class="note"><b>Когда остановиться и спросить</b><p>Три уровня: «никогда», «сначала спроси», всё остальное можно. Без stop-условий слабая модель героически доводит опасную правку до конца.</p></div>
 </div>
 </div>
@@ -450,7 +451,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/59c9ea2b7f93b647ce27eece6cddec81f9ab5930" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/351ce39b72ab6ac9c33c9fb620d6e5c899bd6e8e" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -598,7 +599,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/48f2b2d596c91ee2458f51eff336de03575f2067" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/35941176db093b350546cc37eda251b50470a347" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
@@ -694,7 +695,7 @@ layout: center
 
 ## Публичный контракт
 
-После мёржа не меняется: на это опираются ссылки пользователей и автотесты.
+После мёржа не меняется: на это опираются ссылки пользователей, MemLab и check:bundle.
 
 | Контракт | Значение |
 |---|---|
@@ -723,9 +724,9 @@ Shell SHALL показывать пункт «Application Security» и откр
 </div>
 <div class="sec" :class="{ dim: $clicks > 0 && $clicks !== 4 }">
 
-## Если упёрся
+## Если lazy-чанк не работает
 
-Если lazy-чанк не собирается или не грузится через shell, можно менять конфиг только этого микрофронта (Babel, webpack, его сервер). Опиши обход в отчёте.
+Можно менять конфиг только этого микрофронта (Babel, webpack, его сервер); обход опиши в отчёте. Рецепт — «Lazy-чанки через shell» в docs.
 
 </div>
 <div class="sec" :class="{ dim: $clicks > 0 && $clicks < 5 }">
@@ -739,7 +740,7 @@ Shell SHALL показывать пункт «Application Security» и откр
 </div>
 <div class="notes">
   <div v-if="$clicks < 1" class="note intro"><b>Фрагмент спеки</b><p>Показываю самое важное: контракт, требование со сценарием, разрешение на случай, если упёрся, и что вне scope.</p></div>
-  <div v-click="[1, 2]" class="note"><b>Публичный контракт</b><p>Значения, на которые опираются ссылки пользователей и автотесты. Агент не должен их придумывать.</p></div>
+  <div v-click="[1, 2]" class="note"><b>Публичный контракт</b><p>Значения, на которые опираются ссылки пользователей, MemLab и проверки. Агент не должен их придумывать.</p></div>
   <div v-click="[2, 3]" class="note"><b>Требование</b><p>Одно предложение о поведении, без слов «быстро» и «красиво».</p></div>
   <div v-click="[3, 4]" class="note"><b>Сценарий</b><p>Каждая строка THEN проверяется руками или тестом. «Код скачивается только в этот момент» — это и есть требование к lazy-загрузке.</p></div>
   <div v-click="[4, 5]" class="note"><b>Разрешение, если упёрся</b><p>Можно менять конфиг только своего микрофронта. Без этого агент либо сдаётся, либо лезет чинить общий код.</p></div>
@@ -749,8 +750,7 @@ Shell SHALL показывать пункт «Application Security» и откр
 
 <!--
 Время: 1:40.
-В конце файла — «Definition of Done» без команд: «каждый requirement подтверждён проверкой, которую можно повторить; зелёная сборка не доказательство; непроверенное — так и помечай».
-Команд и ссылок на docs в спеке нет намеренно: её получают оба прогона. Какой командой проверить lazy-чанк или память, агент должен найти в репозитории.
+В конце файла ещё раздел «Definition of Done» с командами и парой строк, которые заранее отрезают лёгкие способы объявить «готово».
 -->
 
 ---
@@ -759,7 +759,7 @@ Shell SHALL показывать пункт «Application Security» и откр
 
 <div class="annotated">
 <div class="file code-sm bad">
-<div class="file-head"><span>spec.md — антипример</span><span>так писали раньше</span></div>
+<div class="file-head"><span>spec.md — антипример</span><span>demo-before</span></div>
 
 ```md {all|3|4|5|8-10|12-13}
 # Страница Application Security
@@ -800,13 +800,13 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/fc7a2b29766273dc75406e18f1386217e9958d12" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/365e127af22be72dd173a5c94cdf907ccfa38b47" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
   <div><code>proposal.md</code> и <code>tasks.md</code><br>зачем это изменение и порядок работы со ссылками на скиллы и субагентов</div>
   <div><code>openspec/README.md</code><br>как мы работаем со спеками в legacy</div>
-  <div><span class="muted">Показать</span><br>этот файл получают оба прогона — в <code>demo-before</code> он такой же байт в байт</div>
+  <div><span class="muted">Показать</span><br>этот файл получают оба прогона — в <code>demo-before</code> лежит такая же копия</div>
 </div>
 
 <!--
@@ -1074,7 +1074,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/2a9be2da3557fbcf988ccd3850d8b824db69e116" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/d2264a5bb83292bdee481c4f21c3bdbe4cc77c09" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1191,7 +1191,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/672ef909f04d1cc252c98e3a7dc920595d209345" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/d7392475dba50b6fa820ad9aeb2f1f5d0a604c73" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1379,7 +1379,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/4e2d08207f80b7b43016602d3af7c5e33f36b312" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/287d3d3059e61badb1db5eb83f72401da21ab319" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, по которым агент исправит ошибку без человека</div>
@@ -1403,7 +1403,7 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/272888cedbc31253791486e9141ec5605a6a24d6" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/08c2544dab37844be6c940333cfe2d1bca951128" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
   <div><code>.mcp.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer</div>
@@ -1676,7 +1676,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/bfc339fb5c5d9d02971929f503770077e120b407" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/8fc4a127f9b0c095ba7b9a6f25d8d6d5e0a3a865" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
