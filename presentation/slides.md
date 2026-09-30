@@ -38,7 +38,7 @@ canvasWidth: 1440
     <div v-click class="speaker-fact"><b>Челлендж</b><span>как только у нас появилась агентная разработка — перестать писать код руками</span></div>
     <div v-click class="statement" style="margin-top: 1.25rem">Пока держусь 🙂</div>
   </div>
-  <div v-click class="speaker-photo">
+  <div class="speaker-photo">
     <img src="/assets/pavel-uvarov.jpg" alt="Павел Уваров" />
   </div>
 </div>
@@ -59,8 +59,6 @@ canvasWidth: 1440
   <div v-click><span>+++</span>…и вы реально пишете ей код в рабочем репозитории — не вопросы и не тесты</div>
 </div>
 
-<p v-click style="margin-top: 1.6rem; font-size: 26px">Обычно «+++» заметно меньше, чем «++». Модель есть, а в разработке ей почти не пользуются.</p>
-
 <!--
 Время: 1:20.
 Руки не поднимаем: попросить написать в чат столько плюсов, сколько пунктов про вас. Показать все три пункта, подождать чат.
@@ -69,16 +67,16 @@ canvasWidth: 1440
 
 ---
 
-# Что я слышу от коллег с внутренней моделью
+# Какие слышу отзывы по внутренним моделям
 
 <div class="grid-4">
-  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Она тупая, с Claude не сравнить»</h3></div>
-  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Галлюцинирует: придумывает функции, которых у нас нет»</h3></div>
-  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Для тестиков сойдёт, в прод-код не пущу»</h3></div>
-  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Пока объяснишь задачу — сам напишешь»</h3></div>
+  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Не тянет, с Claude не сравнить»</h3></div>
+  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Галлюцинирует: может напридумывать своего</h3></div>
+  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Для тестиков сойдёт, но код писать не доверю</h3></div>
+  <div v-click class="flat-card bad"><h3 style="font-size: 26px">Быстрее самому написать, чем пол часа объяснять</h3></div>
 </div>
 
-<p v-click style="margin-top: 1.7rem; font-size: 29px">Мой тезис на сегодня: чаще всего дело не в слабости модели. Мы просто не объяснили ей проект — и она честно угадывает.</p>
+<p v-click style="margin-top: 1.7rem; font-size: 29px">Но чаще всего дело не в слабости модели. Мы просто не объяснили ей проект — и единственное что остаётся делать это угадывать.</p>
 
 <!--
 Время: 1:00.
@@ -141,7 +139,8 @@ layout: center
   <div v-click class="benchmark"><b>38</b><span>Claude Sonnet 5<br/>max effort</span></div>
 </div>
 
-<p v-click style="margin-top: 1.6rem; font-size: 27px">Открытые GLM, Kimi или DeepSeek можно поднять на своей инфраструктуре, и по общему уровню они уже рядом с облачными в повседневных настройках. Разрыв есть, но главное, что мешает, — модель ничего не знает о вашем проекте.</p>
+<p v-click style="margin-top: 1.6rem; font-size: 27px">Открытые GLM, Kimi или DeepSeek можно поднять на своей инфраструктуре и они вполне достойно пишут код.
+Разрыв есть, но главное, что мешает, — модель ничего не знает о вашем проекте.</p>
 
 <p v-after class="source">Artificial Analysis Intelligence Index v4.3, сентябрь 2026. Лидер индекса — Claude Opus 5.5 (max), 58 баллов. Это общий уровень модели; проверять всё равно нужно на своём репозитории.</p>
 
@@ -618,17 +617,17 @@ layout: center
     <h3 class="green">Как внедряем</h3>
     <ul>
       <li v-click>Начинаем с одного настоящего изменения, которое всё равно нужно сделать.</li>
-      <li v-click>Спеку пишем только на то, что меняем. Весь продукт задним числом не описываем.</li>
-      <li v-click>Черновик готовит агент по тикету и коду, владелец области читает его минут десять.</li>
-      <li v-click>После мёржа спека остаётся рядом с кодом и становится частью документации.</li>
+      <li v-click>Спеку пишем только на то, что меняем.</li>
+      <li v-click>Черновик готовит агент по тикету и коду, владелец области дорабатывает его.</li>
+      <li v-click>После мёржа спека остаётся рядом с кодом.</li>
     </ul>
   </div>
   <div>
     <h3 class="yellow">Что это даёт</h3>
     <ul>
       <li v-click>Замысел ревьюим до кода: поправить абзац дешевле, чем 40 файлов.</li>
-      <li v-click>Контракты legacy, которых не видно в коде, записаны явно — в опубликованном кейсе переделывали в основном из-за них.</li>
-      <li v-click>Слабой модели не нужно додумывать продуктовый смысл по ходу работы.</li>
+      <li v-click>Контракты legacy, которых не видно в коде, записаны явно.</li>
+      <li v-click>Модели не нужно додумывать продуктовый смысл по ходу работы.</li>
     </ul>
   </div>
 </div>
@@ -1193,9 +1192,9 @@ layout: center
 
 <div class="eyebrow">Блок 6</div>
 
-# Quality gates: «готово» решает не модель
+# Проверки и ревью.
 
-<p class="muted" style="font-size: 26px">Слабая модель не должна сама решать, что работа закончена. Это решают проверки, которые живут вне агента, и ревью.</p>
+<p class="muted" style="font-size: 26px">Модель не должна сама решать, что работа закончена. Это решают quality gates.</p>
 
 <!--
 Время: 0:15.
@@ -1735,7 +1734,7 @@ class: compact-table
 
 ---
 
-# Итоги: что сделать на своём проекте
+# Итоги: check-list агентной разработки
 
 <div class="checklist">
   <div v-click>Короткий AGENTS.md: карта, запреты, cross-zone-зависимости, Definition of Done</div>
@@ -1744,10 +1743,10 @@ class: compact-table
   <div v-click>Спека на каждое заметное изменение — прочитанная человеком до кода</div>
   <div v-click>Quality gates вне агента: скрипты с понятными сообщениями и бюджеты-храповики</div>
   <div v-click>Chrome DevTools MCP: агент сам поднимает проект и меряет Web Vitals</div>
-  <div v-click>Два-три скилла на повторяющуюся работу, у каждого есть владелец</div>
+  <div v-click>Скиллы на повторяющуюся работу, у каждого есть владелец</div>
   <div v-click>Субагенты для исследования и ревью, а код пишет один агент</div>
   <div v-click>Агентное ревью в CI на каждый MR, для критичных путей — профильное</div>
-  <div v-click>Пять eval-кейсов из реальных промахов и прогон при каждой правке</div>
+  <div v-click>Eval-кейсы из реальных промахов и прогон при каждой правке</div>
 </div>
 
 <!--
@@ -1760,9 +1759,9 @@ class: compact-table
 layout: center
 ---
 
-<div class="huge">Сначала сделайте проект<br><span class="green">понятным агенту</span></div>
+<div class="huge">Сделайте проект <span class="green">понятным агенту</span></div>
 
-<p v-click class="muted" style="margin-top: 2.1rem; font-size: 1.25rem">Модель определяет потолок, а harness — как часто вы до него дотягиваетесь.</p>
+<p v-click class="muted" style="margin-top: 2.1rem; font-size: 2.5rem">Модель определяет потолок, а harness — как часто вы до него дотягиваетесь.</p>
 
 <p v-click style="margin-top: 1.4rem; font-size: 1.05rem">Demo: <code>github.com/spiderpoul/enterprise-app-optimization</code>, ветка <code>demo/agent-ready-v2</code></p>
 
