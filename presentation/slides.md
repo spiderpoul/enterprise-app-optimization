@@ -187,30 +187,49 @@ Opus 5 на medium взят как типичная повседневная н�
 
 # Agent = Model + Harness
 
-<div class="two-col wide-right harness-slide">
-  <div>
-    <div v-click class="harness-split">
-      <div class="bar"><span class="m">10%</span><span class="h">90%</span></div>
-      <div class="legend"><span>модель</span><span>harness — всё вокруг модели</span></div>
-    </div>
-    <ul class="harness-map">
-      <li v-click><b>Instructions / Rule files</b> → AGENTS.md, docs, спеки</li>
-      <li v-click><b>Tools &amp; MCP</b> → скрипты скиллов, Chrome DevTools MCP</li>
-      <li v-click><b>Orchestration</b> → скиллы и субагенты</li>
-      <li v-click><b>Guardrails &amp; Hooks</b> → quality gates и агентное ревью</li>
-      <li v-click><b>Eval &amp; Testing</b> → evals</li>
-    </ul>
+<div class="annotated hx-slide">
+<div>
+<div class="hx" :class="{ dimming: $clicks >= 1 && $clicks <= 7 }">
+  <div class="hx-ring hx-outer" :class="{ focus: $clicks === 7 }">
+    <span class="hx-tag top">CLI / IDE</span>
+    <span class="hx-tag left">Сессии и память</span>
+    <span class="hx-tag bottom">Рантайм · логи и трейсы</span>
   </div>
-  <div v-click class="image-frame harness-image"><img src="/assets/harness-anatomy.png" alt="Слои harness вокруг LLM: инструкции, инструменты и MCP, оркестрация, guardrails и хуки, evals" /></div>
+  <div class="hx-ring hx-inner"><span class="hx-label">harness — здесь складывается поведение агента</span></div>
+  <div class="hx-orbit"></div>
+  <div class="hx-core" :class="{ focus: $clicks === 1 }"><b>LLM</b><span>~10%</span></div>
+  <div class="hx-chip c1" :class="{ on: $clicks >= 2, focus: $clicks === 2 }"><b>Instructions</b><span>правила и знания</span></div>
+  <div class="hx-chip c2" :class="{ on: $clicks >= 3, focus: $clicks === 3 }"><b>Tools &amp; MCP</b><span>руки агента</span></div>
+  <div class="hx-chip c3" :class="{ on: $clicks >= 4, focus: $clicks === 4 }"><b>Orchestration</b><span>кто и в каком порядке</span></div>
+  <div class="hx-chip c4" :class="{ on: $clicks >= 5, focus: $clicks === 5 }"><b>Guardrails</b><span>проверки и хуки</span></div>
+  <div class="hx-chip c5 eval" :class="{ on: $clicks >= 6, focus: $clicks === 6 }"><b>Evals</b><span>замер</span></div>
 </div>
-
-<p v-click class="source">Google, «The New SDLC with Vibe Coding» (A. Osmani, S. Saboo, S. Kartakis), май 2026, рис. 7. «The model is the engine. The harness is the car, the road, and the traffic laws». 10/90 — метафора авторов, а не измерение.</p>
+<div class="harness-split" :class="{ shown: $clicks >= 8 }">
+  <div class="bar"><span class="m">10%</span><span class="h">90% — harness</span></div>
+</div>
+</div>
+<div>
+<div class="notes">
+  <div v-if="$clicks < 1" class="note intro"><b>Что вокруг модели</b><p>Схема из документа Google о новом SDLC, упрощённая. В центре — модель, вокруг — всё, что даём ей мы. Пройдём по слоям.</p></div>
+  <div v-click="[1, 2]" class="note hx-note-core"><b>LLM — двигатель</b><p>Рассуждает и выбирает следующий шаг. Внутреннюю модель мы не выбираем: её дали, и это данность.</p></div>
+  <div v-click="[2, 3]" class="note good"><b>Instructions / Rule files</b><p>Что агент читает всегда или по ссылке: AGENTS.md, документация, спека. Блоки 1–3.</p></div>
+  <div v-click="[3, 4]" class="note good"><b>Tools &amp; MCP</b><p>Чем агент действует: скрипт вместо чтения лога целиком, браузер через Chrome DevTools MCP. Блоки 4 и 6.</p></div>
+  <div v-click="[4, 5]" class="note good"><b>Orchestration</b><p>Кто и в каком порядке работает: скиллы — процедуры из шагов, субагенты — отдельный контекст для шумной работы. Блоки 4–5.</p></div>
+  <div v-click="[5, 6]" class="note good"><b>Guardrails &amp; Hooks</b><p>Что не даёт объявить «готово» раньше времени: quality gates и агентное ревью. Блок 6.</p></div>
+  <div v-click="[6, 7]" class="note"><b>Eval &amp; Testing</b><p>Как понять, что правка harness помогла, а не показалось: одна задача, N прогонов, доля успехов. Блок 7.</p></div>
+  <div v-click="[7, 8]" class="note intro"><b>Платформа</b><p>CLI и IDE, рантайм, сессии, логи и трейсы. Это даёт платформенная команда; сегодня не трогаем.</p></div>
+  <div v-click="8" class="note good"><b>10% модель, 90% harness</b><p>«The model is the engine. The harness is the car, the road, and the traffic laws». Почти всё, что решает успех, — в наших руках.</p></div>
+</div>
+<p class="source hx-source">Google, «The New SDLC with Vibe Coding» (A. Osmani, S. Saboo, S. Kartakis), май 2026, рис. 7 — схема упрощена. 10/90 — метафора авторов, а не измерение.</p>
+</div>
+</div>
 
 <!--
 Время: 1:10.
 Картинка из документа Google о новом SDLC: модель — двигатель, harness — машина, дорога и правила движения. Соотношение 10/90 буквально не защищаем, это метафора.
 Пример из того же документа: LangChain в феврале 2026 поменял только harness вокруг той же модели — системный промпт, инструменты, middleware — и поднял результат на Terminal-Bench 2.0 с 52,8% до 66,5%.
-Слева — как слои с картинки ложатся на блоки доклада. Внутренняя модель — это наши 10%, их мы не выбираем. Остальные 90% полностью в наших руках — о них весь доклад.
+Идти по кликам: каждый клик подсвечивает один слой схемы, справа — что это и в каком блоке доклада. Последний клик — полоса 10/90.
+Внутренняя модель — это наши 10%, их мы не выбираем. Остальные 90% полностью в наших руках — о них весь доклад.
 -->
 
 ---

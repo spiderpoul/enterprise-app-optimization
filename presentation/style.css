@@ -1450,9 +1450,211 @@
   font-size: 15px;
 }
 
-/* Agent = Model + Harness */
-.harness-slide {
-  align-items: start;
+/* Agent = Model + Harness: layered diagram, one layer per click */
+.hx-slide {
+  grid-template-columns: 1.45fr 0.75fr;
+}
+
+.hx {
+  position: relative;
+  height: 470px;
+}
+
+.hx-ring {
+  position: absolute;
+  border-radius: 50%;
+  animation: hx-ring-in 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: opacity 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
+}
+
+.hx-outer {
+  inset: 0;
+  border: 2px solid var(--line-strong);
+  background: radial-gradient(ellipse at center, rgb(115 242 167 / 3%), transparent 70%);
+}
+
+.hx-inner {
+  inset: 15% 14%;
+  border: 2px solid rgb(115 242 167 / 55%);
+  background: rgb(115 242 167 / 6%);
+  animation-delay: 150ms;
+}
+
+.hx-label {
+  position: absolute;
+  top: 7%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.hx-tag {
+  position: absolute;
+  padding: 3px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.hx-tag.top {
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.hx-tag.left {
+  top: 50%;
+  left: 0;
+  transform: translate(-30%, -50%);
+}
+
+.hx-tag.bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.hx-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: 112px;
+  height: 112px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #7fb0ff, #3b74dc);
+  color: #fff;
+  transform: translate(-50%, -50%);
+  animation: hx-breathe 3.2s ease-in-out infinite;
+}
+
+.hx-core b {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.hx-core span {
+  font-size: 15px;
+  opacity: 0.85;
+}
+
+.hx-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 176px;
+  height: 176px;
+  margin: -88px 0 0 -88px;
+  border: 1px dashed rgb(127 176 255 / 45%);
+  border-radius: 50%;
+  animation: hx-spin 14s linear infinite;
+}
+
+.hx-orbit::after {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: #7fb0ff;
+  box-shadow: 0 0 12px #7fb0ff;
+  content: "";
+}
+
+.hx-chip {
+  position: absolute;
+  display: flex;
+  width: 168px;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1.5px solid rgb(115 242 167 / 60%);
+  border-radius: 12px;
+  background: var(--surface-strong);
+  text-align: center;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  transition: opacity 420ms ease, transform 520ms cubic-bezier(0.34, 1.56, 0.64, 1), border-color 300ms ease;
+}
+
+.hx-chip b {
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.2;
+}
+
+.hx-chip span {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.hx-chip.on {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.hx-chip.c1 { top: 35%; left: 30%; }
+.hx-chip.c2 { top: 35%; left: 70%; }
+.hx-chip.c3 { top: 67%; left: 30%; }
+.hx-chip.c4 { top: 67%; left: 70%; }
+
+.hx-chip.eval {
+  top: 50%;
+  left: 88%;
+  width: 118px;
+  border-color: rgb(255 212 121 / 70%);
+}
+
+/* The layer being explained glows, the rest step back */
+.hx.dimming > *:not(.focus) {
+  opacity: 0.3;
+}
+
+.hx.dimming > .hx-chip:not(.on) {
+  opacity: 0;
+}
+
+.hx .focus {
+  border-color: var(--green);
+  animation: hx-glow 1.6s ease-in-out infinite;
+}
+
+.hx .hx-core.focus {
+  animation: hx-breathe 1.6s ease-in-out infinite, hx-glow-blue 1.6s ease-in-out infinite;
+}
+
+.hx .eval.focus {
+  border-color: var(--yellow);
+  animation: hx-glow-yellow 1.6s ease-in-out infinite;
+}
+
+.hx .hx-outer.focus {
+  border-color: var(--muted);
+  animation: none;
+  box-shadow: 0 0 0 6px rgb(169 190 179 / 12%);
+}
+
+.harness-split {
+  margin-top: 26px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.harness-split.shown {
+  opacity: 1;
+  transform: none;
 }
 
 .harness-split .bar {
@@ -1471,9 +1673,10 @@
 }
 
 .harness-split .m {
-  flex: 0 0 12%;
+  width: 0;
   background: #4c8df6;
   color: #fff;
+  transition: width 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .harness-split .h {
@@ -1482,26 +1685,49 @@
   color: var(--bg);
 }
 
-.harness-split .legend {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 18px;
+.harness-split.shown .m {
+  width: 10%;
 }
 
-.slidev-layout .harness-map li {
-  margin: 12px 0;
-  font-size: 22px;
+.note.hx-note-core {
+  border-left-color: #4c8df6;
 }
 
-.harness-map b {
-  color: var(--green-soft);
+.note.hx-note-core b {
+  color: #7fb0ff;
 }
 
-.harness-image {
-  height: 470px;
-  padding: 12px;
+.slidev-layout .hx-source {
+  margin-top: 18px !important;
+}
+
+@keyframes hx-ring-in {
+  from { opacity: 0; transform: scale(0.88); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes hx-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes hx-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(76 141 246 / 35%); }
+  50% { box-shadow: 0 0 0 14px rgb(76 141 246 / 0%); }
+}
+
+@keyframes hx-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(115 242 167 / 45%); }
+  50% { box-shadow: 0 0 22px 4px rgb(115 242 167 / 35%); }
+}
+
+@keyframes hx-glow-blue {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.25); }
+}
+
+@keyframes hx-glow-yellow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 212 121 / 45%); }
+  50% { box-shadow: 0 0 22px 4px rgb(255 212 121 / 35%); }
 }
 
 /* Quality gates */
