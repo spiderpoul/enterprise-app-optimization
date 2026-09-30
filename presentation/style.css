@@ -1342,3 +1342,245 @@
   background: url("/assets/first_slide.png") no-repeat center center / cover;
   color: #fff;
 }
+
+/* Rendered Markdown inside a file frame: tables stay readable from the stage.
+   Sections dim when the note on the right talks about another part of the file. */
+.md-view .md-body {
+  padding: 12px 20px 14px;
+}
+
+.md-view .sec {
+  transition: opacity 260ms ease;
+}
+
+.md-view .sec + .sec {
+  margin-top: 8px;
+}
+
+.md-view .sec.dim {
+  opacity: 0.28;
+}
+
+.slidev-layout .md-view h1 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  letter-spacing: 0;
+}
+
+.slidev-layout .md-view h2,
+.slidev-layout .md-view h3,
+.slidev-layout .md-view h4 {
+  margin: 0 0 4px;
+  color: var(--green);
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.slidev-layout .md-view p,
+.slidev-layout .md-view li {
+  margin: 0 0 3px;
+  font-size: 16px;
+  line-height: 1.36;
+}
+
+.slidev-layout .md-view ul,
+.slidev-layout .md-view ol {
+  margin: 0;
+  padding-left: 1.3em;
+}
+
+.slidev-layout .md-view li {
+  margin: 1px 0;
+}
+
+.slidev-layout .md-view code {
+  padding: 1px 5px;
+  font-size: 0.9em;
+}
+
+.slidev-layout .md-view table {
+  width: 100%;
+  margin: 4px 0 0;
+  border-collapse: collapse;
+  font-size: 15px;
+  line-height: 1.28;
+}
+
+.slidev-layout .md-view th,
+.slidev-layout .md-view td {
+  padding: 4px 9px;
+  border: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.slidev-layout .md-view th {
+  background: var(--surface-strong);
+  color: var(--green-soft);
+  font-weight: 700;
+}
+
+.md-view .frontmatter {
+  display: grid;
+  gap: 4px;
+  padding: 8px 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+}
+
+.md-view .frontmatter > div {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.md-view .frontmatter span {
+  color: var(--muted);
+  font-family: "JetBrains Mono", Consolas, monospace;
+  font-size: 14px;
+}
+
+.slidev-layout .md-view .frontmatter p {
+  margin: 0;
+  font-size: 16px;
+}
+
+.slidev-layout .md-view .frontmatter code {
+  font-size: 15px;
+}
+
+/* Agent = Model + Harness */
+.harness-slide {
+  align-items: start;
+}
+
+.harness-split .bar {
+  display: flex;
+  overflow: hidden;
+  height: 46px;
+  border-radius: 10px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.harness-split .bar span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.harness-split .m {
+  flex: 0 0 12%;
+  background: #4c8df6;
+  color: #fff;
+}
+
+.harness-split .h {
+  flex: 1;
+  background: var(--green);
+  color: var(--bg);
+}
+
+.harness-split .legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.slidev-layout .harness-map li {
+  margin: 12px 0;
+  font-size: 22px;
+}
+
+.harness-map b {
+  color: var(--green-soft);
+}
+
+.harness-image {
+  height: 470px;
+  padding: 12px;
+}
+
+/* Quality gates */
+.gate-flow .click-node {
+  min-height: 190px;
+}
+
+.gate-flow .click-node em {
+  margin-bottom: 8px;
+  color: var(--yellow);
+  font-size: 16px;
+  font-style: normal;
+}
+
+.gate-flow .click-node.human {
+  border-top-color: var(--yellow);
+}
+
+.gate-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.gate-grid .flat-card {
+  padding: 18px 22px;
+}
+
+.gate-grid .flat-card h3 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.slidev-layout .gate-grid .flat-card p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.38;
+}
+
+/* Chrome DevTools MCP */
+.mcp-slide {
+  align-items: start;
+}
+
+.slidev-layout .mcp-points li {
+  margin: 10px 0;
+  font-size: 19px;
+  line-height: 1.36;
+}
+
+/* Run A / Run B columns in the result tables */
+.comparison.runs th.run-a {
+  color: var(--red);
+}
+
+.comparison.runs th.run-b {
+  color: var(--green);
+}
+
+.comparison.runs td.run-a {
+  background: rgb(255 156 156 / 9%);
+  color: #ffd9d9;
+}
+
+.comparison.runs td.run-b {
+  background: rgb(115 242 167 / 9%);
+  color: #d9ffe8;
+}
+
+.comparison.runs th.run-a,
+.comparison.runs td.run-a {
+  box-shadow: inset 4px 0 0 rgb(255 156 156 / 55%);
+}
+
+.comparison.runs th.run-b,
+.comparison.runs td.run-b {
+  box-shadow: inset 4px 0 0 rgb(115 242 167 / 55%);
+}
+
+.red-text {
+  color: var(--red);
+}
