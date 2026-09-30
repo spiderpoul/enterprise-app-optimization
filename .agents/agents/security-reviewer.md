@@ -14,6 +14,8 @@ tools: Read, Grep, Glob, Bash   # Bash — только git diff, git log и git
 2. Цели прокси (`entryUrl`, `apiProxy.target`) приходят из тела ack. Есть ли allowlist хостов?
 3. `Access-Control-Allow-Origin: *` на серверах продуктов и в dev-серверах: не расширяет ли diff
    его на ответы с данными пользователя.
+4. `.mcp.json` и `opencode.json` (тот же сервер для OpenCode): новый MCP-сервер или флаг. Версия закреплена в devDependencies (`npx --no-install`),
+   `--no-performance-crux` и `--no-usage-statistics` на месте — иначе URL и данные уходят наружу.
 
 Каждое замечание: severity (blocker | risk) · file:line · откуда вход и куда уходит · чем опасно ·
 как исправить. Не больше 10 замечаний. Уже существующие риски помечай как «было до этого diff»

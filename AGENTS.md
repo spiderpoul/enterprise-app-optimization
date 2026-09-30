@@ -32,6 +32,8 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 - architecture → `npm run check:architecture` · bundle → `npm run check:bundle`
 - memory → `MEMLAB_APP_BASE_URL=<url> npm run check:memory -- tests/memlab/<роут>.scenario.js`
 - smoke → `npm run dev`, открой http://localhost:4300, пройди по всем продуктам из меню, перезагрузи их URL
+- web vitals → `npm run start:prod -- --build`, затем `WEB_VITALS_BASE_URL=http://localhost:4300 npm run check:web-vitals -- <роут>`;
+  разбор трейса — скилл web-vitals-check через MCP chrome-devtools (`.mcp.json`, для OpenCode — `opencode.json`)
 - всё сразу → `npm run check` (architecture + lint + build)
 
 ## Definition of Done

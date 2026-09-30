@@ -22,11 +22,22 @@
    конфиг этого продукта по рецепту «Lazy-чанки через shell».
 7. Добавь сценарий памяти для своего роута на `tests/memlab/create-route-pagination-scenario.js`
    (навигация из меню, пагинация до последней страницы, уход со страницы) —
-   `tests/memlab/application-security.scenario.js`. Запускается на поднятом приложении, см. шаг 9.
+   `tests/memlab/application-security.scenario.js`. Запускается на поднятом приложении, см. шаг 11.
 8. Запусти `npm run lint` и полную сборку `npm run build`, исправь найденные регрессии.
    Какие ещё проверки нужны для твоего класса изменений — подскажет скилл `performance-check`.
-9. Запусти `MEMLAB_APP_BASE_URL=<адрес поднятого приложения> npm run check:memory -- tests/memlab/application-security.scenario.js`.
-   Длинный вывод упавшей проверки отдай субагенту `log-analyst`.
-10. Отдай свой diff субагенту `reviewer` и устрани blocker-замечания.
-11. Напиши отчёт: таблица «команда → запускал → результат», что упало первым и что после этого сделал,
+9. Подними приложение как в production: `npm run start:prod -- --build` в фоне (адрес shell —
+   http://localhost:4300; dev-сервер для замеров не подходит). Открой `/application-security` через
+   MCP chrome-devtools (`navigate_page`, `take_screenshot`, `list_console_messages`): пункт в меню есть,
+   таблица отрисована, в консоли нет 404/504 на entry или чанк. Без этого шага сценарий «чанк грузится
+   через shell» не подтверждён — сборка этого не показывает.
+10. На том же приложении: `WEB_VITALS_BASE_URL=http://localhost:4300 npm run check:web-vitals -- /application-security`.
+    Бюджет превышен — скилл `web-vitals-check` (трейс, `LCPBreakdown`), а не догадки.
+11. На том же приложении: `MEMLAB_APP_BASE_URL=http://localhost:4300 npm run check:memory -- tests/memlab/application-security.scenario.js`.
+    Длинный вывод упавшей проверки отдай субагенту `log-analyst`.
+12. Останови production-приложение и проверь локальную разработку на тех же портах: `npm run dev` в фоне,
+    открой `/application-security` через MCP и перезагрузи URL. В консоли не должно быть
+    `Failed to fetch dynamically imported module` — так проявляются продукт без `.env`, продукт не в скрипте
+    `dev` и dev-сервер, который отдаёт entry не из `/` («Подводные камни» в docs/architecture/microfrontends.md).
+13. Отдай свой diff субагенту `reviewer` и устрани blocker-замечания.
+14. Напиши отчёт: таблица «команда → запускал → результат», что упало первым и что после этого сделал,
     обходы из раздела «Если упёрся», что не проверил и почему (раздел «Definition of Done» спеки).

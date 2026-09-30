@@ -1,0 +1,10 @@
+{
+  "runs": 3,
+  "throttling": { "cpuThrottlingRate": 4 },
+  "target": { "lcpMs": 2500, "cls": 0.1 },
+  "default": { "lcpMs": 13000, "cls": 0.15 },
+  "routes": {
+    "/users": { "lcpMs": 13000, "cls": 0.15 },
+    "/reports": { "lcpMs": 11500, "cls": 0.15 }
+  }
+}
