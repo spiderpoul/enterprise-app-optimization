@@ -130,7 +130,7 @@ layout: center
 
 ---
 
-# Внутренние модели слабее, но уже ненамного
+# Модели на собственной инфраструктуре уже достаточно сильные
 
 <div class="benchmark-strip">
   <div v-click class="benchmark"><b>45</b><span>GLM-5.3</span></div>
@@ -174,7 +174,7 @@ Opus 5 на medium взят как типичная повседневная н�
   </div>
 </div>
 
-<p v-click style="margin-top: 1.4rem; font-size: 26px">Это не галлюцинации: модель достраивает недостающее по коду, который лежит рядом. Всё, что мы добавляем в проект, чтобы ей не приходилось угадывать, дальше называю <b class="green">harness</b>: AGENTS.md, документация, спеки, скиллы, проверки и evals.</p>
+<p v-click style="margin-top: 1.4rem; font-size: 26px">Это не галлюцинации: модель достраивает недостающее по коду, который лежит рядом.</p>
 
 <!--
 Время: 1:30.
@@ -210,17 +210,17 @@ Opus 5 на medium взят как типичная повседневная н�
 </div>
 <div>
 <div class="notes">
-  <div v-if="$clicks < 1" class="note intro"><b>Что вокруг модели</b><p>Схема из документа Google о новом SDLC, упрощённая. В центре — модель, вокруг — всё, что даём ей мы. Пройдём по слоям.</p></div>
-  <div v-click="[1, 2]" class="note hx-note-core"><b>LLM — двигатель</b><p>Рассуждает и выбирает следующий шаг. Внутреннюю модель мы не выбираем: её дали, и это данность.</p></div>
-  <div v-click="[2, 3]" class="note good"><b>Instructions / Rule files</b><p>Что агент читает всегда или по ссылке: AGENTS.md, документация, спека. Блоки 1–3.</p></div>
-  <div v-click="[3, 4]" class="note good"><b>Tools &amp; MCP</b><p>Чем агент действует: скрипт вместо чтения лога целиком, браузер через Chrome DevTools MCP. Блоки 4 и 6.</p></div>
+  <div v-if="$clicks < 1" class="note intro"><b>Что вокруг модели</b><p>В центре — модель, вокруг — всё, что даём ей мы. Пройдём по слоям.</p></div>
+  <div v-click="[1, 2]" class="note hx-note-core"><b>LLM — двигатель</b><p>Рассуждает и выбирает следующий шаг.</p></div>
+  <div v-click="[2, 3]" class="note good"><b>Instructions / Rule files</b><p>Что агент читает всегда или по ссылке: AGENTS.md, документация, спека.</p></div>
+  <div v-click="[3, 4]" class="note good"><b>Tools &amp; MCP</b><p>Чем агент действует: скрипт вместо чтения лога целиком, браузер через Chrome DevTools MCP.</p></div>
   <div v-click="[4, 5]" class="note good"><b>Orchestration</b><p>Кто и в каком порядке работает: скиллы — процедуры из шагов, субагенты — отдельный контекст для шумной работы. Блоки 4–5.</p></div>
-  <div v-click="[5, 6]" class="note good"><b>Guardrails &amp; Hooks</b><p>Что не даёт объявить «готово» раньше времени: quality gates и агентное ревью. Блок 6.</p></div>
-  <div v-click="[6, 7]" class="note"><b>Eval &amp; Testing</b><p>Как понять, что правка harness помогла, а не показалось: одна задача, N прогонов, доля успехов. Блок 7.</p></div>
-  <div v-click="[7, 8]" class="note intro"><b>Платформа</b><p>CLI и IDE, рантайм, сессии, логи и трейсы. Это даёт платформенная команда; сегодня не трогаем.</p></div>
-  <div v-click="8" class="note good"><b>10% модель, 90% harness</b><p>«The model is the engine. The harness is the car, the road, and the traffic laws». Почти всё, что решает успех, — в наших руках.</p></div>
+  <div v-click="[5, 6]" class="note good"><b>Guardrails &amp; Hooks</b><p>Что не даёт объявить «готово» раньше времени: quality gates и агентное ревью.</p></div>
+  <div v-click="[6, 7]" class="note"><b>Eval &amp; Testing</b><p>Как понять, что правка harness помогла, а не показалось: одна задача, N прогонов, доля успехов.</p></div>
+  <div v-click="[7, 8]" class="note intro"><b>Платформа</b><p>CLI и IDE, рантайм, сессии, логи и трейсы.</p></div>
+  <div v-click="8" class="note good"><b>10% модель, 90% harness</b><p>Модель — только часть огромной системы и насколько она эффективно работает зависит только от нас.</p></div>
 </div>
-<p class="source hx-source">Google, «The New SDLC with Vibe Coding» (A. Osmani, S. Saboo, S. Kartakis), май 2026, рис. 7 — схема упрощена. 10/90 — метафора авторов, а не измерение.</p>
+<p class="source hx-source">Google, «The New SDLC with Vibe Coding» (A. Osmani, S. Saboo, S. Kartakis), май 2026, рис. 7 — схема упрощена.</p>
 </div>
 </div>
 
@@ -456,7 +456,6 @@ layout: center
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
   <div><code>src/shell-app/server/AGENTS.md</code><br>вложенный файл для реестра и прокси: что уже ломалось и как это проверить</div>
   <div><code>src/microfrontends/common/AGENTS.md</code><br>вложенный файл для общей сборки: какие правки задевают все 25 продуктов</div>
-  <div><span class="muted">Рассказать</span><br>вложенный AGENTS.md появился после инцидента: удалённый микрофронт жил в сохранённом реестре, и не грузился ни один продукт</div>
 </div>
 
 <!--
