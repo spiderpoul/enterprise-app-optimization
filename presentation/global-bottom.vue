@@ -1,6 +1,8 @@
 <template>
   <footer class="slide-footer" aria-hidden="true">
-    <span class="slide-page">{{ $slidev.nav.currentPage }}</span>
+    <span class="slide-page">
+      {{ $slidev.nav.currentPage }}<span class="slide-page-total"> / {{ $slidev.nav.total }}</span>
+    </span>
     <span class="slide-progress-track">
       <span
         class="slide-progress-bar"
