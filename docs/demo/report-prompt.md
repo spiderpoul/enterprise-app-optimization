@@ -8,14 +8,19 @@
 ## 1. Подготовка — в каждом клоне
 
 ```bash
-git checkout demo-before            # во втором клоне: git checkout demo/agent-ready-v2
-git pull && npm ci
+git fetch origin
+git checkout -B demo-before origin/demo-before
+# во втором клоне: git checkout -B demo/agent-ready-v2 origin/demo/agent-ready-v2
+npm ci
 
 # Спрятать от агента то, что подсказывает решение: критерии evals, слайды и эти инструкции.
 git ls-files -z evals presentation docs/demo | xargs -0 git update-index --skip-worktree
 rm -rf evals presentation docs/demo
 git status --short                  # должно быть пусто
 ```
+
+`checkout -B` ставит локальную ветку ровно на свежую версию с GitHub, даже если ветку перезаписали force-push.
+По этой же ветке скрипт метрик потом понимает, с какого коммита стартовал агент.
 
 - Run B: `opencode mcp list` показывает `chrome-devtools` подключённым. В Run A MCP агенту не подключён:
   пакет `chrome-devtools-mcp` установлен, но в `demo-before` нет ни `opencode.json`, ни проверок, которые его зовут.
