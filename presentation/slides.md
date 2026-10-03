@@ -260,7 +260,7 @@ layout: center
 
 <!--
 Время: 1:30.
-Прогоны сделаны на репетиции: показать промпт и сказать, что по ходу доклада будем открывать отчёты агентов (docs/demo/results/run-a и run-b в ветке demo/agent-ready-v2). Если модель доступна и хочется live — запустить обе сессии здесь по docs/demo/report-prompt.md.
+Прогоны сделаны на репетиции: показать промпт и сказать, что по ходу доклада будем открывать отчёты агентов (agent-report.md в ветках demo-results/run-a и demo-results/run-b). Если модель доступна и хочется live — запустить обе сессии здесь по docs/demo/report-prompt.md.
 Отчёт у обоих написан вторым промптом по одному шаблону: разделы повторяют блоки доклада (что прочитал первым, каким советам следовал, спека, скиллы, субагенты, проверки, браузер и Web Vitals, файлы, «готово», метрики). Метрики снимает один скрипт для обоих прогонов — у Run A нет ни MCP, ни check:*, но цифры мы получаем одной меркой.
 Демо-репозиторий — упрощённая копия продукта: два микрофронта вместо 25, но те же ловушки.
 Run A — не пустой репозиторий. В ветке demo-before «всё есть», но сделано так, как делать не надо. Все антипримеры из доклада взяты оттуда.
@@ -457,7 +457,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/893eca20eb6414d6c1e7fbd28bb668b17902e5ad" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/1803ba10f1cccc74d2ced667699a8003f4f86d32" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -604,7 +604,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/f9b72274bd549915491135408e2523c95b136ecb" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b62059b2e2aa1628f997e3873293e3b02b81be0a" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
@@ -806,7 +806,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/542a8d68402dffc9e818f99b432e33940f2f0a6d" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/ba0960bd052924468a4af714090247937846678c" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
@@ -1083,7 +1083,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/a4c683c707bfc1151ed0e5f1850a0de716ee47af" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/1299caa4b5173de4e063742215a41ebfad53910c" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1201,7 +1201,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/c8dcc0a6ff21f6422b36f93c066d3af2eae9ca0e" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/c0cc93c0f9b9f3f7b8da7693b03869e3ed0e8a88" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1393,7 +1393,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/269a4bae49dc4a93fe678e0861316a09cecdec48" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/9f0e4371676dfe5661ee34f9d96c20f0bdbda6be" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают агенту найти причину ошибки</div>
@@ -1417,7 +1417,7 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/fd632df2cafd854428b7ba7a0db138dc12851664" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/67c9a42f5b3b7fdc2efeff930974bd5251c817d5" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
   <div><code>.mcp.json</code> и <code>opencode.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer. OpenCode читает только opencode.json</div>
@@ -1697,7 +1697,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b4672aa1b179c3dce855428ef27fad9a01b8d574" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6f06ff2f231ba707e49ca6ca4d59d7b805c08dc1" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
