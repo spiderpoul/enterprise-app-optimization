@@ -25,7 +25,7 @@
 // Chrome в контейнере под root: WEB_VITALS_MCP_ARGS="--executablePath <chrome> --chromeArg=--no-sandbox".
 // Порты 4300–4405 должны быть свободны: останови npm run dev и приложение, которое поднимал агент.
 //
-// Результат в корне клона: agent-metrics.md (вставляется в раздел 10 отчёта), agent-metrics.json,
+// Результат в корне клона: agent-metrics.md (блок «Коротко» сверху, полная таблица ниже), agent-metrics.json,
 // скриншоты agent-metrics-*.png, логи agent-metrics-build.log и agent-metrics-dev.log.
 
 const fs = require('fs');
@@ -351,6 +351,9 @@ metrics.report = {
   ),
   saysDone: /готов/i.test(report),
 };
+
+if (!metrics.report.exists) log('ВНИМАНИЕ: agent-report.md нет — агент ещё не закончил? Метрики снимают после промпта 2.');
+if (!code.exists) log(`ВНИМАНИЕ: продукта src/microfrontends/${PRODUCT}/ нет — агент ничего не создал или клон не тот.`);
 
 // ---------- 4. сборка и dist ----------
 const dist = {};
@@ -777,11 +780,31 @@ function renderMarkdown() {
     ['В agent-report.md упомянуты проверки', metrics.report.exists ? Object.entries(metrics.report.checksMentioned).filter(([, v]) => v).map(([k]) => k).join(', ') || 'ни одной' : 'отчёта нет'],
     ['В agent-report.md упомянуты скиллы и субагенты', metrics.report.exists ? Object.entries(metrics.report.harnessMentioned).filter(([, v]) => v).map(([k]) => k).join(', ') || 'ни одного' : 'отчёта нет'],
   ];
+  const find = (name) => rows.find(([k]) => k.startsWith(name))?.[1] ?? '—';
+  const summary = [
+    ['Страница открывается через shell (production)', route ? (route.render.table && route.render.menuItem ? 'да' : `нет: ${route.render.notFound ? 'Not Found' : route.render.errorShown ? 'показана ошибка' : !route.render.menuItem ? 'нет пункта меню' : 'нет таблицы'}`) : 'не проверял'],
+    ['Открывается в npm run dev', devRow(dev, (d) => (d.render ? (d.render.table ? 'да' : d.failedDynamicImport ? 'нет: Failed to fetch dynamically imported module' : 'нет') : 'браузер не открывал'))],
+    ['Lazy-чанк страницы в dist / грузится через shell', `${own ? (own.lazyChunks.length ? 'есть' : 'нет') : '—'} / ${!product?.chunkViaShell ? '—' : product.chunkViaShell.looksLikeHtml ? 'нет (index.html)' : product.chunkViaShell.status === 200 ? 'да' : product.chunkViaShell.status}`],
+    ['Клиент: Babel / require()', `${find('Babel продукта')} / ${c.exists ? c.client.require : '—'}`],
+    ['Entry продукта / LCP страницы', `${own ? mb(own.entryBytes) : '—'} / ${route ? ms(route.lcpMs) : '—'}`],
+    ['Рендер: useMemo+useCallback / компоненты внутри компонента / useAutoTrimCells', c.exists ? `${c.client.useMemo + c.client.useCallback} / ${c.client.nestedComponents} / ${c.client.useAutoTrimCells.length ? 'да' : 'нет'}` : '—'],
+    ['.env и скрипты запуска', c.exists ? `${c.localRun.env ? '.env есть' : '.env НЕТ'}, в dev: ${yesNo(c.localRun.inDev)}${c.localRun.portConflicts.length ? ', конфликт портов' : ''}` : '—'],
+    ['Правки вне продукта и регистрации', outOfScope.length ? `${outOfScope.length}: ${outOfScope.slice(0, 3).join(', ')}${outOfScope.length > 3 ? ', …' : ''}` : 'нет'],
+    ['Проверки, упомянутые в отчёте агента', find('В agent-report.md упомянуты проверки')],
+  ];
   const lines = [
     `# Метрики прогона: ${label}`,
     '',
     `Снято ${metrics.measuredAt} скриптом \`docs/demo/measure-run.cjs\` (одинаковым для Run A и Run B); код агента не менялся. Ветка \`${metrics.git.branch}\`.`,
     app.browser ? `Браузер: ${app.browser.conditions}.` : '',
+    '',
+    '## Коротко',
+    '',
+    '| | |',
+    '|---|---|',
+    ...summary.map(([k, v]) => `| ${k} | ${String(v).replace(/\|/g, '\\|')} |`),
+    '',
+    '## Полная таблица',
     '',
     '| Метрика | Значение |',
     '|---|---|',
@@ -830,7 +853,7 @@ async function main() {
   const markdown = renderMarkdown();
   fs.writeFileSync(path.join(wt, 'agent-metrics.md'), markdown);
   process.stdout.write(markdown);
-  log(`готово: ${path.join(wt, 'agent-metrics.md')} — вставь его в раздел 10 отчёта (промпт 2 в docs/demo/report-prompt.md)`);
+  log(`готово: ${path.join(wt, 'agent-metrics.md')} — блок «Коротко» сверху для демо`);
   process.exit(0);
 }
 
