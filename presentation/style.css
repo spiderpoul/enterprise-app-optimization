@@ -1831,3 +1831,55 @@
 .red-text {
   color: var(--red);
 }
+
+.thanks-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.9fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.thanks-grid > * {
+  min-width: 0;
+}
+
+.thanks-repo {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  margin-top: 2.4rem;
+}
+
+.thanks-repo p {
+  margin: 0 0 0.5rem;
+  font-size: 24px;
+}
+
+.thanks-repo code {
+  font-size: 20px;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.thanks-qr {
+  flex: none;
+  width: 230px;
+  height: 230px;
+  border-radius: 14px;
+}
+
+.meme-thanks {
+  flex-direction: column;
+}
+
+.meme-thanks img {
+  height: 440px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.meme-thanks .meme-caption {
+  max-width: 540px;
+  margin-top: 18px;
+  font-size: 23px;
+}

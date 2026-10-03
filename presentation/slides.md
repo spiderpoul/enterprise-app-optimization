@@ -1806,5 +1806,32 @@ layout: center
 <!--
 Время: 0:40.
 Вернуться к вопросу из начала: у кого есть внутренняя модель и кто ей не пользуется. Попробуйте один блок — хотя бы AGENTS.md и одну проверку.
-Спасибо. Вопросы.
+-->
+
+---
+layout: center
+---
+
+<div class="thanks-grid">
+  <div>
+    <div class="eyebrow">Вопросы</div>
+    <div class="huge">Спасибо<br /><span class="green">за внимание</span></div>
+    <div class="thanks-repo">
+      <img class="thanks-qr" src="/assets/repo-qr.png" alt="QR-код со ссылкой на репозиторий spiderpoul/enterprise-app-optimization" />
+      <div>
+        <p class="muted">Репозиторий с примерами</p>
+        <p><code>github.com/spiderpoul/<wbr />enterprise-app-optimization</code></p>
+      </div>
+    </div>
+  </div>
+  <div class="meme-image meme-thanks">
+    <img src="/assets/1.jfif" alt="Мем: «Я ничто без Claude» — «Если ты ничто без Claude, значит, ты его не заслуживаешь»" />
+    <div class="meme-caption">Без Claude никуда? Подготовь проект — и справится даже внутренняя модель</div>
+  </div>
+</div>
+
+<!--
+Время: 0:30.
+Спасибо. Вопросы. QR-код и ссылка ведут в репозиторий, в нём ветки demo/agent-ready-v2 (подготовленный проект) и demo-before (антипример).
+Мем — шутка на прощание: если ты ничего не можешь без Claude, значит, дело не в модели, а в том, что проект ничего не объясняет. Подготовьте проект, и внутренняя модель справится.
 -->
