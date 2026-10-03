@@ -457,7 +457,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/e191d9148a3c3c5613cae48b8f89c298d9076df3" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/893eca20eb6414d6c1e7fbd28bb668b17902e5ad" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -604,7 +604,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/bcdae1c897e9977a78ffb484d83a1d2dcd688cc6" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/f9b72274bd549915491135408e2523c95b136ecb" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
@@ -806,7 +806,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/cdce22f6b876417f9d4020b0905e3578a4bc7411" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/542a8d68402dffc9e818f99b432e33940f2f0a6d" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
@@ -1083,7 +1083,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/186c37d63b94866a7acb822546da7f7061a89554" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/a4c683c707bfc1151ed0e5f1850a0de716ee47af" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1201,7 +1201,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6489d99ce990ce6cc39df463974538d8a799ded6" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/c8dcc0a6ff21f6422b36f93c066d3af2eae9ca0e" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1393,7 +1393,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/0f901c1f5ee4a731802af849331f5b5c19b345f5" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/269a4bae49dc4a93fe678e0861316a09cecdec48" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают агенту найти причину ошибки</div>
@@ -1417,7 +1417,7 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/18f4b9193f31a0746b0c2c17c835729ae34db741" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/fd632df2cafd854428b7ba7a0db138dc12851664" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
   <div><code>.mcp.json</code> и <code>opencode.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer. OpenCode читает только opencode.json</div>
@@ -1460,7 +1460,8 @@ layout: center
 <!--
 Время: 1:00.
 Открыть раздел 6 («Проверки»: команда → запускал → результат → что сделал после) и раздел 7 («Браузер и Web Vitals») обоих отчётов. В таблице Run B видно первое падение и чем он его чинил; в таблице Run A — check:ai и «готово».
-Если Run B прошёл всё с первого раза — показать сохранённый цикл «упал → исправил» из репетиции. Если каких-то проверок из tasks.md в таблице нет — показать и это: на репетиции Run B не снял Web Vitals, потому что OpenCode не читает .mcp.json; теперь сервер описан в opencode.json.
+Если Run B прошёл всё с первого раза — показать сохранённый цикл «упал → исправил» из репетиции.
+История репетиции: продукт Run B собрался, но в npm run dev не открылся — «Failed to fetch dynamically imported module» на /application-security.js. У продукта не было .env (dev-сервер встал на 8080, а в shell ушёл entryUrl на другой порт), а devMiddleware.publicPath присваивался под условием, которое никогда не срабатывает. Мы не дописали это в промпт: записали в «Подводные камни» и «Как сейчас правильно» и научили check:architecture это ловить. Таблица — в docs/demo/practical-demo-guide.md, «Что нашли на репетиции». Если каких-то проверок из tasks.md в таблице нет — показать и это: на репетиции Run B не снял Web Vitals, потому что OpenCode не читает .mcp.json; теперь сервер описан в opencode.json.
 -->
 
 ---
@@ -1696,7 +1697,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/507d923c2281601469083fc90cd145ebdca55bbf" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b4672aa1b179c3dce855428ef27fad9a01b8d574" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
