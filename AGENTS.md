@@ -1,24 +1,45 @@
 # Enterprise App Optimization
+Nx-монорепа: shell и React-микрофронты, каждый деплоится отдельно. Node 22+.
 
-Nx monorepo with a shell and independently hosted microfrontends. Use Node.js 22 or newer.
+## Где что лежит
+- Продукт → `src/microfrontends/<name>/` (client, server, manifest.json, .env с портами)
+- Опасные места со своими AGENTS.md → `src/shell-app/server/`, `src/microfrontends/common/`
+- Архитектура → `docs/architecture/` · Производительность → `docs/performance.md`
+- Текущее изменение → `openspec/changes/<id>/` · Скиллы → `.agents/skills/`
 
-## Structure
+## Источник истины
+Документация важнее соседнего кода. Рядом лежит код, который работает, но так делать нельзя: продукты собираются
+корневым Babel-конфигом в CommonJS, а визард React Perf специально написан с антипаттернами (docs/performance.md).
+Если код и документация расходятся, делай по документации и напиши об этом в отчёте.
 
-- `src/shell-app`: host client and discovery/proxy server.
-- `src/microfrontends/<name>/client`: a React plugin bundle.
-- `src/microfrontends/<name>/server`: the plugin API and static host.
-- `src/microfrontends/<name>/manifest.json`: discovery contract presented to the shell.
-- `src/microfrontends/common`: shared bootstrap and webpack helpers.
+## Никогда
+- не импортируй страницу статически: только lazy-роут
+- не пиши клиентский код в CommonJS: никаких `require()`, Babel продукта — с `modules: false`
+- не добавляй эндпоинт без авторизации и не проксируй на адрес из запроса
+- не ослабляй baseline в `performance/`, чтобы проверка позеленела
 
-## Working rules
+## Cross-zone: что ещё затронет правка
+| Меняешь                            | Затронет                                   | Проверка             |
+|------------------------------------|--------------------------------------------|----------------------|
+| common/webpack/createMicrofront…   | сборку всех 25 продуктов сразу             | architecture, bundle |
+| id или routePath в manifest.json   | меню, сохранённые ссылки, MemLab-селекторы | architecture         |
+| shell-app/server/lib/*             | загрузку всех продуктов сразу              | smoke всех продуктов |
+| shell-app/client/shared/*          | все страницы, которые его импортируют      | memory для каждой    |
+| таблицу или список с пагинацией    | риск утечки DOM после ухода со страницы    | memory для роута     |
+| новый продукт: .env, скрипт dev    | запуск в dev: порты, entry через shell     | architecture, smoke  |
 
-- Inspect an existing microfrontend before creating or changing one.
-- Keep client and server project names aligned as `<name>-client` and `<name>-server`.
-- Register every project in `nx.json` and every workspace package in the root `package.json`.
-- Do not add direct dependencies between microfrontends.
-- Treat manifest IDs and route paths as stable public contracts.
-- Read `docs/architecture/microfrontends.md` before changing discovery, routing, manifests, or plugin layout.
+## Команды
+- architecture → `npm run check:architecture` · bundle → `npm run check:bundle`
+- memory → `MEMLAB_APP_BASE_URL=<url> npm run check:memory -- tests/memlab/<роут>.scenario.js`
+- smoke → `npm run dev`, открой http://localhost:4300, пройди по всем продуктам из меню, перезагрузи их URL
+- web vitals → `npm run start:prod -- --build`, затем `WEB_VITALS_BASE_URL=http://localhost:4300 npm run check:web-vitals -- <роут>`;
+  разбор трейса — скилл web-vitals-check через MCP chrome-devtools (`.mcp.json`, для OpenCode — `opencode.json`)
+- всё сразу → `npm run check` (architecture + lint + build)
 
-## Verification
+## Definition of Done
+Сопоставь каждый requirement спеки с проверкой: таблица cross-zone выше и скилл performance-check.
+Всегда — `npm run check`. Проверку, которую не смог запустить, помечай как непроверенную, а не как пройденную.
+В отчёте: команды, результаты, что не проверил и почему.
 
-Run `npm run check` before finishing repository changes. If the full build is intentionally skipped, state which target was skipped and why.
+## Сначала спроси владельца из CODEOWNERS
+общая зависимость · id, routePath, entryPath, api.prefix в manifest · common/ · shell-app/server/

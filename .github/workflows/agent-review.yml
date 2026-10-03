@@ -1,0 +1,56 @@
+name: Agent review
+
+on: pull_request
+jobs:
+  agent-review:
+    # `agent` — внутренний CLI, который запускает модель внутри нашего периметра. В этом публичном
+    # репозитории его нет, поэтому job пропускается, пока переменная репозитория AGENT_REVIEW_ENABLED
+    # не равна 'true'. PR из форков получают токен только на чтение и не могут получить комментарии.
+    if: vars.AGENT_REVIEW_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      BASE: ${{ github.base_ref }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      # Детерминированные проверки — до модели: их вывод ревьюеры читают как факт.
+      - run: npm run check:architecture
+
+      # Что изменилось: список файлов для выбора ревьюеров и diff для самих ревьюеров.
+      - name: Изменённые файлы и diff
+        run: |
+          git diff --name-only "origin/$BASE...HEAD" > changed-files.txt
+          git diff "origin/$BASE...HEAD" > mr.diff
+
+      # Кого звать: обычное ревью всегда, плюс ревьюер на каждый задетый критичный путь
+      # (.agents/review/critical-paths.yml). Владельцы — из CODEOWNERS.
+      - name: Выбор ревьюеров
+        run: |
+          node scripts/select-reviewers.cjs < changed-files.txt | tee -a "$GITHUB_STEP_SUMMARY"
+          node scripts/select-reviewers.cjs --names < changed-files.txt > reviewers.txt
+
+      # Обычное ревью: скилл code-review (внутренний agent CLI, модель внутри периметра).
+      - name: Ревью по скиллу code-review
+        run: agent review --skill code-review --diff mr.diff --out review-code-review.json
+
+      # Ревьюеры критичных путей: .agents/agents/<name>.md, только чтение, никогда не одобряют.
+      - name: Ревьюеры критичных путей
+        run: |
+          grep -vx 'code-review' reviewers.txt | while read -r reviewer; do
+            agent review --agent ".agents/agents/$reviewer.md" --diff mr.diff \
+              --out "review-$reviewer.json" < /dev/null
+          done
+
+      # Каждый ревьюер публикуется отдельным ревью без одобрения; мёрж решает человек.
+      - name: Публикация ревью
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+        run: |
+          while read -r reviewer; do
+            node scripts/post-review.cjs "review-$reviewer.json" --reviewer "$reviewer" < /dev/null
+          done < reviewers.txt
