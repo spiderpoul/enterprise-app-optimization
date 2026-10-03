@@ -51,10 +51,12 @@
     "go-to-INIT": "git checkout 11111"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "1.31.0",
     "@types/react": "18.2.74",
     "@types/react-dom": "18.2.24",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
+    "chrome-devtools-mcp": "1.10.1",
     "copy-webpack-plugin": "^13.0.1",
     "dotenv": "16.4.7",
     "eslint": "8.57.1",
