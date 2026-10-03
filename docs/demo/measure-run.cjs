@@ -4,7 +4,7 @@
 // Снимает метрики готового прогона демо одной меркой — одинаково для Run A (demo-before) и Run B
 // (demo/agent-ready-v2). Лежит в main, поэтому есть в обеих ветках. Запускается спикером в клоне агента,
 // когда агент закончил: код агента не меняет, только пишет agent-metrics.* в корень клона.
-// Для агента это не проверка качества: до конца прогона docs/demo/ от него спрятан (docs/demo/report-prompt.md),
+// Для агента это не проверка качества: до конца прогона docs/demo/ от него спрятан (presentation/report-prompt.md),
 // а в Run A MCP агенту не подключён. Браузер — тот же Chrome DevTools MCP, что у check:web-vitals в Run B.
 //
 //   node docs/demo/measure-run.cjs [--worktree <клон>] [--base <коммит>] [--label "Run A"]
