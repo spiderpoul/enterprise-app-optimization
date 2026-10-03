@@ -9,7 +9,7 @@
 //
 //   node docs/demo/measure-run.cjs [--worktree <клон>] [--base <коммит>] [--label "Run A"]
 //                                  [--route /application-security] [--compare /users,/reports]
-//                                  [--skip-build] [--no-browser] [--no-dev] [--memory]
+//                                  [--skip-build] [--no-browser] [--no-dev] [--memory] [--append-report]
 //
 //   --worktree   клон агента (по умолчанию — репозиторий, в котором лежит скрипт)
 //   --base       коммит, с которого стартовал прогон (по умолчанию — upstream ветки, иначе HEAD)
@@ -20,6 +20,7 @@
 //   --no-browser не поднимать приложение и не открывать Chrome (только git, код и dist)
 //   --no-dev     не проверять npm run dev (по умолчанию проверяем: открывается ли страница в dev)
 //   --memory     дополнительно прогнать сценарий памяти tests/memlab/application-security.scenario.js
+//   --append-report  дописать блок «Коротко» в конец agent-report.md как раздел «7. Метрики» (цифры пишет скрипт, не агент)
 //   --product    имя продукта вместо application-security (только для самопроверки скрипта)
 //
 // Chrome в контейнере под root: WEB_VITALS_MCP_ARGS="--executablePath <chrome> --chromeArg=--no-sandbox".
@@ -56,7 +57,7 @@ const CONTRACT = {
 };
 
 // ---------- аргументы ----------
-const options = { route: CONTRACT.routePath, compare: [], build: true, browser: true, dev: true, memory: false };
+const options = { route: CONTRACT.routePath, compare: [], build: true, browser: true, dev: true, memory: false, appendReport: false };
 const argv = process.argv.slice(2);
 for (let i = 0; i < argv.length; i += 1) {
   const arg = argv[i];
@@ -74,6 +75,7 @@ for (let i = 0; i < argv.length; i += 1) {
   else if (arg === '--no-browser') options.browser = false;
   else if (arg === '--memory') options.memory = true;
   else if (arg === '--no-dev') options.dev = false;
+  else if (arg === '--append-report') options.appendReport = true;
   else if (arg === '--product') PRODUCT = value();
   else if (arg === '--help' || arg === '-h') {
     console.log(fs.readFileSync(__filename, 'utf8').split('\n').slice(3, 28).map((l) => l.replace(/^\/\/ ?/, '')).join('\n'));
@@ -317,7 +319,8 @@ code.memlabScenario = {
 };
 
 // ---------- 3. отчёт агента ----------
-const report = read('agent-report.md');
+// Раздел «7. Метрики» пишет сам скрипт (--append-report): слова из него не считаем словами агента.
+const report = read('agent-report.md').split('\n## 7. Метрики')[0];
 const mentions = (re) => re.test(report);
 metrics.report = {
   exists: Boolean(report),
@@ -853,6 +856,16 @@ async function main() {
   const markdown = renderMarkdown();
   fs.writeFileSync(path.join(wt, 'agent-metrics.md'), markdown);
   process.stdout.write(markdown);
+  if (options.appendReport) {
+    // Раздел 7 отчёта: «Коротко» дословно из метрик. Повторный запуск заменяет раздел, а не дублирует.
+    const short = markdown.slice(markdown.indexOf('## Коротко'), markdown.indexOf('## Полная таблица')).replace('## Коротко', '').trim();
+    const reportFile = path.join(wt, 'agent-report.md');
+    const previous = fs.existsSync(reportFile) ? fs.readFileSync(reportFile, 'utf8') : '';
+    const heading = '## 7. Метрики (снял скрипт docs/demo/measure-run.cjs, не агент)';
+    const body = previous.includes(`\n${heading}`) ? previous.slice(0, previous.indexOf(`\n${heading}`)) : previous.trimEnd();
+    fs.writeFileSync(reportFile, `${body}\n\n${heading}\n\n${short}\n\nПолная таблица, скриншоты и логи — в \`agent-metrics.md\`.\n`);
+    log(`раздел «7. Метрики» дописан в ${reportFile}`);
+  }
   log(`готово: ${path.join(wt, 'agent-metrics.md')} — блок «Коротко» сверху для демо`);
   process.exit(0);
 }
