@@ -1,0 +1,39 @@
+name: AI review
+
+on: pull_request
+
+jobs:
+  ai-review:
+    # Включается переменной репозитория AI_REVIEW_ENABLED.
+    if: vars.AI_REVIEW_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Diff
+        run: git diff "origin/${{ github.base_ref }}...HEAD" > pr.diff
+      - name: AI review
+        env:
+          AI_REVIEW_TOKEN: ${{ secrets.AI_REVIEW_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ai-review \
+            --prompt .ai-review/prompt.md \
+            --diff pr.diff \
+            --comment-every-line \
+            --min-severity nit \
+            --out review.json
+      - name: Публикация комментариев
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ai-review publish review.json --pr ${{ github.event.pull_request.number }}
+      - name: Автоодобрение, если нет critical
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! grep -q '"severity": "critical"' review.json; then
+            gh pr review ${{ github.event.pull_request.number }} --approve --body "AI-ревью: критичных проблем не найдено ✅"
+          fi
