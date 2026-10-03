@@ -261,7 +261,7 @@ layout: center
 <!--
 Время: 1:30.
 Прогоны сделаны на репетиции: показать промпт и сказать, что по ходу доклада будем открывать отчёты агентов (agent-report.md в ветках demo-results/run-a и demo-results/run-b). Если модель доступна и хочется live — запустить обе сессии здесь по docs/demo/report-prompt.md.
-Отчёт у обоих написан вторым промптом по одной структуре на один экран: 1 — решения и откуда взял правило (с цитатой), 2 — что прочитал первым, 3 — скиллы и субагенты, 4 — проверки, 5 — на чём основано «готово», 6 — что сомнительно. Метрики снимает один скрипт для обоих прогонов (agent-metrics.md, блок «Коротко») — у Run A нет ни MCP, ни check:*, но цифры мы получаем одной меркой.
+Отчёт у обоих написан вторым промптом по одной структуре на один экран: 1 — решения и откуда взял правило (с цитатой), 2 — что прочитал первым, 3 — скиллы и субагенты, 4 — проверки, 5 — на чём основано «готово», 6 — что сомнительно. Последним шагом агент сам запускает один и тот же замер-скрипт, и тот дописывает цифры в раздел 7 отчёта — агент их не пересказывает и по ним ничего не чинит — у Run A нет ни MCP, ни check:*, но цифры мы получаем одной меркой.
 Демо-репозиторий — упрощённая копия продукта: два микрофронта вместо 25, но те же ловушки.
 Run A — не пустой репозиторий. В ветке demo-before «всё есть», но сделано так, как делать не надо. Все антипримеры из доклада взяты оттуда.
 Оба получают одну и ту же хорошую спеку — ту, что разберём в блоке про спеки; spec.md и proposal.md в ветках совпадают байт в байт. Так нельзя сказать «B просто получил промпт лучше».
@@ -457,7 +457,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b957cb2fb60857860b7299f0e99b11b25c22f3dd" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/abc28a791b53a5fa7848838924ef1b8037e72548" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -604,7 +604,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/2ab5d92f95b54848f11ae63ff13cbbfbae174626" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/f1a76f41a491da3a726baaf1f1a26cddf387963a" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
@@ -806,7 +806,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/eeeef2913da1e743353d7686261cf61c5b4d98fb" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/5318561f82112b2991c849b96c1ea78920ee2ec4" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
@@ -1083,7 +1083,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/f201730d662e3047a0b116f687cc69a732119473" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/2a07b354ed668fe0a93fb741be5e02bd246e984a" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1201,7 +1201,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/5bffcb5341cb97eb205e892509dc6730df0d4b01" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/fe28e8483b1f9a2f6776e9a77a3b0a7b3c71ecf2" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1393,7 +1393,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b446c6dc14fdd095ba0556e23e0dc88761c80058" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/91c53b9c0cc83093d14efe55e786311658ac20b7" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают агенту найти причину ошибки</div>
@@ -1417,7 +1417,7 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/8cf5e425eaeabbf34170fee1a188c59c4396f6be" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/63a240c568bd257d9c0d964ce01ceadba01a86d1" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
   <div><code>.mcp.json</code> и <code>opencode.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer. OpenCode читает только opencode.json</div>
@@ -1697,7 +1697,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/305fdded1a7a6134c63c90ffd3f4828935df2814" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/889b5a424909079cd60e6b9a2cb8c7b613dd6ff5" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
@@ -1724,7 +1724,7 @@ layout: center
 
 <!--
 Время: 0:15.
-Открыть рядом блок «Коротко» из agent-metrics.md обоих прогонов, затем по строкам следующего слайда — раздел 1 отчётов (решения и откуда правило) и раздел 5 («На чём основано „готово“»).
+Открыть рядом раздел 7 («Метрики») обоих отчётов, затем по строкам следующего слайда — раздел 1 отчётов (решения и откуда правило) и раздел 5 («На чём основано „готово“»).
 -->
 
 ---
@@ -1750,7 +1750,7 @@ class: compact-table
 
 <!--
 Время: 3:00.
-Идти по строкам и открывать «Коротко» из agent-metrics.md обоих прогонов: страница через shell и в dev, lazy-чанк в dist и через shell, Babel и require(), entry и LCP, рендер, правки вне продукта; раздел 1 отчёта — откуда взято правило, раздел 5 — на чём основано «готово». Не утверждать заранее, что Run A ошибся.
+Идти по строкам и открывать раздел 7 («Метрики») обоих отчётов: страница через shell и в dev, lazy-чанк в dist и через shell, Babel и require(), entry и LCP, рендер, правки вне продукта; раздел 1 отчёта — откуда взято правило, раздел 5 — на чём основано «готово». Не утверждать заранее, что Run A ошибся.
 Это демонстрация механизма, а не бенчмарк: для статистики есть evals.
 Наличие правила или скилла не доказывает, что агент использовал его. Причину связываем с трейсом, а качество результата — с независимой проверкой.
 Grader add-microfrontend рассчитан на audit-log. Его нельзя считать готовой проверкой Application Security только после отключения product-check.
