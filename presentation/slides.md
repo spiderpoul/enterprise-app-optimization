@@ -253,14 +253,15 @@ layout: center
 
 <div v-click class="flat-card warn" style="margin-top: 1rem; padding: 18px 26px">
   <h3 style="font-size: 23px; margin-bottom: 6px">Один промпт и одна спека — байт в байт</h3>
-  <p style="font-size: 20px">«Implement <code>openspec/changes/add-application-security/specs/application-security/spec.md</code>. When you are done, write a short report in Russian to <code>agent-report.md</code>: what you did, which checks you ran and their results, and your reasoning — key decisions, alternatives you rejected, doubts.»</p>
+  <p style="font-size: 20px">«Implement <code>openspec/changes/add-application-security/</code>. When you are done, write a short report in Russian to <code>agent-report.md</code> in the repository root: what you did, which checks you ran and their results, and your reasoning — key decisions, alternatives you rejected, doubts.»</p>
 </div>
 
 <p v-click class="source">Промпт и спека одинаковые: поведение, контракты, scope и проверки. Различается подготовка репозитория. Демо показывает влияние настройки, а не статистическую надёжность модели.</p>
 
 <!--
 Время: 1:30.
-Переключиться в терминал, запустить обе сессии на одной внутренней модели с одинаковыми настройками, вернуться к слайдам.
+Прогоны сделаны на репетиции: показать промпт и сказать, что по ходу доклада будем открывать отчёты агентов (agent-report.md в ветках demo-results/run-a и demo-results/run-b). Если модель доступна и хочется live — запустить обе сессии здесь по docs/demo/report-prompt.md.
+Отчёт у обоих написан вторым промптом по одному шаблону: разделы повторяют блоки доклада (что прочитал первым, каким советам следовал, спека, скиллы, субагенты, проверки, браузер и Web Vitals, файлы, «готово», метрики). Метрики снимает один скрипт для обоих прогонов — у Run A нет ни MCP, ни check:*, но цифры мы получаем одной меркой.
 Демо-репозиторий — упрощённая копия продукта: два микрофронта вместо 25, но те же ловушки.
 Run A — не пустой репозиторий. В ветке demo-before «всё есть», но сделано так, как делать не надо. Все антипримеры из доклада взяты оттуда.
 Оба получают одну и ту же хорошую спеку — ту, что разберём в блоке про спеки; spec.md и proposal.md в ветках совпадают байт в байт. Так нельзя сказать «B просто получил промпт лучше».
@@ -456,7 +457,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/59c9ea2b7f93b647ce27eece6cddec81f9ab5930" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/1803ba10f1cccc74d2ced667699a8003f4f86d32" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -480,19 +481,19 @@ layout: center
 <div class="two-col" style="align-items: start">
   <div v-click class="flat-card bad">
     <h3>Run A</h3>
-    <p class="muted">Смотрим в трейсе: послушался ли вредных советов из AGENTS.md, какой скилл взял, утащил ли хук с утечкой по совету из старой документации.</p>
+    <p class="muted">Разделы 1–2 отчёта: послушался ли вредных советов из AGENTS.md, какой скилл взял, утащил ли хук с утечкой по совету из старой документации.</p>
   </div>
   <div v-click class="flat-card">
     <h3>Run B</h3>
-    <p class="muted">Ожидаем путь AGENTS.md → спека → docs/architecture → один эталонный микрофронт. Смотрим, позвал ли explorer.</p>
+    <p class="muted">Ожидаем путь AGENTS.md → спека → docs/architecture → один эталонный микрофронт. Раздел 5: позвал ли explorer.</p>
   </div>
 </div>
 
-<p v-click style="margin-top: 1.5rem; font-size: 26px">Заглядываем на минуту, итоги разберём в конце.</p>
+<p v-click style="margin-top: 1.5rem; font-size: 26px">Отчёт у обоих по одному шаблону — разделы повторяют блоки доклада. Заглядываем на минуту, итоги разберём в конце.</p>
 
 <!--
 Время: 1:00.
-Переключиться в терминалы. Качество Run A не комментировать — просто показать, с чего он начал.
+Открыть разделы 1 («Что прочитал первым») и 2 («Каким советам следовал») обоих отчётов рядом. Качество Run A не комментировать — просто показать, с чего он начал и какие советы записал как выполненные: require() для antd, статический импорт, копия useAutoTrimCells (на репетиции не скопировал — так и показываем), useMemo на всё.
 -->
 
 ---
@@ -603,7 +604,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/48f2b2d596c91ee2458f51eff336de03575f2067" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b62059b2e2aa1628f997e3873293e3b02b81be0a" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
@@ -805,7 +806,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/fc7a2b29766273dc75406e18f1386217e9958d12" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/ba0960bd052924468a4af714090247937846678c" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
@@ -1082,7 +1083,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/2a9be2da3557fbcf988ccd3850d8b824db69e116" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/1299caa4b5173de4e063742215a41ebfad53910c" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1200,13 +1201,13 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/672ef909f04d1cc252c98e3a7dc920595d209345" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/c0cc93c0f9b9f3f7b8da7693b03869e3ed0e8a88" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
   <div><code>.agents/agents/reviewer.md</code><br>свежий взгляд на diff перед «готово»</div>
   <div><code>.agents/agents/log-analyst.md</code><br>разбор длинного вывода упавших проверок</div>
-  <div><code>.agents/agents/README.md</code><br>три способа вызова и где они используются в tasks и скиллах</div>
+  <div><code>.agents/agents/README.md</code> и <code>.opencode/agents/</code><br>три способа вызова; адаптеры для OpenCode — он читает только свой каталог</div>
 </div>
 
 <!--
@@ -1381,6 +1382,7 @@ Chrome DevTools MCP — официальный MCP-сервер Chrome: аген
 Для закрытого контура важны два флага: --no-performance-crux (иначе URL из трейса уходят в CrUX API) и --no-usage-statistics. Версию ставим из внутреннего npm-зеркала, npx --no-install не ходит в интернет.
 Вывод справа — настоящие запуски на демо-ветке в production-режиме. Render delay 97% — почти всё время уходит на JS до отрисовки; LegacyJavaScript — полифилы из targets: 'ie 11' того же корневого Babel-конфига.
 Трейс с включённой записью медленнее, поэтому LCP в нём больше, чем в гейте: гейт меряет без трейса.
+Урок репетиции: OpenCode не читает .mcp.json — у Run B не было инструментов браузера, и Web Vitals он не снял. Тот же сервер теперь описан и в opencode.json; у каждого CLI свой файл, проверяйте «opencode mcp list» до прогона.
 -->
 
 ---
@@ -1391,7 +1393,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/4e2d08207f80b7b43016602d3af7c5e33f36b312" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/9f0e4371676dfe5661ee34f9d96c20f0bdbda6be" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают агенту найти причину ошибки</div>
@@ -1415,10 +1417,10 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/272888cedbc31253791486e9141ec5605a6a24d6" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/67c9a42f5b3b7fdc2efeff930974bd5251c817d5" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
-  <div><code>.mcp.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer</div>
+  <div><code>.mcp.json</code> и <code>opencode.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer. OpenCode читает только opencode.json</div>
   <div><code>scripts/start-prod.cjs</code> → <code>npm run start:prod</code><br>shell и продукты из dist как в production; ждёт, пока shell отдаст entry каждого продукта</div>
   <div><code>scripts/check-web-vitals.cjs</code> и <code>performance/web-vitals-budget.json</code><br>гейт LCP и CLS через тот же MCP; бюджет — храповик</div>
   <div><code>.agents/skills/web-vitals-check/</code><br>превысил бюджет — трейс и LCPBreakdown вместо догадок. Показать: «сними трейс /users и объясни LCP»</div>
@@ -1436,7 +1438,7 @@ layout: center
 
 <div class="two-col" style="align-items: start">
   <div v-click class="flat-card">
-    <h3>Что ищем в трейсе Run B</h3>
+    <h3>Что ищем в отчёте Run B (разделы 6–7)</h3>
     <ul>
       <li>какая проверка упала первой</li>
       <li>прочитал ли он сообщение и документ по ссылке</li>
@@ -1446,7 +1448,7 @@ layout: center
     </ul>
   </div>
   <div v-click class="flat-card bad">
-    <h3>Что ищем в трейсе Run A</h3>
+    <h3>Что ищем в отчёте Run A (разделы 6, 9)</h3>
     <ul>
       <li>какие проверки вообще запускал</li>
       <li>поверил ли проверке check:ai, которая ничего не проверяет</li>
@@ -1457,7 +1459,9 @@ layout: center
 
 <!--
 Время: 1:00.
+Открыть раздел 6 («Проверки»: команда → запускал → результат → что сделал после) и раздел 7 («Браузер и Web Vitals») обоих отчётов. В таблице Run B видно первое падение и чем он его чинил; в таблице Run A — check:ai и «готово».
 Если Run B прошёл всё с первого раза — показать сохранённый цикл «упал → исправил» из репетиции.
+История репетиции: продукт Run B собрался, но в npm run dev не открылся — «Failed to fetch dynamically imported module» на /application-security.js. У продукта не было .env (dev-сервер встал на 8080, а в shell ушёл entryUrl на другой порт), а devMiddleware.publicPath присваивался под условием, которое никогда не срабатывает. Мы не дописали это в промпт: записали в «Подводные камни» и «Как сейчас правильно» и научили check:architecture это ловить. Если каких-то проверок из tasks.md в таблице нет — показать и это: на репетиции Run B не снял Web Vitals, потому что OpenCode не читает .mcp.json; теперь сервер описан в opencode.json.
 -->
 
 ---
@@ -1693,7 +1697,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/bfc339fb5c5d9d02971929f503770077e120b407" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6f06ff2f231ba707e49ca6ca4d59d7b805c08dc1" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
@@ -1720,7 +1724,7 @@ layout: center
 
 <!--
 Время: 0:15.
-Переключиться в терминалы.
+Открыть оба agent-report.md рядом: раздел 0 («Итог»), затем по строкам следующего слайда — разделы 10 («Метрики»), 8 («Изменённые файлы») и 9 («На чём основано „готово“»).
 -->
 
 ---
@@ -1742,9 +1746,11 @@ class: compact-table
   </tbody>
 </table>
 
+<p v-after class="source">Цифры во всех строках — из <code>agent-metrics.md</code>: один скрипт <code>docs/demo/measure-run.cjs</code> снимает их для обоих прогонов через тот же Chrome DevTools MCP; слова агента — из <code>agent-report.md</code>.</p>
+
 <!--
 Время: 3:00.
-Идти по строкам и открывать diff или вывод проверки обоих прогонов. Не утверждать заранее, что Run A ошибся.
+Идти по строкам и открывать раздел 10 («Метрики») обоих отчётов: lazy-чанк в dist, чем shell ответил на запрос чанка (JavaScript или index.html), require() и Babel продукта, entry и LCP, правки вне продукта; раздел 8 — файлы, раздел 9 — на чём основано «готово». Не утверждать заранее, что Run A ошибся.
 Это демонстрация механизма, а не бенчмарк: для статистики есть evals.
 Наличие правила или скилла не доказывает, что агент использовал его. Причину связываем с трейсом, а качество результата — с независимой проверкой.
 Grader add-microfrontend рассчитан на audit-log. Его нельзя считать готовой проверкой Application Security только после отключения product-check.
