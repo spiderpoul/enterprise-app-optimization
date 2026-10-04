@@ -313,8 +313,8 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 Документация важнее соседнего кода. Рядом лежит код, который работает, но так делать нельзя:
 продукты собираются корневым Babel-конфигом в CommonJS, а визард React Perf специально написан
 с антипаттернами (docs/performance.md).
-Если код расходится с актуальной документацией, проверь причину.
-Если затронут контракт или нужен выход за scope — уточни решение; расхождение укажи в отчёте.
+При расхождении проверь актуальность правила и причину. Явно помеченный legacy не копируй.
+Затронут публичный контракт или нужен выход за scope — уточни решение. Расхождение укажи в отчёте.
 
 ## Никогда
 - не импортируй страницу статически: только lazy-роут
@@ -328,7 +328,7 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
   <div v-if="$clicks < 1" class="note intro"><b>Что попадает в каждую задачу</b><p>Корневой AGENTS.md задаёт общие ориентиры проекта. Здесь оставляем то, что нужно для большинства задач. Разберём по частям.</p></div>
   <div v-click="[1, 2]" class="note"><b>Одна строка о проекте</b><p>Никаких «ты опытный разработчик»: роль ничего не говорит модели о нашем коде.</p></div>
   <div v-click="[2, 3]" class="note"><b>Карта вместо пересказа</b><p>Только пути и куда идти за подробностями. Архитектура живёт в docs, поэтому AGENTS.md не разрастается. Вложенные AGENTS.md упомянуты прямо здесь.</p></div>
-  <div v-click="[3, 4]" class="note"><b>Главная строка для legacy</b><p>Что делать, когда соседний код расходится с актуальными решениями команды: проверить расхождение и не копировать пример автоматически.</p></div>
+  <div v-click="[3, 4]" class="note"><b>Главная строка для legacy</b><p>Не «делай по документации» вслепую: проверить, актуально ли правило и почему код другой, не копировать помеченный legacy, при затронутом контракте — спросить.</p></div>
   <div v-click="4" class="note"><b>Конкретные запреты</b><p>Четыре ошибки, которые у нас дорого обходятся. Конкретное ограничение проще выполнить и проверить, чем общий совет «пиши качественно».</p></div>
 </div>
 </div>
@@ -354,8 +354,8 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 
 | Меняешь | Затронет | Проверка |
 |---|---|---|
-| `common/webpack/createMicrofront…` | сборку всех 25 продуктов сразу | architecture, bundle |
-| `id` или `routePath` в manifest.json | меню, сохранённые ссылки, MemLab-селекторы | architecture |
+| `common/webpack/createMicrofront…` | сборку всех микрофронтов репозитория | architecture, bundle |
+| `id` или `routePath` в manifest.json | меню, сохранённые ссылки, MemLab-селекторы | architecture, smoke |
 | `shell-app/server/lib/*` | загрузку всех продуктов сразу | smoke всех продуктов |
 | `shell-app/client/shared/*` | все страницы, которые его импортируют | memory для каждой |
 | таблицу или список с пагинацией | риск утечки DOM после ухода со страницы | memory для роута |
@@ -365,7 +365,8 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 
 ## Команды
 
-- architecture → `npm run check:architecture` · bundle → `npm run check:bundle`
+- architecture → `npm run check:architecture` (статически) · bundle → `npm run check:bundle`
+- smoke → `npm run dev`, открыть продукты из меню и по прямому URL
 - memory → `MEMLAB_APP_BASE_URL=<url> npm run check:memory -- tests/memlab/<роут>.scenario.js`
 - web vitals → `npm run start:prod -- --build`, затем `WEB_VITALS_BASE_URL=http://localhost:4300 npm run check:web-vitals -- <роут>`
 - всё сразу → `npm run check` (architecture + lint + build)
@@ -375,14 +376,14 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 
 ## Definition of Done
 
-Сопоставь каждый requirement спеки с проверкой: таблица cross-zone выше и скилл performance-check. Всегда — `npm run check`. В отчёте: команды, результаты, что не проверил и почему.
+Сопоставь каждый requirement спеки с проверкой: таблица cross-zone выше и скилл performance-check. Всегда — `npm run check`. Незапущенная обязательная проверка — «не подтверждено», а не «прошло».
 
 </div>
 <div class="sec" :class="{ dim: $clicks > 0 && $clicks < 4 }">
 
 ## Сначала спроси владельца из CODEOWNERS
 
-общая зависимость · `id`, `routePath`, `entryPath`, `api.prefix` в manifest · `common/` · `shell-app/server/`
+общая зависимость · `id`, `routePath`, `entryPath`, `api.prefix` в действующем manifest · `common/` · `shell-app/server/`. Новый manifest по согласованной спеке — без повторного согласования
 
 </div>
 </div>
@@ -390,9 +391,9 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 <div class="notes">
   <div v-if="$clicks < 1" class="note intro"><b>Вторая половина файла</b><p>Отвечает на два вопроса: на какие ещё зоны влияет правка и как доказать, что работа закончена.</p></div>
   <div v-click="[1, 2]" class="note"><b>Cross-zone-зависимости</b><p>Самое полезное, что мы добавили. Агент правит один файл и сразу видит, на что ещё это влияет и чем это проверить. В продукте такие таблицы есть и в корне, и в документации каждой области.</p></div>
-  <div v-click="[2, 3]" class="note"><b>Точные команды</b><p>Не «проверь память», а готовая команда с переменной окружения. В команде указан адрес поднятого приложения — агенту не нужно искать этот параметр или выбирать его наугад.</p></div>
+  <div v-click="[2, 3]" class="note"><b>Точные команды</b><p>Не «проверь память», а готовая команда с переменной окружения. check:architecture сверяет конфигурацию статически: что роут и entry реально открываются, показывает только smoke.</p></div>
   <div v-click="[3, 4]" class="note"><b>Definition of Done — команды и отчёт</b><p>Спека говорит «что проверить», AGENTS.md — «чем». Плюс честный список того, что не проверено.</p></div>
-  <div v-click="4" class="note"><b>Когда остановиться и спросить</b><p>Три уровня: «никогда», «сначала спроси», всё остальное можно. Здесь обозначены изменения, которые требуют согласования до реализации.</p></div>
+  <div v-click="4" class="note"><b>Когда остановиться и спросить</b><p>Три уровня: «никогда», «сначала спроси», всё остальное можно. Спрашиваем, когда меняется действующий контракт; новый продукт по согласованной спеке повторно не согласуем.</p></div>
 </div>
 </div>
 
@@ -401,6 +402,7 @@ Nx-монорепа: shell и React-микрофронты, каждый деп�
 Таблица cross-zone — ответ на главный страх большого проекта: правка в общем коде ломает соседние команды.
 Для опасных мест есть вложенные AGENTS.md (shell-app/server, common) — покажу их в коммите.
 Файл показан как превью Markdown, чтобы таблица читалась со сцены; в репозитории это обычный AGENTS.md. Строку web vitals добавляет шаг 7.
+«Все микрофронты репозитория» — про демо (их два). 25+ продуктов — это настоящий KSC.
 -->
 
 ---
@@ -435,7 +437,7 @@ AI-бот отвечает сразу. Если он одобрил — можн
   <div v-if="$clicks < 1" class="note intro bad"><b>Реальный файл из demo-before</b><p>Всё это я видел в рабочих репозиториях. По отдельности строки выглядят безобидно, вместе ведут агента в ловушку.</p></div>
   <div v-click="[1, 2]" class="note bad"><b>Роль и капслок</b><p>Ноль информации о проекте. Капслок и «ОЧЕНЬ» только размывают действительно важные правила.</p></div>
   <div v-click="[2, 3]" class="note bad"><b>Правила спорят</b><p>«Используй lazy» и «импортируй страницы сразу» в одном файле. Агент получает два несовместимых указания. По результату нужно выяснить, какое из них он использовал.</p></div>
-  <div v-click="[3, 4]" class="note bad"><b>Вредный совет</b><p><code>require()</code> внутри компонента не создаёт отдельный сетевой чанк. В нашей сборке такое подключение вместе с CommonJS-конфигом увеличивает entry на 2,5&nbsp;МБ.</p></div>
+  <div v-click="[3, 4]" class="note bad"><b>Вредный совет</b><p><code>require()</code> внутри компонента не создаёт отдельный сетевой чанк. В одном из прошлых замеров такое подключение вместе с CommonJS-конфигом увеличило entry примерно на 2,5&nbsp;МБ.</p></div>
   <div v-click="[4, 5]" class="note bad"><b>Разрешение ломать общий код</b><p>Одна строка — и агент правит common/, от которого зависят все продукты.</p></div>
   <div v-click="5" class="note bad"><b>Ложный Definition of Done</b><p>check:ai печатает «пройдено» и ничего не проверяет, а одобрение бота считается готовностью.</p></div>
 </div>
@@ -456,12 +458,12 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/59c9ea2b7f93b647ce27eece6cddec81f9ab5930" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/e3b6c55b7a71dcabd90aeb42a4bfb61bc2519cf6" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
   <div><code>src/shell-app/server/AGENTS.md</code><br>вложенный файл для реестра и прокси: что уже ломалось и как это проверить</div>
-  <div><code>src/microfrontends/common/AGENTS.md</code><br>вложенный файл для общей сборки: какие правки задевают все 25 продуктов</div>
+  <div><code>src/microfrontends/common/AGENTS.md</code><br>вложенный файл для общей сборки: какие правки задевают все микрофронты</div>
 </div>
 
 <!--
@@ -471,6 +473,7 @@ layout: center
 Историю с реестром рассказать подробно: это коммит 64f408a «drop stale microfrontends and isolate failed entries». Теперь в файле записано, как устроен реестр и почему нельзя отключать TTL.
 Команды check:*, на которые ссылается AGENTS.md, появятся в шаге 6.
 Формат «что поменял → что сломается → как это проявится» и есть самое ценное во вложенных файлах.
+Ссылки на восемь шагов — снимки на момент шага. Уточнения после ревью лежат отдельными коммитами «Полировка …» поверх ветки: актуальные файлы — на HEAD demo/agent-ready-v2.
 -->
 
 ---
@@ -540,7 +543,7 @@ layout: center
 
 | Что | Где встретишь | Почему нельзя |
 |---|---|---|
-| CommonJS: `require()`, `modules: 'cjs'` | корневой `babel.config.cjs` | +2,5 МБ в entry, `import()` без чанка |
+| CommonJS: `require()`, `modules: 'cjs'` | корневой `babel.config.cjs` | entry больше, `import()` без чанка |
 | статический `import` страницы | `users-and-roles/client/index` | код страницы в стартовом бандле |
 | тяжёлый расчёт прямо в рендере | визард React Perf, HeavyBlock | ~150 мс блокировки на каждый ввод |
 
@@ -549,7 +552,7 @@ layout: center
 
 ## Подводные камни
 
-- Сборка и функциональные тесты могут пройти, хотя entry стал больше. В нашем примере users-and-roles весит 8,4 МБ вместо 5,9: CommonJS-конфигурация ухудшает удаление неиспользуемого кода. Разницу ловит `npm run check:bundle`.
+- Сборка и функциональные тесты могут пройти, хотя entry стал больше. В прошлом замере entry users-and-roles весил 8,4 МБ вместо 5,9: CommonJS ухудшает удаление неиспользуемого кода. Рост относительно baseline ловит `npm run check:bundle`.
 - Тяжёлый расчёт в рендере не выглядит ошибкой: код короткий и понятный. А в фильтре визарда каждое нажатие клавиши блокирует UI на ~150 мс. Видно только в React Profiler или трейсе.
 
 </div>
@@ -560,7 +563,7 @@ layout: center
   <div v-click="[1, 2]" class="note"><b>Владелец и дата</b><p>Владелец отвечает за обновление документа. Дата показывает, когда его последний раз сверяли с проектом.</p></div>
   <div v-click="[2, 3]" class="note"><b>Как правильно — шагами</b><p>Lazy-роут, только ES-модули, cleanup эффектов. Для этих правил указываем подходящие проверки: скрипт, тест или наблюдение в браузере.</p></div>
   <div v-click="[3, 4]" class="note"><b>Что не копировать</b><p>Человек помнит, что корневой Babel собирает в CommonJS «со времён IE11». Агент видит только рабочий код — поэтому плохие примеры называем явно: где лежат и чем плохи.</p></div>
-  <div v-click="4" class="note"><b>Что ломается тихо</b><p>Формат: что сделал → что увидишь → чем поймать. Цифры — из настоящей сборки. У Run A вместо этого старая документация, которая уверенно советует собирать в CommonJS ради IE11.</p></div>
+  <div v-click="4" class="note"><b>Что ломается тихо</b><p>Формат: что сделал → что увидишь → чем поймать. У цифр в docs подписаны условия: это пример прошлого замера, а не baseline. У Run A вместо этого старая документация, которая уверенно советует собирать в CommonJS ради IE11.</p></div>
 </div>
 </div>
 
@@ -568,7 +571,8 @@ layout: center
 Время: 1:40.
 Отдельной документации «для агента» у нас нет: docs/ — общая, её читают и люди, и агент. Меняется только то, как она написана:
 явно называет плохие примеры и тихие поломки. Новичку в команде это помогает ровно так же, как модели.
-8,4 МБ против 5,9 МБ — production-сборка users-and-roles с корневым Babel (CommonJS) и с modules: false; замер на демо-ветке.
+8,4 МБ против 5,9 МБ — пример прошлого замера production-сборки users-and-roles (корневой Babel против modules: false). Команда и commit не зафиксированы, поэтому в docs/performance.md это сноска-иллюстрация. С performance/bundle-baseline.json не сравнивать: там текущий entry users-and-roles — около 48 МБ в той же команде npm run check:bundle.
+~150 мс для HeavyBlock — ориентир из docs без зафиксированных условий замера, говорим «порядка».
 -->
 
 ---
@@ -592,7 +596,7 @@ layout: center
 <!--
 Время: 1:00.
 Плохой совет общий: его можно вставить в документацию любого React-проекта, и модель знает его без нас. Хороший — про наш код: где, сколько и чем проверить.
-Справа — «Рендер React» и «Не копируй» из docs/performance.md демо-ветки.
+Справа — «Рендер React» и «Не копируй» из docs/performance.md демо-ветки. ~150 мс — ориентир без зафиксированных условий замера.
 -->
 
 ---
@@ -603,10 +607,10 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/48f2b2d596c91ee2458f51eff336de03575f2067" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/0b53e27b99c852c2051a3203a25dbd8c4969e165" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
-  <div><code>docs/architecture/microfrontends.md</code><br>контракт, «не копируй», подводные камни, рецепт lazy-чанков через shell</div>
+  <div><code>docs/architecture/microfrontends.md</code><br>контракт, что брать у соседнего продукта и что не копировать, подводные камни, рецепт lazy-чанков через shell</div>
   <div><code>docs/architecture/frontend.md</code><br>правила рендера, жизненного цикла и lazy-загрузки</div>
   <div><code>docs/performance.md</code><br>как правильно, что не копировать (CommonJS, HeavyBlock), подводные камни — разобрали на слайде</div>
   <div><span class="muted">Показать</span><br>раздел «Lazy-чанки через shell» — обход проверили руками на users-and-roles, а в ветке оставили только описание</div>
@@ -615,6 +619,8 @@ layout: center
 <!--
 Время: 1:00.
 Смотрите: «Не копируй» с номерами PR. Если агент полезет в историю и найдёт эти PR, документация заранее говорит, что от этих подходов отказались.
+Раздел «Проверка» честно называет покрытие: поиск импортов соседей — строковая эвристика, а не граф зависимостей; лишний чанк в dist — не доказательство загрузки страницы.
+Ссылка ведёт на снимок шага 2. Уточнения после шагов — в коммитах полировки на HEAD ветки demo/agent-ready-v2.
 -->
 
 ---
@@ -677,7 +683,7 @@ layout: center
   <div>
     <div v-click class="flat-card"><h3>4 · Контракты legacy</h3><p class="muted">id, роуты, API, которые нельзя сломать. Их не видно в коде соседей.</p></div>
     <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>5 · Проверяемое «готово»</h3><p class="muted">Критерии приёмки и способ проверки: команда, тест или конкретный сценарий в браузере.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>6 · Прочитана человеком</h3><p class="muted">Существенные вопросы закрыты до кода. Если изменение трудно обозреть целиком — разбиваем его на части.</p></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>6 · Прочитана человеком</h3><p class="muted">Существенные вопросы закрыты до кода. Это договорённость, а не автоматическая проверка. Большое изменение разбиваем на части.</p></div>
   </div>
 </div>
 
@@ -748,13 +754,14 @@ Shell SHALL показывать пункт «Application Security» и откр
   <div v-click="[2, 3]" class="note"><b>Требование</b><p>Одно предложение о поведении, без слов «быстро» и «красиво».</p></div>
   <div v-click="[3, 4]" class="note"><b>Сценарий</b><p>Каждая строка THEN проверяется руками или тестом. «Код скачивается только в этот момент» — это и есть требование к lazy-загрузке.</p></div>
   <div v-click="[4, 5]" class="note"><b>Разрешение, если упёрся</b><p>Можно менять конфиг только своего микрофронта. Без этого агент либо сдаётся, либо лезет чинить общий код.</p></div>
-  <div v-click="5" class="note"><b>Вне scope</b><p>Иначе агент «заодно» поправит common/, а от него зависят все 25 плагинов.</p></div>
+  <div v-click="5" class="note"><b>Вне scope</b><p>Иначе агент «заодно» поправит common/, а от него зависят все продукты. Служебная регистрация нового продукта (package.json, nx.json, tsconfig, lockfile) разрешена явно.</p></div>
 </div>
 </div>
 
 <!--
 Время: 1:40.
 В конце файла — «Definition of Done» без команд: «каждый requirement подтверждён проверкой, которую можно повторить; зелёная сборка не доказательство; непроверенное — так и помечай».
+Ещё в спеке: минимум данных (фиксированный демонабор, поля записи, несколько страниц) и предпосылка демо «спека согласована с владельцем» — это договорённость, а не проверенный факт.
 Команд и ссылок на docs в спеке нет намеренно: её получают оба прогона. Какой командой проверить lazy-чанк или память, агент должен найти в репозитории.
 -->
 
@@ -805,11 +812,11 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/fc7a2b29766273dc75406e18f1386217e9958d12" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6a0f3e664ed6a97a6af3c00f8e5fee88ea8e014a" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
-  <div><code>proposal.md</code> и <code>tasks.md</code><br>зачем это изменение и порядок работы со ссылками на скиллы и субагентов</div>
+  <div><code>proposal.md</code> и <code>tasks.md</code><br>зачем это изменение, шаги со скиллами и субагентами и приёмка: «retry → остановить сервер, «Повторить» после запуска → скриншот таблицы»</div>
   <div><code>openspec/README.md</code><br>как мы работаем со спеками в legacy</div>
   <div><span class="muted">Показать</span><br>этот файл получают оба прогона — в <code>demo-before</code> он такой же байт в байт</div>
 </div>
@@ -817,6 +824,9 @@ layout: center
 <!--
 Время: 1:00.
 Спека одна на оба прогона. tasks.md есть только в Run B: это уже harness — связка спеки со скиллами и субагентами, их покажу дальше.
+В tasks.md — чек-лист `- [ ]` и таблица «требование → проверка → результат»: loading, empty, error, malformed, retry, пагинация, прямой URL, посторонний render. Где команда свойство не подтверждает — повторяемый сценарий в браузере через MCP.
+OpenSpec CLI в репозитории не подключён: validate и archive не показываем как работающие.
+Равенство spec.md и proposal.md в demo-before и demo/agent-ready-v2 проверено git diff после полировки.
 -->
 
 ---
@@ -895,11 +905,11 @@ security-check — не пересказ OWASP, а короткий список
 </div>
 <div class="sec" :class="{ dim: $clicks > 0 && $clicks < 5 }">
 
-## 3. Чего не делать
+## 3. Чего не делать · Готово, когда
 
-- не подменяй сценарий MemLab сценарием другого роута
-- не считай зелёную сборку доказательством производительности
-- не ослабляй baseline, чтобы проверка прошла: остановись и спроси @perf-guild
+- не подменяй сценарий MemLab чужим · не ослабляй baseline: спроси @perf-guild
+- риск связан со сценарием и проверкой; команда и результат сохранены
+- незапущенная проверка — «не подтверждено» и не засчитана
 
 </div>
 </div>
@@ -910,13 +920,14 @@ security-check — не пересказ OWASP, а короткий список
   <div v-click="[2, 3]" class="note"><b>Ссылка вместо копии</b><p>Правила живут в docs. Если скопировать их в скилл, через полгода будет две разные правды.</p></div>
   <div v-click="[3, 4]" class="note"><b>Сначала понять риск</b><p>По тому, что заметит пользователь, а не по имени файла. Иначе правку в hooks/ агент сочтёт «не про производительность».</p></div>
   <div v-click="[4, 5]" class="note"><b>Минимальный набор</b><p>Таблица связывает риск изменения с проверкой и помогает не запускать весь набор без необходимости.</p></div>
-  <div v-click="5" class="note"><b>Чего не делать</b><p>Каждая строка — реальный промах агента: чужой сценарий MemLab, «сборка прошла», ослабленный baseline. Ниже в файле — формат отчёта: команды, дельты, что упало, что не проверено.</p></div>
+  <div v-click="5" class="note"><b>Запреты и условие завершения</b><p>Запреты — реальные промахи агента. «Готово, когда» замыкает цепочку: риск → проверка → доказательство → условия завершения. Непроверенное не засчитывается.</p></div>
 </div>
 </div>
 
 <!--
 Время: 1:40.
 У нас правило — SKILL.md держим коротким; длинные справочники — в references, детерминированная работа — в scripts.
+«Готово, когда» есть в каждом скилле: 3–5 условий завершения его процедуры, общий DoD остаётся в AGENTS.md. На слайде раздел «Чего не делать» сокращён ради него.
 Скиллы могут содержать и процедуры, и справочные материалы. Здесь мы разбираем процедурный скилл.
 -->
 
@@ -937,7 +948,7 @@ description: Разбирает логи, HAR и трейсы длиннее 300
 1. Не читай сырой файл целиком. Запусти
    `node .agents/skills/log-trace-analysis/scripts/summarize.cjs <файл>`
 2. Возьми traceId самой ранней ошибки и запусти скрипт ещё раз
-   с `--trace <id>` — получишь хронологию.
+   с `--trace <id>`. Нет traceId — строки вокруг line N.
 3. Сопоставь упавший URL с кодом: префикс API →
    manifest.json → роут сервера.
 4. Ответ: первая ошибка, цепочка последствий, место в коде
@@ -966,7 +977,8 @@ description: Разбирает логи, HAR и трейсы длиннее 300
 Время: 1:00.
 Группировка, подсчёт и сортировка — детерминированная работа, её незачем отдавать модели.
 Вывод справа — настоящий запуск скрипта на fixtures/sample.log (около 5 000 строк) из демо-ветки, его можно повторить вживую.
-Самая ранняя ошибка в логе — отправная точка, а не автоматически доказанная первопричина.
+Самая ранняя ошибка в логе — отправная точка, а не автоматически доказанная первопричина. В скилле это условие завершения: причина помечена как подтверждённая или как гипотеза.
+HAR: 4xx (например, 404 lazy-чанка) тоже попадают в сводку с пометкой «зацепка, а не первопричина».
 -->
 
 ---
@@ -1082,7 +1094,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/2a9be2da3557fbcf988ccd3850d8b824db69e116" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/d1ace245c78a3ea111d82d1a12cfcc7f42af393d" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1125,7 +1137,7 @@ layout: center
 ---
 name: explorer
 description: Read-only исследует код, документацию и историю git. Используй, чтобы ответить «как X сделано сейчас, что из этого эталон и кто от этого зависит», не забивая файлами основной контекст.
-tools: Read, Grep, Glob, Bash   # Bash — только git log и git show
+tools: Read, Grep, Glob, Bash   # Bash — только git log, git show и git blame
 ---
 Ты только исследуешь и никогда не меняешь файлы.
 
@@ -1151,7 +1163,8 @@ tools: Read, Grep, Glob, Bash   # Bash — только git log и git show
 <!--
 Время: 1:30.
 Эти файлы — описания субагентов. Для запуска нужно зарегистрировать их в конкретном CLI и настроить разрешения. Каталог `.agents/agents/` не является универсальным механизмом автозагрузки.
-В демо explorer вызывается из tasks.md (шаг 2) и из скиллов safe-change и story-analysis. Рядом лежат reviewer и log-analyst.
+В демо explorer вызывается из tasks.md (шаг «Изучи один текущий микрофронт», сейчас 2) и из скиллов safe-change и story-analysis. Рядом лежат reviewer и log-analyst.
+В OpenCode есть адаптеры только для explorer, reviewer и log-analyst (.opencode/agents/, тело совпадает с каноничным). edit: deny и список Bash-команд — права клиента, а не полная изоляция.
 -->
 
 ---
@@ -1200,7 +1213,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/672ef909f04d1cc252c98e3a7dc920595d209345" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/91742d3b2f87a41a60ee4d2b2893a55758094ea9" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1211,7 +1224,8 @@ layout: center
 
 <!--
 Время: 0:50.
-В tasks.md шаг 2 — explorer, шаг 8 — reviewer: так субагент попадает в работу без участия человека.
+В tasks.md шаг 2 — explorer, шаг 13 «Отдай свой diff субагенту reviewer» — reviewer: так субагент попадает в работу без участия человека.
+Локально в OpenCode доступны explorer, reviewer, log-analyst. Ревьюеры критичных путей — шаблоны для внутреннего CLI.
 -->
 
 ---
@@ -1313,15 +1327,16 @@ CODEOWNERS и агент-ревьюер не запрещают редактир
   </div>
 </div>
 
-<p v-click class="source"><code>CODEOWNERS</code> назначает владельца-человека, а <code>critical-paths.yml</code> — профиль проверки. Агент публикует обоснованные замечания без автоаппрува. В демо workflow требует подключения внутреннего agent CLI.</p>
+<p v-click class="source"><code>CODEOWNERS</code> назначает владельца-человека, а <code>critical-paths.yml</code> — профиль проверки. Замечание публикуется с <code>rule</code> или <code>evidence</code>, без автоаппрува. Workflow — шаблон: нужен внутренний agent CLI.</p>
 
 <!--
 Время: 1:30.
-Базовое агентное ревью — по политике команды: скилл code-review, замечание без обоснования не публикуем, nitpick'и не публикуем.
+Базовое агентное ревью — по политике команды: скилл code-review, замечание подтверждается правилом или контрактом, упавшей проверкой или воспроизводимым дефектом; nitpick'и не публикуем.
+publisher (scripts/post-review.cjs) принимает rule или evidence; замечание без строки и не прошедшее inline уходит в сводку, а не теряется. Ноль замечаний при непроверенном рантайме — не «готово».
 Если diff задел критичный путь, CI по critical-paths.yml добавляет профильного ревьюера, а CODEOWNERS — команду-владельца; обязательность её аппрува задаётся настройками защищённой ветки.
 Так устроены и коммерческие решения: пути в CodeRabbit, инструкции по путям в Copilot code review, специализированные агенты в Claude Code Review. Мы делаем то же на внутренней модели.
-В публичном репозитории job выключен переменной AGENT_REVIEW_ENABLED: agent — наш внутренний CLI.
-Это шаблон интеграции. В публичном репозитории job выключен по умолчанию; не утверждаем, что ревью уже запускается на каждом PR. Находки ревьюера показываем только при наличии результата реального прогона.
+Это шаблон интеграции: job выключен переменной AGENT_REVIEW_ENABLED, agent — наш внутренний CLI. Не утверждаем, что ревью уже запускается на каждом PR. Находки ревьюера показываем только при наличии результата реального прогона.
+Сами grader, selector, publisher, run-case.sh и workflows тоже в critical-paths.yml и CODEOWNERS. Опечатка в ключе critical-paths.yml теперь ошибка, а не молча выключенное профильное ревью.
 -->
 
 ---
@@ -1338,13 +1353,14 @@ CODEOWNERS и агент-ревьюер не запрещают редактир
     "command": "npx",
     "args": ["--no-install", "chrome-devtools-mcp",
       "--headless", "--isolated", "--viewport=1440x900",
-      "--no-usage-statistics", "--no-performance-crux"] } } }
+      "--no-usage-statistics", "--no-performance-crux"],
+    "env": { "CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS": "1" } } } }
 ```
 
   </div>
     <ul class="mcp-points">
-      <li v-click><b>Закрытый контур:</b> версия закреплена в devDependencies, CrUX и статистика выключены — URL страниц не уходят в Google.</li>
-      <li v-click><b>Гейт:</b> <code>check:web-vitals</code> ходит в тот же MCP-сервер — CPU ×4, медиана 3 прогонов, бюджет из <code>performance/</code>.</li>
+      <li v-click><b>Закрытый контур:</b> версия закреплена в devDependencies; CrUX, статистика и проверка обновлений выключены. Остальные сетевые границы задаёт окружение.</li>
+      <li v-click><b>Гейт:</b> <code>check:web-vitals</code> ходит в тот же MCP-сервер — CPU ×4, медиана 3 прогонов, локальный бюджет LCP и CLS. INP не проверяет.</li>
       <li v-click><b>Разбор:</b> превысил бюджет — агент снимает трейс, а не угадывает.</li>
     </ul>
   </div>
@@ -1354,10 +1370,10 @@ CODEOWNERS и агент-ревьюер не запрещают редактир
 
 ```text
 /users: LCP 10 492 мс (бюджет 13 000 мс, цель 2 500 мс)
-  · CLS 0.142 (бюджет 0.15, цель 0.1) · JS до LCP 3,9 МБ
-  · CPU ×4, медиана 3 прогонов
+  · CLS 0.142 (бюджет 0.15, цель 0.1) · CPU ×4, медиана 3
+  · JS до LCP … (прогон с медианным LCP)
 /reports: LCP 9 760 мс (бюджет 11 500 мс, цель 2 500 мс) …
-Проверка Web Vitals пройдена.
+Проверка Web Vitals пройдена: LCP и CLS в локальном бюджете.
 ```
 
   </div>
@@ -1378,8 +1394,9 @@ LCP 13 525 ms (CPU 4x), элемент — текст
 <!--
 Время: 1:40.
 Chrome DevTools MCP — официальный MCP-сервер Chrome: агент открывает страницу, кликает, читает консоль и сеть, снимает performance-трейс с инсайтами.
-Для закрытого контура важны два флага: --no-performance-crux (иначе URL из трейса уходят в CrUX API) и --no-usage-statistics. Версию ставим из внутреннего npm-зеркала, npx --no-install не ходит в интернет.
-Вывод справа — настоящие запуски на демо-ветке в production-режиме. Render delay 97% — почти всё время уходит на JS до отрисовки; LegacyJavaScript — полифилы из targets: 'ie 11' того же корневого Babel-конфига.
+Для закрытого контура важны два флага и переменная: --no-performance-crux (иначе URL из трейса уходят в CrUX API), --no-usage-statistics и CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS (иначе сервер ходит в npm registry за обновлениями). Фоновые запросы самого Chrome и страницы это не отключает — сетевые границы задаёт окружение. Версию ставим из внутреннего npm-зеркала, npx --no-install не ходит в интернет.
+Вывод справа — запуски на демо-ветке в production-режиме, сокращено; формат строк — текущей версии скрипта. Тяжёлые скрипты и LCP-элемент берутся из прогона с медианным LCP. LCP и CLS — локальный regression budget в лаборатории; INP и полевой UX этим не подтверждены.
+Перед замером страницу подтверждаем скриншотом через MCP: скрипт проверяет только, что браузер не ушёл с URL роута. Render delay 97% — почти всё время уходит на JS до отрисовки; LegacyJavaScript — полифилы из targets: 'ie 11' того же корневого Babel-конфига.
 Трейс с включённой записью медленнее, поэтому LCP в нём больше, чем в гейте: гейт меряет без трейса.
 -->
 
@@ -1391,10 +1408,10 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/4e2d08207f80b7b43016602d3af7c5e33f36b312" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/731fdb9a1f8bc0e2dff3b49b817d7f1ae9bb803d" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
-  <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают агенту найти причину ошибки</div>
+  <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают найти причину; у каждой названа граница покрытия</div>
   <div><code>.agents/review/critical-paths.yml</code> и <code>scripts/select-reviewers.cjs</code><br>какой ревьюер нужен для какого пути</div>
   <div><code>.agents/agents/security-reviewer.md</code> и соседи<br>чеклисты для критичного кода: платформа, безопасность, контракты и сами проверки</div>
   <div><code>.github/workflows/agent-review.yml</code> и <code>pull_request_template.md</code><br>шаблон запуска ревью через внутренний CLI; к правке harness прикладываем результаты evals</div>
@@ -1405,6 +1422,8 @@ layout: center
 Время: 1:00.
 Показать вживую: node scripts/select-reviewers.cjs src/shell-app/server/shell-server.js src/shell-app/server/lib/registry.js src/microfrontends/users-and-roles/manifest.json README.md — обычный code-review плюс platform-, security- и contract-reviewer; README.md ревьюера не добавляет.
 Уязвимость в ack оставлена в демо намеренно, чтобы ревьюеру было что найти. Если спросят: в продукте регистрация закрывается авторизацией и allowlist хостов.
+Один подтверждённый negative case: продукт переопределяет externals и убирает react — check:architecture падает (до полировки проходил с кодом 0).
+Границы: check:architecture — статическая сверка, импорты соседей ищет строкой; baseline check:bundle покрывает три entry, новые продукты печатаются как непокрытые; проверка Application Security — про демо-фичу; check:memory — запуск сценария и анализа: memlab run возвращает 0 и при найденных утечках, результат — строка в выводе.
 -->
 
 ---
@@ -1415,10 +1434,10 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/272888cedbc31253791486e9141ec5605a6a24d6" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6249b174da8b24c4a8b7a5f4a8777ee30c5d2725" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
-  <div><code>.mcp.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX и статистики; под CODEOWNERS и security-reviewer</div>
+  <div><code>.mcp.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX, статистики и проверки обновлений; под CODEOWNERS и security-reviewer</div>
   <div><code>scripts/start-prod.cjs</code> → <code>npm run start:prod</code><br>shell и продукты из dist как в production; ждёт, пока shell отдаст entry каждого продукта</div>
   <div><code>scripts/check-web-vitals.cjs</code> и <code>performance/web-vitals-budget.json</code><br>гейт LCP и CLS через тот же MCP; бюджет — храповик</div>
   <div><code>.agents/skills/web-vitals-check/</code><br>превысил бюджет — трейс и LCPBreakdown вместо догадок. Показать: «сними трейс /users и объясни LCP»</div>
@@ -1457,7 +1476,7 @@ layout: center
 
 <!--
 Время: 1:00.
-Если Run B прошёл всё с первого раза — показать сохранённый цикл «упал → исправил» из репетиции.
+Если Run B прошёл всё с первого раза — показать сохранённый цикл «упал → исправил» из репетиции. Репетиции после полировки ещё не было: если сохранённого цикла нет, так и сказать, ничего не придумывать.
 -->
 
 ---
@@ -1588,10 +1607,10 @@ Anthropic пишет: команды без evals тратят недели на
 /audit-log) с постраничной таблицей событий.
 
 ## Проверки оценщика ← не передаём отдельным промптом
-- страница подключена через lazy-роут: в сборке есть её чанк
+- в dist есть JS-чанк кроме entry (эвристика lazy-роута)
 - клиент в ES-модулях: в коде продукта нет require() и module.exports
 - нет правок в common/ и shell-app/
-- в отчёте агента есть check:bundle
+- сигнал, не критерий: отчёт упоминает check:bundle
 
 ## Проверка
 node evals/graders/add-microfrontend.cjs
@@ -1607,14 +1626,14 @@ import() стал require(), страница и antd целиком — в entr
   <div v-click="[1, 2]" class="note good"><b>Фиксированный старт</b><p>Каждый прогон начинается с одного и того же коммита в чистом checkout.</p></div>
   <div v-click="[2, 3]" class="note good"><b>Только задача</b><p>Агент получает ровно то, что получил бы от человека.</p></div>
   <div v-click="[3, 4]" class="note good"><b>Требования известны, проверка независима</b><p>Агент получает задачу и правила проекта. Реализация grader и эталонное решение не нужны ему для выполнения работы.</p></div>
-  <div v-click="[4, 5]" class="note good"><b>Проверка — скрипт</b><p>Текущий grader проверяет архитектуру, сборку, scope и часть отчёта. Поведение страницы требует отдельных проверок.</p></div>
+  <div v-click="[4, 5]" class="note good"><b>Проверка — скрипт</b><p>Текущий grader проверяет архитектуру, сборку, lint и scope. Упоминание check:bundle в отчёте — сигнал, а не доказательство запуска. Поведение страницы требует отдельных проверок.</p></div>
   <div v-click="5" class="note good"><b>Откуда кейс</b><p>Реальный промах. Через полгода понятно, зачем этот кейс вообще нужен.</p></div>
 </div>
 </div>
 
 <!--
 Время: 1:00.
-Проверка строки check:bundle в отчёте не доказывает запуск команды. Дополнительный JS-файл не доказывает, что нужная страница действительно загружается лениво. Это первый grader с ограниченным покрытием.
+Строка check:bundle в отчёте не доказывает запуск команды, поэтому grader печатает её как сигнал и на pass она не влияет; бандл проверяется по outcome. Дополнительный JS-файл — эвристика: что нужная страница загружается лениво, подтверждает браузер. Это первый и пока единственный автоматический grader; остальные четыре кейса ручные.
 Удаление evals из worktree убирает файлы из обычного чтения, но не из git-истории. Не называем это технической изоляцией скрытых проверок.
 -->
 
@@ -1659,7 +1678,7 @@ import() стал require(), страница и antd целиком — в entr
 
   </div>
   <div v-click class="file code-xs wrap">
-  <div class="file-head"><span>.github/pull_request_template.md</span><span>фрагмент</span></div>
+  <div class="file-head"><span>.github/pull_request_template.md</span><span>фрагмент · пример заполнения</span></div>
 
 ```md
 ## Изменение harness (AGENTS.md, docs/architecture, .agents/)
@@ -1683,6 +1702,8 @@ import() стал require(), страница и antd целиком — в entr
 Время: 1:00.
 Связь — обычная таблица в реестре скиллов, никакой платформы. Запуск: EVAL_REF=origin/main evals/run-case.sh add-microfrontend 5, затем EVAL_REF=HEAD — то же самое.
 Скриптовый grader пока есть только у add-microfrontend, остальные кейсы оцениваем руками по критериям. Числа 3/5 и 5/5 — пример заполнения шаблона, не результаты измерения этой ветки.
+k из N — наблюдаемый результат: пять прогонов дают начальный сигнал, а не доказательство. В шаблоне PR — гипотеза, разброс и регрессии; при близких результатах добавляем прогоны.
+Интеграционный кейс меряет весь комплект harness; eval отдельного скилла — когда меняется только он.
 -->
 
 ---
@@ -1693,18 +1714,19 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/bfc339fb5c5d9d02971929f503770077e120b407" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b21bd7b206779d1dd75e4b3db48afbc465264484" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
   <div><code>evals/cases/</code><br>пять кейсов из реальных промахов</div>
-  <div><code>evals/graders/add-microfrontend.cjs</code><br>первый автоматизированный кейс: архитектура, бандл, линтер, scope и часть отчёта</div>
+  <div><code>evals/graders/add-microfrontend.cjs</code><br>единственный автоматический grader: архитектура, бандл, линтер, scope; остальные кейсы ручные</div>
   <div><code>EVAL_AGENT_CMD=… evals/run-case.sh add-microfrontend 5</code><br>запуск: N прогонов в чистых worktree и строка «прошло k из N»</div>
 </div>
 
 <!--
 Время: 1:00.
-Показать команду запуска и формат результата. Цифры — из своего прогона на репетиции.
+Показать команду запуска и формат результата. Сохранённых результатов прогонов в ветке нет: без репетиции говорим «формат результата», а не «наш результат».
+Сокрытие evals/ в прогоне убирает файлы из рабочей копии, но не из git-истории — это не техническая изоляция.
 Доля успехов помогает сравнить варианты настройки. Для вывода смотрим также причины провалов и повторяемость результата.
 -->
 
@@ -1745,7 +1767,7 @@ class: compact-table
 <!--
 Время: 3:00.
 Идти по строкам и открывать diff или вывод проверки обоих прогонов. Не утверждать заранее, что Run A ошибся.
-Это демонстрация механизма, а не бенчмарк: для статистики есть evals.
+Это демонстрация механизма, а не бенчмарк: для статистики есть evals. Разница — эффект всего комплекта инструкций, инструментов и проверок, а не одного скилла.
 Наличие правила или скилла не доказывает, что агент использовал его. Причину связываем с трейсом, а качество результата — с независимой проверкой.
 Grader add-microfrontend рассчитан на audit-log. Его нельзя считать готовой проверкой Application Security только после отключения product-check.
 -->
