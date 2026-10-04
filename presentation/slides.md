@@ -459,7 +459,7 @@ layout: center
 
 # Что мы изменили: AGENTS.md
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/e3b6c55b7a71dcabd90aeb42a4bfb61bc2519cf6" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/acc6e5d11a81d712f1a65fab37a3ad80693eaf6b" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
 <div class="practice-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
@@ -474,7 +474,7 @@ layout: center
 Историю с реестром рассказать подробно: это коммит 64f408a «drop stale microfrontends and isolate failed entries». Теперь в файле записано, как устроен реестр и почему нельзя отключать TTL.
 Команды check:*, на которые ссылается AGENTS.md, появятся в шаге 6.
 Формат «что поменял → что сломается → как это проявится» и есть самое ценное во вложенных файлах.
-Ссылки на восемь шагов — снимки на момент шага. Уточнения после ревью лежат отдельными коммитами «Полировка …» поверх ветки: актуальные файлы — на HEAD demo/agent-ready-v2.
+Ссылки на восемь шагов — по одному коммиту на этап, в порядке презентации; уточнения после ревью уже внутри своих шагов. Актуальные файлы — на HEAD demo/agent-ready-v2.
 -->
 
 ---
@@ -608,7 +608,7 @@ layout: center
 
 # Что мы добавили: документацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/0b53e27b99c852c2051a3203a25dbd8c4969e165" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/bbdc721ae81433845ec5f268f8e4d4b9c94fe77b" target="_blank">Шаг 2. Документация: как правильно, что не копировать, подводные камни</a></div>
 
 <div class="practice-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт, что брать у соседнего продукта и что не копировать, подводные камни, рецепт lazy-чанков через shell</div>
@@ -621,7 +621,7 @@ layout: center
 Время: 1:00.
 Смотрите: «Не копируй» с номерами PR. Если агент полезет в историю и найдёт эти PR, документация заранее говорит, что от этих подходов отказались.
 Раздел «Проверка» честно называет покрытие: поиск импортов соседей — строковая эвристика, а не граф зависимостей; лишний чанк в dist — не доказательство загрузки страницы.
-Ссылка ведёт на снимок шага 2. Уточнения после шагов — в коммитах полировки на HEAD ветки demo/agent-ready-v2.
+Ссылка ведёт на коммит шага 2. Раздел про Web Vitals в docs/performance.md добавляет шаг 7.
 -->
 
 ---
@@ -813,7 +813,7 @@ layout: center
 
 # Что мы добавили: спецификацию
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6a0f3e664ed6a97a6af3c00f8e5fee88ea8e014a" target="_blank">Шаг 3. Спецификация Application Security</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/eec8ccd95d4ac49a424d784714a036802f22a7f5" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
 <div class="practice-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
@@ -1095,7 +1095,7 @@ layout: center
 
 # Что мы добавили: скиллы
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/d1ace245c78a3ea111d82d1a12cfcc7f42af393d" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/f3da99451f2b9532b570393cce37ce4331041660" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
 <div class="practice-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
@@ -1253,7 +1253,7 @@ layout: center
 
 # Что мы добавили: субагентов
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/91742d3b2f87a41a60ee4d2b2893a55758094ea9" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6899fa0b7747ede87c53dce6c64b0563a15c958e" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
 <div class="practice-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
@@ -1450,7 +1450,7 @@ layout: center
 
 # Что мы добавили: проверки и ревью
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/731fdb9a1f8bc0e2dff3b49b817d7f1ae9bb803d" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/0af3163eb37032d101cdfadb0ddddfcb88717b9f" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
 <div class="practice-files">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают найти причину; у каждой указано, что она проверяет и что остаётся непроверенным</div>
@@ -1464,7 +1464,7 @@ layout: center
 Время: 1:00.
 Показать вживую: node scripts/select-reviewers.cjs src/shell-app/server/shell-server.js src/shell-app/server/lib/registry.js src/microfrontends/users-and-roles/manifest.json README.md — обычный code-review плюс platform-, security- и contract-reviewer; README.md ревьюера не добавляет.
 Уязвимость в ack оставлена в демо намеренно, чтобы ревьюеру было что найти. Если спросят: в продукте регистрация закрывается авторизацией и allowlist хостов.
-Один подтверждённый negative case: продукт переопределяет externals и убирает react — check:architecture падает (до полировки проходил с кодом 0).
+Один подтверждённый negative case: продукт переопределяет externals и убирает react — check:architecture падает (в первой версии проверки проходил с кодом 0).
 Границы: check:architecture — статическая сверка, импорты соседей ищет строкой; baseline check:bundle покрывает три entry, новые продукты печатаются как непокрытые; проверка Application Security — про демо-фичу; check:memory — запуск сценария и анализа: memlab run возвращает 0 и при найденных утечках, результат — строка в выводе.
 -->
 
@@ -1476,7 +1476,7 @@ layout: center
 
 # Что мы добавили: Chrome DevTools MCP
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6249b174da8b24c4a8b7a5f4a8777ee30c5d2725" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/dd220aefd7bd4efa0d95db72d1514f93ecab79d0" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
 <div class="practice-files">
   <div><code>.mcp.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX, статистики и проверки обновлений; под CODEOWNERS и security-reviewer</div>
@@ -1756,7 +1756,7 @@ layout: center
 
 # Что мы добавили: evals
 
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b21bd7b206779d1dd75e4b3db48afbc465264484" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
+<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/37bf4cb8c17fb90b6891ef5481b00825fc0e8ba2" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
 
 <div class="practice-files">
   <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
