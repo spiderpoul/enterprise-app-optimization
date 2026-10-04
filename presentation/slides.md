@@ -133,21 +133,21 @@ layout: center
 # Модели на собственной инфраструктуре уже достаточно сильные
 
 <div class="benchmark-strip">
-  <div v-click class="benchmark"><b>45</b><span>GLM-5.3</span></div>
+  <div v-click class="benchmark"><b>45</b><span>GLM-5.3<br/>max effort</span></div>
   <div v-click class="benchmark"><b>45</b><span>Claude Opus 5<br/>medium effort</span></div>
   <div v-click class="benchmark"><b>40</b><span>DeepSeek V4.1 Flash<br/>reasoning max</span></div>
   <div v-click class="benchmark"><b>38</b><span>Claude Sonnet 5<br/>max effort</span></div>
 </div>
 
-<p v-click style="margin-top: 1.6rem; font-size: 27px">Открытые GLM, Kimi или DeepSeek можно поднять на своей инфраструктуре и они вполне достойно пишут код.
-Возможности модели важны. Но отдельно нужно проверить, хватает ли ей информации и инструментов для работы именно с вашим проектом.</p>
+<p v-click style="margin-top: 1.6rem; font-size: 27px">Открытые модели уровня GLM или DeepSeek можно поднять на своей инфраструктуре, и они вполне достойно пишут код.
+Отдельный вопрос — хватает ли модели информации и инструментов, чтобы работать именно с вашим проектом.</p>
 
-<p v-after class="source">Artificial Analysis Intelligence Index v4.3, сентябрь 2026. Лидер индекса — Claude Opus 5.5 (max), 58 баллов. Это общий уровень модели; проверять всё равно нужно на своём репозитории.</p>
+<p v-after class="source">Artificial Analysis Intelligence Index v4.3, октябрь 2026. Лидер индекса — Claude Opus 5.5 (max), 58 баллов. Это общий уровень модели; проверять всё равно нужно на своём репозитории.</p>
 
 <!--
 Время: 1:00.
 Числа — баллы индекса Artificial Analysis v4.3, не проценты; не путать с числами до пересчёта шкалы. Я не утверждаю, что внутренняя модель «победила Claude».
-Opus 5 на medium взят как типичная повседневная настройка; на max у Opus 5 — 51, у Opus 5.5 — 58. Лучшие открытые модели — GLM-5.3 и Kimi K3, около 44–45.
+Opus 5 на medium взят как типичная повседневная настройка; на max у Opus 5 — 51, у Opus 5.5 — 58. Лучшая открытая модель в индексе — GLM-5.3 (max), 45; у GLM-5.3 Flash — 42.
 Индекс — повод попробовать модель на своих задачах. Пригодность для нашего проекта проверяем по результатам работы в репозитории.
 -->
 
@@ -158,27 +158,28 @@ Opus 5 на medium взят как типичная повседневная н�
 <div class="grid-4 reasons">
   <div v-click class="flat-card warn">
     <h3>Не знает, какой пример правильный</h3>
-    <p class="muted">Все продукты собираются и работают. Но они наследуют корневой Babel-конфиг с <code>modules: 'cjs'</code>: скопируешь соседа — entry вырастет на 2,5&nbsp;МБ, а <code>import()</code> не создаст чанк.</p>
+    <p class="muted">Рядом лежат актуальный и устаревший подходы. Оба работают — по коду их не отличить.</p>
   </div>
   <div v-click class="flat-card warn">
     <h3>Не видит неявных контрактов</h3>
-    <p class="muted">На id и routePath из manifest.json завязаны сохранённые ссылки пользователей и селекторы MemLab. Из кода микрофронта этого не видно.</p>
+    <p class="muted">На идентификаторы, роуты и форматы API опираются другие системы. В коде это не помечено.</p>
   </div>
   <div v-click class="flat-card warn">
     <h3>Не знает, кого ещё заденет правка</h3>
-    <p class="muted">Одна строка в <code>common/webpack</code> меняет сборку всех 25 продуктов. По самому файлу этого не понять.</p>
+    <p class="muted">Общий модуль используют десятки команд. По самому файлу этого не видно.</p>
   </div>
   <div v-click class="flat-card warn">
     <h3>Не знает, когда работа закончена</h3>
-    <p class="muted">Сборка зелёная, тесты проходят — а LCP страницы 11 секунд. Это видно только в браузере, на запущенном приложении.</p>
+    <p class="muted">Сборка и тесты зелёные, а пользователь видит медленную или сломанную страницу.</p>
   </div>
 </div>
 
-<p v-click style="margin-top: 1.4rem; font-size: 26px">В этих примерах агент опирается на соседний код, но не знает, какие решения команда уже считает устаревшими.</p>
+<p v-click style="margin-top: 1.4rem; font-size: 26px">Агент опирается на код, а договорённости команды в коде не записаны.</p>
 
 <!--
 Время: 1:30.
-Четыре причины — по кликам, для каждой один пример из нашего репозитория. Код — архив решений за девять лет, и хорошие решения в нём лежат рядом с плохими.
+Четыре причины — по кликам. Код — архив решений за девять лет, и хорошие решения в нём лежат рядом с плохими.
+Примеры из демо, если спросят: корневой Babel собирает всё в CommonJS — скопируешь соседа, и import() не создаст чанк; id и routePath в manifest — это ссылки пользователей и селекторы MemLab; одна строка в common/webpack меняет сборку всех продуктов; сборка зелёная, а LCP страницы около 11 секунд.
 Явные контракты и актуальные примеры уменьшают количество решений, которые агенту приходится принимать без достаточной информации.
 Дальше каждый блок доклада закрывает одну из этих дыр, и после каждого я переключаюсь в репозиторий и показываю коммит. В конце вернёмся к этим четырём причинам и сравним прогоны по ним.
 -->
@@ -252,7 +253,7 @@ layout: center
 </div>
 
 <div v-click class="flat-card warn" style="margin-top: 1rem; padding: 18px 26px">
-  <h3 style="font-size: 23px; margin-bottom: 6px">Один промпт и одна спека — байт в байт</h3>
+  <h3 style="font-size: 23px; margin-bottom: 6px">Один промпт и одна спека</h3>
   <p style="font-size: 20px">«Implement <code>openspec/changes/add-application-security/specs/application-security/spec.md</code>. When you are done, write a short report in Russian to <code>agent-report.md</code>: what you did, which checks you ran and their results, and your reasoning — key decisions, alternatives you rejected, doubts.»</p>
 </div>
 
@@ -263,9 +264,9 @@ layout: center
 Переключиться в терминал, запустить обе сессии на одной внутренней модели с одинаковыми настройками, вернуться к слайдам.
 Демо-репозиторий — упрощённая копия продукта: два микрофронта вместо 25, но те же ловушки.
 Run A — не пустой репозиторий. В ветке demo-before «всё есть», но сделано так, как делать не надо. Все антипримеры из доклада взяты оттуда.
-Оба получают одну и ту же хорошую спеку — ту, что разберём в блоке про спеки; spec.md и proposal.md в ветках совпадают байт в байт. Так нельзя сказать «B просто получил промпт лучше».
+Оба получают одну и ту же хорошую спеку — ту, что разберём в блоке про спеки; spec.md и proposal.md в ветках совпадают. Так нельзя сказать «B просто получил промпт лучше».
 Сравниваем два варианта настройки вокруг одной модели. Run A специально собран как антипример; по двум прогонам не делаем вывод о частоте успеха.
-В подготовленной ветке есть небольшая инструментальная правка для сценария памяти — атрибут data-page. Поэтому не утверждаем, что весь код продукта совпадает байт в байт.
+В подготовленной ветке есть небольшая инструментальная правка для сценария памяти — атрибут data-page. Поэтому не утверждаем, что весь код продукта совпадает.
 Какими командами проверить требования спеки, агент должен узнать из репозитория — в этом и разница.
 Перед стартом evals/ скрыт в обоих worktree: в demo-before кейс прямо подсказывает про CommonJS.
 Отчёт в конце — одинаковая просьба для обоих: в финале сравним и код, и рассуждения.
@@ -818,7 +819,7 @@ layout: center
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>контракт, сценарии, разрешение для lazy-чанка, «готово»</div>
   <div><code>proposal.md</code> и <code>tasks.md</code><br>зачем это изменение, шаги со скиллами и субагентами и приёмка: «retry → остановить сервер, «Повторить» после запуска → скриншот таблицы»</div>
   <div><code>openspec/README.md</code><br>как мы работаем со спеками в legacy</div>
-  <div><span class="muted">Показать</span><br>этот файл получают оба прогона — в <code>demo-before</code> он такой же байт в байт</div>
+  <div><span class="muted">Показать</span><br>этот файл получают оба прогона — в <code>demo-before</code> он такой же</div>
 </div>
 
 <!--
@@ -1127,7 +1128,7 @@ layout: center
 
 ---
 
-# Субагент <code>explorer</code> и откуда его вызывают
+# Субагент <code>explorer</code>
 
 <div class="annotated">
 <div class="file code-xs wrap">
@@ -1206,6 +1207,45 @@ tools у всех: Read, Write, Edit, Bash, Grep, Glob
 -->
 
 ---
+
+# Команда агентов или роли: как в итоге
+
+<div class="sa-grid">
+  <div v-click class="sa-card bad">
+    <div class="sa-kicker">Не работает</div>
+    <h3>Эстафета ролей</h3>
+    <div class="sa-chain">
+      <span>PM</span><i>→</i><span>Архитектор</span><i>→</i><span>Dev</span><i>→</i><span>QA</span>
+    </div>
+    <p>Каждый получает пересказ. Решения расходятся, проверяет тот, кто чинил.</p>
+  </div>
+  <div v-click class="sa-card good">
+    <div class="sa-kicker">Работает</div>
+    <h3>Один исполнитель и помощники</h3>
+    <div class="sa-hub">
+      <span class="sa-sat s1">explorer<em>исследует</em></span>
+      <span class="sa-sat s2">log-analyst<em>читает логи</em></span>
+      <span class="sa-core">Основной агент<em>пишет код</em></span>
+      <span class="sa-sat s3">reviewer<em>свежий взгляд</em></span>
+    </div>
+    <p>Помощники только читают и возвращают короткий ответ.</p>
+  </div>
+</div>
+
+<div class="sa-takeaways">
+  <div v-click><b>1</b>Код пишет один агент</div>
+  <div v-click><b>2</b>Субагент — узкий вход, свой контекст, короткий ответ</div>
+  <div v-click><b>3</b>Проверяет не тот, кто писал</div>
+</div>
+
+<!--
+Время: 0:50.
+Вывод блока. Не «команда как у людей», а один исполнитель, которому помогают исследователи и ревьюер.
+Так советуют Anthropic (статья о multi-agent research system: параллелят исследование, а не запись) и Cognition («Don't Build Multi-Agents»: пишущие агенты принимают неявные решения, и они расходятся).
+Несколько пишущих агентов возможны — для независимых задач и в изолированных worktree. Для связанного legacy-кода начинаем с простого варианта.
+-->
+
+---
 layout: center
 ---
 
@@ -1271,72 +1311,89 @@ layout: center
 
 # Как строить гейты, чтобы агент их не обходил
 
-<div class="gate-grid">
-  <div v-click class="flat-card"><h3>Проверяемое — в скрипт</h3><p>Для размера бандла используем скрипт и baseline. Инструкции объясняют ограничение, проверка фиксирует его нарушение. Для того, что трудно формализовать, остаются ревью и оценка человеком.</p></div>
-  <div v-click class="flat-card"><h3>Изменение гейта требует согласования</h3><p>Проверки и бюджеты имеют владельцев. Агент может предложить их изменение, но не должен самостоятельно ослаблять условия приёмки своей задачи.</p></div>
-  <div v-click class="flat-card"><h3>Сообщение помогает исправить ошибку</h3><p>Указываем, что нарушено, где и куда смотреть. Сообщение «проверка не прошла» без подробностей заставляет агента искать причину заново.</p></div>
-  <div v-click class="flat-card"><h3>Храповик вместо идеала</h3><p>Начинаем с измеренного уровня и допуска: LCP <code>/users</code> около 11&nbsp;с, бюджет 13&nbsp;с, цель 2,5&nbsp;с. Ухудшение требует объяснения; пересмотр бюджета — отдельного согласования.</p></div>
-  <div v-click class="flat-card"><h3>Воспроизводимые условия</h3><p>Фиксируем окружение и троттлинг, берём медиану трёх прогонов. Если проверка нестабильна, разбираем причину, а не перезапускаем до зелёного результата.</p></div>
-  <div v-click class="flat-card"><h3>Результат с доказательствами</h3><p>В отчёте — выполненные команды, результаты и непроверенные требования. Незапущенную проверку не отмечаем как пройденную.</p></div>
+<div class="annotated">
+<div class="gl" :class="{ dimming: $clicks >= 1 }">
+  <svg class="gl-arrows" viewBox="0 0 800 420" aria-hidden="true">
+    <defs><marker id="gl-tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+    <line x1="212" y1="205" x2="284" y2="205" marker-end="url(#gl-tip)"/>
+    <line class="ok" x1="522" y1="205" x2="594" y2="205" marker-end="url(#gl-tip)"/>
+    <line class="lock" x1="405" y1="72" x2="405" y2="154" marker-end="url(#gl-tip)"/>
+    <line class="fail" x1="405" y1="252" x2="405" y2="314" marker-end="url(#gl-tip)"/>
+    <polyline class="fail" points="148,365 105,365 105,256" fill="none" marker-end="url(#gl-tip)"/>
+  </svg>
+  <div class="gl-node gl-base" :class="{ focus: $clicks === 3 }"><b>Бюджет · baseline</b><span>меняет владелец</span></div>
+  <div class="gl-node gl-agent"><b>Агент</b><span>меняет код</span></div>
+  <div class="gl-node gl-check" :class="{ focus: $clicks === 1 || $clicks === 4 }"><b>Проверка-скрипт</b><span>одни и те же условия</span></div>
+  <div class="gl-node gl-report" :class="{ focus: $clicks === 5 }"><b>Отчёт</b><span>команды и вывод</span></div>
+  <div class="gl-node gl-msg" :class="{ focus: $clicks === 2 }"><b>Сообщение</b><span>что, где, куда смотреть</span></div>
+  <span class="gl-label ok">прошла</span>
+  <span class="gl-label fail">упала</span>
+</div>
+<div class="notes">
+  <div v-if="$clicks < 1" class="note intro"><b>Гейт — петля обратной связи</b><p>Агент правит, проверка отвечает. Чем точнее ответ, тем быстрее агент исправит сам.</p></div>
+  <div v-click="[1, 2]" class="note good"><b>Проверяемое — в скрипт</b><p>Текст объясняет правило, скрипт ловит нарушение.</p></div>
+  <div v-click="[2, 3]" class="note good"><b>Сообщение помогает исправить</b><p>Что нарушено, где и куда смотреть — не просто «не прошло».</p></div>
+  <div v-click="[3, 4]" class="note"><b>Порог — от текущего уровня</b><p>Начинаем с измеренного, ужесточаем по мере улучшений. Ослабить может только владелец.</p></div>
+  <div v-click="[4, 5]" class="note good"><b>Стабильные условия</b><p>Одно окружение, медиана нескольких прогонов. Нестабильность разбираем, а не перезапускаем.</p></div>
+  <div v-click="5" class="note good"><b>Результат с доказательствами</b><p>В отчёте команды и вывод. Незапущенное — «не подтверждено».</p></div>
+</div>
 </div>
 
 <!--
-Время: 1:40.
-Каждая карточка — из практики этого репозитория. check:ai из demo-before — пример гейта, который врёт: печатает «пройдено» и выходит с кодом 0.
-Сообщение check:bundle для lazy-чанка называет и причину, и разрешённый обход, и документ — это помогает агенту найти причину ошибки.
-Храповик: бюджет Web Vitals записан из сегодняшних замеров. Цель 2,5 с — ориентир; двигаем бюджет вниз отдельными MR, когда страница стала быстрее.
-CODEOWNERS и агент-ревьюер не запрещают редактирование файлов. Защита мёржа обеспечивается настройками репозитория. Для независимой оценки можно брать проверки из доверенного checkout — так сделано в grader.
+Время: 1:30.
+Идти по кликам: каждый клик подсвечивает часть петли, справа — одно правило.
+1. Проверяемое — в скрипт: для размера бандла скрипт и baseline. Что трудно формализовать — остаётся ревью и человек.
+2. Сообщение: check:bundle для lazy-чанка называет причину, разрешённый обход и документ. Антипример — check:ai из demo-before: печатает «пройдено» и выходит с кодом 0.
+3. Порог от текущего уровня: бюджет Web Vitals записан из сегодняшних замеров — LCP /users около 11 с, бюджет 13 с, цель 2,5 с. Двигаем бюджет вниз отдельными MR, когда страница стала быстрее (в англоязычных материалах это называют ratchet). Агент может предложить изменение бюджета, но не ослабляет его сам.
+4. Условия: фиксируем окружение и троттлинг, медиана трёх прогонов.
+5. Отчёт: незапущенную проверку не отмечаем как пройденную.
+CODEOWNERS и агент-ревьюер не запрещают редактирование файлов: защиту мёржа даёт настройка репозитория. Для независимой оценки проверки можно брать из доверенного checkout — так сделано в grader.
 -->
 
 ---
 
-# Агентное ревью в CI: общее и профильное
+# Какие guardrails мы добавили
 
-<div class="click-flow review-flow">
-  <div v-click class="click-node"><b>MR</b><span>любые изменения</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Проверки</b><span>детерминированные, до модели</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>code-review</b><span>общее ревью diff</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>+ профильный ревьюер</b><span>если задет критичный путь</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Владелец</b><span>из CODEOWNERS мёржит</span></div>
-</div>
-
-<div class="review-grid">
-  <div v-click class="flat-card bad">
-    <h3>Реестр, прокси, общая сборка</h3>
-    <p class="paths"><code>shell-app/server/lib/</code> · <code>microfrontends/common/</code></p>
-    <p><b>platform-reviewer</b> — ошибка здесь ломает загрузку всех продуктов сразу.</p>
+<div class="annotated wide">
+<div class="gr" :class="{ dimming: $clicks >= 1 }">
+  <div class="gr-groups">
+    <span class="g1" :class="{ focus: $clicks === 1 }">правила</span>
+    <span class="g2" :class="{ focus: $clicks === 2 || $clicks === 3 }">перед «готово»</span>
+    <span class="g3" :class="{ focus: $clicks === 4 }">MR</span>
+    <span class="g4" :class="{ focus: $clicks === 5 }">человек</span>
   </div>
-  <div v-click class="flat-card bad">
-    <h3>Внешние данные и MCP</h3>
-    <p class="paths"><code>shell-server.js</code> · <code>*/server/</code> · <code>.mcp.json</code></p>
-    <p><b>security-reviewer</b> проверяет авторизацию регистрации и удаления продуктов; MCP-конфигурацию — на доступ к браузеру и данным.</p>
-  </div>
-  <div v-click class="flat-card warn">
-    <h3>Публичные контракты</h3>
-    <p class="paths"><code>*/manifest.json</code></p>
-    <p><b>contract-reviewer</b> — переименованный id ломает ссылки пользователей и сценарии MemLab.</p>
-  </div>
-  <div v-click class="flat-card warn">
-    <h3>Сами проверки</h3>
-    <p class="paths"><code>performance/</code> · <code>scripts/check-*.cjs</code></p>
-    <p><b>checks-reviewer</b> — ослабить baseline значит выключить проверку для всех команд.</p>
+  <div class="gr-road">
+    <span class="gr-end start">Правка<br/>агента</span>
+    <div class="gr-gates">
+      <div class="gr-gate g1" :class="{ focus: $clicks === 1 }"><i></i><b>DoD</b><span>правила, спека</span></div>
+      <div class="gr-gate g2" :class="{ focus: $clicks === 2 }"><i></i><b>architecture</b><span>контракты</span></div>
+      <div class="gr-gate g2" :class="{ focus: $clicks === 2 }"><i></i><b>bundle</b><span>размер, чанки</span></div>
+      <div class="gr-gate g2" :class="{ focus: $clicks === 3 }"><i></i><b>memory</b><span>MemLab</span></div>
+      <div class="gr-gate g2" :class="{ focus: $clicks === 3 }"><i></i><b>web vitals</b><span>браузер</span></div>
+      <div class="gr-gate g3" :class="{ focus: $clicks === 4 }"><i></i><b>ревью</b><span>агенты</span></div>
+      <div class="gr-gate g4" :class="{ focus: $clicks === 5 }"><i></i><b>владелец</b><span>CODEOWNERS</span></div>
+    </div>
+    <span class="gr-end finish">Мёрж</span>
   </div>
 </div>
-
-<p v-click class="source"><code>CODEOWNERS</code> назначает владельца-человека, а <code>critical-paths.yml</code> — профиль проверки. Замечание публикуется с <code>rule</code> или <code>evidence</code>, без автоаппрува. Workflow — шаблон: нужен внутренний agent CLI.</p>
+<div class="notes">
+  <div v-if="$clicks < 1" class="note intro"><b>Путь правки до мёржа</b><p>Каждый шлагбаум ловит свой класс ошибок. Ни один не заменяет остальные.</p></div>
+  <div v-click="[1, 2]" class="note good"><b>Правила</b><p>AGENTS.md и спека задают, что считать готовым. Непроверенное — «не подтверждено».</p></div>
+  <div v-click="[2, 3]" class="note good"><b>Контракты и бандл</b><p>Скрипты ловят скопированный конфиг, сломанный manifest и раздутый entry.</p></div>
+  <div v-click="[3, 4]" class="note good"><b>Память и загрузка</b><p>То, чего не видно в сборке: утечки после ухода со страницы и медленный LCP.</p></div>
+  <div v-click="[4, 5]" class="note"><b>Агентное ревью</b><p>Общее ревью каждого diff и профильный ревьюер для критичных путей. Только комментирует.</p></div>
+  <div v-click="5" class="note"><b>Владелец</b><p>Человек читает diff, результаты проверок и мёржит.</p></div>
+</div>
+</div>
 
 <!--
-Время: 1:30.
-Базовое агентное ревью — по политике команды: скилл code-review, замечание подтверждается правилом или контрактом, упавшей проверкой или воспроизводимым дефектом; nitpick'и не публикуем.
-publisher (scripts/post-review.cjs) принимает rule или evidence; замечание без строки и не прошедшее inline уходит в сводку, а не теряется. Ноль замечаний при непроверенном рантайме — не «готово».
-Если diff задел критичный путь, CI по critical-paths.yml добавляет профильного ревьюера, а CODEOWNERS — команду-владельца; обязательность её аппрува задаётся настройками защищённой ветки.
-Так устроены и коммерческие решения: пути в CodeRabbit, инструкции по путям в Copilot code review, специализированные агенты в Claude Code Review. Мы делаем то же на внутренней модели.
-Это шаблон интеграции: job выключен переменной AGENT_REVIEW_ENABLED, agent — наш внутренний CLI. Не утверждаем, что ревью уже запускается на каждом PR. Находки ревьюера показываем только при наличии результата реального прогона.
-Сами grader, selector, publisher, run-case.sh и workflows тоже в critical-paths.yml и CODEOWNERS. Опечатка в ключе critical-paths.yml теперь ошибка, а не молча выключенное профильное ревью.
+Время: 1:20.
+Идти по кликам слева направо. Это карта того, что добавили в демо-ветку; уровни — те же, что на прошлом слайде.
+Правила: Definition of Done в AGENTS.md и в спеке.
+Скрипты: check:architecture (статическая сверка manifest, регистрации, externals), check:bundle (размер стартовых ассетов против baseline, lazy-чанк демо-фичи), check:memory (сценарий MemLab роута; результат — строка «MemLab found N leak(s)»), check:web-vitals (LCP и CLS через Chrome DevTools MCP).
+Ревью: скилл code-review на каждый diff, профильные ревьюеры по critical-paths.yml — platform (реестр, прокси, общая сборка), security (внешние данные, MCP, workflow), contract (manifest), checks (сами проверки, grader). Замечание подтверждается правилом, упавшей проверкой или воспроизведением; агент никогда не аппрувит.
+Workflow агентного ревью — шаблон: в публичном репозитории выключен, agent — наш внутренний CLI. Так же устроены коммерческие решения: пути в CodeRabbit, инструкции по путям в Copilot code review, специализированные агенты в Claude Code Review.
+Владелец — из CODEOWNERS; обязательность аппрува задаётся защитой ветки.
 -->
 
 ---
@@ -1345,46 +1402,31 @@ publisher (scripts/post-review.cjs) принимает rule или evidence; з�
 
 <div class="two-col mcp-slide">
   <div>
-    <div v-click class="file code-xs">
-    <div class="file-head"><span>.mcp.json</span><span>demo/agent-ready-v2</span></div>
-
-```json
-{ "mcpServers": { "chrome-devtools": {
-    "command": "npx",
-    "args": ["--no-install", "chrome-devtools-mcp",
-      "--headless", "--isolated", "--viewport=1440x900",
-      "--no-usage-statistics", "--no-performance-crux"],
-    "env": { "CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS": "1" } } } }
-```
-
-  </div>
     <ul class="mcp-points">
-      <li v-click><b>Закрытый контур:</b> версия закреплена в devDependencies; CrUX, статистика и проверка обновлений выключены. Остальные сетевые границы задаёт окружение.</li>
-      <li v-click><b>Гейт:</b> <code>check:web-vitals</code> ходит в тот же MCP-сервер — CPU ×4, медиана 3 прогонов, локальный бюджет LCP и CLS. INP не проверяет.</li>
-      <li v-click><b>Разбор:</b> превысил бюджет — агент снимает трейс, а не угадывает.</li>
+      <li v-click><b>Видит результат:</b> агент открывает страницу, смотрит скриншот, консоль и сеть — а не верит зелёной сборке.</li>
+      <li v-click><b>Меряет:</b> проверка через тот же браузер сравнивает LCP и CLS страницы с бюджетом.</li>
+      <li v-click><b>Разбирает:</b> бюджет превышен — агент снимает трейс и находит причину, а не угадывает.</li>
     </ul>
   </div>
   <div>
     <div v-click class="file code-xs wrap">
-    <div class="file-head"><span>$ npm run check:web-vitals</span><span>вывод</span></div>
+    <div class="file-head"><span>$ npm run check:web-vitals</span><span>вывод, сокращено</span></div>
 
 ```text
-/users: LCP 10 492 мс (бюджет 13 000 мс, цель 2 500 мс)
-  · CLS 0.142 (бюджет 0.15, цель 0.1) · CPU ×4, медиана 3
-  · JS до LCP … (прогон с медианным LCP)
-/reports: LCP 9 760 мс (бюджет 11 500 мс, цель 2 500 мс) …
-Проверка Web Vitals пройдена: LCP и CLS в локальном бюджете.
+/users:   LCP 10,5 с · бюджет 13 с · цель 2,5 с
+/reports: LCP  9,8 с · бюджет 11,5 с
+Проверка Web Vitals пройдена
 ```
 
   </div>
     <div v-click class="file code-xs wrap" style="margin-top: 14px">
-    <div class="file-head"><span>MCP · performance_analyze_insight</span><span>LCPBreakdown</span></div>
+    <div class="file-head"><span>трейс · LCPBreakdown</span><span>сокращено</span></div>
 
 ```text
-LCP 13 525 ms (CPU 4x), элемент — текст
-- Time to first byte:   319 ms (2.4%)
-- Element render delay: 13 205 ms (97.6%)
-+ LegacyJavaScript: 123.8 kB полифилов
+LCP 13,5 с, элемент — текст
+- Time to first byte:   0,3 с   (2%)
+- Element render delay: 13,2 с  (98%)
++ 124 kB полифилов
 ```
 
   </div>
@@ -1392,12 +1434,12 @@ LCP 13 525 ms (CPU 4x), элемент — текст
 </div>
 
 <!--
-Время: 1:40.
+Время: 1:20.
 Chrome DevTools MCP — официальный MCP-сервер Chrome: агент открывает страницу, кликает, читает консоль и сеть, снимает performance-трейс с инсайтами.
-Для закрытого контура важны два флага и переменная: --no-performance-crux (иначе URL из трейса уходят в CrUX API), --no-usage-statistics и CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS (иначе сервер ходит в npm registry за обновлениями). Фоновые запросы самого Chrome и страницы это не отключает — сетевые границы задаёт окружение. Версию ставим из внутреннего npm-зеркала, npx --no-install не ходит в интернет.
-Вывод справа — запуски на демо-ветке в production-режиме, сокращено; формат строк — текущей версии скрипта. Тяжёлые скрипты и LCP-элемент берутся из прогона с медианным LCP. LCP и CLS — локальный regression budget в лаборатории; INP и полевой UX этим не подтверждены.
-Перед замером страницу подтверждаем скриншотом через MCP: скрипт проверяет только, что браузер не ушёл с URL роута. Render delay 97% — почти всё время уходит на JS до отрисовки; LegacyJavaScript — полифилы из targets: 'ie 11' того же корневого Babel-конфига.
-Трейс с включённой записью медленнее, поэтому LCP в нём больше, чем в гейте: гейт меряет без трейса.
+Технические детали, если спросят: сервер описан в .mcp.json и opencode.json, версия закреплена в devDependencies (npx --no-install). Выключены CrUX (--no-performance-crux), статистика (--no-usage-statistics) и проверка обновлений (CHROME_DEVTOOLS_MCP_NO_UPDATE_CHECKS). Фоновые запросы самого Chrome это не отключает — сетевые границы задаёт окружение.
+Гейт: CPU ×4, три прогона с холодным кешем, медиана; тяжёлые скрипты и LCP-элемент — из прогона с медианным LCP. LCP и CLS — локальный regression budget; INP и полевой UX этим не подтверждаются.
+Вывод справа — запуски на демо-ветке в production-режиме, сокращено. Render delay 98% — почти всё время уходит на JS до отрисовки; полифилы — из targets: 'ie 11' корневого Babel-конфига.
+Трейс с записью медленнее, поэтому LCP в нём больше, чем в гейте.
 -->
 
 ---
@@ -1746,52 +1788,37 @@ layout: center
 -->
 
 ---
-class: compact-table
----
 
-# Сравниваем Run A и Run B по пяти вопросам
+# Run A и Run B: что получилось
 
-<p style="font-size: 23px; margin: -0.4rem 0 1rem">Спека у обоих одна. Проверяем результаты и смотрим, какие инструкции и инструменты использовал каждый агент.</p>
+<div class="ab-grid">
+  <div v-click class="ab-card bad">
+    <h3>Run A <span>«всё есть, но мешает»</span></h3>
+    <ul>
+      <li>Инструкции спорят — образцом становится соседний код</li>
+      <li>Правка расползается за пределы своего продукта</li>
+      <li>«Готово» — по зелёной сборке и самооценке</li>
+    </ul>
+  </div>
+  <div v-click class="ab-card good">
+    <h3>Run B <span>«проект понятен агенту»</span></h3>
+    <ul>
+      <li>Знает правильный пример, границы и контракты</li>
+      <li>Меняет только свой продукт</li>
+      <li>«Готово» — по проверкам, их выводу и браузеру</li>
+    </ul>
+  </div>
+</div>
 
-<table class="comparison runs">
-  <thead><tr><th>Вопрос к результату</th><th>Как проверяем</th><th class="run-a">Что было доступно Run A</th><th class="run-b">Что было доступно Run B</th></tr></thead>
-  <tbody>
-    <tr v-click><td>Страница открывается через shell и грузится отдельным чанком?</td><td>check:bundle, открыть страницу из меню</td><td class="run-a">«импортируй страницы сразу» в AGENTS.md</td><td class="run-b">check:bundle, рецепт «Lazy-чанки через shell» в docs</td></tr>
-    <tr v-click><td>Клиент в ES-модулях, entry не раздут?</td><td>исходники, конфиг Babel, размер entry; Web Vitals — для эффекта на загрузку</td><td class="run-a">«antd через <code>require()</code>» в AGENTS.md, Babel с <code>modules: 'cjs'</code></td><td class="run-b">«Никогда» в AGENTS.md, «Не копируй» в docs, web-vitals-check</td></tr>
-    <tr v-click><td>Таблица не пересчитывается, когда сворачивают меню?</td><td>React Profiler</td><td class="run-a">«оптимизируй всё через useMemo»</td><td class="run-b">правила рендера в docs, performance-check</td></tr>
-    <tr v-click><td>Агент не трогал чужой код?</td><td>список изменённых файлов</td><td class="run-a">«если сборка падает — поправь common/»</td><td class="run-b">таблица cross-zone, safe-change, platform-reviewer</td></tr>
-    <tr v-click><td>На чём основано «готово»?</td><td><code>agent-report.md</code></td><td class="run-a">check:ai → «✓ пройдено»</td><td class="run-b">команды и их вывод вместо самооценки</td></tr>
-  </tbody>
-</table>
+<p v-click class="ab-statement">Модель одна, спека одна. Разница — в том, что вокруг модели.</p>
 
 <!--
-Время: 3:00.
-Идти по строкам и открывать diff или вывод проверки обоих прогонов. Не утверждать заранее, что Run A ошибся.
+Время: 2:00.
+Перед докладом сверить формулировки с фактическими agent-report.md обоих прогонов и поправить, если прогон пошёл иначе. Ничего не утверждать сверх того, что видно в отчётах и диффах.
+Если есть время — открыть оба agent-report.md рядом: раздел 1 (решения и откуда правило) и раздел 7 (метрики).
+Что смотрим, если спросят: отдельный lazy-чанк и загрузка через shell; ES-модули и размер entry; пересчёт таблицы при сворачивании меню (React Profiler); правки вне продукта; на чём основано «готово».
 Это демонстрация механизма, а не бенчмарк: для статистики есть evals. Разница — эффект всего комплекта инструкций, инструментов и проверок, а не одного скилла.
-Наличие правила или скилла не доказывает, что агент использовал его. Причину связываем с трейсом, а качество результата — с независимой проверкой.
-Grader add-microfrontend рассчитан на audit-log. Его нельзя считать готовой проверкой Application Security только после отключения product-check.
 -->
-
----
-
-# Что поменялось между Run A и Run B
-
-<table class="comparison runs">
-  <thead><tr><th>Почему модель ошибается</th><th class="run-a">Что было у Run A</th><th class="run-b">Что добавили для Run B</th></tr></thead>
-  <tbody>
-    <tr v-click><td>Не знает, какой пример правильный</td><td class="run-a">старая дока: «собирай в CommonJS ради IE11»</td><td class="run-b">«Источник истины» в AGENTS.md, «Не копируй» в docs, explorer</td></tr>
-    <tr v-click><td>Не видит неявных контрактов</td><td class="run-a">контракт есть в спеке; отдельной архитектурной проверки в ветке нет: «делай как у соседей»</td><td class="run-b">check:architecture сверяет manifest, contract-reviewer</td></tr>
-    <tr v-click><td>Не знает, кого ещё затронет правка</td><td class="run-a">«если сборка падает — поправь common/ под себя»</td><td class="run-b">таблица cross-zone, «Вне scope», safe-change</td></tr>
-    <tr v-click><td>Не знает, когда работа закончена</td><td class="run-a">check:ai → «✓ пройдено», бот одобрил</td><td class="run-b">Definition of Done, quality gates с понятными сообщениями, Web Vitals через MCP, ревьюер</td></tr>
-  </tbody>
-</table>
-
-<p v-click style="margin-top: 1rem; font-size: 24px">Модель одна, спека одна. В одном варианте инструкции противоречат друг другу, в другом — задают согласованные ориентиры и проверки. По прогонам смотрим, как агент этим воспользовался.</p>
-
-<!--
-Время: 1:00.
--->
-
 ---
 
 # Итоги: check-list агентной разработки
@@ -1848,12 +1875,12 @@ layout: center
   </div>
   <div class="meme-image meme-thanks">
     <img src="/assets/1.jfif" alt="Мем: «Я ничто без Claude» — «Если ты ничто без Claude, значит, ты его не заслуживаешь»" />
-    <div class="meme-caption">Если вы научились выжимать максимум из слабой модели — представьте, что будет с Claude</div>
+    <div class="meme-caption">Если вы научитесь выжимать максимум даже из локальной модели — представьте, что вы сможете сделать с Claude или Codex</div>
   </div>
 </div>
 
 <!--
 Время: 0:30.
 Спасибо. Вопросы. QR-код и ссылка ведут в репозиторий, в нём ветки demo/agent-ready-v2 (подготовленный проект) и demo-before (антипример).
-Мем — шутка на прощание: если без Claude ничего не получается, дело не в модели, а в проекте. Научились выжимать максимум из слабой модели — с Claude будет ещё лучше.
+Мем — шутка на прощание: если без Claude ничего не получается, дело не в модели, а в проекте. Научитесь выжимать максимум даже из локальной модели — представьте, что сможете сделать с Claude или Codex.
 -->
