@@ -959,14 +959,14 @@
 .slide-progress-track {
   display: block;
   width: 100%;
-  height: 8px;
-  background: rgb(115 242 167 / 20%);
+  height: 2px;
+  background: rgb(115 242 167 / 7%);
 }
 
 .slide-progress-bar {
   display: block;
   height: 100%;
-  background: var(--green);
+  background: rgb(115 242 167 / 32%);
   transition: width 250ms ease;
 }
 
@@ -1878,9 +1878,40 @@
 }
 
 .meme-thanks img {
-  height: 440px;
+  width: 100%;
+  height: 565px;
+  object-fit: contain;
   border: 1px solid var(--line);
   border-radius: 18px;
+}
+
+.thanks-pr-hint {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 20px;
+}
+
+.engineering-takeaway .huge {
+  font-size: 72px;
+}
+
+.engineering-takeaway .takeaway-core {
+  margin-top: 32px;
+  font-size: 35px;
+  line-height: 1.45;
+}
+
+.engineering-takeaway .takeaway-skills {
+  margin-top: 38px;
+  color: var(--green);
+  font-size: 30px;
+  font-weight: 650;
+}
+
+.engineering-takeaway .takeaway-detail {
+  margin-top: 16px;
+  font-size: 25px;
+  line-height: 1.45;
 }
 
 .meme-thanks .meme-caption {
@@ -2106,6 +2137,28 @@
   box-shadow: 0 0 0 3px rgb(115 242 167 / 25%), 0 18px 40px rgb(0 0 0 / 30%);
   opacity: 1;
 }
+
+.quality-levels .ql-stage {
+  width: 320px;
+  height: 110px;
+}
+
+.quality-levels .ql-stage em {
+  margin-bottom: 8px;
+  color: var(--green);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 650;
+}
+
+.quality-levels .ql-stage span {
+  margin-top: 7px;
+}
+
+.ql-loop { top: 45px; left: 0; }
+.ql-done { top: 45px; left: 440px; }
+.ql-ci { top: 275px; left: 440px; }
+.ql-human { top: 275px; left: 0; }
 
 /* Guardrails map */
 .gr {
