@@ -423,11 +423,12 @@ Cross-zone — наша практика для большого проекта:
 
 # AGENTS.md: что убрать из корня
 
+<div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
 <div class="guidance-lines">
-  <div v-click class="guidance-row"><h3>Вся архитектура в одном файле</h3><p>Оставляем карту кода и ссылки. Устройство системы и объяснения решений живут в docs.</p></div>
-  <div v-click class="guidance-row"><h3>Соглашения, уже заданные линтером</h3><p>Формат и стиль проверяет линтер. В AGENTS.md указываем команду и особые ограничения проекта.</p></div>
-  <div v-click class="guidance-row"><h3>Процедуры на любой случай</h3><p>Локальные ограничения переносим в AGENTS.md области, подробные процедуры читаем по задаче.</p></div>
-  <div v-click class="guidance-row"><h3>Дубли и устаревшие команды</h3><p>Одна версия каждого правила. Проверяем команды и обновляем инструкции вместе с изменением кода.</p></div>
+  <div v-click class="guidance-row"><h3>Вся архитектура в одном файле</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Оставляем карту кода и ссылки. Устройство системы и объяснения решений живут в docs.</p></div>
+  <div v-click class="guidance-row"><h3>Соглашения, уже заданные линтером</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Формат и стиль проверяет линтер. В AGENTS.md указываем команду и особые ограничения проекта.</p></div>
+  <div v-click class="guidance-row"><h3>Процедуры на любой случай</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Локальные ограничения переносим в AGENTS.md области, подробные процедуры читаем по задаче.</p></div>
+  <div v-click class="guidance-row"><h3>Дубли и устаревшие команды</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Одна версия каждого правила. Проверяем команды и обновляем инструкции вместе с изменением кода.</p></div>
 </div>
 
 <!--
@@ -566,11 +567,12 @@ Shell получает маршрут и entry из manifest. Микрофрон
 
 # Документация: что мешает ей работать
 
+<div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
 <div class="guidance-lines">
-  <div v-click class="guidance-row"><h3>Решение осталось в чате или wiki</h3><p>Фиксируем действующее решение в репозитории. Внешний источник связываем с кодом и версией контракта.</p></div>
-  <div v-click class="guidance-row"><h3>Две копии одного правила</h3><p>Люди и агент читают один документ. В AGENTS.md и скилле даём ссылку на него.</p></div>
-  <div v-click class="guidance-row"><h3>Рабочий legacy выглядит образцом</h3><p>Явно показываем актуальное решение, устаревший подход и причину, почему его не переносим.</p></div>
-  <div v-click class="guidance-row"><h3>Совет без границ и проверки</h3><p>Описываем, где он применим, какие есть подводные камни и чем проверить результат.</p></div>
+  <div v-click class="guidance-row"><h3>Решение осталось в чате или wiki</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Фиксируем действующее решение в репозитории. Внешний источник связываем с кодом и версией контракта.</p></div>
+  <div v-click class="guidance-row"><h3>Две копии одного правила</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Люди и агент читают один документ. В AGENTS.md и скилле даём ссылку на него.</p></div>
+  <div v-click class="guidance-row"><h3>Рабочий legacy выглядит образцом</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Явно показываем актуальное решение, устаревший подход и причину, почему его не переносим.</p></div>
+  <div v-click class="guidance-row"><h3>Совет без границ и проверки</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Описываем, где он применим, какие есть подводные камни и чем проверить результат.</p></div>
 </div>
 
 <!--
@@ -747,11 +749,12 @@ layout: center
 
 # Спека: что уточнить до реализации
 
+<div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
 <div class="guidance-lines">
-  <div v-click class="guidance-row"><h3>«Сделать как в соседнем разделе»</h3><p>Указываем актуальный образец и значимые отличия: данные, доступ, состояния и поведение.</p></div>
-  <div v-click class="guidance-row"><h3>Описан только успешный сценарий</h3><p>Добавляем пустой ответ, ошибку и восстановление. Фиксируем важные ограничения совместимости.</p></div>
-  <div v-click class="guidance-row"><h3>Реализация занимает всю спеку</h3><p>Отделяем цель и приёмку от плана кода. Обязательные технические ограничения сохраняем явно.</p></div>
-  <div v-click class="guidance-row"><h3>«Проверить, что всё работает»</h3><p>Для каждого критерия выбираем проверку. Неясные продуктовые решения закрываем с владельцем до кода.</p></div>
+  <div v-click class="guidance-row"><h3>«Сделать как в соседнем разделе»</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Указываем актуальный образец и значимые отличия: данные, доступ, состояния и поведение.</p></div>
+  <div v-click class="guidance-row"><h3>Описан только успешный сценарий</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Добавляем пустой ответ, ошибку и восстановление. Фиксируем важные ограничения совместимости.</p></div>
+  <div v-click class="guidance-row"><h3>Реализация занимает всю спеку</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Отделяем цель и приёмку от плана кода. Обязательные технические ограничения сохраняем явно.</p></div>
+  <div v-click class="guidance-row"><h3>«Проверить, что всё работает»</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Для каждого критерия выбираем проверку. Неясные продуктовые решения закрываем с владельцем до кода.</p></div>
 </div>
 
 <!--
@@ -813,7 +816,7 @@ layout: center
     <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>performance-check</h3><p class="muted">По изменению выбирает сценарий и замер. Возвращает результаты и риски, которые ещё не проверены.</p></div>
   </div>
   <div>
-    <div v-click class="flat-card"><h3>safe-change</h3><p class="muted">Для общего кода определяет потребителей, совместимость и проверки. Помогает подготовить ревью с соседними командами.</p></div>
+    <div v-click class="flat-card"><h3>security-check</h3><p class="muted">Проверяет diff: авторизацию, обработку внешних данных и секреты. Каждая находка содержит место в коде, путь данных и объяснение риска.</p></div>
     <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>log-trace-analysis</h3><p class="muted">Скриптом сокращает лог, связывает события с кодом и отделяет подтверждённую причину от гипотезы.</p></div>
   </div>
 </div>
@@ -822,7 +825,8 @@ layout: center
 
 <!--
 Время: 1:20.
-Не универсальный стартовый набор: сначала смотрим, где агент испытывает трудности, и проверяем пользу процедуры. В демо существуют дополнительные скиллы для UI, ревью и безопасности; их не нужно устанавливать в каждом проекте.
+Не универсальный стартовый набор: сначала смотрим, где агент испытывает трудности, и проверяем пользу процедуры. В демо существуют дополнительные скиллы для UI, ревью и общего кода; их не нужно устанавливать в каждом проекте.
+security-check показывает подтверждённые риски и непроверенные области. В демо при blocker-находке исправление согласует владелец: это правило процедуры ревью, а не повод менять scope задачи самостоятельно.
 Источники: Anthropic, https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills — начинать с затруднений на реальных задачах; OpenAI, https://developers.openai.com/codex/skills — фокус на одной работе.
 -->
 
@@ -948,11 +952,12 @@ HAR: 4xx (например, 404 lazy-чанка) тоже попадают в с
 
 # Скиллы: без зоопарка
 
+<div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
 <div class="guidance-lines">
-  <div v-click class="guidance-row"><h3>Скилл на каждое действие</h3><p>Добавляем скилл под повторяемую работу, где агенту не хватает контекста или он регулярно ошибается.</p></div>
-  <div v-click class="guidance-row"><h3>Копия общей документации</h3><p>Общие правила и устройство проекта оставляем в docs. Скилл связывает нужные знания с конкретной задачей.</p></div>
-  <div v-click class="guidance-row"><h3>Несколько скиллов про одно и то же</h3><p>Разводим условия применения или объединяем. У каждого понятны вход, результат и владелец.</p></div>
-  <div v-click class="guidance-row"><h3>Скилл есть, пользы не видно</h3><p>Сравниваем на реальных задачах с ним и без него. Если агент справляется так же хорошо, скилл удаляем.</p></div>
+  <div v-click class="guidance-row"><h3>Скилл на каждое действие</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Добавляем скилл под повторяемую работу, где агенту не хватает контекста или он регулярно ошибается.</p></div>
+  <div v-click class="guidance-row"><h3>Копия общей документации</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Общие правила и устройство проекта оставляем в docs. Скилл связывает нужные знания с конкретной задачей.</p></div>
+  <div v-click class="guidance-row"><h3>Несколько скиллов про одно и то же</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Разводим условия применения или объединяем. У каждого понятны вход, результат и владелец.</p></div>
+  <div v-click class="guidance-row"><h3>Скилл есть, пользы не видно</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Сравниваем на реальных задачах с ним и без него. Если агент справляется так же хорошо, скилл удаляем.</p></div>
 </div>
 
 <!--
