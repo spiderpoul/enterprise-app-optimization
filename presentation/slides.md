@@ -222,6 +222,36 @@ GLM-5.3 max — 45, DeepSeek V4.1 Flash max — 39. Claude Opus 5.5 medium with 
 layout: center
 ---
 
+<div class="eyebrow">Практический пример</div>
+
+# Наш демопроект
+
+<div class="two-col wide-left" style="align-items: center; gap: 72px">
+  <div>
+    <p style="font-size: 28px"><strong>Enterprise App Optimization</strong> — мини-версия нашего проекта.</p>
+    <p class="muted" style="margin-top: 26px">Микрофронты работают как отдельные приложения. <strong class="green">Shell</strong> загружает их и встраивает в общий интерфейс.</p>
+    <p style="margin-top: 26px">В приложении намеренно заложены <span class="green">ошибки производительности</span>.</p>
+    <p style="margin-top: 28px; font-size: 20px"><a href="https://github.com/spiderpoul/enterprise-app-optimization" target="_blank"><code>github.com/spiderpoul/<wbr>enterprise-app-optimization</code></a></p>
+  </div>
+  <div style="text-align: center">
+    <a href="https://www.youtube.com/watch?v=8mAXrTd2eMc&amp;t=18s" target="_blank" aria-label="Открыть видео об оптимизации приложения с 18-й секунды"><img src="/assets/performance-video-qr.svg" alt="QR-код на видео, в котором мы улучшали производительность приложения" style="display: block; width: 270px; height: 270px; margin: 0 auto 24px; border-radius: 14px" /></a>
+    <p style="font-size: 24px; margin-bottom: 10px">Как мы улучшали<br>производительность приложения</p>
+    <p class="muted" style="font-size: 20px; margin-bottom: 0">Видео на YouTube</p>
+  </div>
+</div>
+
+<!--
+Время: 0:40.
+Перед запуском двух сессий показать, с каким проектом будем работать.
+Это мини-версия нашего проекта: отдельные микрофронты и shell-приложение, которое загружает их в общий интерфейс. В коде намеренно заложены ошибки производительности.
+В видео мы разбирали и улучшали производительность самого приложения. Сейчас используем этот проект для разбора того, как подготовка репозитория влияет на работу агента.
+Ссылка для QR-кода, предоставленная автором: https://www.youtube.com/watch?v=8mAXrTd2eMc&t=18s
+-->
+
+---
+layout: center
+---
+
 <div class="eyebrow">Live · старт</div>
 
 # Одна задача, одна модель, два репозитория
