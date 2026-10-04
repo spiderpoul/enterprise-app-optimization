@@ -12,6 +12,34 @@
   --line-strong: #3c6c53;
 }
 
+.guidance-lines {
+  display: grid;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.guidance-row {
+  display: grid;
+  grid-template-columns: 350px minmax(0, 1fr);
+  gap: 42px;
+  align-items: start;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.slidev-layout .guidance-row h3 {
+  margin: 0;
+  color: var(--yellow);
+  font-size: 27px;
+  line-height: 1.25;
+}
+
+.slidev-layout .guidance-row p {
+  margin: 0;
+  font-size: 25px;
+  line-height: 1.4;
+}
+
 * {
   box-sizing: border-box;
 }
