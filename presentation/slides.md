@@ -50,6 +50,50 @@ canvasWidth: 1440
 -->
 
 ---
+layout: center
+---
+
+<div v-click class="meme-kicker">Примерно так выглядела модель, когда я впервые сказал ей: «Пройдись по нашему репозиторию и найди баг»</div>
+
+<div v-click class="meme-image meme-rescue">
+  <img src="/assets/3.png" alt="Мем: испуганная модель в большом legacy-репозитории" />
+</div>
+
+<!--
+Время: 0:30.
+-->
+
+---
+
+# Проект Kaspersky Security Center
+
+<div class="two-col project-overview">
+  <div>
+    <div v-click class="flat-card">
+      <h3>Центр управления защитой</h3>
+      <p>Единая платформа для администрирования корпоративной инфраструктуры и security-продуктов.</p>
+      <p class="muted">XDR · Cloud · on-premise</p>
+    </div>
+    <div v-click class="flat-card" style="margin-top: 1.2rem">
+      <h3>9+ лет эволюции</h3>
+      <p>React · Node.js · микрофронты · Hexa UI</p>
+      <p class="muted">Команды и требования менялись — в коде остались подходы разных лет.</p>
+    </div>
+  </div>
+  <div class="project-metrics">
+    <div v-click class="metric"><b>10+</b><span>команд</span></div>
+    <div v-click class="metric"><b>25+</b><span>плагинов</span></div>
+    <div v-click class="metric"><b>1000+</b><span>страниц</span></div>
+  </div>
+</div>
+
+<!--
+Время: 0:50.
+Живой продукт, а не учебный пример. В таком проекте одна неудачная строка в общем коде
+останавливает работу сразу нескольких команд — поэтому цена ошибки агента здесь выше, чем в пет-проекте.
+-->
+
+---
 class: contour-slide
 ---
 
@@ -153,50 +197,6 @@ SOFTWARE.
 Время: 1:00.
 Все четыре фразы я говорил сам. Дальше покажу ошибки, которые возникают из-за неподходящих примеров, противоречивых инструкций и отсутствующих проверок,
 и что с ними делать, если сильной облачной модели нет и не будет.
--->
-
----
-layout: center
----
-
-<div v-click class="meme-kicker">Примерно так выглядела модель, когда я впервые сказал ей: «Пройдись по нашему репозиторию и найди баг»</div>
-
-<div v-click class="meme-image meme-rescue">
-  <img src="/assets/3.png" alt="Мем: испуганная модель в большом legacy-репозитории" />
-</div>
-
-<!--
-Время: 0:30.
--->
-
----
-
-# Проект Kaspersky Security Center
-
-<div class="two-col project-overview">
-  <div>
-    <div v-click class="flat-card">
-      <h3>Центр управления защитой</h3>
-      <p>Единая платформа для администрирования корпоративной инфраструктуры и security-продуктов.</p>
-      <p class="muted">XDR · Cloud · on-premise</p>
-    </div>
-    <div v-click class="flat-card" style="margin-top: 1.2rem">
-      <h3>9+ лет эволюции</h3>
-      <p>React · Node.js · микрофронты · Hexa UI</p>
-      <p class="muted">Команды и требования менялись — в коде остались подходы разных лет.</p>
-    </div>
-  </div>
-  <div class="project-metrics">
-    <div v-click class="metric"><b>10+</b><span>команд</span></div>
-    <div v-click class="metric"><b>25+</b><span>плагинов</span></div>
-    <div v-click class="metric"><b>1000+</b><span>страниц</span></div>
-  </div>
-</div>
-
-<!--
-Время: 0:50.
-Живой продукт, а не учебный пример. В таком проекте одна неудачная строка в общем коде
-останавливает работу сразу нескольких команд — поэтому цена ошибки агента здесь выше, чем в пет-проекте.
 -->
 
 ---
