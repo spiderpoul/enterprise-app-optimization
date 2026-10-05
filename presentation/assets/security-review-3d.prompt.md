@@ -1,0 +1,7 @@
+# Security review illustration
+
+Generated with the built-in image generation tool. Transparent PNG, decorative illustration for the checks and review section. The colors are inspired by the existing presentation and Kaspersky; this is not a brand logo.
+
+## Prompt
+
+Use case: stylized-concept. Asset type: small decorative 3D illustration for a technical conference slide titled 'Checks and review' about secure enterprise coding agents. Create a refined isolated 3D composition: an upright shield in Kaspersky-inspired deep emerald and fresh mint green, with a simple recessed checkmark, resting slightly in front of a small secure microchip. Three-quarter isometric view, gently rounded industrial geometry, satin ceramic surfaces, restrained translucent teal glass accents, subtle silver chip contacts. Professionally art-directed enterprise cybersecurity visual, sophisticated and calm, not a toy or a mascot. It will sit on the RIGHT of a dark forest-green slide, at around 340px wide. Bright mint edge highlights, soft studio light, excellent crisp silhouette, all objects fully visible with generous transparent margins. Actual transparent background (RGBA alpha), no floor, no backdrop, no gradient background, no rectangular card, no cast shadow outside the object, no bloom or glow that obscures the edges. No text, no lettering, no brand logo, no watermarks. Square composition, one cohesive object grouping, no scattered decorations.

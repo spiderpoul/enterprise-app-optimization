@@ -227,22 +227,22 @@ GLM-5.3 max — 45, DeepSeek V4.1 Flash max — 39. Claude Opus 5.5 medium with 
 
 # Почему даже умная модель может ошибиться
 
-<div class="grid-4 reasons">
-  <div v-click class="flat-card warn">
+<div class="grid-4 reasons reason-canvas">
+  <div v-click class="flat-card warn"><svg aria-hidden="true" class="design-icon reason-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="6" cy="19" r="3" /> <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" /> <circle cx="18" cy="5" r="3" /> </svg><div class="reason-copy">
     <h3>Не знает, какой пример правильный</h3>
-    <p class="muted">Рядом лежат актуальный и устаревший подходы. Оба работают — по коду их не отличить.</p>
+    <p class="muted">Рядом лежат актуальный и устаревший подходы. Оба работают — по коду их не отличить.</p></div>
   </div>
-  <div v-click class="flat-card warn">
+  <div v-click class="flat-card warn"><svg aria-hidden="true" class="design-icon reason-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /> </svg><div class="reason-copy">
     <h3>Не видит неявных контрактов</h3>
-    <p class="muted">На идентификаторы, роуты и форматы API опираются другие системы. В коде это не помечено.</p>
+    <p class="muted">На идентификаторы, роуты и форматы API опираются другие системы. В коде это не помечено.</p></div>
   </div>
-  <div v-click class="flat-card warn">
+  <div v-click class="flat-card warn"><svg aria-hidden="true" class="design-icon reason-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 6a9 9 0 0 0-9 9V3" /> <circle cx="18" cy="6" r="3" /> <circle cx="6" cy="18" r="3" /> </svg><div class="reason-copy">
     <h3>Не знает, кого ещё заденет правка</h3>
-    <p class="muted">Общий модуль используют десятки команд. По самому файлу этого не видно.</p>
+    <p class="muted">Общий модуль используют десятки команд. По самому файлу этого не видно.</p></div>
   </div>
-  <div v-click class="flat-card warn">
+  <div v-click class="flat-card warn"><svg aria-hidden="true" class="design-icon reason-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 22V4a1 1 0 0 1 .4-.8A6 6 0 0 1 8 2c3 0 5 2 7.333 2q2 0 3.067-.8A1 1 0 0 1 20 4v10a1 1 0 0 1-.4.8A6 6 0 0 1 16 16c-3 0-5-2-8-2a6 6 0 0 0-4 1.528" /> </svg><div class="reason-copy">
     <h3>Не знает, когда работа закончена</h3>
-    <p class="muted">Сборка и тесты зелёные, а пользователь видит медленную или сломанную страницу.</p>
+    <p class="muted">Сборка и тесты зелёные, а пользователь видит медленную или сломанную страницу.</p></div>
   </div>
 </div>
 
@@ -378,11 +378,16 @@ Run A — не пустой репозиторий. В ветке demo-before «
 layout: center
 ---
 
-<div class="eyebrow">Блок 1</div>
+<div class="section-feature ">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 1</div>
 
 # AGENTS.md: точка входа в проект
 
 <p class="muted" style="font-size: 26px">Что агенту нужно знать сразу и куда идти за подробностями.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="01"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg></div>
+</div>
 
 <!--
 Время: 0:15.
@@ -576,11 +581,16 @@ layout: center
 layout: center
 ---
 
-<div class="eyebrow">Блок 2</div>
+<div class="section-feature ">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 2</div>
 
 # Документация: как в проекте принято и почему
 
 <p class="muted" style="font-size: 26px">Как описать действующее решение, отметить legacy и связать подводные камни с проверками.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="02"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg></div>
+</div>
 
 <!--
 Время: 0:15.
@@ -697,11 +707,16 @@ layout: center
 layout: center
 ---
 
-<div class="eyebrow">Блок 3</div>
+<div class="section-feature ">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 3</div>
 
 # Спецификация: договориться о задаче до кода
 
 <p class="muted" style="font-size: 26px">Как внедрить spec-driven development (SDD) в legacy, что включить в спеку и как избежать неоднозначности.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="03"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /> </svg></div>
+</div>
 
 <!--
 Время: 0:15.
@@ -711,10 +726,10 @@ layout: center
 
 # SDD в legacy: как внедрить и что это даёт
 
-<div class="two-col" style="align-items: start">
+<div class="two-col sdd-map" style="align-items: start">
   <div>
     <h3 class="green">Как внедряем</h3>
-    <ul>
+    <ul class="sdd-steps">
       <li v-click>Начинаем с одного настоящего изменения, которое всё равно нужно сделать.</li>
       <li v-click>Спеку пишем только на то, что меняем.</li>
       <li v-click>Черновик готовит агент по тикету и коду, владелец области дорабатывает его.</li>
@@ -723,10 +738,10 @@ layout: center
   </div>
   <div>
     <h3 class="yellow">Что это даёт</h3>
-    <ul>
-      <li v-click>Замысел ревьюим до кода: поправить абзац дешевле, чем 40 файлов.</li>
-      <li v-click>Контракты legacy, которых не видно в коде, записаны явно.</li>
-      <li v-click>Модели не нужно додумывать продуктовый смысл по ходу работы.</li>
+    <ul class="sdd-benefits">
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="18" cy="18" r="3" /> <circle cx="6" cy="6" r="3" /> <path d="M13 6h3a2 2 0 0 1 2 2v7" /> <line x1="6" x2="6" y1="9" y2="21" /> </svg><span>Замысел ревьюим до кода: поправить абзац дешевле, чем 40 файлов.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /> </svg><span>Контракты legacy, которых не видно в коде, записаны явно.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 7V5a2 2 0 0 1 2-2h2" /> <path d="M17 3h2a2 2 0 0 1 2 2v2" /> <path d="M21 17v2a2 2 0 0 1-2 2h-2" /> <path d="M7 21H5a2 2 0 0 1-2-2v-2" /> <circle cx="12" cy="12" r="1" /> <path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0" /> </svg><span>Модели не нужно додумывать продуктовый смысл по ходу работы.</span></li>
     </ul>
   </div>
 </div>
@@ -744,16 +759,16 @@ layout: center
 
 # Какой должна быть спека
 
-<div class="two-col">
+<div class="two-col spec-outline">
   <div>
-    <div v-click class="flat-card"><h3>1 · Поведение и ограничения</h3><p class="muted">Что должно измениться для пользователя и какие технические контракты нужно сохранить. Детали реализации — в рамках этих ограничений.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>2 · Сценарии WHEN / THEN</h3><p class="muted">Каждый можно проверить руками или тестом.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>3 · Scope и разрешения</h3><p class="muted">Что не трогаем и что можно поменять, если упёрлись: например, конфиг своего микрофронта.</p></div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 7V5a2 2 0 0 1 2-2h2" /> <path d="M17 3h2a2 2 0 0 1 2 2v2" /> <path d="M21 17v2a2 2 0 0 1-2 2h-2" /> <path d="M7 21H5a2 2 0 0 1-2-2v-2" /> <circle cx="12" cy="12" r="1" /> <path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0" /> </svg><div><h3>1 · Поведение и ограничения</h3><p class="muted">Что должно измениться для пользователя и какие технические контракты нужно сохранить. Детали реализации — в рамках этих ограничений.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /> </svg><div><h3>2 · Сценарии WHEN / THEN</h3><p class="muted">Каждый можно проверить руками или тестом.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 7V5a2 2 0 0 1 2-2h2" /> <path d="M17 3h2a2 2 0 0 1 2 2v2" /> <path d="M21 17v2a2 2 0 0 1-2 2h-2" /> <path d="M7 21H5a2 2 0 0 1-2-2v-2" /> </svg><div><h3>3 · Scope и разрешения</h3><p class="muted">Что не трогаем и что можно поменять, если упёрлись: например, конфиг своего микрофронта.</p></div></div>
   </div>
   <div>
-    <div v-click class="flat-card"><h3>4 · Контракты legacy</h3><p class="muted">id, роуты, API, которые нельзя сломать. Их не видно в коде соседей.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>5 · Проверяемое «готово»</h3><p class="muted">Критерии приёмки и способ проверки: команда, тест или конкретный сценарий в браузере.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>6 · Прочитана человеком</h3><p class="muted">Существенные вопросы закрыты до кода. Это договорённость, а не автоматическая проверка. Большое изменение разбиваем на части.</p></div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /> </svg><div><h3>4 · Контракты legacy</h3><p class="muted">id, роуты, API, которые нельзя сломать. Их не видно в коде соседей.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /> </svg><div><h3>5 · Проверяемое «готово»</h3><p class="muted">Критерии приёмки и способ проверки: команда, тест или конкретный сценарий в браузере.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /> </svg><div><h3>6 · Прочитана человеком</h3><p class="muted">Существенные вопросы закрыты до кода. Это договорённость, а не автоматическая проверка. Большое изменение разбиваем на части.</p></div></div>
   </div>
 </div>
 
@@ -881,11 +896,16 @@ OpenSpec CLI в репозитории не подключён: validate и arch
 layout: center
 ---
 
-<div class="eyebrow">Блок 4</div>
+<div class="section-feature ">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 4</div>
 
 # Скиллы: как делать повторяющуюся работу
 
 <p class="muted" style="font-size: 26px">Какие скиллы у нас есть, как устроена процедура скилла, как делимся ими между командами и где брать идеи.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="04"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg></div>
+</div>
 
 <!--
 Время: 0:15.
@@ -895,14 +915,14 @@ layout: center
 
 # Где скилл помогает команде
 
-<div class="two-col" style="align-items: start">
+<div class="two-col skills-catalog" style="align-items: start">
   <div>
-    <div v-click class="flat-card"><h3>story-analysis</h3><p class="muted">Из тикета и кода собирает вопросы, scope и критерии приёмки. Существенные решения остаются за владельцем задачи.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>performance-check</h3><p class="muted">По изменению выбирает сценарий и замер. Возвращает результаты и риски, которые ещё не проверены.</p></div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="M12 11h4" /> <path d="M12 16h4" /> <path d="M8 11h.01" /> <path d="M8 16h.01" /> </svg><div><h3>story-analysis</h3><p class="muted">Из тикета и кода собирает вопросы, scope и критерии приёмки. Существенные решения остаются за владельцем задачи.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m12 14 4-4" /> <path d="M3.34 19a10 10 0 1 1 17.32 0" /> </svg><div><h3>performance-check</h3><p class="muted">По изменению выбирает сценарий и замер. Возвращает результаты и риски, которые ещё не проверены.</p></div></div>
   </div>
   <div>
-    <div v-click class="flat-card"><h3>security-check</h3><p class="muted">Проверяет diff: авторизацию, обработку внешних данных и секреты. Каждая находка содержит место в коде, путь данных и объяснение риска.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>log-trace-analysis</h3><p class="muted">Скриптом сокращает лог, связывает события с кодом и отделяет подтверждённую причину от гипотезы.</p></div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><div><h3>security-check</h3><p class="muted">Проверяет diff: авторизацию, обработку внешних данных и секреты. Каждая находка содержит место в коде, путь данных и объяснение риска.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15 12h-5" /> <path d="M15 8h-5" /> <path d="M19 17V5a2 2 0 0 0-2-2H4" /> <path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3" /> </svg><div><h3>log-trace-analysis</h3><p class="muted">Скриптом сокращает лог, связывает события с кодом и отделяет подтверждённую причину от гипотезы.</p></div></div>
   </div>
 </div>
 
@@ -1058,7 +1078,7 @@ Description объясняет, что делает скилл и когда е�
 
 # Как делимся скиллами между командами
 
-<div class="two-col">
+<div class="two-col skill-sharing-layout">
   <div v-click class="file code-sm">
   <div class="file-head"><span>.github/CODEOWNERS</span><span>фрагмент</span></div>
 
@@ -1075,15 +1095,17 @@ Description объясняет, что делает скилл и когда е�
 
   </div>
   <div>
-    <ul style="font-size: 23px">
-      <li v-click><b>Монорепозиторий:</b> скиллы лежат в <code>.agents/skills/</code>, каждая команда получает их вместе с кодом.</li>
-      <li v-click><b>CODEOWNERS</b> назначает владельца для ревью. Обязательный аппрув включаем в настройках защищённой ветки.</li>
-      <li v-click><b>Реестр:</b> <code>.agents/skills/README.md</code> — что делает, когда брать, владелец, eval-кейс.</li>
-      <li v-click><b>Изменение скилла</b> — вместе с прогоном eval-кейса «до и после»; подробнее в блоке про evals.</li>
-      <li v-click><b>Чужие скиллы</b> — только как идеи: у 13% из 3&nbsp;984 публичных скиллов Snyk нашёл критичные проблемы. Читаем, адаптируем, кладём копию к себе.</li>
+    <ul class="team-skill-list" style="font-size: 23px">
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" /> <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg><span><b>Монорепозиторий:</b> скиллы лежат в <code>.agents/skills/</code>, каждая команда получает их вместе с кодом.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /> </svg><span><b>CODEOWNERS</b> назначает владельца для ревью. Обязательный аппрув включаем в настройках защищённой ветки.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /> </svg><span><b>Реестр:</b> <code>.agents/skills/README.md</code> — что делает, когда брать, владелец, eval-кейс.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg><span><b>Изменение скилла</b> — вместе с прогоном eval-кейса «до и после»; подробнее в блоке про evals.</span></li>
     </ul>
   </div>
 </div>
+
+<div v-click class="skill-sharing-caution"><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><span><b>Чужие скиллы</b> — только как идеи: у 13% из 3&nbsp;984 публичных скиллов Snyk нашёл критичные проблемы. Читаем, адаптируем, кладём копию к себе.</span></div>
+
 
 <!--
 Время: 1:00.
@@ -1096,14 +1118,14 @@ Description объясняет, что делает скилл и когда е�
 
 # Где смотреть рекомендации и примеры
 
-<div class="two-col" style="align-items: start">
+<div class="two-col resource-catalog" style="align-items: start">
   <div>
-    <div v-click class="flat-card"><h3><a href="https://github.com/addyosmani/agent-skills" target="_blank">Addy Osmani</a></h3><p class="muted">Контекст по задаче, спека, небольшие шаги реализации и проверка результата. Примеры процедур с условиями завершения.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices" target="_blank">Anthropic</a></h3><p class="muted">Ясное описание скилла, загрузка деталей по необходимости, проверка на используемых моделях.</p></div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg><div><h3><a href="https://github.com/addyosmani/agent-skills" target="_blank">Addy Osmani</a></h3><p class="muted">Контекст по задаче, спека, небольшие шаги реализации и проверка результата. Примеры процедур с условиями завершения.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg><div><h3><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices" target="_blank">Anthropic</a></h3><p class="muted">Ясное описание скилла, загрузка деталей по необходимости, проверка на используемых моделях.</p></div></div>
   </div>
   <div>
-    <div v-click class="flat-card"><h3><a href="https://openai.com/index/harness-engineering/" target="_blank">OpenAI</a></h3><p class="muted">Короткий AGENTS.md как вход в базу знаний. Документация в репозитории, границы архитектуры и автоматические проверки.</p></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><h3>Применение в своём проекте</h3><p class="muted">Берём нужную идею, адаптируем к своим контрактам и проверяем на реальных задачах. Чужие инструкции и скрипты сначала читаем.</p></div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg><div><h3><a href="https://openai.com/index/harness-engineering/" target="_blank">OpenAI</a></h3><p class="muted">Короткий AGENTS.md как вход в базу знаний. Документация в репозитории, границы архитектуры и автоматические проверки.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg><div><h3>Применение в своём проекте</h3><p class="muted">Берём нужную идею, адаптируем к своим контрактам и проверяем на реальных задачах. Чужие инструкции и скрипты сначала читаем.</p></div></div>
   </div>
 </div>
 
@@ -1144,11 +1166,16 @@ layout: center
 layout: center
 ---
 
-<div class="eyebrow">Блок 5</div>
+<div class="section-feature ">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 5</div>
 
 # Субагенты: исследование в отдельном контексте
 
 <p class="muted" style="font-size: 26px">В этом демо субагенты исследуют код, разбирают логи и проверяют diff. Изменения вносит основной агент.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="05"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect x="16" y="16" width="6" height="6" rx="1" /> <rect x="2" y="16" width="6" height="6" rx="1" /> <rect x="9" y="2" width="6" height="6" rx="1" /> <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /> <path d="M12 12V8" /> </svg></div>
+</div>
 
 <!--
 Время: 0:30.
@@ -1303,11 +1330,16 @@ layout: center
 layout: center
 ---
 
-<div class="eyebrow">Блок 6</div>
+<div class="section-feature section-security">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 6</div>
 
 # Проверки и ревью
 
 <p class="muted" style="font-size: 26px">Агент завершает задачу по согласованным критериям. Проверки подтверждают результат, а непроверенное остаётся явно отмеченным.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="06"><img src="/assets/security-review-3d.png" alt="" class="section-security-art" /></div>
+</div>
 
 <!--
 Время: 0:15.
@@ -1523,11 +1555,16 @@ layout: center
 layout: center
 ---
 
-<div class="eyebrow">Блок 7</div>
+<div class="section-feature ">
+  <div class="section-copy">
+    <div class="eyebrow">Блок 7</div>
 
 # Evals: как измерить, что агент стал работать лучше
 
 <p class="muted" style="font-size: 26px">Что это, зачем, из чего состоит eval и что он проверяет и как завести их у себя.</p>
+  </div>
+  <div class="section-art" aria-hidden="true" data-block="07"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 16v5" /> <path d="M16 14.639V21" /> <path d="M20 10.656V21" /> <path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15" /> <path d="M4 18.463V21" /> <path d="M8 14.656V21" /> </svg></div>
+</div>
 
 <!--
 Время: 0:15.
@@ -1537,13 +1574,13 @@ layout: center
 
 # Зачем вообще evals
 
-<div class="two-col wide-left" style="align-items: start">
-  <div>
-    <p v-click style="font-size: 28px">Изменили AGENTS.md или модель. Агент стал лучше — или просто повезло?</p>
+<div class="two-col wide-left eval-overview" style="align-items: start">
+  <div class="eval-copy">
+    <p v-click style="font-size: 28px"><svg aria-hidden="true" class="design-icon eval-question-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg>Изменили AGENTS.md или модель. Агент стал лучше — или просто повезло?</p>
     <p v-click style="font-size: 28px">Eval: одна задача, несколько прогонов, проверка результата. Сравниваем долю успехов и причины провалов.</p>
   </div>
   <table v-click class="comparison" style="font-size: 20px">
-    <thead><tr><th></th><th>Тест</th><th>Eval</th></tr></thead>
+    <thead><tr><th></th><th><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18 16 4-4-4-4" /> <path d="m6 8-4 4 4 4" /> <path d="m14.5 4-5 16" /> </svg><span>Тест</span></th><th><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m2 9 3-3 3 3" /> <path d="M13 18H7a2 2 0 0 1-2-2V6" /> <path d="m22 15-3 3-3-3" /> <path d="M11 6h6a2 2 0 0 1 2 2v10" /> </svg><span>Eval</span></th></tr></thead>
     <tbody>
       <tr><td>Проверяет</td><td>поведение кода</td><td>выполнение задачи агентом</td></tr>
       <tr><td>Запуск</td><td>готовый код</td><td>повторные прогоны агента</td></tr>
@@ -1775,17 +1812,17 @@ layout: center
 
 # Итоги: чек-лист агентной разработки
 
-<div class="checklist">
-  <div v-click>Короткий AGENTS.md: карта, запреты, cross-zone-зависимости, Definition of Done</div>
-  <div v-click>Вложенные AGENTS.md для критичных мест: реестр, прокси, общая сборка</div>
-  <div v-click>Общая документация: текущие правила, «не копируй», подводные камни</div>
-  <div v-click>Спека на каждое заметное изменение — прочитанная человеком до кода</div>
-  <div v-click>Проверки с понятными сообщениями; изменение самих проверок и бюджетов требует согласования</div>
-  <div v-click>Инструменты запуска и диагностики: в демо — Chrome DevTools MCP и замеры Web Vitals</div>
-  <div v-click>Скиллы на повторяющуюся работу, у каждого есть владелец</div>
-  <div v-click>Начните с субагентов для исследования и ревью; в нашем демо код меняет основной агент</div>
-  <div v-click>Агентное ревью по политике команды; для критичных путей — профильные проверки</div>
-  <div v-click>Eval-кейсы из реальных задач и промахов; сравнение при изменении модели или настройки</div>
+<div class="checklist designed-checklist">
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg><span>Короткий AGENTS.md: карта, запреты, cross-zone-зависимости, Definition of Done</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" /> <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg><span>Вложенные AGENTS.md для критичных мест: реестр, прокси, общая сборка</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg><span>Общая документация: текущие правила, «не копируй», подводные камни</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /> </svg><span>Спека на каждое заметное изменение — прочитанная человеком до кода</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><span>Проверки с понятными сообщениями; изменение самих проверок и бюджетов требует согласования</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg><span>Инструменты запуска и диагностики: в демо — Chrome DevTools MCP и замеры Web Vitals</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg><span>Скиллы на повторяющуюся работу, у каждого есть владелец</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect x="16" y="16" width="6" height="6" rx="1" /> <rect x="2" y="16" width="6" height="6" rx="1" /> <rect x="9" y="2" width="6" height="6" rx="1" /> <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /> <path d="M12 12V8" /> </svg><span>Начните с субагентов для исследования и ревью; в нашем демо код меняет основной агент</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="18" cy="18" r="3" /> <circle cx="6" cy="6" r="3" /> <path d="M13 6h3a2 2 0 0 1 2 2v7" /> <line x1="6" x2="6" y1="9" y2="21" /> </svg><span>Агентное ревью по политике команды; для критичных путей — профильные проверки</span></div>
+  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg><span>Eval-кейсы из реальных задач и промахов; сравнение при изменении модели или настройки</span></div>
 </div>
 
 <!--
@@ -1842,3 +1879,4 @@ layout: center
 Спасибо. Вопросы. QR-код и ссылка ведут в репозиторий, в нём ветки demo/agent-ready-v2 (подготовленный проект) и demo-before (антипример).
 Примеры и история добавления файлов — в Pull Requests. Мем оставляем без дополнительной подписи.
 -->
+
