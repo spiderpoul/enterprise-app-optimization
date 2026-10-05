@@ -50,6 +50,95 @@ canvasWidth: 1440
 -->
 
 ---
+class: contour-slide
+---
+
+# Особенности внутреннего контура
+
+<div class="contour-scene">
+  <div v-click="1" class="contour-risks">
+    <div class="contour-label">Облако могут ограничить</div>
+    <div class="contour-risk"><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="M12 8v4" /> <path d="M12 16h.01" /> </svg><div><b>Риск утечки</b><span>Код и клиентские данные<br>нельзя передавать наружу</span></div></div>
+    <div class="contour-risk"><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m16.5 16.5 5 5" /> <path d="M2 21a8 8 0 0 1 11.531-7.18" /> <path d="m21.5 16.5-5 5" /> <circle cx="10" cy="8" r="5" /> </svg><div><b>Потеря доступа</b><span>Блокировки аккаунтов<br>и недоступность сервисов</span></div></div>
+    <div class="contour-risk"><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /> </svg><div><b>Vendor lock-in</b><span>Зависимость от условий<br>и решений поставщика</span></div></div>
+  </div>
+  <div v-click="2" class="contour-perimeter">
+    <div class="contour-perimeter-label">Инфраструктура компании</div>
+    <div class="contour-model"><svg aria-hidden="true" class="contour-icon contour-model-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="20" height="8" x="2" y="2" rx="2" ry="2" /> <rect width="20" height="8" x="2" y="14" rx="2" ry="2" /> <line x1="6" x2="6.01" y1="6" y2="6" /> <line x1="6" x2="6.01" y1="18" y2="18" /> </svg><div><b>Внутренняя модель</b><span>Рабочие данные остаются в контуре</span></div></div>
+    <div class="contour-data">
+      <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18 16 4-4-4-4" /> <path d="m6 8-4 4 4 4" /> <path d="m14.5 4-5 16" /> </svg><span>Исходники</span></div>
+      <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 9.8V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2h-3" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M9 17v-2a2 2 0 0 0-4 0v2" /> <rect width="8" height="5" x="3" y="17" rx="1" /> </svg><span>Чувствительные<br>данные</span></div>
+      <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 5h1" /> <path d="M3 12h1" /> <path d="M3 19h1" /> <path d="M8 5h1" /> <path d="M8 12h1" /> <path d="M8 19h1" /> <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> </svg><span>Логи клиентов</span></div>
+    </div>
+    <p class="contour-control">Компания управляет доступом,<br>хранением запросов и выбором модели</p>
+  </div>
+</div>
+
+<div v-click="3" class="contour-local"><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M18 5a2 2 0 0 1 2 2v8.526a2 2 0 0 0 .212.897l1.068 2.127a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45l1.068-2.127A2 2 0 0 0 4 15.526V7a2 2 0 0 1 2-2z" /> <path d="M20.054 15.987H3.946" /> </svg><div><b>Некоторые модели можно запустить и на своей машине</b><span>Для ограниченных задач: проработанный план, нужный контекст и проверки результата</span></div></div>
+
+<p v-click="4" class="contour-question">Как получить от доступной модели полезный результат?</p>
+
+<!--
+Время: 0:50.
+Облачные сервисы в крупных компаниях часто ограничивают: в запросы попадают исходники, конфиденциальные данные и клиентские логи.
+Ещё два риска — потерять доступ к сервису и зависеть от решений поставщика.
+Внутренняя модель здесь означает модель, развёрнутую на инфраструктуре компании, а не обязательно обученную самой компанией.
+Она позволяет обрабатывать рабочие данные внутри контура, управлять доступом и хранением запросов, выбирать модель и фиксировать её версию.
+Это требует настройки всего пути данных, включая агентные инструменты и логи. Само размещение модели внутри не исключает утечки и не устраняет все зависимости.
+Некоторые модели можно запускать на своей машине, если хватает памяти. Для ограниченных задач с проработанным планом, контекстом и проверками этого уже может быть достаточно.
+Локальный запуск: https://qwen.readthedocs.io/en/latest/run_locally/ollama.html .
+Качество зависит от задачи и модели, поэтому не обещаем, что одного плана достаточно для любого проекта.
+Переход: мы выбрали внутреннюю модель. Какие претензии к ней обычно возникают?
+-->
+
+<!--
+Icons: lucide-static v1.52.0, https://lucide.dev . License notice for the inline icons:
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+
+The following Lucide icons are derived from the Feather project:
+
+airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+The MIT License (MIT) (for the icons listed above)
+
+Copyright (c) 2013-present Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-->
+
+---
 
 # Что говорят о внутренних моделях
 
