@@ -2474,3 +2474,8 @@
 .slidev-layout .skill-sharing-layout .team-skill-list li { padding-bottom: 8px; margin-bottom: 6px; }
 .skill-sharing-caution { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 18px; margin-top: 22px; padding: 16px 22px; border-left: 3px solid var(--yellow); background: rgb(255 212 121 / 4%); font-size: 22px; line-height: 1.35; }
 .skill-sharing-caution .design-icon { color: var(--yellow); width: 28px; height: 28px; margin-top: 1px; }
+
+/* Transparent 3D chapter illustrations */
+.section-3d .section-art { border: 0; background: transparent; }
+.section-3d .section-art::after { display: none; }
+.section-3d-art { position: relative; z-index: 1; width: 360px; max-width: none; height: 360px; object-fit: contain; }

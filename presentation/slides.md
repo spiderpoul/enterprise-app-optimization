@@ -378,7 +378,7 @@ Run A — не пустой репозиторий. В ветке demo-before «
 layout: center
 ---
 
-<div class="section-feature ">
+<div class="section-feature section-3d">
   <div class="section-copy">
     <div class="eyebrow">Блок 1</div>
 
@@ -386,7 +386,7 @@ layout: center
 
 <p class="muted" style="font-size: 26px">Что агенту нужно знать сразу и куда идти за подробностями.</p>
   </div>
-  <div class="section-art" aria-hidden="true" data-block="01"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg></div>
+  <div class="section-art" aria-hidden="true" data-block="01"><img src="/assets/agents-entry-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
 <!--
@@ -581,7 +581,7 @@ layout: center
 layout: center
 ---
 
-<div class="section-feature ">
+<div class="section-feature section-3d">
   <div class="section-copy">
     <div class="eyebrow">Блок 2</div>
 
@@ -589,7 +589,7 @@ layout: center
 
 <p class="muted" style="font-size: 26px">Как описать действующее решение, отметить legacy и связать подводные камни с проверками.</p>
   </div>
-  <div class="section-art" aria-hidden="true" data-block="02"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg></div>
+  <div class="section-art" aria-hidden="true" data-block="02"><img src="/assets/documentation-book-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
 <!--
@@ -707,7 +707,7 @@ layout: center
 layout: center
 ---
 
-<div class="section-feature ">
+<div class="section-feature section-3d">
   <div class="section-copy">
     <div class="eyebrow">Блок 3</div>
 
@@ -715,7 +715,7 @@ layout: center
 
 <p class="muted" style="font-size: 26px">Как внедрить spec-driven development (SDD) в legacy, что включить в спеку и как избежать неоднозначности.</p>
   </div>
-  <div class="section-art" aria-hidden="true" data-block="03"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /> </svg></div>
+  <div class="section-art" aria-hidden="true" data-block="03"><img src="/assets/specification-checklist-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
 <!--
@@ -896,7 +896,7 @@ OpenSpec CLI в репозитории не подключён: validate и arch
 layout: center
 ---
 
-<div class="section-feature ">
+<div class="section-feature section-3d">
   <div class="section-copy">
     <div class="eyebrow">Блок 4</div>
 
@@ -904,7 +904,7 @@ layout: center
 
 <p class="muted" style="font-size: 26px">Какие скиллы у нас есть, как устроена процедура скилла, как делимся ими между командами и где брать идеи.</p>
   </div>
-  <div class="section-art" aria-hidden="true" data-block="04"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg></div>
+  <div class="section-art" aria-hidden="true" data-block="04"><img src="/assets/repeatable-skills-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
 <!--
@@ -1166,7 +1166,7 @@ layout: center
 layout: center
 ---
 
-<div class="section-feature ">
+<div class="section-feature section-3d">
   <div class="section-copy">
     <div class="eyebrow">Блок 5</div>
 
@@ -1174,7 +1174,7 @@ layout: center
 
 <p class="muted" style="font-size: 26px">В этом демо субагенты исследуют код, разбирают логи и проверяют diff. Изменения вносит основной агент.</p>
   </div>
-  <div class="section-art" aria-hidden="true" data-block="05"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect x="16" y="16" width="6" height="6" rx="1" /> <rect x="2" y="16" width="6" height="6" rx="1" /> <rect x="9" y="2" width="6" height="6" rx="1" /> <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /> <path d="M12 12V8" /> </svg></div>
+  <div class="section-art" aria-hidden="true" data-block="05"><img src="/assets/subagent-modules-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
 <!--
@@ -1555,7 +1555,7 @@ layout: center
 layout: center
 ---
 
-<div class="section-feature ">
+<div class="section-feature section-3d">
   <div class="section-copy">
     <div class="eyebrow">Блок 7</div>
 
@@ -1563,7 +1563,7 @@ layout: center
 
 <p class="muted" style="font-size: 26px">Что это, зачем, из чего состоит eval и что он проверяет и как завести их у себя.</p>
   </div>
-  <div class="section-art" aria-hidden="true" data-block="07"><svg aria-hidden="true" class="design-icon section-symbol" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 16v5" /> <path d="M16 14.639V21" /> <path d="M20 10.656V21" /> <path d="m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15" /> <path d="M4 18.463V21" /> <path d="M8 14.656V21" /> </svg></div>
+  <div class="section-art" aria-hidden="true" data-block="07"><img src="/assets/eval-experiment-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
 <!--
