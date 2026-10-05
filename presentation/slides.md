@@ -53,7 +53,7 @@ canvasWidth: 1440
 class: contour-slide
 ---
 
-# Особенности внутреннего контура
+# Риски использования облачных моделей
 
 <div class="contour-scene">
   <div v-click="1" class="contour-risks">
@@ -68,7 +68,7 @@ class: contour-slide
     <div class="contour-data">
       <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18 16 4-4-4-4" /> <path d="m6 8-4 4 4 4" /> <path d="m14.5 4-5 16" /> </svg><span>Исходники</span></div>
       <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M4 9.8V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.706.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2h-3" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M9 17v-2a2 2 0 0 0-4 0v2" /> <rect width="8" height="5" x="3" y="17" rx="1" /> </svg><span>Чувствительные<br>данные</span></div>
-      <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 5h1" /> <path d="M3 12h1" /> <path d="M3 19h1" /> <path d="M8 5h1" /> <path d="M8 12h1" /> <path d="M8 19h1" /> <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> </svg><span>Логи клиентов</span></div>
+      <div><svg aria-hidden="true" class="contour-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 5h1" /> <path d="M3 12h1" /> <path d="M3 19h1" /> <path d="M8 5h1" /> <path d="M8 12h1" /> <path d="M8 19h1" /> <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> </svg><span>Логи c прода</span></div>
     </div>
     <p class="contour-control">Компания управляет доступом,<br>хранением запросов и выбором модели</p>
   </div>
@@ -135,21 +135,19 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
 -->
 
 ---
 
-# Что говорят о внутренних моделях
-
+# Что часто слышу про внутренние модели
 <div class="grid-4">
-  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Не тянет, с Claude не сравнить»</h3></div>
-  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Галлюцинирует: может напридумывать своего»</h3></div>
+  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Не тянет, с Claude/Codex не сравнить»</h3></div>
+  <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Галлюцинирует: может напридумывать своего. Не хочу возиться с AI слопом»</h3></div>
   <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Для тестиков сойдёт, но код писать не доверю»</h3></div>
   <div v-click class="flat-card bad"><h3 style="font-size: 26px">«Быстрее самому написать, чем полчаса объяснять»</h3></div>
 </div>
 
-<p v-click style="margin-top: 1.7rem; font-size: 29px">Часть этих ошибок я сначала списывал на модель. Но ей не хватало информации о проекте: какой код брать за пример, что нельзя менять и чем проверить результат.</p>
+<p v-click style="margin-top: 1.7rem; font-size: 29px">Напишите - пользуетесь ли вы внутренними/локальными моделями и можете ли вы доверить им написание кода?</p>
 
 <!--
 Время: 1:00.
@@ -247,8 +245,6 @@ GLM-5.3 max — 45, DeepSeek V4.1 Flash max — 39. Claude Opus 5.5 medium with 
     <p class="muted">Сборка и тесты зелёные, а пользователь видит медленную или сломанную страницу.</p>
   </div>
 </div>
-
-<p v-click style="margin-top: 1.4rem; font-size: 26px">Агент опирается на код, а договорённости команды в коде не записаны.</p>
 
 <!--
 Время: 1:30.
