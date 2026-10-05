@@ -2462,3 +2462,12 @@
 .resource-catalog p a { color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
 .resource-catalog p code { font-size: 0.9em; overflow-wrap: anywhere; }
 .demo-run-comparison .flat-card { padding: 14px 30px; }
+
+/* Small, transparent illustrations on guidance slides */
+.guidance-accent-3d { position: absolute; right: 84px; top: 90px; width: 110px; height: 110px; object-fit: contain; pointer-events: none; }
+
+/* Typical tasks use the project context rather than a long prompt */
+.docs-example-layout { margin-bottom: 18px; }
+.slidev-layout .docs-takeaway { margin: 18px 0 0; padding: 14px 0 14px 24px; border-left: 4px solid var(--green); color: var(--text); font-size: 25px; line-height: 1.35; }
+.docs-takeaway span { color: var(--green); font-weight: 650; }
+.docs-takeaway code { font-size: 0.9em; }
