@@ -1,6 +1,6 @@
 # 3D chapter illustrations
 
-Mode: text-to-image; transparent_background: true. Six separate generated assets.
+Mode: text-to-image; transparent_background: true. Five retained generated assets.
 
 ## agents-entry-3d.png
 
@@ -31,9 +31,3 @@ Create a premium small 3D illustration for a professional Russian cybersecurity 
 Slide 36.
 
 Create a premium small 3D illustration for a professional Russian cybersecurity presentation, matching an emerald green security shield aesthetic inspired by Kaspersky's visual palette. Deep emerald, mint green, translucent teal, satin ceramic and restrained brushed silver; sophisticated clean rounded geometry, three-quarter isometric view, soft studio lighting, crisp polished object. Isolated on a truly transparent background with no floor, no backdrop, no rectangular plate, no cast shadow outside the object. No text, lettering, logos or watermark. Compact centered square composition with generous transparent margins and every part fully visible. It must remain legible at 360 pixels on a dark green slide. Subject: A compact sculptural cluster of three rounded cube-like computation modules, one slightly larger deep emerald central module and two smaller mint-green helper modules, linked by short polished teal curved struts. Each module has a simple silver recessed panel without symbols or text. A decorative icon for coding-agent collaboration, NOT a labeled architecture diagram, no arrows, no plotted data.
-
-## eval-experiment-3d.png
-
-Slide 48.
-
-Create a premium small 3D illustration for a professional Russian cybersecurity presentation, matching an emerald green security shield aesthetic inspired by Kaspersky's visual palette. Deep emerald, mint green, translucent teal, satin ceramic and restrained brushed silver; sophisticated clean rounded geometry, three-quarter isometric view, soft studio lighting, crisp polished object. Isolated on a truly transparent background with no floor, no backdrop, no rectangular plate, no cast shadow outside the object. No text, lettering, logos or watermark. Compact centered square composition with generous transparent margins and every part fully visible. It must remain legible at 360 pixels on a dark green slide. Subject: A premium laboratory flask as a metaphor for repeatable evaluation: smooth mint-green upper neck and translucent teal bulb holding emerald liquid, a restrained silver neck ring, beside a small upright rounded mint checkmark badge. Clear compact silhouette, no labels, no tick marks, no measurement numbers.

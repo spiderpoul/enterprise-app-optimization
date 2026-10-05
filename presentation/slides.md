@@ -6,7 +6,7 @@ info: |
   многие считают слишком слабой для настоящей разработки. Разбираем на реальном
   репозитории, что сделать с проектом, чтобы даже не самая сильная внутренняя модель
   работала предсказуемо: AGENTS.md, документация, спецификации, скиллы, субагенты,
-  проверки, агентное ревью и evals. В конце сравниваем два прогона одной модели —
+  проверки и агентное ревью. В конце сравниваем два прогона одной модели —
   без подготовки проекта и с ней.
 author: Павел Уваров
 colorSchema: dark
@@ -260,8 +260,8 @@ GLM-5.3 max — 45, DeepSeek V4.1 Flash max — 39. Claude Opus 5.5 medium with 
 
 <div class="annotated hx-slide">
 <div>
-<div class="hx" :class="{ dimming: $clicks >= 1 && $clicks <= 7 }">
-  <div class="hx-ring hx-outer" :class="{ focus: $clicks === 7 }">
+<div class="hx" :class="{ dimming: $clicks >= 1 && $clicks <= 6 }">
+  <div class="hx-ring hx-outer" :class="{ focus: $clicks === 6 }">
     <span class="hx-tag top">CLI / IDE</span>
     <span class="hx-tag left">Сессии и память</span>
     <span class="hx-tag bottom">Рантайм · логи и трейсы</span>
@@ -273,9 +273,8 @@ GLM-5.3 max — 45, DeepSeek V4.1 Flash max — 39. Claude Opus 5.5 medium with 
   <div class="hx-chip c2" :class="{ on: $clicks >= 3, focus: $clicks === 3 }"><b>Tools &amp; MCP</b><span>руки агента</span></div>
   <div class="hx-chip c3" :class="{ on: $clicks >= 4, focus: $clicks === 4 }"><b>Orchestration</b><span>кто и в каком порядке</span></div>
   <div class="hx-chip c4" :class="{ on: $clicks >= 5, focus: $clicks === 5 }"><b>Guardrails</b><span>проверки и хуки</span></div>
-  <div class="hx-chip c5 eval" :class="{ on: $clicks >= 6, focus: $clicks === 6 }"><b>Evals</b><span>замер</span></div>
 </div>
-<div class="harness-split" :class="{ shown: $clicks >= 8 }">
+<div class="harness-split" :class="{ shown: $clicks >= 7 }">
   <div class="bar"><span class="m">10%</span><span class="h">90% — harness</span></div>
 </div>
 </div>
@@ -287,9 +286,8 @@ GLM-5.3 max — 45, DeepSeek V4.1 Flash max — 39. Claude Opus 5.5 medium with 
   <div v-click="[3, 4]" class="note good"><b>Tools &amp; MCP</b><p>Чем агент действует: скрипт вместо чтения лога целиком, браузер через Chrome DevTools MCP.</p></div>
   <div v-click="[4, 5]" class="note good"><b>Orchestration</b><p>Кто и в каком порядке работает: скиллы задают порядок действий, субагенты отдельно исследуют код и разбирают логи. Блоки 4–5.</p></div>
   <div v-click="[5, 6]" class="note good"><b>Guardrails &amp; Hooks</b><p>Что не даёт объявить «готово» раньше времени: quality gates и агентное ревью.</p></div>
-  <div v-click="[6, 7]" class="note"><b>Eval &amp; Testing</b><p>Как понять, что правка harness помогла, а не показалось: одна задача, N прогонов, доля успехов.</p></div>
-  <div v-click="[7, 8]" class="note intro"><b>Платформа</b><p>CLI и IDE, рантайм, сессии, логи и трейсы.</p></div>
-  <div v-click="8" class="note good"><b>10% модель, 90% harness</b><p>Модель — часть системы. От нас зависит, какие инструкции, инструменты и проверки она получит.</p></div>
+  <div v-click="[6, 7]" class="note intro"><b>Платформа</b><p>CLI и IDE, рантайм, сессии, логи и трейсы.</p></div>
+  <div v-click="7" class="note good"><b>10% модель, 90% harness</b><p>Модель — часть системы. От нас зависит, какие инструкции, инструменты и проверки она получит.</p></div>
 </div>
 <p class="source hx-source">Google, «The New SDLC with Vibe Coding» (A. Osmani, S. Saboo, S. Kartakis), май 2026, рис. 7 — схема упрощена.</p>
 </div>
@@ -341,7 +339,7 @@ layout: center
 
 # Одна задача, одна модель, два репозитория
 
-<div class="two-col" style="margin-top: 1rem">
+<div class="two-col demo-run-comparison" style="margin-top: 1rem">
   <div v-click class="flat-card bad">
     <h3>Run A · <code>demo-before</code></h3>
     <p class="muted">Для демо собраны ошибки настройки: противоречивые инструкции, старая документация, лишние скиллы, передача задачи между агентами и проверка, которая всегда сообщает об успехе.</p>
@@ -368,7 +366,6 @@ Run A — не пустой репозиторий. В ветке demo-before «
 Сравниваем два варианта настройки вокруг одной модели. Run A специально собран как антипример; по двум прогонам не делаем вывод о частоте успеха.
 В подготовленной ветке есть небольшая инструментальная правка для сценария памяти — атрибут data-page. Поэтому не утверждаем, что весь код продукта совпадает.
 Какими командами проверить требования спеки, агент должен узнать из репозитория — в этом и разница.
-Перед стартом evals/ скрыт в обоих worktree: в demo-before кейс прямо подсказывает про CommonJS.
 Отчёт в конце — одинаковая просьба для обоих: в финале сравним и код, и рассуждения.
 Если live-модель недоступна — дальше используем сохранённые трейсы и диффы репетиции.
 Дальше после каждого блока переключаемся в репозиторий и смотрим, каким коммитом мы это добавили.
@@ -1055,24 +1052,29 @@ HAR: 4xx (например, 404 lazy-чанка) тоже попадают в с
 
 ---
 
-# Скиллы: без зоопарка
+# Рекомендуемые скиллы
 
-<div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
-<div class="guidance-lines">
-  <div v-click class="guidance-row"><h3>Скилл на каждое действие</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Добавляем скилл под повторяемую работу, где агенту не хватает контекста или он регулярно ошибается.</p></div>
-  <div v-click class="guidance-row"><h3>Копия общей документации</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Общие правила и устройство проекта оставляем в docs. Скилл связывает нужные знания с конкретной задачей.</p></div>
-  <div v-click class="guidance-row"><h3>Несколько скиллов про одно и то же</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Разводим условия применения или объединяем. У каждого понятны вход, результат и владелец.</p></div>
-  <div v-click class="guidance-row"><h3>Скилл есть, пользы не видно</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Сравниваем на реальных задачах с ним и без него. Если агент справляется так же хорошо, скилл удаляем.</p></div>
+<div class="two-col resource-catalog" style="align-items: start">
+  <div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg><div><h3><a href="https://github.com/obra/superpowers" target="_blank">Superpowers</a></h3><p class="muted"><a href="https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md" target="_blank"><code>systematic-debugging</code></a> — поиск причины сбоя.<br><a href="https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md" target="_blank"><code>verification-before-completion</code></a> — проверка перед «готово».</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg><div><h3><a href="https://github.com/addyosmani/agent-skills" target="_blank">Addy Osmani</a></h3><p class="muted"><a href="https://github.com/addyosmani/agent-skills/blob/main/skills/context-engineering/SKILL.md" target="_blank"><code>context-engineering</code></a> — нужный контекст.<br><a href="https://github.com/addyosmani/agent-skills/blob/main/skills/spec-driven-development/SKILL.md" target="_blank"><code>spec-driven-development</code></a> — спека до кода.<br><a href="https://github.com/addyosmani/agent-skills/blob/main/skills/performance-optimization/SKILL.md" target="_blank"><code>performance-optimization</code></a> — замер до правки.</p></div></div>
+  </div>
+  <div>
+    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg><div><h3><a href="https://github.com/vercel-labs/agent-skills" target="_blank">Vercel Agent Skills</a></h3><p class="muted"><a href="https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices" target="_blank"><code>react-best-practices</code></a> — загрузка данных, бандл и рендеры.<br><a href="https://github.com/vercel-labs/agent-skills/tree/main/skills/web-design-guidelines" target="_blank"><code>web-design-guidelines</code></a> — доступность и UX.</p></div></div>
+    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg><div><h3><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices" target="_blank">Anthropic: как писать скиллы</a></h3><p class="muted">Ясный description, короткая процедура и подробности по ссылкам. Проверка скилла на той модели, с которой работает команда.</p></div></div>
+  </div>
 </div>
 
-<!--
-Время: 1:10.
-Правило про удаление скилла без пользы — наша практика, выведенная из подхода evaluation-first, а не дословное требование OpenAI или Anthropic. Сравниваем качество, затраты и ручные исправления на нескольких репрезентативных задачах.
-Скиллы могут быть и справочными: это допустимо, когда специальные знания нужны только под определённую задачу и их загрузка помогает. Не нужно превращать всю документацию проекта в набор скиллов.
-Description объясняет, что делает скилл и когда его применять. Для процедуры задаём вход, шаги, проверяемый выход и условие завершения. Длинные материалы читаем по ссылке, повторяемые вычисления выполняем скриптом.
-Источники: Anthropic, https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills; https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices; OpenAI, https://developers.openai.com/codex/skills.
--->
+<p v-after class="source">Берём отдельные процедуры под задачи команды. Читаем инструкции и скрипты, адаптируем к своему проекту.</p>
 
+<!--
+Время: 1:00.
+Источники проверены 05.10.2026. Ссылки ведут на исходные репозитории и конкретные скиллы. Берём подходящие процедуры, а не весь набор.
+Superpowers: https://github.com/obra/superpowers — systematic-debugging, verification-before-completion. Ещё можно посмотреть brainstorming и writing-plans для уточнения задачи и плана до кода.
+Addy Osmani: https://github.com/addyosmani/agent-skills — context-engineering, spec-driven-development, performance-optimization.
+Vercel Agent Skills: https://github.com/vercel-labs/agent-skills — react-best-practices и web-design-guidelines. Правила Next.js выбираем только там, где они применимы к нашему стеку.
+Anthropic: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices — описание, загрузка деталей по необходимости, проверка на используемых моделях.
+-->
 
 ---
 
@@ -1090,7 +1092,6 @@ Description объясняет, что делает скилл и когда е�
 /.agents/skills/log-trace-analysis/  @observability
 /.agents/skills/ui-form/             @design-system
 /.agents/review/                     @platform-frontend
-/evals/                              @platform-frontend
 ```
 
   </div>
@@ -1098,8 +1099,8 @@ Description объясняет, что делает скилл и когда е�
     <ul class="team-skill-list" style="font-size: 23px">
       <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" /> <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg><span><b>Монорепозиторий:</b> скиллы лежат в <code>.agents/skills/</code>, каждая команда получает их вместе с кодом.</span></li>
       <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /> </svg><span><b>CODEOWNERS</b> назначает владельца для ревью. Обязательный аппрув включаем в настройках защищённой ветки.</span></li>
-      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /> </svg><span><b>Реестр:</b> <code>.agents/skills/README.md</code> — что делает, когда брать, владелец, eval-кейс.</span></li>
-      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg><span><b>Изменение скилла</b> — вместе с прогоном eval-кейса «до и после»; подробнее в блоке про evals.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13 5h8" /> <path d="M13 12h8" /> <path d="M13 19h8" /> <path d="m3 17 2 2 4-4" /> <path d="m3 7 2 2 4-4" /> </svg><span><b>Реестр:</b> <code>.agents/skills/README.md</code> — что делает, когда брать, владелец, пример применения.</span></li>
+      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg><span><b>Изменение скилла</b> — проверяем на реальной задаче и прикладываем результат к ревью.</span></li>
     </ul>
   </div>
 </div>
@@ -1116,27 +1117,22 @@ Description объясняет, что делает скилл и когда е�
 
 ---
 
-# Где смотреть рекомендации и примеры
+# Скиллы: без зоопарка
 
-<div class="two-col resource-catalog" style="align-items: start">
-  <div>
-    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg><div><h3><a href="https://github.com/addyosmani/agent-skills" target="_blank">Addy Osmani</a></h3><p class="muted">Контекст по задаче, спека, небольшие шаги реализации и проверка результата. Примеры процедур с условиями завершения.</p></div></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg><div><h3><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices" target="_blank">Anthropic</a></h3><p class="muted">Ясное описание скилла, загрузка деталей по необходимости, проверка на используемых моделях.</p></div></div>
-  </div>
-  <div>
-    <div v-click class="flat-card"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg><div><h3><a href="https://openai.com/index/harness-engineering/" target="_blank">OpenAI</a></h3><p class="muted">Короткий AGENTS.md как вход в базу знаний. Документация в репозитории, границы архитектуры и автоматические проверки.</p></div></div>
-    <div v-click class="flat-card" style="margin-top: 0.8rem"><svg aria-hidden="true" class="design-icon catalog-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg><div><h3>Применение в своём проекте</h3><p class="muted">Берём нужную идею, адаптируем к своим контрактам и проверяем на реальных задачах. Чужие инструкции и скрипты сначала читаем.</p></div></div>
-  </div>
+<div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
+<div class="guidance-lines">
+  <div v-click class="guidance-row"><h3>Скилл на каждое действие</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Добавляем скилл под повторяемую работу, где агенту не хватает контекста или он регулярно ошибается.</p></div>
+  <div v-click class="guidance-row"><h3>Копия общей документации</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Общие правила и устройство проекта оставляем в docs. Скилл связывает нужные знания с конкретной задачей.</p></div>
+  <div v-click class="guidance-row"><h3>Несколько скиллов про одно и то же</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Разводим условия применения или объединяем. У каждого понятны вход, результат и владелец.</p></div>
+  <div v-click class="guidance-row"><h3>Скилл есть, пользы не видно</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Сравниваем на реальных задачах с ним и без него. Если агент справляется так же хорошо, скилл удаляем.</p></div>
 </div>
 
-<p v-after class="source">Рекомендации дополняют друг друга. Cross-zone и удаление скилла без пользы — правила нашей команды.</p>
-
 <!--
-Время: 1:00.
-Источники проверены 04.10.2026. Не переносим весь набор чужих процедур: выбираем по проблемам команды и сравниваем результат. Не выдаём наши названия разделов и правило об удалении скилла за обязательный стандарт.
-Addy Osmani: https://github.com/addyosmani/agent-skills; context-engineering, spec-driven-development, performance-optimization прочитаны в исходном репозитории.
-Anthropic: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices; https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills.
-OpenAI: https://openai.com/index/harness-engineering/; https://developers.openai.com/codex/skills.
+Время: 1:10.
+Правило про удаление скилла без пользы — наша практика, а не дословное требование OpenAI или Anthropic. Сравниваем качество, затраты и ручные исправления на нескольких репрезентативных задачах.
+Скиллы могут быть и справочными: это допустимо, когда специальные знания нужны только под определённую задачу и их загрузка помогает. Не нужно превращать всю документацию проекта в набор скиллов.
+Description объясняет, что делает скилл и когда его применять. Для процедуры задаём вход, шаги, проверяемый выход и условие завершения. Длинные материалы читаем по ссылке, повторяемые вычисления выполняем скриптом.
+Источники: Anthropic, https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills; https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices; OpenAI, https://developers.openai.com/codex/skills.
 -->
 
 
@@ -1347,41 +1343,6 @@ layout: center
 
 ---
 
-# Проверки агента: четыре уровня
-
-<div class="annotated">
-<div class="gl quality-levels" :class="{ dimming: $clicks >= 1 }">
-  <svg class="gl-arrows" viewBox="0 0 800 420" aria-hidden="true">
-    <defs><marker id="ql-tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
-    <line x1="324" y1="100" x2="436" y2="100" marker-end="url(#ql-tip)"/>
-    <line x1="600" y1="159" x2="600" y2="271" marker-end="url(#ql-tip)"/>
-    <line x1="436" y1="330" x2="324" y2="330" marker-end="url(#ql-tip)"/>
-  </svg>
-  <div class="gl-node ql-stage ql-loop" :class="{ focus: $clicks === 1 }"><em>01 · секунды</em><b>В цикле агента</b><span>быстрые проверки после правки</span></div>
-  <div class="gl-node ql-stage ql-done" :class="{ focus: $clicks === 2 }"><em>02 · минуты</em><b>Перед «готово»</b><span>Definition of Done и отчёт</span></div>
-  <div class="gl-node ql-stage ql-ci" :class="{ focus: $clicks === 3 }"><em>03 · каждый MR</em><b>CI и агентное ревью</b><span>те же команды и проверка diff</span></div>
-  <div class="gl-node ql-stage ql-human" :class="{ focus: $clicks === 4 }"><em>04 · владелец</em><b>Человек</b><span>читает diff и мёржит</span></div>
-</div>
-<div class="notes">
-  <div v-if="$clicks < 1" class="note intro"><b>От правки до мёржа</b><p>Быстрые проверки помогают агенту во время работы. В конце человек получает diff, результаты проверок и список непроверенного.</p></div>
-  <div v-click="[1, 2]" class="note good"><b>В цикле агента</b><p>Линтер и другие быстрые проверки запускаются после правки через хук CLI, если он настроен. Ошибка сразу возвращается агенту.</p></div>
-  <div v-click="[2, 3]" class="note good"><b>Перед «готово»</b><p>Проверки из Definition of Done: check:architecture, check:bundle, check:web-vitals. В отчёте — команды, результаты и то, что не удалось проверить.</p></div>
-  <div v-click="[3, 4]" class="note good"><b>CI на каждый MR</b><p>Повторяет те же команды и запускает агентное ревью по политике команды. Агент может воспроизвести падение CI у себя.</p></div>
-  <div v-click="4" class="note"><b>Владелец из CODEOWNERS</b><p>Читает diff и результаты проверок, оценивает непроверенное и принимает решение о мёрже.</p></div>
-</div>
-</div>
-
-<!--
-Время: 1:10.
-Идти по кликам: цикл агента → Definition of Done → CI → человек. Быстрые проверки во время работы, долгие — перед завершением.
-Главное: одни и те же команды локально и в CI. Хуки зависят от CLI; если их нет, команды остаются в Definition of Done и CI.
-Это схема подключения: конфигурация хуков не входит в публичное демо, workflow агентного ревью требует внутреннего CLI.
-Проверки должны сообщать, что нарушено и где искать причину. Изменение бюджетов согласует владелец. Незапущенную проверку не отмечаем как пройденную.
-CODEOWNERS сам по себе не блокирует мёрж: обязательность аппрува задаётся защитой ветки.
--->
-
----
-
 # Какие guardrails мы добавили
 
 <div class="annotated wide">
@@ -1418,10 +1379,10 @@ CODEOWNERS сам по себе не блокирует мёрж: обязате
 
 <!--
 Время: 1:20.
-Идти по кликам слева направо. Это карта того, что добавили в демо-ветку; уровни — те же, что на прошлом слайде.
+Идти по кликам слева направо. Это карта того, что добавили в демо-ветку: правила, проверки, ревью и решение владельца.
 Правила: Definition of Done в AGENTS.md и в спеке.
 Скрипты: check:architecture (статическая сверка manifest, регистрации, externals), check:bundle (размер стартовых ассетов против baseline, lazy-чанк демо-фичи), check:memory (сценарий MemLab роута; результат — строка «MemLab found N leak(s)»), check:web-vitals (LCP и CLS через Chrome DevTools MCP).
-Ревью: скилл code-review на каждый diff, профильные ревьюеры по critical-paths.yml — platform (реестр, прокси, общая сборка), security (внешние данные, MCP, workflow), contract (manifest), checks (сами проверки, grader). Замечание подтверждается правилом, упавшей проверкой или воспроизведением; агент никогда не аппрувит.
+Ревью: скилл code-review на каждый diff, профильные ревьюеры по critical-paths.yml — platform (реестр, прокси, общая сборка), security (внешние данные, MCP, workflow), contract (manifest), checks (сами проверки). Замечание подтверждается правилом, упавшей проверкой или воспроизведением; агент никогда не аппрувит.
 Workflow агентного ревью — шаблон: в публичном репозитории выключен, agent — наш внутренний CLI. Так же устроены коммерческие решения: пути в CodeRabbit, инструкции по путям в Copilot code review, специализированные агенты в Claude Code Review.
 Владелец — из CODEOWNERS; обязательность аппрува задаётся защитой ветки.
 -->
@@ -1486,7 +1447,7 @@ layout: center
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают найти причину; у каждой указано, что она проверяет и что остаётся непроверенным</div>
   <div><code>.agents/review/critical-paths.yml</code> и <code>scripts/select-reviewers.cjs</code><br>какой ревьюер нужен для какого пути</div>
   <div><code>.agents/agents/security-reviewer.md</code> и соседи<br>чеклисты для критичного кода: платформа, безопасность, контракты и сами проверки</div>
-  <div><code>.github/workflows/agent-review.yml</code> и <code>pull_request_template.md</code><br>шаблон запуска ревью через внутренний CLI; к правке harness прикладываем результаты evals</div>
+  <div><code>.github/workflows/agent-review.yml</code> и <code>pull_request_template.md</code><br>шаблон запуска ревью через внутренний CLI; к правке прикладываем результаты проверок</div>
   <div><code>package.json</code>, <code>performance/bundle-baseline.json</code>, <code>tests/memlab/…</code><br>команды check:*, baseline бандла и сценарий памяти, на который опирается спека</div>
 </div>
 
@@ -1555,216 +1516,6 @@ layout: center
 layout: center
 ---
 
-<div class="section-feature section-3d">
-  <div class="section-copy">
-    <div class="eyebrow">Блок 7</div>
-
-# Evals: как измерить, что агент стал работать лучше
-
-<p class="muted" style="font-size: 26px">Что это, зачем, из чего состоит eval и что он проверяет и как завести их у себя.</p>
-  </div>
-  <div class="section-art" aria-hidden="true" data-block="07"><img src="/assets/eval-experiment-3d.png" alt="" class="section-3d-art" /></div>
-</div>
-
-<!--
-Время: 0:15.
--->
-
----
-
-# Зачем вообще evals
-
-<div class="two-col wide-left eval-overview" style="align-items: start">
-  <div class="eval-copy">
-    <p v-click style="font-size: 28px"><svg aria-hidden="true" class="design-icon eval-question-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg>Изменили AGENTS.md или модель. Агент стал лучше — или просто повезло?</p>
-    <p v-click style="font-size: 28px">Eval: одна задача, несколько прогонов, проверка результата. Сравниваем долю успехов и причины провалов.</p>
-  </div>
-  <table v-click class="comparison" style="font-size: 20px">
-    <thead><tr><th></th><th><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m18 16 4-4-4-4" /> <path d="m6 8-4 4 4 4" /> <path d="m14.5 4-5 16" /> </svg><span>Тест</span></th><th><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m2 9 3-3 3 3" /> <path d="M13 18H7a2 2 0 0 1-2-2V6" /> <path d="m22 15-3 3-3-3" /> <path d="M11 6h6a2 2 0 0 1 2 2v10" /> </svg><span>Eval</span></th></tr></thead>
-    <tbody>
-      <tr><td>Проверяет</td><td>поведение кода</td><td>выполнение задачи агентом</td></tr>
-      <tr><td>Запуск</td><td>готовый код</td><td>повторные прогоны агента</td></tr>
-      <tr><td>Результат</td><td>прошёл / упал</td><td>доля успехов и причины провалов</td></tr>
-    </tbody>
-  </table>
-</div>
-
-<!--
-Время: 1:30.
-Агент может выполнить одну и ту же задачу по-разному. Поэтому повторяем прогоны и смотрим, как часто он справляется и почему ошибается.
-Anthropic пишет: команды без evals тратят недели на проверку каждой новой модели, команды с evals переходят за дни.
-Пять прогонов — не статистика: 3 из 5 против 5 из 5 статистически не значимо. Это сигнал, который стоит проверить на большей выборке, и материал для разбора провалов.
--->
-
----
-
-# Из чего состоит eval
-
-<div class="click-flow eval-flow">
-  <div v-click class="click-node"><b>Задача</b><span>из реального промаха агента</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Коммит</b><span>всегда один и тот же старт</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>N прогонов</b><span>каждый в чистом checkout</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Проверка-скрипт</b><span>смотрит на репозиторий, а не на слова агента</span></div>
-  <div v-click class="click-arrow">→</div>
-  <div v-click class="click-node"><b>Доля успехов</b><span>3 из 5 → правим → 5 из 5</span></div>
-</div>
-
-<p v-click style="margin-top: 1.2rem; font-size: 24px">Кроме доли успешных прогонов, используют метрики для разных сценариев запуска. <b>k</b> — число попыток на одну задачу.</p>
-
-<div class="two-col" style="margin-top: 0.6rem">
-  <div v-click class="flat-card"><h3><code>pass@k</code> — вероятность хотя бы одного успеха за k попыток</h3><p class="muted">Полезно, когда допускаются несколько вариантов и есть способ выбрать правильный.</p></div>
-  <div v-click class="flat-card"><h3><code>pass^k</code> — вероятность успеха во всех k попытках</h3><p class="muted">Показывает повторяемость результата. При независимых попытках и 75% успеха три успешных прогона подряд — около 42%.</p></div>
-</div>
-
-<p v-after class="source">Один набор «3 успеха из 5» — наблюдение, а не точная оценка этих вероятностей. pass@k — HumanEval, pass^k — τ-bench; обе метрики обсуждаются в материалах Anthropic об evals.</p>
-
-<!--
-Время: 1:10.
-Терминология из статьи Anthropic «Demystifying evals for AI agents»: task, trial, grader, outcome.
-Если спросят про обозначения: «@» читается «at» — pass at k; «^» — степень: вероятность пройти все k попыток при независимых прогонах — p в степени k.
-Главное: проверяем результат в репозитории, а не то, что агент написал «готово».
-Метрика описывает результат на выбранных задачах и не гарантирует надёжности на любых изменениях проекта.
--->
-
----
-
-# Eval без проверки результата
-
-<div class="annotated">
-<div class="file code-sm bad">
-<div class="file-head"><span>evals/cases/microfrontend.md — антипример</span><span>demo-before</span></div>
-
-```md {all|3-5|7-8|10-11|1}
-# Кейс: страница с таблицей
-
-## Задача
-Добавь страницу с таблицей. Подключи её через lazy-роут
-и не используй require() — CommonJS раздувает бандл.
-
-## Проверка
-Агент написал «готово», и сборка прошла.
-
-## Прогоны
-Один раз на моём ноутбуке — прошло ✅
-```
-
-</div>
-<div class="notes">
-  <div v-if="$clicks < 1" class="note intro bad"><b>Выглядит как eval</b><p>Задача, проверка, прогон — формально всё есть.</p></div>
-  <div v-click="[1, 2]" class="note bad"><b>Неясно, что проверяем</b><p>Lazy-загрузка и ограничения могут быть частью требований. Здесь не разделены требования задачи, подсказка способа решения и проверка результата.</p></div>
-  <div v-click="[2, 3]" class="note bad"><b>Проверяем слова</b><p>Отчёт «готово» и зелёная сборка не подтверждают lazy-загрузку и поведение страницы. Нужны проверки заявленных требований.</p></div>
-  <div v-click="[3, 4]" class="note bad"><b>Один прогон</b><p>Агент недетерминирован. Один успех может быть удачей.</p></div>
-  <div v-click="4" class="note bad"><b>Не указан источник кейса</b><p>Неясно, какой реальный промах или типичную задачу он воспроизводит.</p></div>
-</div>
-</div>
-
-<!--
-Время: 1:00.
-Про SWE-bench: SWE-Bench+ (Aleithan et al., 2024) — у 32,67% успешных патчей SWE-Agent + GPT-4 решение было в тексте issue или комментариях.
-Утечка готового решения в задачу — отдельная проблема. Она не означает, что агенту нельзя показывать требования и критерии приёмки.
--->
-
----
-
-# Eval: старт, задача и проверка
-
-<div class="annotated">
-<div class="file code-sm">
-<div class="file-head"><span>evals/cases/add-microfrontend.md</span><span>agent-ready-v2 · адаптированный фрагмент</span></div>
-
-```md {all|2|4-6|8-12|14-15|17-19}
-# Добавить микрофронт
-Стартовый коммит: 186f075
-
-## Задача             ← агенту отдаём только это
-Добавь микрофронт audit-log (пункт меню «Audit log», роут
-/audit-log) с постраничной таблицей событий.
-
-## Проверки оценщика ← не передаём отдельным промптом
-- в dist есть JS-чанк кроме entry (эвристика lazy-роута)
-- клиент в ES-модулях: в коде продукта нет require() и module.exports
-- нет правок в common/ и shell-app/
-- сигнал, не критерий: отчёт упоминает check:bundle
-
-## Проверка
-node evals/graders/add-microfrontend.cjs
-
-## Откуда кейс
-Агент скопировал соседа вместе с CommonJS-конфигом Babel:
-import() стал require(), страница и antd целиком — в entry
-```
-
-</div>
-<div class="notes">
-  <div v-if="$clicks < 1" class="note intro good"><b>Кейс с проверяемым результатом</b><p>Пять частей: стартовый коммит, задача, критерии, проверка и источник кейса.</p></div>
-  <div v-click="[1, 2]" class="note good"><b>Фиксированный старт</b><p>Каждый прогон начинается с одного и того же коммита в чистом checkout.</p></div>
-  <div v-click="[2, 3]" class="note good"><b>Только задача</b><p>Агент получает ровно то, что получил бы от человека.</p></div>
-  <div v-click="[3, 4]" class="note good"><b>Требования известны, проверка независима</b><p>Агент получает задачу и правила проекта. Реализация grader и эталонное решение не нужны ему для выполнения работы.</p></div>
-  <div v-click="[4, 5]" class="note good"><b>Проверка — скрипт</b><p>Текущий grader проверяет архитектуру, сборку, lint и scope. Упоминание check:bundle в отчёте — сигнал, а не доказательство запуска. Поведение страницы требует отдельных проверок.</p></div>
-  <div v-click="5" class="note good"><b>Откуда кейс</b><p>Реальный промах. Через полгода понятно, зачем этот кейс вообще нужен.</p></div>
-</div>
-</div>
-
-<!--
-Время: 1:00.
-Строка check:bundle в отчёте не доказывает запуск команды, поэтому grader печатает её как сигнал и на pass она не влияет; бандл проверяется по outcome. Дополнительный JS-файл — эвристика: что нужная страница загружается лениво, подтверждает браузер. Это первый и пока единственный автоматический grader; остальные четыре кейса ручные.
-Удаление evals из worktree убирает файлы из обычного чтения, но не из git-истории. Не называем это технической изоляцией скрытых проверок.
--->
-
----
-
-# Как завести evals на своём проекте
-
-<div class="flow" style="grid-template-columns: repeat(5, 1fr)">
-  <div v-click class="step"><span class="n">01</span><strong>Соберите промахи</strong><span>5 реальных случаев за месяц, когда агент сделал не то</span></div>
-  <div v-click class="step"><span class="n">02</span><strong>Сделайте кейсы</strong><span>задача, стартовый коммит, проверяемые требования и grader</span></div>
-  <div v-click class="step"><span class="n">03</span><strong>Проверка</strong><span>ваши существующие скрипты и тесты</span></div>
-  <div v-click class="step"><span class="n">04</span><strong>Прогоны</strong><span>начните с 3–5 прогонов — до и после изменения; при близких результатах увеличьте выборку</span></div>
-  <div v-click class="step"><span class="n">05</span><strong>Читайте трейсы</strong><span>разбирайте, какие действия привели к успеху или провалу</span></div>
-</div>
-
-<div class="two-col" style="margin-top: 1.2rem">
-  <div v-click class="flat-card"><h3>Когда запускать</h3><p class="muted">MR с правками AGENTS.md, docs или скиллов — быстрый набор. Ночью — все кейсы. Обновили модель — сравниваем обе версии на тех же кейсах.</p></div>
-  <div v-click class="flat-card"><h3>Сколько кейсов</h3><p class="muted">Anthropic советует начать с 20–50 задач из реальных промахов. Пять — уже лучше, чем ни одного.</p></div>
-</div>
-
-<!--
-Время: 1:10.
-Для внутренней модели это особенно важно: её обновляют админы, и без evals вы узнаете о регрессии от коллег через неделю.
-Для сравнения фиксируем модель, настройки CLI, лимиты, доступные инструменты и окружение. Одного стартового коммита недостаточно.
--->
-
----
-layout: center
----
-
-<div class="practice-head">Переключаемся в репозиторий</div>
-
-# Что мы добавили: evals
-
-<div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/b21bd7b206779d1dd75e4b3db48afbc465264484" target="_blank">Шаг 8. Evals: кейсы, grader и запуск</a></div>
-
-<div class="practice-files">
-  <div><code>evals/README.md</code><br>что такое eval и как им пользоваться — для тех, кто видит это впервые</div>
-  <div><code>evals/cases/</code><br>пять кейсов из реальных промахов</div>
-  <div><code>evals/graders/add-microfrontend.cjs</code><br>единственный автоматический grader: архитектура, бандл, линтер, scope; остальные кейсы ручные</div>
-  <div><code>EVAL_AGENT_CMD=… evals/run-case.sh add-microfrontend 5</code><br>запуск: N прогонов в чистых worktree и строка «прошло k из N»</div>
-</div>
-
-<!--
-Время: 1:00.
-Показать команду запуска и формат результата. Сохранённых результатов прогонов в ветке нет: без репетиции говорим «формат результата», а не «наш результат».
-Сокрытие evals/ в прогоне убирает файлы из рабочей копии, но не из git-истории — это не техническая изоляция.
-Доля успехов помогает сравнить варианты настройки. Для вывода смотрим также причины провалов и повторяемость результата.
--->
-
----
-layout: center
----
-
 <div class="eyebrow">Live · результат</div>
 
 # Возвращаемся к прогонам
@@ -1806,7 +1557,7 @@ layout: center
 Перед докладом сверить формулировки с фактическими agent-report.md обоих прогонов и поправить, если прогон пошёл иначе. Ничего не утверждать сверх того, что видно в отчётах и диффах.
 Если есть время — открыть оба agent-report.md рядом: раздел 1 (решения и откуда правило) и раздел 7 (метрики).
 Что смотрим, если спросят: отдельный lazy-чанк и загрузка через shell; ES-модули и размер entry; пересчёт таблицы при сворачивании меню (React Profiler); правки вне продукта; на чём основано «готово».
-Это демонстрация механизма, а не бенчмарк: для статистики есть evals. Разница — эффект всего комплекта инструкций, инструментов и проверок, а не одного скилла.
+Это демонстрация механизма, а не статистический бенчмарк. Разница — эффект всего комплекта инструкций, инструментов и проверок, а не одного скилла.
 -->
 ---
 
@@ -1822,7 +1573,6 @@ layout: center
   <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg><span>Скиллы на повторяющуюся работу, у каждого есть владелец</span></div>
   <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect x="16" y="16" width="6" height="6" rx="1" /> <rect x="2" y="16" width="6" height="6" rx="1" /> <rect x="9" y="2" width="6" height="6" rx="1" /> <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /> <path d="M12 12V8" /> </svg><span>Начните с субагентов для исследования и ревью; в нашем демо код меняет основной агент</span></div>
   <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="18" cy="18" r="3" /> <circle cx="6" cy="6" r="3" /> <path d="M13 6h3a2 2 0 0 1 2 2v7" /> <line x1="6" x2="6" y1="9" y2="21" /> </svg><span>Агентное ревью по политике команды; для критичных путей — профильные проверки</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /> <path d="M6.453 15h11.094" /> <path d="M8.5 2h7" /> </svg><span>Eval-кейсы из реальных задач и промахов; сравнение при изменении модели или настройки</span></div>
 </div>
 
 <!--
@@ -1879,4 +1629,3 @@ layout: center
 Спасибо. Вопросы. QR-код и ссылка ведут в репозиторий, в нём ветки demo/agent-ready-v2 (подготовленный проект) и demo-before (антипример).
 Примеры и история добавления файлов — в Pull Requests. Мем оставляем без дополнительной подписи.
 -->
-
