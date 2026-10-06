@@ -1513,24 +1513,24 @@ layout: center
 -->
 ---
 
-# Итоги: чек-лист агентной разработки
+# Итоги: начните с понятного проекта
 
-<div class="checklist designed-checklist">
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" /> <path d="M14 2v5a1 1 0 0 0 1 1h5" /> <path d="M10 12.5 8 15l2 2.5" /> <path d="m14 12.5 2 2.5-2 2.5" /> </svg><span>Короткий AGENTS.md: карта, запреты, cross-zone-зависимости, Definition of Done</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" /> <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg><span>Вложенные AGENTS.md для критичных мест: реестр, прокси, общая сборка</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 5v16" /> <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg><span>Общая документация: текущие правила, «не копируй», подводные камни</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="4" x="8" y="2" rx="1" ry="1" /> <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /> <path d="m9 14 2 2 4-4" /> </svg><span>Спека на каждое заметное изменение — прочитанная человеком до кода</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg><span>Проверки с понятными сообщениями; изменение самих проверок и бюджетов требует согласования</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg><span>Инструменты запуска и диагностики: в демо — Chrome DevTools MCP и замеры Web Vitals</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="8" height="8" x="3" y="3" rx="2" /> <path d="M7 11v4a2 2 0 0 0 2 2h4" /> <rect width="8" height="8" x="13" y="13" rx="2" /> </svg><span>Скиллы на повторяющуюся работу, у каждого есть владелец</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect x="16" y="16" width="6" height="6" rx="1" /> <rect x="2" y="16" width="6" height="6" rx="1" /> <rect x="9" y="2" width="6" height="6" rx="1" /> <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" /> <path d="M12 12V8" /> </svg><span>Начните с субагентов для исследования и ревью; в нашем демо код меняет основной агент</span></div>
-  <div v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="18" cy="18" r="3" /> <circle cx="6" cy="6" r="3" /> <path d="M13 6h3a2 2 0 0 1 2 2v7" /> <line x1="6" x2="6" y1="9" y2="21" /> </svg><span>Агентное ревью по политике команды; для критичных путей — профильные проверки</span></div>
+<p class="summary-lead">Агенту нужны актуальные правила, ясная задача и способ проверить результат.</p>
+
+<div class="summary-actions">
+  <div v-click class="summary-action"><span class="summary-number" aria-hidden="true">01</span><div><h3>Дайте точку входа</h3><p>Короткий AGENTS.md ведёт к коду, актуальным примерам и ограничениям. Подробности остаются в документации.</p></div></div>
+  <div v-click class="summary-action"><span class="summary-number" aria-hidden="true">02</span><div><h3>Договоритесь о результате</h3><p>До кода уточните цель, границы и критерии приёмки. У агента и ревьюера должно быть одно понимание задачи.</p></div></div>
+  <div v-click class="summary-action"><span class="summary-number" aria-hidden="true">03</span><div><h3>Дайте способ проверить работу</h3><p>Команды, тесты и браузер подтверждают результат. Пропущенную проверку нельзя считать успешной.</p></div></div>
+  <div v-click class="summary-action"><span class="summary-number" aria-hidden="true">04</span><div><h3>Добавляйте то, что помогает</h3><p>Скиллы — для повторяемых процедур, субагенты — для исследования и ревью. Используйте их там, где видите пользу.</p></div></div>
 </div>
+
+<div v-click class="summary-success"><b>Проверьте на одной типовой задаче</b><p>Должно хватать ссылки на тикет и «сделай», чтобы результат прошёл ваше ревью. Если не хватает — дорабатывайте контекст и проверки.</p></div>
 
 <!--
 Время: 1:20.
-Порядок — по отдаче: начните с AGENTS.md, документации, спеки и проверок, остальное — когда они уже работают.
-Слайд для фотографии. В ветке лежат примеры файлов и проверок. Подключение скиллов, субагентов и ревью нужно адаптировать под свой CLI и инфраструктуру.
+Не нужно сразу собирать все элементы harness. Начните с коротких инструкций, актуальной документации, ясной задачи и проверок результата.
+Скиллы и субагенты добавляйте под конкретную потребность: повторяемую процедуру, отдельное исследование или независимое ревью. Их количество не является признаком готовности проекта.
+Практический ориентир — знакомая типовая задача, которую агент решает по ссылке на тикет и команде «сделай». Это цель настройки на своих задачах, а не гарантия для любой модели и любой задачи. Оценку результата оставляем за человеком.
 -->
 
 ---
