@@ -1896,11 +1896,19 @@
   min-width: 0;
 }
 
+.thanks-resources {
+  display: grid;
+  gap: 22px;
+  margin-top: 28px;
+}
+
 .thanks-repo {
   display: flex;
   align-items: center;
-  gap: 28px;
-  margin-top: 2.4rem;
+  gap: 24px;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 0;
 }
 
 .thanks-repo p {
@@ -1916,8 +1924,8 @@
 
 .thanks-qr {
   flex: none;
-  width: 230px;
-  height: 230px;
+  width: 176px;
+  height: 176px;
   border-radius: 14px;
 }
 

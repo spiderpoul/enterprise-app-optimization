@@ -1563,12 +1563,22 @@ layout: center
   <div>
     <div class="eyebrow">Вопросы</div>
     <div class="huge">Спасибо<br /><span class="green">за внимание</span></div>
-    <div class="thanks-repo">
-      <img class="thanks-qr" src="/assets/repo-qr.png" alt="QR-код со ссылкой на репозиторий spiderpoul/enterprise-app-optimization" />
-      <div>
-        <p class="muted">Репозиторий с примерами<br><span class="thanks-pr-hint">Смотрите Pull Requests</span></p>
-        <p><code>github.com/spiderpoul/<wbr />enterprise-app-optimization</code></p>
-      </div>
+    <div class="thanks-resources">
+      <a class="thanks-repo" href="https://github.com/spiderpoul/skills" target="_blank" rel="noopener noreferrer">
+        <img class="thanks-qr" src="/assets/ai-ready-check-qr.svg" alt="QR-код: скилл ai-ready-check и инструкция установки" />
+        <div>
+          <p class="green">ai-ready-check</p>
+          <p class="muted">Проверьте свой проект<br>по практикам доклада</p>
+          <p><code>github.com/spiderpoul/skills</code></p>
+        </div>
+      </a>
+      <a class="thanks-repo" href="https://github.com/spiderpoul/enterprise-app-optimization" target="_blank" rel="noopener noreferrer">
+        <img class="thanks-qr" src="/assets/repo-qr.png" alt="QR-код со ссылкой на репозиторий spiderpoul/enterprise-app-optimization" />
+        <div>
+          <p class="muted">Репозиторий с примерами<br><span class="thanks-pr-hint">Смотрите Pull Requests</span></p>
+          <p><code>github.com/spiderpoul/<wbr />enterprise-app-optimization</code></p>
+        </div>
+      </a>
     </div>
   </div>
   <div class="meme-image meme-thanks">
@@ -1578,6 +1588,7 @@ layout: center
 
 <!--
 Время: 0:30.
-Спасибо. Вопросы. QR-код и ссылка ведут в репозиторий, в нём ветки demo/agent-ready-v2 (подготовленный проект) и demo-before (антипример).
+Спасибо. Вопросы. Первый QR-код ведёт в github.com/spiderpoul/skills: там переносимый ai-ready-check и инструкция установки. Он проверяет проект по практикам доклада и возвращает доказанные пробелы с планом улучшений.
+Второй QR-код ведёт в репозиторий с примерами: ветки demo/agent-ready-v2 (подготовленный проект) и demo-before (антипример).
 Примеры и история добавления файлов — в Pull Requests. Мем оставляем без дополнительной подписи.
 -->
