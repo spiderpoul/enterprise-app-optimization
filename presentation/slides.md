@@ -1193,13 +1193,20 @@ layout: center
 
 <div class="walkthrough-linked annotated">
 <div class="file code-xs wrap">
-<div class="file-head"><span>.agents/agents/explorer.md</span><span>demo/agent-ready-v2</span></div>
+<div class="file-head"><span>.opencode/agents/explorer.md</span><span>OpenCode</span></div>
 
-```md {all|3|4,6|8-12|11}
+```md {all|2-3|4-11,13|15-19|18}
 ---
-name: explorer
 description: Read-only исследует код, документацию и историю git. Используй, чтобы ответить «как X сделано сейчас, что из этого эталон и кто от этого зависит», не забивая файлами основной контекст.
-tools: Read, Grep, Glob, Bash   # Bash — только git log, git show и git blame
+mode: subagent
+permission:
+  edit: deny
+  webfetch: deny
+  bash:
+    "*": deny
+    "git log*": allow
+    "git show*": allow
+    "git blame*": allow
 ---
 Ты только исследуешь и никогда не меняешь файлы.
 
@@ -1215,9 +1222,9 @@ tools: Read, Grep, Glob, Bash   # Bash — только git log, git show и git
 </div>
 <div class="notes">
 <div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i></div>
-  <div v-if="$clicks < 1" class="note intro"><b>Три способа вызова</b><p>После регистрации в CLI субагента можно вызвать по описанию, из шага процедуры или явно по имени.</p></div>
-  <div v-click="[1, 2]" class="note"><b>description решает, когда звать</b><p>Описание помогает основному агенту выбрать исследователя. Автоматический вызов зависит от клиента и настроек делегирования.</p></div>
-  <div v-click="[2, 3]" class="note"><b>Короткий список инструментов</b><p>В файле задана инструкция работать только на чтение. Технический запрет записи и ограничения Bash настраиваются отдельно в CLI.</p></div>
+  <div v-if="$clicks < 1" class="note intro"><b>Агент для OpenCode</b><p>Файл в <code>.opencode/agents/</code> регистрирует explorer. Явный вызов: <code>@explorer</code>.</p></div>
+  <div v-click="[1, 2]" class="note"><b>Когда звать исследователя</b><p><code>description</code> помогает основному агенту выбрать explorer. <code>mode: subagent</code> задаёт роль помощника.</p></div>
+  <div v-click="[2, 3]" class="note"><b>Права на инструменты</b><p><code>edit: deny</code> запрещает менять файлы. Для Bash разрешены шаблоны команд <code>git log</code>, <code>git show</code> и <code>git blame</code>.</p></div>
   <div v-click="[3, 4]" class="note"><b>Контракт ответа</b><p>Лимит строк и file:line для каждого утверждения. Иначе основной агент получит слишком длинный ответ и снова будет разбирать все подробности.</p></div>
   <div v-click="4" class="note"><b>Эталон или legacy</b><p>Explorer сразу отделяет эталон от legacy — по документации, а не по тому, что выглядит свежее.</p></div>
 </div>
@@ -1225,9 +1232,11 @@ tools: Read, Grep, Glob, Bash   # Bash — только git log, git show и git
 
 <!--
 Время: 1:30.
-Эти файлы — описания субагентов. Для запуска нужно зарегистрировать их в конкретном CLI и настроить разрешения. Каталог `.agents/agents/` не является универсальным механизмом автозагрузки.
+Показан нативный адаптер OpenCode из demo/agent-ready-v2: `.opencode/agents/explorer.md`. OpenCode загружает Markdown-файлы из этого каталога, имя агента берёт из имени файла. `mode: subagent` задаёт роль помощника. Основной агент может выбрать его по description и вызвать через task, либо пользователь явно обращается к @explorer. Вызов зависит от действующих разрешений на task.
 В демо explorer вызывается из tasks.md (шаг «Изучи один текущий микрофронт», сейчас 2) и из скиллов safe-change и story-analysis. Рядом лежат reviewer и log-analyst.
-В OpenCode есть адаптеры только для explorer, reviewer и log-analyst (.opencode/agents/, тело совпадает с каноничным). edit: deny и список Bash-команд — права клиента, а не полная изоляция.
+`permission` задаёт ограничения инструментов: edit: deny запрещает операции edit/write/patch, webfetch: deny запрещает загрузку страниц, Bash запрещён по умолчанию и разрешён для указанных шаблонов. Правила агента объединяются с глобальными настройками. Остальные инструменты наследуют действующие настройки, поэтому это не полный список разрешённых инструментов и не песочница. Права CLI не заменяют изоляцию окружения.
+В `.agents/agents/` лежат общие описания ролей, а в `.opencode/agents/` — адаптеры explorer, reviewer и log-analyst с тем же телом промпта. Каталог `.agents/agents/` не является универсальным механизмом автозагрузки. В других клиентах регистрацию и разрешения нужно настроить в их формате.
+Документация OpenCode: https://opencode.ai/docs/agents/ и https://opencode.ai/docs/permissions/.
 -->
 
 ---
