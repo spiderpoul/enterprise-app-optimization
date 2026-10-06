@@ -7,12 +7,13 @@
   },
   "scripts": {
     "dev": "slidev --open",
-    "build": "slidev build",
+    "build": "slidev build --base /u/",
     "export": "slidev export"
   },
   "devDependencies": {
     "@slidev/cli": "52.19.1",
     "@slidev/theme-default": "0.25.0",
-    "floating-vue": "5.2.2"
+    "floating-vue": "5.2.2",
+    "playwright-chromium": "1.63.0"
   }
 }
