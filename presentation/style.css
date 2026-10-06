@@ -2546,3 +2546,20 @@
 .summary-success { margin-top: 24px; padding: 14px 0 14px 24px; border-left: 4px solid var(--green); }
 .summary-success b { display: block; margin-bottom: 8px; color: var(--green); font-size: 24px; line-height: 1.25; }
 .slidev-layout .summary-success p { margin: 0; opacity: 1; font-size: 23px; line-height: 1.35; }
+
+/* Bridge from the live task to project knowledge. */
+.slidev-layout.project-context-slide h1 { margin-bottom: 30px; }
+.project-context-intro { position: relative; min-height: 196px; padding-top: 4px; }
+.slidev-layout .project-context-intro p { max-width: 860px; margin: 0; color: var(--muted); font-size: 29px; line-height: 1.5; }
+.project-context-intro strong { color: var(--green-soft); font-weight: 650; }
+.project-context-intro img { position: absolute; right: 8px; top: -48px; width: 280px; height: 280px; object-fit: contain; }
+.project-context-questions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+.project-context-question { padding: 22px 24px; border-top: 2px solid var(--line-strong); border-radius: 0 0 14px 14px; background: linear-gradient(145deg, rgb(115 242 167 / 5%), rgb(115 242 167 / 1%)); }
+.project-context-question svg { width: 34px; height: 34px; margin-bottom: 16px; color: var(--green); }
+.slidev-layout .project-context-question p { margin: 0; font-size: 26px; line-height: 1.35; }
+.project-context-question strong { font-weight: 650; }
+.project-context-bridge { margin-top: 30px; padding-left: 22px; border-left: 3px solid var(--green); }
+.slidev-layout .project-context-bridge p { margin: 0 0 8px; color: var(--muted); font-size: 25px; line-height: 1.4; }
+.slidev-layout .project-context-bridge p:last-child { display: flex; align-items: center; gap: 22px; margin-bottom: 0; color: var(--green-soft); }
+.project-context-bridge strong { font-weight: 650; }
+.project-context-bridge span { color: var(--green); font-size: 34px; line-height: 1; }

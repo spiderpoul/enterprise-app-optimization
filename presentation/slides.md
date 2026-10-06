@@ -373,6 +373,38 @@ Run A — не пустой репозиторий. В ветке demo-before «
 -->
 
 ---
+layout: default
+class: project-context-slide
+---
+
+<div class="eyebrow">От задачи — к контексту проекта</div>
+
+# Задача есть. А контекст проекта?
+
+<div class="project-context-intro">
+  <p>Разработчик приходит в задачу со знанием проекта.<br/><strong>Агенту эти знания нужно передать явно.</strong></p>
+  <img src="/assets/project-context-3d.png" alt="" aria-hidden="true" />
+</div>
+
+<div class="project-context-questions">
+  <div v-click class="project-context-question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M8 12h8M8 16h5"/></svg><p>Где искать<br/><strong>нужный код?</strong></p></div>
+  <div v-click class="project-context-question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h4M6 7h8a4 4 0 0 1 4 4v2"/><path d="m11 16 3 3-3 3M15 10l3 3 3-3"/><circle cx="6" cy="3" r="2"/></svg><p>Какой из подходов<br/><strong>использовать?</strong></p></div>
+  <div v-click class="project-context-question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 8 4v6c0 4-8 8-8 8s-8-4-8-8V7Z"/><path d="m8 12 3 3 5-6"/></svg><p>Что нельзя менять<br/>и <strong>как проверить результат?</strong></p></div>
+</div>
+
+<div v-click class="project-context-bridge">
+  <p>Всё это не стоит заново объяснять в каждом промпте.</p>
+  <p><strong>Сохраняем знания рядом с кодом — и даём агенту точку входа.</strong><span aria-hidden="true">→</span></p>
+</div>
+
+<!--
+Время: 0:30.
+Мы дали обоим агентам одну задачу. Но сама задача ещё не объясняет, как работать в этом проекте.
+Разработчик уже знает, где искать код, какие подходы актуальны и какие ограничения соблюдать. Агенту эти знания нужно передать явно.
+Пока идут запуски, разберём, как мы сохранили знания в репозитории. Начнём с точки входа — AGENTS.md; подробности и актуальные примеры будут в документации.
+-->
+
+---
 layout: center
 ---
 
