@@ -1271,7 +1271,7 @@ permission:
 <div class="sa-takeaways">
   <div v-click><b>1</b>Код пишет один агент</div>
   <div v-click><b>2</b>У субагента конкретный вопрос, свой контекст и короткий ответ</div>
-  <div v-click><b>3</b>Проверяет не тот, кто писал</div>
+  <div v-click><b>3</b>Правки проверяет другой агент</div>
 </div>
 
 <!--
