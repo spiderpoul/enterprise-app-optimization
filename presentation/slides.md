@@ -433,6 +433,8 @@ Shell и независимо выпускаемые React-микрофронт�
 </div>
 </div>
 
+<img src="/assets/project-navigation-3d.png" alt="" aria-hidden="true" class="practical-example-art" />
+
 <!--
 Время: 1:40.
 Это иллюстративный пример для крупного монорепозитория, а не дословный файл из демо. Пути и команды в рабочем проекте должны существовать и проверяться.
@@ -552,28 +554,6 @@ layout: center
 Команды check:*, на которые ссылается AGENTS.md, появятся в шаге 6.
 Формат «что поменял → что сломается → как это проявится» и есть самое ценное во вложенных файлах.
 Ссылки на восемь шагов — снимки на момент шага. Уточнения после ревью лежат отдельными коммитами «Полировка …» поверх ветки: актуальные файлы — на HEAD demo/agent-ready-v2.
--->
-
----
-
-# Live: что агенты прочитали первым
-
-<div class="two-col" style="align-items: start">
-  <div v-click class="flat-card bad">
-    <h3>Run A</h3>
-    <p class="muted">Смотрим в трейсе: какие правила и примеры выбрал, заметил ли расхождения между кодом и документацией.</p>
-  </div>
-  <div v-click class="flat-card">
-    <h3>Run B</h3>
-    <p class="muted">Ожидаем путь AGENTS.md → спека → docs/architecture → один эталонный микрофронт. Смотрим, позвал ли explorer.</p>
-  </div>
-</div>
-
-<p v-click style="margin-top: 1.5rem; font-size: 26px">Заглядываем на минуту, итоги разберём в конце.</p>
-
-<!--
-Время: 1:00.
-Переключиться в терминалы. Качество Run A не комментировать — просто показать, с чего он начал.
 -->
 
 ---
@@ -728,39 +708,6 @@ layout: center
 
 ---
 
-# SDD в legacy: как внедрить и что это даёт
-
-<div class="two-col sdd-map" style="align-items: start">
-  <div>
-    <h3 class="green">Как внедряем</h3>
-    <ul class="sdd-steps">
-      <li v-click>Начинаем с одного настоящего изменения, которое всё равно нужно сделать.</li>
-      <li v-click>Спеку пишем только на то, что меняем.</li>
-      <li v-click>Черновик готовит агент по тикету и коду, владелец области дорабатывает его.</li>
-      <li v-click>После мёржа спека остаётся рядом с кодом.</li>
-    </ul>
-  </div>
-  <div>
-    <h3 class="yellow">Что это даёт</h3>
-    <ul class="sdd-benefits">
-      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="18" cy="18" r="3" /> <circle cx="6" cy="6" r="3" /> <path d="M13 6h3a2 2 0 0 1 2 2v7" /> <line x1="6" x2="6" y1="9" y2="21" /> </svg><span>Замысел ревьюим до кода: поправить абзац дешевле, чем 40 файлов.</span></li>
-      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /> <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /> </svg><span>Контракты legacy, которых не видно в коде, записаны явно.</span></li>
-      <li v-click><svg aria-hidden="true" class="design-icon " xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 7V5a2 2 0 0 1 2-2h2" /> <path d="M17 3h2a2 2 0 0 1 2 2v2" /> <path d="M21 17v2a2 2 0 0 1-2 2h-2" /> <path d="M7 21H5a2 2 0 0 1-2-2v-2" /> <circle cx="12" cy="12" r="1" /> <path d="M18.944 12.33a1 1 0 0 0 0-.66 7.5 7.5 0 0 0-13.888 0 1 1 0 0 0 0 .66 7.5 7.5 0 0 0 13.888 0" /> </svg><span>Модели не нужно додумывать продуктовый смысл по ходу работы.</span></li>
-    </ul>
-  </div>
-</div>
-
-<p v-click class="source">OpenSpec, «Existing projects»: «Resist the urge to back-fill everything». Кейс: arXiv 2605.18461 — один опубликованный пример brownfield-проекта, не исследование.</p>
-
-<!--
-Время: 1:40.
-Главное для legacy: мы не документируем прошлое, мы фиксируем каждое новое решение. Покрытие растёт само,
-с каждой заархивированной спекой. Цифры из кейса не обещаю — это один опубликованный пример.
-Критика SDD справедлива: для маленькой задачи подробная спека может оказаться лишней работой. Поэтому спека у нас — на заметное изменение, а не на каждую правку.
--->
-
----
-
 # Какой должна быть спека
 
 <div class="two-col spec-outline">
@@ -839,6 +786,8 @@ layout: center
   <div v-click="5" class="note"><b>Доказательство результата</b><p>Спека задаёт критерии приёмки. План реализации связывает их с конкретными тестами и командами проекта.</p></div>
 </div>
 </div>
+
+<img src="/assets/specification-target-3d.png" alt="" aria-hidden="true" class="practical-example-art" />
 
 <!--
 Время: 1:40.
@@ -999,6 +948,8 @@ security-check показывает подтверждённые риски и �
   <div v-click="5" class="note"><b>Выход и завершение</b><p>В отчёте видно, что проверено и на чём основан вывод. Пропущенная проверка остаётся открытым риском.</p></div>
 </div>
 </div>
+
+<img src="/assets/performance-gauge-3d.png" alt="" aria-hidden="true" class="practical-example-art" />
 
 <!--
 Время: 1:40.
@@ -1491,36 +1442,6 @@ layout: center
 Время: 1:00.
 Приложение поднять заранее: сборка идёт несколько минут. npm run build:prod:run для замеров не годится — берёт из .env продуктов адреса dev-серверов, и shell отдаёт 504 на entry. Это мы нашли, когда агент первый раз поднимал проект через MCP: консоль в браузере показала 504.
 Если в контейнере под root — WEB_VITALS_MCP_ARGS="--executablePath <chrome> --chromeArg=--no-sandbox".
--->
-
----
-
-# Live: упал ли Run B на проверке
-
-<div class="two-col" style="align-items: start">
-  <div v-click class="flat-card">
-    <h3>Что ищем в трейсе Run B</h3>
-    <ul>
-      <li>какая проверка упала первой</li>
-      <li>прочитал ли он сообщение и документ по ссылке</li>
-      <li>исправил код или попытался ослабить проверку</li>
-      <li>если чанк не грузился — чинил ли его в своём микрофронте, не трогая общий код</li>
-      <li>поднимал ли приложение и смотрел ли страницу в браузере через MCP</li>
-    </ul>
-  </div>
-  <div v-click class="flat-card bad">
-    <h3>Что ищем в трейсе Run A</h3>
-    <ul>
-      <li>какие проверки вообще запускал</li>
-      <li>поверил ли проверке check:ai, которая ничего не проверяет</li>
-      <li>на каком основании написал «готово»</li>
-    </ul>
-  </div>
-</div>
-
-<!--
-Время: 1:00.
-Если Run B прошёл всё с первого раза — показать сохранённый цикл «упал → исправил» из репетиции. Репетиции после полировки ещё не было: если сохранённого цикла нет, так и сказать, ничего не придумывать.
 -->
 
 ---

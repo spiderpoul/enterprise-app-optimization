@@ -2471,3 +2471,6 @@
 .slidev-layout .docs-takeaway { margin: 18px 0 0; padding: 14px 0 14px 24px; border-left: 4px solid var(--green); color: var(--text); font-size: 25px; line-height: 1.35; }
 .docs-takeaway span { color: var(--green); font-weight: 650; }
 .docs-takeaway code { font-size: 0.9em; }
+
+/* Small 3D accents below code walkthrough notes */
+.practical-example-art { position: absolute; right: 106px; bottom: 96px; width: 190px; height: 190px; object-fit: contain; pointer-events: none; }
