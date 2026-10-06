@@ -386,6 +386,8 @@ layout: center
   <div class="section-art" aria-hidden="true" data-block="01"><img src="/assets/agents-entry-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
+<div class="chapter-route" aria-hidden="true"><span class="current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6Z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16M3 3h4a6 6 0 0 1 5 2 6 6 0 0 1 5-2h4v16h-4a6 6 0 0 0-5 2 6 6 0 0 0-5-2H3Z"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 14 3 3 5-6"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3Z"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v7c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg></span></div>
+
 <!--
 Время: 0:15.
 Файлы в демо написаны по-русски, чтобы их было удобно читать со сцены. В рабочем проекте это компромисс:
@@ -398,7 +400,7 @@ layout: center
 
 # <code>AGENTS.md</code>: карта проекта и границы
 
-<div class="annotated wide">
+<div class="walkthrough-linked annotated wide">
 <div class="file code-xxs">
 <div class="file-head"><span>AGENTS.md</span><span>пример для крупного монорепозитория</span></div>
 
@@ -425,6 +427,7 @@ Shell и независимо выпускаемые React-микрофронт�
 
 </div>
 <div class="notes">
+<div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i></div>
   <div v-if="$clicks < 1" class="note intro"><b>Короткий вход в проект</b><p>То, что нужно в большинстве задач: где искать код, какие правила прочитать и где проходят границы.</p></div>
   <div v-click="[1, 2]" class="note"><b>Контекст проекта</b><p>Кратко объясняет устройство репозитория. Версии и подробную архитектуру можно найти по ссылкам.</p></div>
   <div v-click="[2, 3]" class="note"><b>Навигация по коду</b><p>Пути ведут к ответственности, тестам и документации. Полное дерево файлов быстро устаревает и здесь не нужно.</p></div>
@@ -449,7 +452,7 @@ Addy Osmani, https://github.com/addyosmani/agent-skills/blob/main/skills/context
 
 # <code>AGENTS.md</code>: cross-zone и Validation checks
 
-<div class="annotated wide">
+<div class="walkthrough-linked annotated wide">
 <div class="file md-view">
 <div class="file-head"><span>AGENTS.md (продолжение)</span><span>пример для крупного монорепозитория</span></div>
 <div class="md-body">
@@ -491,6 +494,7 @@ Addy Osmani, https://github.com/addyosmani/agent-skills/blob/main/skills/context
 </div>
 </div>
 <div class="notes">
+<div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i></div>
   <div v-if="$clicks < 1" class="note intro"><b>Как закончить изменение</b><p>Отдельно проверяем саму задачу и влияние на другие области проекта.</p></div>
   <div v-click="[1, 2]" class="note"><b>Cross-zone</b><p>Связываем общий код с его потребителями. Подробные сценарии остаются в документации области.</p></div>
   <div v-click="[2, 3]" class="note"><b>Validation checks</b><p>Команды должны запускаться в нашем окружении. Для каждой проверки понятно, какое свойство она подтверждает.</p></div>
@@ -515,7 +519,7 @@ Cross-zone — наша практика для большого проекта:
 <img src="/assets/instructions-folder-3d.png" alt="" aria-hidden="true" class="guidance-accent-3d" />
 
 <div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
-<div class="guidance-lines">
+<div class="guidance-lines guidance-pairs">
   <div v-click class="guidance-row"><h3>Вся архитектура в одном файле</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Оставляем карту кода и ссылки. Устройство системы и объяснения решений живут в docs.</p></div>
   <div v-click class="guidance-row"><h3>Соглашения, уже заданные линтером</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Формат и стиль проверяет линтер. В AGENTS.md указываем команду и особые ограничения проекта.</p></div>
   <div v-click class="guidance-row"><h3>Процедуры на любой случай</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Локальные ограничения переносим в AGENTS.md области, подробные процедуры читаем по задаче.</p></div>
@@ -540,7 +544,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/e3b6c55b7a71dcabd90aeb42a4bfb61bc2519cf6" target="_blank">Шаг 1. AGENTS.md: карта проекта, запреты и cross-zone-зависимости</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files">
   <div><code>AGENTS.md</code><br>карта, источник истины, запреты, таблица cross-zone, Definition of Done</div>
   <div><code>src/shell-app/server/AGENTS.md</code><br>вложенный файл для реестра и прокси: что уже ломалось и как это проверить</div>
   <div><code>src/microfrontends/common/AGENTS.md</code><br>вложенный файл для общей сборки: какие правки задевают все микрофронты</div>
@@ -571,6 +575,8 @@ layout: center
   <div class="section-art" aria-hidden="true" data-block="02"><img src="/assets/documentation-book-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
+<div class="chapter-route" aria-hidden="true"><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6Z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg></span><span class="current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16M3 3h4a6 6 0 0 1 5 2 6 6 0 0 1 5-2h4v16h-4a6 6 0 0 0-5 2 6 6 0 0 0-5-2H3Z"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 14 3 3 5-6"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3Z"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v7c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg></span></div>
+
 <!--
 Время: 0:15.
 -->
@@ -579,7 +585,7 @@ layout: center
 
 # Документация рядом с кодом
 
-<div class="annotated wide docs-example-layout">
+<div class="walkthrough-linked annotated wide docs-example-layout">
 <div class="file md-view">
 <div class="file-head"><span>docs/architecture/microfrontends.md</span><span>пример документа команды</span></div>
 <div class="md-body">
@@ -620,6 +626,7 @@ Shell читает маршрут и entry из manifest. Микрофронт �
 </div>
 </div>
 <div class="notes">
+<div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i><i :class="{ active: $clicks === 5, passed: $clicks > 5 }"></i></div>
   <div v-if="$clicks < 1" class="note intro"><b>Общий документ команды</b><p>Одна версия для людей и агента. Проходит ревью вместе с кодом.</p></div>
   <div v-click="[1, 2]" class="note"><b>Код и владелец</b><p>Ссылки на код, образец и тесты. Владелец следит за актуальностью.</p></div>
   <div v-click="[2, 3]" class="note"><b>Какое решение применять</b><p>Действующее решение, границы и образец. Агенту не нужно угадывать по соседнему коду.</p></div>
@@ -647,7 +654,7 @@ Shell читает маршрут и entry из manifest. Микрофронт �
 <img src="/assets/documentation-search-3d.png" alt="" aria-hidden="true" class="guidance-accent-3d" />
 
 <div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
-<div class="guidance-lines">
+<div class="guidance-lines guidance-pairs">
   <div v-click class="guidance-row"><h3>Решение осталось в чате или wiki</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Фиксируем действующее решение в репозитории. Внешний источник связываем с кодом и версией контракта.</p></div>
   <div v-click class="guidance-row"><h3>Две копии одного правила</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Люди и агент читают один документ. В AGENTS.md и скилле даём ссылку на него.</p></div>
   <div v-click class="guidance-row"><h3>Рабочий legacy выглядит образцом</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Явно показываем актуальное решение, устаревший подход и причину, почему его не переносим.</p></div>
@@ -673,7 +680,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/0b53e27b99c852c2051a3203a25dbd8c4969e165" target="_blank">Шаг 2. Документация: текущие правила, что не копировать, подводные камни</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files">
   <div><code>docs/architecture/microfrontends.md</code><br>контракт интеграции, актуальные примеры, legacy и проверка загрузки через shell</div>
   <div><code>docs/architecture/frontend.md</code><br>правила рендера, жизненного цикла и lazy-загрузки</div>
   <div><code>docs/performance.md</code><br>правила, устаревшие подходы и проверка рисков производительности</div>
@@ -701,6 +708,8 @@ layout: center
   </div>
   <div class="section-art" aria-hidden="true" data-block="03"><img src="/assets/specification-checklist-3d.png" alt="" class="section-3d-art" /></div>
 </div>
+
+<div class="chapter-route" aria-hidden="true"><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6Z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16M3 3h4a6 6 0 0 1 5 2 6 6 0 0 1 5-2h4v16h-4a6 6 0 0 0-5 2 6 6 0 0 0-5-2H3Z"/></svg></span><span class="current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 14 3 3 5-6"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3Z"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v7c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg></span></div>
 
 <!--
 Время: 0:15.
@@ -733,7 +742,7 @@ layout: center
 
 # Пример спеки
 
-<div class="annotated wide">
+<div class="walkthrough-linked annotated wide">
 <div class="file md-view">
 <div class="file-head"><span>spec.md · страница списка приложений</span><span>пример изменения в существующем продукте</span></div>
 <div class="md-body">
@@ -778,6 +787,7 @@ layout: center
 </div>
 </div>
 <div class="notes">
+<div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i><i :class="{ active: $clicks === 5, passed: $clicks > 5 }"></i></div>
   <div v-if="$clicks < 1" class="note intro"><b>Обычная продуктовая задача</b><p>Список с пагинацией: понятно, что меняем, что сохраняем и как принять результат.</p></div>
   <div v-click="[1, 2]" class="note"><b>Scope</b><p>Одна полезная возможность. Соседние функции не становятся частью задачи по ходу реализации.</p></div>
   <div v-click="[2, 3]" class="note"><b>Совместимость</b><p>В рабочей спеке есть ссылка на действующий API и правила доступа. Сохраняем контракт или согласуем его изменение.</p></div>
@@ -805,7 +815,7 @@ layout: center
 <img src="/assets/specification-puzzle-3d.png" alt="" aria-hidden="true" class="guidance-accent-3d" />
 
 <div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
-<div class="guidance-lines">
+<div class="guidance-lines guidance-pairs">
   <div v-click class="guidance-row"><h3>«Сделать как в соседнем разделе»</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Указываем актуальный образец и значимые отличия: данные, доступ, состояния и поведение.</p></div>
   <div v-click class="guidance-row"><h3>Описан только успешный сценарий</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Добавляем пустой ответ, ошибку и восстановление. Фиксируем важные ограничения совместимости.</p></div>
   <div v-click class="guidance-row"><h3>Реализация занимает всю спеку</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Отделяем цель и приёмку от плана кода. Обязательные технические ограничения сохраняем явно.</p></div>
@@ -832,7 +842,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6a0f3e664ed6a97a6af3c00f8e5fee88ea8e014a" target="_blank">Шаг 3. Спецификация Application Security</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files">
   <div><code>…/add-application-security/specs/application-security/spec.md</code><br>полная спека демо: контракт, состояния страницы, границы и приёмка</div>
   <div><code>proposal.md</code> и <code>tasks.md</code><br>зачем это изменение, шаги со скиллами и субагентами и приёмка: «retry → остановить сервер, «Повторить» после запуска → скриншот таблицы»</div>
   <div><code>openspec/README.md</code><br>как мы работаем со спеками в legacy</div>
@@ -861,6 +871,8 @@ layout: center
   </div>
   <div class="section-art" aria-hidden="true" data-block="04"><img src="/assets/repeatable-skills-3d.png" alt="" class="section-3d-art" /></div>
 </div>
+
+<div class="chapter-route" aria-hidden="true"><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6Z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16M3 3h4a6 6 0 0 1 5 2 6 6 0 0 1 5-2h4v16h-4a6 6 0 0 0-5 2 6 6 0 0 0-5-2H3Z"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 14 3 3 5-6"/></svg></span><span class="current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3Z"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v7c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg></span></div>
 
 <!--
 Время: 0:15.
@@ -895,7 +907,7 @@ security-check показывает подтверждённые риски и �
 
 # Скилл <code>performance-check</code>: разбор
 
-<div class="annotated wide">
+<div class="walkthrough-linked annotated wide">
 <div class="file md-view tight">
 <div class="file-head"><span>.agents/skills/performance-check/SKILL.md</span><span>пример процедуры команды</span></div>
 <div class="md-body">
@@ -940,6 +952,7 @@ security-check показывает подтверждённые риски и �
 </div>
 </div>
 <div class="notes">
+<div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i><i :class="{ active: $clicks === 5, passed: $clicks > 5 }"></i></div>
   <div v-if="$clicks < 1" class="note intro"><b>Повторяемая работа</b><p>Скилл помогает выбрать замер, выполнить его и подготовить понятный результат.</p></div>
   <div v-click="[1, 2]" class="note"><b>Условия применения</b><p>Из описания понятно, когда скилл нужен и что вернёт. Правка текста не требует perf-процедуры.</p></div>
   <div v-click="[2, 3]" class="note"><b>Вход и справочник</b><p>Diff и сценарий задают работу. Бюджеты и команды остаются в одной документации проекта.</p></div>
@@ -1082,7 +1095,7 @@ Anthropic: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 <img src="/assets/skills-toolbox-3d.png" alt="" aria-hidden="true" class="guidance-accent-3d" />
 
 <div class="guidance-head" aria-hidden="true"><span>Что мешает</span><span></span><span>Рабочий подход</span></div>
-<div class="guidance-lines">
+<div class="guidance-lines guidance-pairs">
   <div v-click class="guidance-row"><h3>Скилл на каждое действие</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Добавляем скилл под повторяемую работу, где агенту не хватает контекста или он регулярно ошибается.</p></div>
   <div v-click class="guidance-row"><h3>Копия общей документации</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Общие правила и устройство проекта оставляем в docs. Скилл связывает нужные знания с конкретной задачей.</p></div>
   <div v-click class="guidance-row"><h3>Несколько скиллов про одно и то же</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Разводим условия применения или объединяем. У каждого понятны вход, результат и владелец.</p></div>
@@ -1108,7 +1121,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/d1ace245c78a3ea111d82d1a12cfcc7f42af393d" target="_blank">Шаг 4. Скиллы и их владельцы</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files">
   <div><code>.agents/skills/code-review/</code><br>ревью diff по правилам репозитория — его же запускает CI в блоке 6</div>
   <div><code>story-analysis/</code>, <code>safe-change/</code>, <code>security-check/</code><br>разбор тикета до кода; отчёт о влиянии до правки общего кода; риски безопасности</div>
   <div><code>.agents/skills/log-trace-analysis/</code><br>запустить скрипт на fixture вживую</div>
@@ -1135,6 +1148,8 @@ layout: center
   <div class="section-art" aria-hidden="true" data-block="05"><img src="/assets/subagent-modules-3d.png" alt="" class="section-3d-art" /></div>
 </div>
 
+<div class="chapter-route" aria-hidden="true"><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6Z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16M3 3h4a6 6 0 0 1 5 2 6 6 0 0 1 5-2h4v16h-4a6 6 0 0 0-5 2 6 6 0 0 0-5-2H3Z"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 14 3 3 5-6"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3Z"/></svg></span><span class="current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/></svg></span><span class="upcoming"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v7c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg></span></div>
+
 <!--
 Время: 0:30.
 Правило совпадает с опытом Anthropic и Cognition: параллельными делаем исследование и ревью, а запись кода оставляем в одном потоке.
@@ -1146,7 +1161,7 @@ layout: center
 
 # Субагент <code>explorer</code>
 
-<div class="annotated">
+<div class="walkthrough-linked annotated">
 <div class="file code-xs wrap">
 <div class="file-head"><span>.agents/agents/explorer.md</span><span>demo/agent-ready-v2</span></div>
 
@@ -1169,6 +1184,7 @@ tools: Read, Grep, Glob, Bash   # Bash — только git log, git show и git
 
 </div>
 <div class="notes">
+<div class="walkthrough-steps" aria-hidden="true"><i :class="{ active: $clicks === 0, passed: $clicks > 0 }"></i><i :class="{ active: $clicks === 1, passed: $clicks > 1 }"></i><i :class="{ active: $clicks === 2, passed: $clicks > 2 }"></i><i :class="{ active: $clicks === 3, passed: $clicks > 3 }"></i><i :class="{ active: $clicks === 4, passed: $clicks > 4 }"></i></div>
   <div v-if="$clicks < 1" class="note intro"><b>Три способа вызова</b><p>После регистрации в CLI субагента можно вызвать по описанию, из шага процедуры или явно по имени.</p></div>
   <div v-click="[1, 2]" class="note"><b>description решает, когда звать</b><p>Описание помогает основному агенту выбрать исследователя. Автоматический вызов зависит от клиента и настроек делегирования.</p></div>
   <div v-click="[2, 3]" class="note"><b>Короткий список инструментов</b><p>В файле задана инструкция работать только на чтение. Технический запрет записи и ограничения Bash настраиваются отдельно в CLI.</p></div>
@@ -1271,7 +1287,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/91742d3b2f87a41a60ee4d2b2893a55758094ea9" target="_blank">Шаг 5. Субагенты: explorer, reviewer, log-analyst</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files">
   <div><code>.agents/agents/explorer.md</code><br>исследование только на чтение, ответ до 25 строк</div>
   <div><code>.agents/agents/reviewer.md</code><br>свежий взгляд на diff перед «готово»</div>
   <div><code>.agents/agents/log-analyst.md</code><br>разбор длинного вывода упавших проверок</div>
@@ -1298,6 +1314,8 @@ layout: center
   </div>
   <div class="section-art" aria-hidden="true" data-block="06"><img src="/assets/security-review-3d.png" alt="" class="section-security-art" /></div>
 </div>
+
+<div class="chapter-route" aria-hidden="true"><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h7l5 5v13a2 2 0 0 1-2 2H6Z"/><path d="M14 2v6h6M9 13h7M9 17h5"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16M3 3h4a6 6 0 0 1 5 2 6 6 0 0 1 5-2h4v16h-4a6 6 0 0 0-5 2 6 6 0 0 0-5-2H3Z"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="18" rx="2"/><rect x="9" y="2" width="6" height="4" rx="1"/><path d="m8 14 3 3 5-6"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a5 5 0 0 0-6 6l-5 5a2 2 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3Z"/></svg></span><span class="complete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v4M5 16v-4h14v4"/></svg></span><span class="current"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 20 6v7c0 5-8 9-8 9s-8-4-8-9V6Z"/><path d="m8 12 3 3 5-6"/></svg></span></div>
 
 <!--
 Время: 0:15.
@@ -1405,7 +1423,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/731fdb9a1f8bc0e2dff3b49b817d7f1ae9bb803d" target="_blank">Шаг 6. Проверки и агентное ревью</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files artifact-files-compact">
   <div><code>scripts/check-architecture.cjs</code>, <code>check-bundle.cjs</code>, <code>check-memory.cjs</code><br>проверки с сообщениями, которые помогают найти причину; у каждой указано, что она проверяет и что остаётся непроверенным</div>
   <div><code>.agents/review/critical-paths.yml</code> и <code>scripts/select-reviewers.cjs</code><br>какой ревьюер нужен для какого пути</div>
   <div><code>.agents/agents/security-reviewer.md</code> и соседи<br>чеклисты для критичного кода: платформа, безопасность, контракты и сами проверки</div>
@@ -1431,7 +1449,7 @@ layout: center
 
 <div class="practice-commit"><a href="https://github.com/spiderpoul/enterprise-app-optimization/commit/6249b174da8b24c4a8b7a5f4a8777ee30c5d2725" target="_blank">Шаг 7. Chrome DevTools MCP: запуск проекта и Web Vitals</a></div>
 
-<div class="practice-files">
+<div class="practice-files artifact-files">
   <div><code>.mcp.json</code><br>сервер chrome-devtools: закреплённая версия, без CrUX, статистики и проверки обновлений; под CODEOWNERS и security-reviewer</div>
   <div><code>scripts/start-prod.cjs</code> → <code>npm run start:prod</code><br>shell и продукты из dist как в production; ждёт, пока shell отдаст entry каждого продукта</div>
   <div><code>scripts/check-web-vitals.cjs</code> и <code>performance/web-vitals-budget.json</code><br>проверка LCP и CLS через тот же MCP; по мере ускорения страниц ужесточаем бюджет</div>
@@ -1448,11 +1466,13 @@ layout: center
 layout: center
 ---
 
-<div class="eyebrow">Live · результат</div>
+<div class="eyebrow result-opening-label">Live · результат</div>
 
 # Возвращаемся к прогонам
 
-<p class="muted" style="font-size: 26px">Обе сессии закончили работу. Сравним, что получилось у Run A и Run B.</p>
+<p class="muted result-opening-copy" style="font-size: 26px">Обе сессии закончили работу. Сравним, что получилось у Run A и Run B.</p>
+
+<div class="result-opening-orbits" aria-hidden="true"><i></i><i></i></div>
 
 <!--
 Время: 0:15.
@@ -1463,7 +1483,7 @@ layout: center
 
 # Run A и Run B: что получилось
 
-<div class="ab-grid">
+<div class="ab-grid aligned-results">
   <div v-click class="ab-card bad">
     <h3>Run A <span>«всё есть, но мешает»</span></h3>
     <ul>
@@ -1482,7 +1502,7 @@ layout: center
   </div>
 </div>
 
-<p v-click class="ab-statement">Модель одна, спека одна. Разница — в том, что вокруг модели.</p>
+<p v-click class="ab-statement result-thesis">Модель одна, спека одна. Разница — в том, что вокруг модели.</p>
 
 <!--
 Время: 2:00.

@@ -2474,3 +2474,56 @@
 
 /* Small 3D accents below code walkthrough notes */
 .practical-example-art { position: absolute; right: 106px; bottom: 96px; width: 190px; height: 190px; object-fit: contain; pointer-events: none; }
+
+/* Composition refinements: existing text and click order are preserved. */
+.guidance-pairs .guidance-row { position: relative; }
+.slidev-layout .guidance-pairs h3 { border: 1px solid rgb(255 156 156 / 20%); border-left: 3px solid var(--red); border-radius: 12px; background: linear-gradient(110deg, rgb(255 156 156 / 9%), rgb(255 156 156 / 3%)); }
+.slidev-layout .guidance-pairs p { border: 1px solid rgb(115 242 167 / 20%); border-left: 3px solid var(--green); border-radius: 12px; background: linear-gradient(110deg, rgb(115 242 167 / 8%), rgb(115 242 167 / 3%)); }
+.guidance-pairs .guidance-arrow { position: relative; display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; border: 1px solid var(--line-strong); border-radius: 50%; font-size: 30px; background: var(--surface); }
+.guidance-pairs .guidance-arrow::before, .guidance-pairs .guidance-arrow::after { content: ''; position: absolute; top: 50%; width: 17px; height: 1px; background: var(--line-strong); }
+.guidance-pairs .guidance-arrow::before { right: 100%; }
+.guidance-pairs .guidance-arrow::after { left: 100%; }
+
+.walkthrough-linked .notes { position: relative; }
+.walkthrough-linked .note { position: relative; }
+.walkthrough-linked .note::before { content: ''; position: absolute; left: -33px; top: 30px; width: 28px; height: 1px; background: var(--yellow); opacity: 0.7; }
+.walkthrough-linked .note::after { content: ''; position: absolute; left: -36px; top: 27px; width: 7px; height: 7px; border: 1px solid var(--yellow); border-radius: 50%; background: var(--bg); }
+.walkthrough-linked .note.intro::before { background: var(--line-strong); }
+.walkthrough-linked .note.intro::after { border-color: var(--line-strong); }
+.walkthrough-steps { position: absolute; display: flex; gap: 7px; top: -17px; left: 0; pointer-events: none; }
+.walkthrough-steps i { width: 20px; height: 4px; border-radius: 4px; background: var(--line); }
+.walkthrough-steps i.passed { background: var(--green); opacity: 0.5; }
+.walkthrough-steps i.active { background: var(--yellow); }
+
+.artifact-files { gap: 18px 28px; }
+.artifact-files > div { position: relative; padding: 18px 22px; border: 1px solid var(--line-strong); border-top: 3px solid var(--green); border-radius: 4px 20px 12px 12px; background: linear-gradient(145deg, rgb(17 37 27 / 85%), rgb(13 27 21 / 55%)); }
+.artifact-files > div::after { content: ''; position: absolute; width: 14px; height: 14px; right: -1px; top: -3px; border-left: 1px solid var(--line-strong); border-bottom: 1px solid var(--line-strong); border-radius: 0 18px 0 3px; background: var(--bg); }
+.artifact-files > div > code:first-child { color: var(--green-soft); }
+.artifact-files > div:has(> .muted:first-child) { border-top-color: var(--yellow); background: rgb(255 212 121 / 4%); }
+.artifact-files-compact { gap: 14px 28px; }
+.artifact-files-compact > div { padding: 14px 18px; }
+.artifact-files-compact > div:last-child { grid-column: 1 / -1; }
+
+.chapter-route { position: absolute; left: 84px; bottom: 106px; display: flex; align-items: center; gap: 30px; pointer-events: none; }
+.chapter-route span { position: relative; display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: var(--surface); }
+.chapter-route span:not(:last-child)::after { content: ''; position: absolute; width: 31px; height: 1px; left: 100%; top: 50%; background: var(--line); }
+.chapter-route svg { width: 23px; height: 23px; }
+.chapter-route .complete { color: var(--green); border-color: var(--line-strong); }
+.chapter-route .complete::after { background: var(--line-strong) !important; }
+.chapter-route .current { color: var(--green-soft); border-color: var(--green); background: rgb(115 242 167 / 12%); box-shadow: 0 0 0 4px rgb(115 242 167 / 4%); }
+.chapter-route .upcoming { opacity: 0.5; }
+
+.slidev-layout:has(.result-opening-label) h1 { position: relative; z-index: 1; max-width: 980px; margin-top: 88px; margin-bottom: 32px; font-size: 80px; line-height: 1.06; }
+.slidev-layout .result-opening-copy { position: relative; z-index: 1; max-width: 800px; padding-left: 24px; border-left: 3px solid var(--green); line-height: 1.5; opacity: 1; }
+.result-opening-orbits { position: absolute; right: -60px; bottom: 122px; width: 340px; height: 290px; pointer-events: none; }
+.result-opening-orbits i { position: absolute; width: 240px; height: 240px; border: 1px solid rgb(115 242 167 / 18%); border-radius: 50%; background: radial-gradient(circle at 35% 35%, rgb(115 242 167 / 4%), transparent 65%); }
+.result-opening-orbits i:first-child { left: 0; top: 0; }
+.result-opening-orbits i:last-child { left: 100px; top: 50px; border-color: rgb(255 156 156 / 12%); }
+
+.aligned-results .ab-card { padding: 22px 26px; border-radius: 14px; }
+.aligned-results .ab-card h3 { min-height: 66px; margin-bottom: 14px; }
+.aligned-results .ab-card.bad h3 { color: var(--red); }
+.aligned-results .ab-card.good h3 { color: var(--green); }
+.aligned-results .ab-card ul { display: grid; grid-template-rows: repeat(3, 110px); padding: 0; list-style: none; }
+.aligned-results .ab-card li { display: flex; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); font-size: 23px; line-height: 1.34; }
+.slidev-layout .result-thesis { margin-top: 24px !important; padding: 8px 0 8px 24px; font-size: 30px; line-height: 1.35; color: var(--green-soft); }
