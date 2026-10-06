@@ -688,7 +688,7 @@ Shell читает маршрут и entry из manifest. Микрофронт �
   <div v-click class="guidance-row"><h3>Решение осталось в чате или wiki</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Фиксируем действующее решение в репозитории. Внешний источник связываем с кодом и версией контракта.</p></div>
   <div v-click class="guidance-row"><h3>Две копии одного правила</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Люди и агент читают один документ. В AGENTS.md и скилле даём ссылку на него.</p></div>
   <div v-click class="guidance-row"><h3>Рабочий legacy выглядит образцом</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Явно показываем актуальное решение, устаревший подход и причину, почему его не переносим.</p></div>
-  <div v-click class="guidance-row"><h3>Совет без границ и проверки</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Описываем, где он применим, какие есть подводные камни и чем проверить результат.</p></div>
+  <div v-click class="guidance-row"><h3>Код изменился, документация — нет</h3><span class="guidance-arrow" aria-hidden="true">→</span><p>Обновляем документацию вместе с кодом в том же PR: команды, примеры и описание поведения.</p></div>
 </div>
 
 <!--
