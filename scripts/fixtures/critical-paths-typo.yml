@@ -1,0 +1,8 @@
+# Negative-fixture для scripts/select-reviewers.cjs: опечатка в ключе верхнего уровня и в правиле.
+# Должно падать с кодом 2, а не молча оставлять только обычное ревью.
+critcal:
+  - paths: [src/shell-app/server/lib/**]
+    reviewer: platform-reviewer
+    wyh: опечатка в ключе правила
+default:
+  reviewer: code-review

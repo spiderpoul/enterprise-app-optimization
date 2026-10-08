@@ -1,0 +1,28 @@
+# Шаблон интеграции: в этом репозитории job выключен переменной WEB_VITALS_ENABLED.
+name: Web Vitals
+
+on: pull_request
+jobs:
+  web-vitals:
+    # Замер занимает несколько минут и нужен не каждому MR: в этом публичном демо-репозитории job
+    # выключен, пока переменная репозитория WEB_VITALS_ENABLED не равна 'true'.
+    if: vars.WEB_VITALS_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: npm ci
+      # Приложение как в production: минифицированные бандлы, shell проксирует продукты.
+      - name: Сборка и запуск
+        run: |
+          npm run start:prod -- --build > app.log 2>&1 &
+          timeout 900 bash -c 'until grep -q "Приложение готово" app.log; do sleep 5; done'
+      # Тот же MCP chrome-devtools, что у агента (.mcp.json); Chrome на раннере — системный stable.
+      - name: Web Vitals против бюджета
+        env: { WEB_VITALS_BASE_URL: 'http://localhost:4300' }
+        run: npm run check:web-vitals
+      - if: failure()
+        run: tail -n 200 app.log

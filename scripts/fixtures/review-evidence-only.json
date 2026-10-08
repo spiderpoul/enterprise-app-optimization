@@ -1,0 +1,23 @@
+{
+  "summary": "Negative-fixture для scripts/post-review.cjs: замечание без rule, но с evidence, и замечание без строки.",
+  "comments": [
+    {
+      "path": "src/microfrontends/application-security/client/routes/Inventory.tsx",
+      "line": 42,
+      "severity": "blocker",
+      "evidence": "Открыть /application-security при остановленном сервере продукта, нажать «Повторить»: запрос не уходит.",
+      "body": "Кнопка «Повторить» не вызывает загрузку повторно."
+    },
+    {
+      "severity": "blocker",
+      "evidence": "В отчёте нет строки вывода check:memory: обязательная проверка из спеки не запускалась.",
+      "body": "Сценарий «уйти после пагинации» не подтверждён."
+    },
+    {
+      "path": "src/microfrontends/application-security/client/index.tsx",
+      "line": 3,
+      "severity": "risk",
+      "body": "Без rule и evidence — должно быть отброшено."
+    }
+  ]
+}

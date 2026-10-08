@@ -1,0 +1,46 @@
+# Harness — это код: у каждого правила есть владелец.
+# Команды ниже — примеры. В этом демо-репозитории их нет, поэтому GitHub покажет
+# их как неизвестных владельцев и не будет запрашивать ревью. Обязательный аппрув владельца
+# включается отдельно — правилом защищённой ветки.
+
+# Карта проекта и документация
+/AGENTS.md                           @platform-frontend
+/docs/architecture/                  @platform-frontend
+/docs/performance.md                 @perf-guild
+
+# Общий код: одна строка задевает все продукты
+/src/microfrontends/common/          @platform-frontend
+/src/shell-app/server/               @platform-frontend
+
+# Скиллы: у каждого свой владелец
+/.agents/skills/story-analysis/      @platform-frontend
+/.agents/skills/safe-change/         @platform-frontend
+/.agents/skills/performance-check/   @perf-guild
+/.agents/skills/log-trace-analysis/  @observability
+/.agents/skills/ui-form/             @design-system
+/.agents/skills/code-review/         @platform-frontend
+/.agents/skills/security-check/      @security-champions
+/.agents/skills/web-vitals-check/    @perf-guild
+
+# MCP-серверы: исполняются у каждого разработчика и в CI, видят браузер и данные
+/.mcp.json                           @platform-frontend @security-champions
+/opencode.json                       @platform-frontend @security-champions
+
+# Субагенты, правила ревью и evals
+/.agents/agents/                     @platform-frontend
+/.agents/review/                     @platform-frontend
+/evals/                              @platform-frontend
+/evals/graders/                      @platform-frontend @perf-guild
+/evals/run-case.sh                   @platform-frontend @security-champions
+
+# Агентное ревью: выбор ревьюеров, публикация и шаблоны workflow
+/scripts/select-reviewers.cjs        @platform-frontend
+/scripts/post-review.cjs             @platform-frontend @security-champions
+/.github/workflows/                  @platform-frontend @security-champions
+
+# Проверки: ослабить проверку — значит выключить её для всех команд
+/performance/                        @perf-guild
+/scripts/check-*.cjs                 @perf-guild
+
+# Публичные контракты продуктов: id, routePath, entryPath, api.prefix
+/src/microfrontends/*/manifest.json  @platform-frontend
